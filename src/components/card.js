@@ -1,4 +1,4 @@
-export default ({
+const Card = ({
   category,
   title,
   content,
@@ -11,9 +11,11 @@ export default ({
     </div> }
     <div class="p-8">
       <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{ category }</div>
-      <a href="#" class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">{ title }</a>
+      <h3 class="block mt-1 text-lg leading-tight font-medium text-black hover:underline">{ title }</h3>
       { content && <p class="mt-2 text-gray-500">{ content }</p> }
     </div>
   </div>
 </div>
 );
+
+export default Card;
