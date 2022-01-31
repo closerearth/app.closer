@@ -1,11 +1,21 @@
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ['Metropolis', 'Helvetica', 'Sans-Serif']
+      },
+      colors: {
+        primary: '#d626df',
+        'primary-hover': '#c30fcc',
+        background: '#ececec'
+      }
+    },
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }

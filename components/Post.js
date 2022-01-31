@@ -1,0 +1,229 @@
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Linkify from 'react-linkify';
+import api, { cdn, formatSearch } from '../utils/api';
+
+import TimeSince from './TimeSince';
+import ProfilePhoto from './ProfilePhoto';
+import CreatePost from './CreatePost';
+import { useAuth } from '../contexts/auth.js';
+
+const Post = ({ _id, attachment, channel, tags, createdBy, created, content, photo, replyCount, showChannel, usersById, setUsersById, channelsById }) => {
+
+  const [posts, setPosts] = useState([]);
+  const [repliesOpen, setRepliesOpen] = useState(false);
+  const [error, setErrors] = useState(null);
+  const [deleted, setDeleted] = useState(false);
+  const [localReplyCount, setLocalReplyCount] = useState(replyCount || 0);
+  const { user, isAuthenticated } = useAuth();
+
+  const deletePost = async () => {
+    if (confirm('Really delete this post?')) {
+      try {
+        await api.delete(`/post/${_id}`);
+        setDeleted(true);
+      } catch (err) {
+        setErrors(err.message);
+      }
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      const usersMap = { ...usersById };
+
+      const where = {
+        channel,
+        parentType: 'post',
+        parentId: _id
+      };
+      const params = where && { params: { where: formatSearch(where), sort_by: '-created', limit: 100 } };
+      const { data: { results: posts } } = await api.get('/post', params);
+      setPosts(posts);
+
+      if (posts && posts.length > 0) {
+        const usersToLoad = posts.map(post => post.createdBy).filter(u => !usersById[u]);
+        if (usersToLoad.length > 0) {
+          const params = { where: formatSearch({ _id: { $in: usersToLoad } }) };
+          const { data: { results: users }} = await api.get('/user', { params });
+          if (setUsersById) {
+            users.forEach(u => {
+              usersMap[u._id] = u;
+            });
+            setUsersById(usersMap);
+          }
+        }
+      }
+      // Add current user to map in case of posting
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message)
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [_id]);
+
+  if (deleted) {
+    return (
+      <div className="post card">
+        <div className="card-body">
+          <h3>Post deleted.</h3>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="post card">
+      { showChannel && channel && channelsById[channel] &&
+        <div className="card-title">
+          <i>In #<Link as={`/channel/${channelsById[channel] ? channelsById[channel].slug : channel}`} href="/channel/[channel]">
+            <a>{ channelsById[channel] ? channelsById[channel].name : 'unknown channel' }</a>
+          </Link></i>
+        </div>
+      }
+      <div className="card-title">
+        { usersById[createdBy] &&
+          <Link key={ createdBy } as={`/members/${usersById[createdBy].slug}`} href="/members/[slug]">
+            <a className="from user-preview">
+              <ProfilePhoto size="sm" user={usersById[createdBy]} />
+              <span className="name">{ usersById[createdBy].screenname }</span>
+            </a>
+          </Link>
+        }
+        <TimeSince time={ created } />
+      </div>
+      { photo &&
+        <div className="card-body">
+          <img src={ `${cdn}${photo}-max-lg.jpg` } />
+        </div>
+      }
+      { error && <div className="card-body">
+        <div className="validation-error">
+          { error }
+        </div>
+      </div> }
+      <div className="card-body">
+        <div className="body">
+          <Linkify
+            componentDecorator={(decoratedHref, decoratedText, key) => (
+                <a
+                  target="_blank"
+                  rel="nofollow noreferrer"
+                  href={decoratedHref}
+                  key={key}
+                  onClick={e => e.stopPropagation()}
+                >
+                    {decoratedText}
+                </a>
+            )}
+          >
+              {content}
+          </Linkify>
+        </div>
+        { tags && tags.length > 0 &&
+            <div className="tags">
+              { tags.map(tag => (
+                <Link key={ tag } as={`/search/${tag}`} href="/search/[keyword]">
+                  <a className="tag">
+                    <span className="ellipsis">{ tag }</span>
+                  </a>
+                </Link>
+              ))}
+          </div>
+        }
+      </div>
+      { attachment &&
+        <div className="card-body">
+          { attachment.image && attachment.image &&
+            <a href={ attachment.url } target="_blank" rel="nofollow">
+              <img src={ attachment.image } />
+            </a>
+          }
+          { attachment.title &&
+            <h3>
+              <a href={ attachment.url } target="_blank" rel="nofollow">
+                {attachment.title}
+              </a>
+            </h3>
+          }
+          { attachment.description &&
+            <p>{attachment.description}</p>
+          }
+        </div>
+      }
+      { isAuthenticated &&
+        <div className="card-footer">
+          <div className="action-row">
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setRepliesOpen(!repliesOpen);
+              }}
+            >
+              { localReplyCount } replies
+            </a>
+            { createdBy === user._id &&
+              <a
+                href="#"
+                className="danger-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  deletePost();
+                }}
+              >
+                delete
+              </a>
+            }
+          </div>
+        </div>
+      }
+      { isAuthenticated && repliesOpen &&
+        <div className="card-footer">
+          <div className="replies">
+            <div className="reply-body">
+              <CreatePost
+                isReply
+                channel={ channel }
+                parentType={ 'post' }
+                parentId={ _id }
+                addPost={ post => {
+                  setPosts([post, ...posts]);
+                  setLocalReplyCount(localReplyCount + 1);
+                } }
+              />
+              { posts.map(post => (
+                <div className="reply" key={ post._id }>
+                  { post.photo &&
+                    <div className="reply-photo">
+                      <img src={ `${cdn}${post.photo}-max-lg.jpg` } />
+                    </div>
+                  }
+                  { usersById[post.createdBy] &&
+                    <Link as={`/members/${usersById[post.createdBy].slug}`} href="/members/[slug]">
+                      <a className="from user-preview">
+                        <ProfilePhoto size="sm" user={usersById[post.createdBy]} />
+                      </a>
+                    </Link>
+                  }
+                  <p>
+                    <b>{ usersById[post.createdBy] && usersById[post.createdBy].screenname || 'Anonymous otter' }: </b>
+                    { post.content }
+                  </p>
+                </div>
+              )) }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  );
+}
+Post.defaultProps = {
+  replyCount: 0
+};
+
+export default Post;

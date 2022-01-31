@@ -1,0 +1,80 @@
+.create-post textarea {
+  font-size: 1.2rem;
+  font-style: italic;
+}
+.create-post .tags {
+  margin-top: 0.5rem;
+}
+.post {
+  margin-bottom: 1rem;
+}
+.user-preview {
+  width: 9rem;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem;
+  text-align: center;
+}
+.user-preview .name {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+.post .from .name {
+  margin: 0;
+}
+.post .profile-photo {
+  margin-right: 0.5rem;
+}
+.post {
+  margin-top: 1rem;
+}
+.post .tags {
+  margin-top: 0.5rem;
+}
+.post .body {
+  font-style: italic;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  max-width: 30rem;
+}
+.reply {
+  margin: 0 -1rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  /* border-bottom: 1px solid #f1efe7; */
+}
+.reply h3 {
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.reply p {
+  margin-bottom: 0;
+}
+.post .reply .from {
+  padding-bottom: 0;
+}
+.card .replies .card-body {
+  margin: 0;
+  padding: 0;
+}
+.reply p {
+  padding: 0.25rem;
+  background-color: #f2f4f3;
+}
+.reply:last-child {
+  border-bottom: none;
+}
+.replies .create-post {
+  margin-bottom: 0.5rem;
+}
+.replies .create-post input {
+  font-size: 1rem;
+}

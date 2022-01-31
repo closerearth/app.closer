@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply py-2 px-4 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+    display: inline-block;
+  }
+  .btn-black {
+    @apply btn bg-black text-white hover:bg-stone-800;
+    display: inline-block;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-hover disabled:bg-gray-500;
+    display: inline-block;
+  }
+  .main-content {
+    @apply max-w-4xl mx-auto p-4;
+  }
+  .date-preview {
+    @apply text-center max-w-xl mr-3 p-1 text-gray-900 bg-gray-100 font-bold w-16;
+  }
+  .date-preview .date {
+    @apply text-sm;
+  }
+  input, textarea {
+    @apply w-full;
+  }
+  body {
+    @apply bg-background;
+  }
+  .App {
+    min-height: 100vh;
+    @apply flex flex-col justify-between;
+  }
+  h1 {
+    @apply text-4xl font-bold;
+  }
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  h3 {
+    @apply text-xl font-bold;
+  }
+}

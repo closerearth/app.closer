@@ -1,0 +1,66 @@
+
+.card {
+  background-color: #fafafa;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.card:last-child {
+  margin-bottom: 0;
+}
+.card .card-title {
+  margin: 0 -1rem 1rem -1rem;
+  padding: 0 1rem 1rem 1rem;
+  border-bottom: 1px solid #f1efe7;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.card .card-title h2, .card .card-title h3 {
+  margin-bottom: 0;
+}
+.card .card-actions {
+  font-size: 0.8rem;
+}
+.card .card-body {
+  padding: 1rem 0;
+}
+.card .card-body a.tag {
+  text-decoration: none;
+}
+.card .card-footer {
+  margin: 1rem -1rem 0 -1rem;
+  padding: 1rem 1rem 0 1rem;
+  border-top: 1px solid #f1efe7;
+}
+/* .card .card-footer.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+} */
+.card .card-footer.pagination a, .card .card-footer.pagination a:visited {
+  padding: 0.25rem;
+  background-color: #f2f4f3;
+  margin-right: 0.5rem;
+  text-decoration: none;
+}
+.action-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.card .card-footer.pagination a.active {
+  background-color: black;
+  color: white;
+}
+.card .card-footer button {
+  margin-right: 0.5rem;
+}
+.card input, .card textarea {
+  background-color: #f2f4f3;
+}
+.card p:last-child{
+  margin-bottom: 0;
+}
