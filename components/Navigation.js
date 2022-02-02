@@ -16,7 +16,7 @@ import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from '../config';
 
 dayjs.extend(relativeTime);
 
-const nav = () => {
+const Navigation = () => {
   const [navOpen, toggleNav] = useState(false);
   const [now, setNow] = useState(dayjs());
   const router = useRouter();
@@ -83,12 +83,12 @@ const nav = () => {
             <Link href="/signup">
               <a
                 href="/signup"
-                className="btn-primary mr-2 hidden lg:visible"
+                className="btn-primary mr-2 hidden md:visible"
               >
                 Get your membership
               </a>
             </Link>
-            {TELEGRAM_URL && <a
+            {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noreferrer nofollow"
@@ -129,4 +129,4 @@ const nav = () => {
   );
 };
 
-export default nav;
+export default Navigation;

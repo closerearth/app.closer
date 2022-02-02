@@ -1,16 +1,17 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { initAnalytics, trackPageView } from './Analytics';
 
-export default class Layout extends Component {
-  componentDidMount() {
-    if (!window.GA_INITIALIZED) {
-      initAnalytics()
-      window.GA_INITIALIZED = true
-    }
-    trackPageView()
-  }
+let GA_INITIALIZED;
 
-  render() {
-    return this.props.children;
-  }
+const Layout = ({ children }) => {
+  useEffect(() => {
+    if (!GA_INITIALIZED) {
+      initAnalytics();
+      GA_INITIALIZED = true;
+    }
+    trackPageView();
+  }, []);
+
+  return children;
 }
+export default Layout;

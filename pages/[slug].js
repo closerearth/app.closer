@@ -8,22 +8,23 @@ import api, { cdn } from '../utils/api';
 import { useAuth } from '../contexts/auth.js'
 
 const Article = ({ article, error }) => {
-  if (!article) {
-    return <PageNotFound error={ error } />
-  }
   const { user, isAuthenticated } = useAuth();
 
-  const fullImageUrl = article.photo && (
+  const fullImageUrl = article && article.photo && (
     !article.photo.startsWith('http') ?
       `${cdn}/${article.photo}-max-lg.jpg`:
       article.photo
   );
 
-  const createdAt = new Date(article.created).toLocaleDateString('en-US', {
+  const createdAt = article && new Date(article.created).toLocaleDateString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
+
+  if (!article) {
+    return <PageNotFound error={ error } />
+  }
 
   return (
     <Layout>

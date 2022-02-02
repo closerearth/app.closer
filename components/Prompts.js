@@ -26,7 +26,7 @@ const Prompts = () => {
           <div className="prompt-text">
             { image ?
               <p>Looking good {user.screenname} ♥️</p>:
-              <p>It's nice to have you here {user.screenname}. Now let's add a photo to your profile ♥️</p>
+              <p>It&apos;s nice to have you here {user.screenname}. Now let&apos;s add a photo to your profile ♥️</p>
             }
             <p>
               <a

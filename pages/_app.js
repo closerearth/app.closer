@@ -2,19 +2,12 @@ import api, { formatSearch } from '../utils/api'
 import Head from 'next/head'
 import App from 'next/app'
 import Router, { useRouter } from 'next/router';
-import Footer from '../components/Footer'
+import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'
-// import '../public/reset.css';
-import '../public/styles.css';
-// import '../public/css/card.css';
-// import '../public/css/events.css';
-// import '../public/css/posts.css';
-// import '../public/css/calendar.css';
-import '../public/fonts/Avenir.css';
-import '../public/fonts/Metropolis.css';
-import { AuthProvider } from '../contexts/auth'
+import { AuthProvider } from '../contexts/auth';
 import { PlatformProvider } from '../contexts/platform'
-import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION } from '../config'
+import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION } from '../config';
+import '../public/styles.css';
 
 import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import { config } from "@fortawesome/fontawesome-svg-core";

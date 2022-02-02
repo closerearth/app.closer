@@ -3,11 +3,11 @@ import Newsletter from './Newsletter'
 import Link from 'next/link'
 import api from '../utils/api'
 import { trackEvent } from './Analytics'
-import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL } from '../config';
+import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER } from '../config';
 
 const footer = () => (
   <div className="footer-wrapper no-print bg-primary">
-    <Newsletter placement="Footer" />
+    { NEWSLETTER && <Newsletter placement="Footer" /> }
     <footer className="main-content">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center justify-start">

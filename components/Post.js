@@ -138,13 +138,13 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
       { attachment &&
         <div className="card-body">
           { attachment.image && attachment.image &&
-            <a href={ attachment.url } target="_blank" rel="nofollow">
+            <a href={ attachment.url } target="_blank" rel="nofollow noreferrer">
               <img src={ attachment.image } />
             </a>
           }
           { attachment.title &&
             <h3>
-              <a href={ attachment.url } target="_blank" rel="nofollow">
+              <a href={ attachment.url } target="_blank" rel="nofollow noreferrer">
                 {attachment.title}
               </a>
             </h3>

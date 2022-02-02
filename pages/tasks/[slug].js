@@ -17,13 +17,8 @@ import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js';
 
 const Task = ({ task, error }) => {
-
   const [loadError, setErrors] = useState(null);
   const [status, setStatus] = useState(task && task.status);
-  if (!task) {
-    return <PageNotFound error={ error } />;
-  }
-
   const { user, isAuthenticated } = useAuth();
   const [usersById, setUsersById] = useState({});
   const [applicants, setApplicants] = useState(task.applicants || []);
@@ -49,6 +44,10 @@ const Task = ({ task, error }) => {
     }
   }
 
+  if (!task) {
+    return <PageNotFound error={ error } />;
+  }
+
   return (
     <Layout>
       <Head>
@@ -57,7 +56,7 @@ const Task = ({ task, error }) => {
         <meta property="og:type" content="task" />
       </Head>
       <main className="fullwidth task-page main-content intro">
-        <div className={`columns intro`} className="columns">
+        <div className="columns">
           <div className="col lg two-third">
             <div>
               <h1>{task.title}</h1>

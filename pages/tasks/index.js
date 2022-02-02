@@ -10,9 +10,8 @@ import models from '../../models';
 import { useAuth } from '../../contexts/auth.js'
 
 const Settings = ({ token }) => {
-
   const { user } = useAuth();
-  
+
   return (
     <Layout protect>
       <Head>

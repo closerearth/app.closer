@@ -25,7 +25,7 @@ const Search = ({ tags, error, keyword, articles }) => (
                   articles.map(article => {
                     return (
                       <div className="article-preview" key={ article._id }>
-                        <Link href={ `/${article.slug}` } href="/[slug]">
+                        <Link as={ `/${article.slug}` } href="/[slug]">
                           <a role="button">
                           <span className="title">
                             {article.title}

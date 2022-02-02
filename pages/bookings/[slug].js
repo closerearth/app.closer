@@ -59,8 +59,8 @@ const Booking = ({ booking, error }) => {
                 <h3>Check out:</h3>
                 <p><b>{end.format('LLL')}</b></p>
                 <p>Booking cost: {booking.price}€</p>
-                <p>Directions: <b>Find us on <a target="_blank" href="https://www.google.com/maps/place/Traditional+Dream+Factory/@38.0030022,-8.5613082,17z/data=!3m1!4b1!4m5!3m4!1s0xd1bb5a9aebf4183:0x70f027ce7d295aae!8m2!3d38.002998!4d-8.5591195">Google Maps</a></b></p>
-                <p>Any questions? <b>Ask in the <a target="_blank" href="https://chat.whatsapp.com/DnkSxE2x6nM5bOZiPuMpdj">WhatsApp Group</a></b></p>
+                <p>Directions: <b>Find us on <a target="_blank" rel="noreferrer" href="https://www.google.com/maps/place/Traditional+Dream+Factory/@38.0030022,-8.5613082,17z/data=!3m1!4b1!4m5!3m4!1s0xd1bb5a9aebf4183:0x70f027ce7d295aae!8m2!3d38.002998!4d-8.5591195">Google Maps</a></b></p>
+                <p>Any questions? <b>Ask in the <a target="_blank" rel="noreferrer" href="https://chat.whatsapp.com/DnkSxE2x6nM5bOZiPuMpdj">WhatsApp Group</a></b></p>
               </section>
             </div>
           </div>

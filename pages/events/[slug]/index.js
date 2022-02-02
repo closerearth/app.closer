@@ -23,15 +23,13 @@ const Event = ({ event, error }) => {
 
   const [photo, setPhoto] = useState(event.photo);
   const [loadError, setErrors] = useState(null);
-  if (!event) {
-    return <PageNotFound error={ error } />;
-  }
-
   const { platform } = usePlatform();
   const { user, isAuthenticated } = useAuth();
   const [attendees, setAttendees] = useState(event.attendees || []);
   const [ticketsSold, setTicketsSold] = useState([]);
-  const ticketsFilter = { where: { event: event._id, status: 'approved' } };
+  const ticketsFilter = { where: { event: event && event._id, status: 'approved' } };
+  const start = event.start && dayjs(event.start);
+  const end = event.end && dayjs(event.end);
   const getTicketHoldersFilter = tickets => {
     if (!tickets || !tickets.count) {
       return false;
@@ -76,9 +74,9 @@ const Event = ({ event, error }) => {
     loadData();
   }, [event, ticketsSold]);
 
-  const now = dayjs();
-  const start = event.start && dayjs(event.start);
-  const end = event.end && dayjs(event.end);
+  if (!event) {
+    return <PageNotFound error={ error } />;
+  }
 
   return (
     <Layout>
@@ -163,7 +161,7 @@ const Event = ({ event, error }) => {
       </section>
       <main className="main-content event-page py-10">
         <section className="attendees card-body mb-6">
-          <h3 className="text-2xl font-bold">Who's coming?</h3>
+          <h3 className="text-2xl font-bold">Who&apos;s coming?</h3>
           { event.price || event.ticketOptions?
               <div className="-space-x-4 flex flex-row flex-wrap">
                 { ticketsSold && getTicketHoldersFilter(ticketsSold) && platform.user.find(getTicketHoldersFilter(ticketsSold)) &&

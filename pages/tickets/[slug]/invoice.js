@@ -12,12 +12,12 @@ import { usePlatform } from '../../../contexts/platform';
 import { PLATFORM_NAME, PLATFORM_LEGAL_ADDRESS } from '../../../config';
 
 const Ticket = ({ ticket, event, error }) => {
+  const { platform } = usePlatform();
+  const { user, isAuthenticated } = useAuth();
+
   if (!ticket) {
     return <PageNotFound error={ error } />;
   }
-
-  const { platform } = usePlatform();
-  const { user, isAuthenticated } = useAuth();
 
   return (
     <Layout>

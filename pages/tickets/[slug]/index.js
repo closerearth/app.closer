@@ -9,12 +9,12 @@ import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
 const Ticket = ({ ticket, event, error }) => {
+  const { platform } = usePlatform();
+  const { user, isAuthenticated } = useAuth();
+
   if (!ticket) {
     return <PageNotFound error={ error } />;
   }
-
-  const { platform } = usePlatform();
-  const { user, isAuthenticated } = useAuth();
 
   return (
     <Layout>
@@ -23,7 +23,7 @@ const Ticket = ({ ticket, event, error }) => {
         <meta property="og:type" content="ticket" />
       </Head>
       <main className="main-content ticket-page">
-        <div className={`columns`} className="columns">
+        <div className="columns">
           <div className="col lg two-third">
             <div className="ticket card">
               <i>You are going to</i><br/>
@@ -33,7 +33,7 @@ const Ticket = ({ ticket, event, error }) => {
               <h4>Ticket number: {ticket._id}</h4>
             </div>
             <br />
-            <p>Make sure to check your email address. If you didn't receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to team@rebuild.co for support.</p>
+            <p>Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to team@rebuild.co for support.</p>
           </div>
           <div className="col third">
           </div>

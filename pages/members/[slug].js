@@ -23,12 +23,7 @@ const MemberPage = ({ member, loadError }) => {
   const [error, setErrors] = useState(false);
   const [sendError, setSendErrors] = useState(false);
   const { user: currentUser, isAuthenticated } = useAuth();
-
-  if (!member) {
-    return <PageNotFound error={ error } />;
-  }
-
-  const [about, setAbout] = useState(member.about);
+  const [about, setAbout] = useState(member && member.about);
   const image = (photo || member.photo);
 
   const saveAbout = async (about) => {
@@ -55,6 +50,10 @@ const MemberPage = ({ member, loadError }) => {
   useEffect(() => {
     setAbout(member.about);
   }, [member]);
+
+  if (!member) {
+    return <PageNotFound error={ error } />;
+  }
 
   return (
     <Layout>

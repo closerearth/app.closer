@@ -94,7 +94,7 @@ const ApplicationList = ({ children, channel, status, managedBy }) => {
                     <label>From your conversation, would you say this member will adhere to the values in the Pink Paper?</label>
                     <fieldset>
                       <div className="radio-group">
-                        <label for="adheres">Yes</label>
+                        <label htmlFor="adheres">Yes</label>
                         <input
                           type="radio"
                           onChange={ (e) => {
@@ -113,7 +113,7 @@ const ApplicationList = ({ children, channel, status, managedBy }) => {
                         />
                       </div>
                       <div className="radio-group">
-                        <label for="noadheres">No</label>
+                        <label htmlFor="noadheres">No</label>
                         <input
                           type="radio"
                           onChange={ (e) => {

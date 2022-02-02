@@ -48,7 +48,7 @@ const Admin = ({ token }) => {
       <main className="main-content center intro">
         { invite &&
           <div className="success-box">
-            Here's your invite link:
+            Invite link:
             <input value={ invite } className="copy-box" disabled />
           </div>
         }

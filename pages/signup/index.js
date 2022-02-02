@@ -4,7 +4,7 @@ import Layout from '../../components/Layout'
 import api from '../../utils/api'
 import { EN } from '../../config'
 
-const signup = () => {
+const Signup = () => {
   const [submitted, setSubmitted] = useState(false);
   const [application, setApplication] = useState({
     name: '',
@@ -81,4 +81,4 @@ const signup = () => {
   );
 }
 
-export default signup;
+export default Signup;

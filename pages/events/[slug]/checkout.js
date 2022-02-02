@@ -28,9 +28,6 @@ const optionToIcon = {
 const formatName = name => name && name.split('_').join(' ');
 
 const EventCheckout = ({ event, error }) => {
-  if (error || !event) {
-    return <PageNotFound error={ error } />;
-  }
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const [ticketOption, setTicketOption] = useState(null);
@@ -86,6 +83,10 @@ const EventCheckout = ({ event, error }) => {
     const refreshAvailability = setInterval(loadData, 30000);
     return () => clearInterval(refreshAvailability);
   }, [event]);
+
+  if (error || !event) {
+    return <PageNotFound error={ error } />;
+  }
 
   return (
     <Layout>

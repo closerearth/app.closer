@@ -187,7 +187,6 @@ const EditModel = ({
         })
         .map(({ label, placeholder, name, type, required, options, endpoint, searchField, multi }) => {
           const currency = type === 'currency' && currencies.find(cur => cur.value === data[name]?.cur);
-          console.log('data[name]?.cur', data[name])
 
           return (
             <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
@@ -232,7 +231,7 @@ const EditModel = ({
               { type === 'currencies' &&
                 <div className="currencies-group">
                   { (data[name] || []).map((currencyGroup, index) => (
-                    <div className="currency-group">
+                    <div className="currency-group" key={ `${name}.${index}.cur` }>
                       <select
                           value={ data[name]?.cur }
                           onChange={e => update(`${name}.${index}.cur`, e.target.value)}
