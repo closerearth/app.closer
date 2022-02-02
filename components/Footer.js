@@ -25,8 +25,8 @@ const footer = () => (
               <img src="/images/icons/twitter.svg" width="30" alt="twitter" />
             </a> }
           </div>
-          <div className="border-t-4 border-t-white pt-2">
-            <a href={`mailto:${TEAM_EMAIL}`} className="text-white text-sm hover:underline">{TEAM_EMAIL}</a>
+          <div className="border-t border-background pt-2">
+            <a href={`mailto:${TEAM_EMAIL}`} className="text-sm text-white hover:underline">{TEAM_EMAIL}</a>
           </div>
         </div>
       </div>

@@ -12,8 +12,8 @@ const index = () => (
     <main className="homepage">
       <section className="text-center flex flex-column items-center justify-center pb-10">
         <div className="main-content">
-          <h1>Hello World</h1>
-          <h2>You can edit this page by adding a index.js to your /pages.</h2>
+          <h1 className="font-9xl">Closer</h1>
+          <p className="font-lg">The operating system for regenerative communities</p>
           <p className="mt-4">
             <Link href="/signup"><a className="btn-primary">Create your account</a></Link>
           </p>
