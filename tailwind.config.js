@@ -9,8 +9,8 @@ module.exports = {
         'sans': ['Metropolis', 'Helvetica', 'Sans-Serif']
       },
       colors: {
-        primary: '#d626df',
-        'primary-hover': '#c30fcc',
+        primary: '#000000',
+        'primary-hover': '#000001',
         background: '#ececec'
       }
     },

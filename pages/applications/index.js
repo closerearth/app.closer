@@ -26,12 +26,12 @@ const Applications = ({ token }) => {
   }
 
   useEffect(() => {
-    if (user && user.roles.includes('admin')){
+    if (user && user.roles.includes('community-curator')){
       loadData();
     }
   }, [user]);
 
-  if (!user || !user.roles.includes('tdf')) {
+  if (!user || !user.roles.includes('community-curator')) {
     return <PageNotAllowed />;
   }
 
@@ -40,22 +40,14 @@ const Applications = ({ token }) => {
       <Head>
         <title>Community applications</title>
       </Head>
-      <main className="main-content intro">
-        <div className="columns">
-          <div className="col lg two-third">
-            <div className="page-header">
-              <div>
-                <h1>Community applications</h1>
-                <p>Help grow the community and invite new members. Each applicant should have a conversation with a member, after which if the member sees a good fit the applicant can be added to the whatsapp channel & granted an account on the online community.</p>
-                <p>Make sure you have read the pink paper and understand on which values to judge applicants before starting this process.</p>
-              </div>
-            </div>
-            <h2>In conversation</h2>
-            <ApplicationList status="conversation" managedBy={ user._id } />
-            <h2>Open applications</h2>
-            <ApplicationList status="open" />
+      <main className="main-content">
+        <div className="page-header mb-4">
+          <div>
+            <h1>Community applications</h1>
           </div>
-          <div className="col third">
+        </div>
+        <div className="md:flex md:flex-row-reverse">
+          <div className="md:w-1/3 md:ml-4">
             <div className="card">
               <h3 className="card-title">Platform metrics</h3>
               <div className="card-body">
@@ -64,6 +56,12 @@ const Applications = ({ token }) => {
                 <p>Accepted applications: <b>{platform.application.findCount(approvedApplications)}</b></p>
               </div>
             </div>
+          </div>
+          <div className="md:w-2/3">
+            <h3>In conversation</h3>
+            <ApplicationList status="conversation" managedBy={ user._id } />
+            <h3 className="mt-4">Open applications</h3>
+            <ApplicationList status="open" />
           </div>
         </div>
       </main>

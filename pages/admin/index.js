@@ -3,7 +3,7 @@ import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import EditModel from '../../components/editmodel';
+import EditModel from '../../components/EditModel';
 import Loading from '../../components/Loading';
 import api, { formatSearch } from '../../utils/api';
 import models from '../../models';

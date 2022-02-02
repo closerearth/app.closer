@@ -14,7 +14,6 @@ import '../public/fonts/Avenir.css';
 import '../public/fonts/Metropolis.css';
 import { AuthProvider } from '../contexts/auth'
 import { PlatformProvider } from '../contexts/platform'
-import { StaticProvider } from '../contexts/static'
 import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION } from '../config'
 
 import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
@@ -54,12 +53,10 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
       </Head>
       <AuthProvider>
         <PlatformProvider>
-          <StaticProvider>
-            <Navigation query={ query } signedIn={ signedIn } />
-            <div className="content-wrapper">
-              <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
-            </div>
-          </StaticProvider>
+          <Navigation query={ query } signedIn={ signedIn } />
+          <div className="content-wrapper">
+            <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
+          </div>
         </PlatformProvider>
       </AuthProvider>
       <Footer tags={ tags } />

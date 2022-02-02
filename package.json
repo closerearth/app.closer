@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev -p 16666",
     "build": "next build",
+    "lint": "next lint",
     "start": "next start -p 16666"
   },
   "repository": {
@@ -22,6 +23,7 @@
     "axios": "^0.21.1",
     "datejs": "^1.0.0-rc3",
     "dayjs": "^1.10.4",
+    "eslint-config-airbnb-base": "^15.0.0",
     "immutable": "^4.0.0-rc.12",
     "js-cookie": "^2.2.1",
     "moment": "^2.28.0",

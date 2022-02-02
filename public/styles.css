@@ -43,4 +43,37 @@
   h3 {
     @apply text-xl font-bold;
   }
+
+  .card {
+    @apply bg-gray-100 rounded-md p-4 mb-4 last:mb-0 divide-y;
+  }
+  .card .card-title {
+    @apply mt-0 -ml-4 -mr-4 p-4 pt-0 flex flex-row justify-between items-center;
+  }
+  .card .card-body {
+    @apply py-4;
+  }
+  .card .card-footer {
+    @apply mt-4 -ml-4 -mr-4 mb-0 p-4 pb-0;
+  }
+  .card .card-footer.pagination a, .card .card-footer.pagination a:visited {
+    padding: 0.25rem;
+    background-color: #f2f4f3;
+    margin-right: 0.5rem;
+    text-decoration: none;
+  }
+  .card .card-footer.pagination a.active {
+    background-color: black;
+    color: white;
+  }
+  .card .card-footer button {
+    margin-right: 0.5rem;
+  }
+  .card input, .card textarea {
+    background-color: #f2f4f3;
+  }
+  .card p:last-child{
+    margin-bottom: 0;
+  }
+
 }

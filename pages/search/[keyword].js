@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
-import { dynamicPages } from '../../pageDetails';
 
 const Search = ({ articles, error, keyword, tags }) => console.log(error, articles) || (
   <Layout>
@@ -22,24 +21,20 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
             }
             <div className="article-previews two-col">
               { articles ?
-                articles.map(article => {
-                  const href = dynamicPages.includes(article.slug) ? `/${article.slug}`: '/[slug]';
-
-                  return (
-                    <div className="article-preview" key={ article._id }>
-                      <Link as={ `/${article.slug}` } href={ href }>
-                        <a role="button">
-                        <span className="title">
-                          {article.title}
-                        </span>
-                        { article.summary &&
-                          <span className="summary">{ article.summary }</span>
-                        }
-                        </a>
-                      </Link>
-                    </div>
-                  );
-                }):
+                articles.map(article => (
+                  <div className="article-preview" key={ article._id }>
+                    <Link as={ `/${article.slug}` } href="/[slug]">
+                      <a role="button">
+                      <span className="title">
+                        {article.title}
+                      </span>
+                      { article.summary &&
+                        <span className="summary">{ article.summary }</span>
+                      }
+                      </a>
+                    </Link>
+                  </div>
+                )):
                 <div className="Loading">Loading...</div>
               }
             </div>

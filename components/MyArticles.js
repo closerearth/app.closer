@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ActiveLink from './ActiveLink';
-import { trackEvent } from './analytics';
+import { trackEvent } from './Analytics';
 import Link from './ActiveLink'
 import api, { formatSearch } from '../utils/api';
 

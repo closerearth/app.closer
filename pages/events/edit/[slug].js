@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import Layout from '../../../components/Layout';
-import EditModel from '../../../components/editmodel';
+import EditModel from '../../../components/EditModel';
 import models from '../../../models';
 
 import api from '../../../utils/api';

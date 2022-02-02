@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import Layout from '../components/Layout'
-import api from '../utils/api'
-import { useAuth } from '../contexts/auth.js'
+import Layout from '../../components/Layout'
+import api from '../../utils/api'
+import { useAuth } from '../../contexts/auth.js'
 
 const SetPasswordScreen = () => {
   const router = useRouter();

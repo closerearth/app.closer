@@ -12,7 +12,7 @@ module.exports = {
   CDN_URL: 'https://cdn.oasa.co/photo/',
   TELEGRAM_URL: "https://t.me/joinchat/iXB2vqgiWx03NjFh",
   LOG_REQUESTS: false,
-  CACHE_DURATION: 300000, // 5min
+  CACHE_DURATION: 6000000, // 1h
   STRIPE_TEST_KEY: 'pk_test_51Gv17cGtt5D0VKR2Gt2RUVIDfrHRGJTfMSwRFpdbF5B4VfZ2zFOxM62ckAj4aQN5q6mDexpjZAqQKLpKdmwcnQfJ00sJwfbVWK',
   STRIPE_PUB_KEY: 'pk_live_YxOUUf7iOvQj104TG4JyWMAE003w80ISH6',
   // LOGO_HEADER: "",

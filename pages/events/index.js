@@ -31,6 +31,7 @@ const Events = () => {
       }
       <div className="main-content intro">
         <UpcomingEvents
+          allowCreate
           limit={ 30 }
           page={ page }
           labelLink={null}

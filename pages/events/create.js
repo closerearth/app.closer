@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import EditModel from '../../components/editmodel';
+import EditModel from '../../components/EditModel';
 import api from '../../utils/api';
 import models from '../../models';
 

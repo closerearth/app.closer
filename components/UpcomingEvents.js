@@ -37,23 +37,25 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
   }, [page, channel, limit]);
 
   return (
-    <section className="upcoming-events sessionsList">
-      <h3 className="card-title text-2xl text-center font-bold mb-4">
-        { labelLink ?
-          <Link href={labelLink}><a>{ label }</a></Link>:
-          label
-        }
+    <section className="card">
+      <div className="card-title">
+        <h3>
+          { labelLink ?
+            <Link href={labelLink}><a>{ label }</a></Link>:
+            label
+          }
+        </h3>
         { allowCreate &&
           <div className="card-actions">
             <Link href="/events/create"><a>Create event</a></Link>
           </div>
         }
-      </h3>
+      </div>
       <div className="card-body event-list flex flex-row flex-wrap justify-center">
         { events && events.count() > 0?
           events.map(event => (
             <div key={ event.get('_id') } className="event-preview relative live w-1/3 session flex flex-row pr-4 mb-8">
-              <div className="card rounded bg-white text-black  overflow-hidden">
+              <div className="card rounded bg-white text-black overflow-hidden">
                 <div>
                   <Link href={`/events/${event.get('slug')}`}><a>
                     <img
@@ -84,7 +86,7 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
               </div>
             </div>
           )):
-          <div className="w-full p-4">
+          <div className="w-full py-4">
             <p className="text-center italic">No upcoming events.</p>
           </div>
         }

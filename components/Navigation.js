@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
-import { streams } from '../utils/const';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from '../config';
@@ -22,7 +21,6 @@ const nav = () => {
   const [now, setNow] = useState(dayjs());
   const router = useRouter();
   const { cache } = useStatic();
-  const { happeningSoon, happeningNow } = cache;
 
   useEffect(() => {
     const tick = setInterval(() => {
