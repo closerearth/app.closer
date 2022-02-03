@@ -28,7 +28,6 @@ const Login = () => {
               e.preventDefault();
               login(email, password);
             }}
-            className="card"
           >
             <div className="w-full mb-4">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="email">

@@ -1,0 +1,35 @@
+@tailwind components;
+
+@layer components {
+  body {
+    @apply bg-background;
+  }
+  .App {
+    min-height: 100vh;
+    @apply flex flex-col justify-between;
+  }
+  .main-content {
+    @apply max-w-screen-xl mx-auto p-4;
+  }
+  .date-preview {
+    @apply text-center max-w-xl mr-3 p-1 text-gray-900 bg-gray-100 font-bold w-16;
+  }
+  .date-preview .date {
+    @apply text-sm;
+  }
+  h1 {
+    @apply text-4xl font-bold;
+  }
+  h1.page-title {
+    @apply text-9xl font-light mb-4;
+  }
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  h3 {
+    @apply text-xl font-bold;
+  }
+  .logo img {
+    height: 3rem;
+  }
+}

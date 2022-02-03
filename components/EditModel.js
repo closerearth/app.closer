@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import DatePicker from 'react-datepicker';
 import objectPath from 'object-path';
 import Switch from 'react-switch';
 import Autocomplete from './Autocomplete';
@@ -191,7 +190,7 @@ const EditModel = ({
           return (
             <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label }</label>
-              { ['text', 'email', 'phone', 'hidden', 'number'].includes(type) && <input
+              { ['text', 'email', 'phone', 'hidden', 'number', 'date'].includes(type) && <input
                 type={ type }
                 value={ data[name] }
                 placeholder={ placeholder }
@@ -199,11 +198,12 @@ const EditModel = ({
                 required={ required }
               /> }
               { type === 'longtext' && <textarea
-                type={ type }
+                // type={ type }
                 value={ data[name] }
                 placeholder={ placeholder }
                 onChange={e => update(name, e.target.value)}
                 required={ required }
+                className="textarea"
               /> }
               { type === 'currency' &&
                 <div className="currency-group">
@@ -263,14 +263,6 @@ const EditModel = ({
                   } }>Add currency</a>
                 </div>
               }
-              { type === 'date' && <DatePicker
-                selected={ data[name] && new Date(data[name]) }
-                onChange={date => update(name, date)}
-                showTimeSelect
-                timeFormat="p"
-                timeIntervals={30}
-                dateFormat="Pp"
-              /> }
               { type === 'select' &&
                 <select
                     value={ data[name] }

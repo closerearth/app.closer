@@ -35,19 +35,7 @@ const Navigation = () => {
     <div className="NavContainer">
       <nav className={`${navOpen ? 'open' : 'closed'}`}>
         <div className="main-content flex flex-row justify-between items-center">
-          <h3 className="logo">
-            <Link href="/">
-              <a>
-                { LOGO_HEADER ? <img
-                  src={LOGO_HEADER}
-                  width="120"
-                  alt={PLATFORM_NAME}
-                /> : PLATFORM_NAME }
-              </a>
-            </Link>
-          </h3>
-
-          <div className="menu-right no-print flex text-sm flex-row justify-center items-center">
+          <div className="menu-left no-print flex text-sm flex-row justify-start items-center w-1/3">
             <Link
               href="/events"
             >
@@ -55,6 +43,19 @@ const Navigation = () => {
                 Events
               </a>
             </Link>
+          </div>
+          <h3 className="logo">
+            <Link href="/">
+              <a className="block">
+                { LOGO_HEADER ? <img
+                  src={LOGO_HEADER}
+                  alt={PLATFORM_NAME}
+                /> : PLATFORM_NAME }
+              </a>
+            </Link>
+          </h3>
+
+          <div className="menu-right no-print flex text-sm flex-row justify-end items-center w-1/3">
             { isAuthenticated ? (
               <Link href="/">
                 <a

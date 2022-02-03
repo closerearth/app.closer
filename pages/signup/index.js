@@ -10,9 +10,8 @@ const Signup = () => {
     name: '',
     phone: '',
     email: '',
-    home: '',
-    dream: '',
-    source: typeof window !== 'undefined' ? window.location.href : 'traditionaldreamfactory.com'
+    community: '',
+    source: typeof window !== 'undefined' && window.location.href
   });
   const submit = async (e) => {
     e.preventDefault();
@@ -24,7 +23,7 @@ const Signup = () => {
       await api.post('/application', application);
       setSubmitted(true);
     } catch (err) {
-      alert('We couldn\'t send your dream to HQ');
+      alert('There was an error sending your application, please try again.');
     }
   }
 
@@ -35,41 +34,41 @@ const Signup = () => {
       <Head>
         <title>{ EN.signup_title }</title>
       </Head>
-      <main className="main-content mt-12 px-4">
-        <h1 className="text-xl mb-2">{ EN.signup_title }</h1>
+      <main className="main-content mt-12 px-4 max-w-prose mx-auto">
+        <h1 className="mb-2">{ EN.signup_title }</h1>
         <p className="mb-8">{ EN.signup_body }</p>
         { submitted?
-          <h2 className="my-4 text-2xl">{ EN.signup_success }</h2>:
+          <h2 className="my-4">{ EN.signup_success }</h2>:
           <form className="join mt-24 flex flex-col" onSubmit={ submit }>
             <div className="w-full mb-4">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="screenname">
+              <label htmlFor="screenname">
                 Name
               </label>
-              <input className="border border-gray-200 w-full px-4 py-1" id="screenname" type="text" onChange={ e => updateApplication({ name: e.target.value }) } placeholder="Jane Birkin" />
+              <input id="screenname" type="text" onChange={ e => updateApplication({ name: e.target.value }) } placeholder="Jane Birkin" />
             </div>
-            <div className="w-full mb-4">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="home">
+            {/* <div className="w-full mb-4">
+              <label htmlFor="home">
                 What is home to you?
               </label>
-              <textarea className="border border-gray-200 resize-none w-full px-4 py-1" id="home" value={ application.home } onChange={ e => updateApplication({ home: e.target.value }) } placeholder="Home is where..." />
-            </div>
+              <textarea id="home" value={ application.home } onChange={ e => updateApplication({ home: e.target.value }) } placeholder="Home is where..." />
+            </div> */}
             <div className="w-full mb-4">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="dream">
-                What do you dream of creating?
+              <label htmlFor="community">
+                Tell us about your community
               </label>
-              <textarea className="border border-gray-200 resize-none w-full px-4 py-1" id="dream" value={ application.dream } onChange={ e => updateApplication({ dream: e.target.value }) } placeholder="My dream is to..." />
+              <textarea className="textarea" id="community" value={ application.community } onChange={ e => updateApplication({ community: e.target.value }) } placeholder="" />
             </div>
             <div className="w-full mb-4">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="phone">
+              <label htmlFor="phone">
                 Phone number
               </label>
-              <input type="phone" className="border border-gray-200 w-full px-4 py-1" required id="phone" value={ application.phone } onChange={ e => updateApplication({ phone: e.target.value }) } placeholder="+351 777 888 999" />
+              <input type="phone" required id="phone" value={ application.phone } onChange={ e => updateApplication({ phone: e.target.value }) } placeholder="+1 777 888 999" />
             </div>
             <div className="w-full mb-4">
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="email">
+              <label htmlFor="email">
                 Email
               </label>
-              <input type="email" className="border border-gray-200 w-full px-4 py-1" id="email" required value={ application.email } onChange={ e => updateApplication({ email: e.target.value }) } placeholder="you@project.co" />
+              <input type="email" id="email" required value={ application.email } onChange={ e => updateApplication({ email: e.target.value }) } placeholder="you@project.co" />
             </div>
             <div className="w-full mb-4">
               <button id="signupbutton" className="btn-primary" type="submit">Apply</button>
