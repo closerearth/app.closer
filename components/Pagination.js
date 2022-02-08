@@ -11,7 +11,7 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="card-footer pagination flex flex-row items-center justify-between">
+    <div className="pagination flex flex-row items-center justify-between">
       <div className="flex flex-row items-center justify-between">
         { page > 1 &&
           <Link href={{query: { [queryParam]: page - 1 }}}>
@@ -52,6 +52,7 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
             <a
               className="p-1"
               onClick={ (e) => {
+                console.log('set page, ', page, page + 1)
                 e.preventDefault();
                 e.stopPropagation();
                   loadPage(page + 1);
@@ -67,7 +68,9 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
 };
 
 Pagination.defaultProps = {
-  queryParam: 'page'
+  queryParam: 'page',
+  page: 1,
+  limit: 50
 };
 
 export default Pagination;

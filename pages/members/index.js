@@ -19,7 +19,7 @@ const Settings = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Re:build Members</title>
+        <title>Members</title>
       </Head>
       <div className="main-content fullheight">
         { user &&

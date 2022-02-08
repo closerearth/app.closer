@@ -25,7 +25,7 @@ const Book = ({ token }) => {
   const listings = platform.listing.find();
   const [booking, setBooking] = useState({
     message: '',
-    listing: (listings && listings.first().get('_id')),
+    listing: (listings && listings.count() > 0 && listings.first().get('_id')),
     start: defaultStart,
     end: defaultEnd,
     price: 0
@@ -105,41 +105,7 @@ const Book = ({ token }) => {
       </Head>
       <div className="main-content">
         <section className="text-center">
-          <h2>Book your stay at Traditional Dream Factory!</h2>
-          <Slider
-            slides={[
-              {
-                image: '/images/locations/traditionaldreamfactory/1.jpeg',
-                label: 'The Tranditional Dream Factory, Alentejo',
-                text: ''
-              },
-              {
-                image: '/images/locations/traditionaldreamfactory/2.jpeg',
-                label: 'Coworking',
-                text: ''
-              },
-              {
-                image: '/images/locations/traditionaldreamfactory/3.jpeg',
-                label: 'Set in protected oak lands',
-                text: ''
-              },
-              {
-                image: '/images/locations/traditionaldreamfactory/4.jpeg',
-                label: 'Bring your van',
-                text: ''
-              },
-              {
-                image: '/images/locations/traditionaldreamfactory/5.jpeg',
-                label: '100Mb internet connection',
-                text: ''
-              },
-              {
-                image: '/images/locations/traditionaldreamfactory/6.jpeg',
-                label: 'Creative space',
-                text: ''
-              },
-            ]}
-          />
+          <h2>Book your stay</h2>
           <form onSubmit={ e => submit(e) }>
             <div className="columns horizontal-center">
               <fieldset>
@@ -177,7 +143,7 @@ const Book = ({ token }) => {
               <select
                 id="listing"
                 className="size-md"
-                value={ booking.listing || (listings && listings.count() > 0 && listings.first().get('_id')) }
+                value={ booking.listing || (listings && listings.first() && listings.first().get('_id')) }
                 onChange={e => updateBooking({ ...booking, listing: e.target.value })}
               >
               {listings && listings.map(listing => (
@@ -188,7 +154,7 @@ const Book = ({ token }) => {
               </select>
             </fieldset>
             <fieldset className="center-content">
-              <label htmlFor="message">Send a message to your hosts in Abela</label>
+              <label htmlFor="message">Add message to your hosts</label>
               <textarea
                 id="message"
                 className="size-md"

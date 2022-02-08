@@ -45,9 +45,6 @@ const Bookings = () => {
           <div className="col lg two-third">
             <div className="page-header">
               <h1>Bookings</h1>
-              <div className="user-actions">
-                <Link as="/bookings/create" href="/bookings/create"><a className="button">Create</a></Link>
-              </div>
             </div>
             <div className="bookings-list">
               { bookings && bookings.count() > 0 ?
