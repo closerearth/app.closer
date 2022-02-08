@@ -22,9 +22,7 @@ const Settings = ({ token }) => {
         <title>Members</title>
       </Head>
       <div className="main-content fullheight">
-        { user &&
-          <MemberList />
-        }
+        <MemberList />
       </div>
     </Layout>
   );

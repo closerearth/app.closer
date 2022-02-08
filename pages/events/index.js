@@ -30,6 +30,7 @@ const Events = () => {
         <div className="validation-error">{ error }</div>
       }
       <div className="main-content intro">
+        <h1 className="mb-4">Events</h1>
         <UpcomingEvents
           allowCreate
           limit={ 30 }

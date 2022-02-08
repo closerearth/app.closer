@@ -27,7 +27,7 @@ const Event = ({ event, error }) => {
   const { user, isAuthenticated } = useAuth();
   const [attendees, setAttendees] = useState(event.attendees || []);
   const [ticketsSold, setTicketsSold] = useState([]);
-  const ticketsFilter = { where: { event: event && event._id, status: 'approved' } };
+  const ticketsFilter = { where: { event: event._id, status: 'approved' } };
   const start = event.start && dayjs(event.start);
   const end = event.end && dayjs(event.end);
   const getTicketHoldersFilter = tickets => {
@@ -87,9 +87,9 @@ const Event = ({ event, error }) => {
         { photo && <meta key="og:image" property="og:image" content={ `${cdn}${photo}-place-lg.jpg` } /> }
         { photo && <meta key="twitter:image" name="twitter:image" content={ `${cdn}${photo}-place-lg.jpg` } /> }
       </Head>
-      <section className="py-5 bg-primary text-white">
-        <div className="main-content md:flex flex-row justify-center items-center -mb-5">
-          <div className="md:w-1/2 md:mr-4 mb-4 md:-mb-10 relative">
+      <section className="py-5">
+        <div className="main-content md:flex flex-row justify-center items-center">
+          <div className="md:w-1/2 md:mr-4 mb-4 relative">
             <img
               className="object-cover md:h-full md:w-full"
               src={ photo? `${cdn}${photo}-max-lg.jpg` : '/images/illustrations/placeholder-image.png' }
@@ -117,7 +117,7 @@ const Event = ({ event, error }) => {
             <div className="mt-4 event-actions">
               { event.price || event.ticketOptions?
                 <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
-                  <a className="btn-black mr-2">Buy ticket</a>
+                  <a className="btn-primary mr-2">Buy ticket</a>
                 </Link>:
                 attendees?.includes(user._id) ?
                 <p className="text-small">
@@ -145,7 +145,7 @@ const Event = ({ event, error }) => {
 
               {(isAuthenticated) && user._id === event.createdBy &&
                 <Link as={`/events/edit/${event.slug}`} href="/events/edit/[slug]">
-                  <a className="btn-black mr-2">Edit event</a>
+                  <a className="btn-primary mr-2">Edit event</a>
                 </Link>
               }
               {/* <AddToCalendar event={{
@@ -163,7 +163,7 @@ const Event = ({ event, error }) => {
         <section className="attendees card-body mb-6">
           <h3 className="text-2xl font-bold">Who&apos;s coming?</h3>
           { event.price || event.ticketOptions?
-              <div className="-space-x-4 flex flex-row flex-wrap">
+              <div className="-space-x-3 flex flex-row flex-wrap">
                 { ticketsSold && getTicketHoldersFilter(ticketsSold) && platform.user.find(getTicketHoldersFilter(ticketsSold)) &&
                   platform.user.find(getTicketHoldersFilter(ticketsSold)).map(user => {
                   if (!user) {
@@ -173,7 +173,7 @@ const Event = ({ event, error }) => {
                   return (
                     <Link key={ user.get('_id') } as={`/members/${user.get('slug')}`} href="/members/[slug]">
                       <a className="from user-preview">
-                        <ProfilePhoto stack size="sm" user={user.toJS()} />
+                        <ProfilePhoto size="sm" user={user.toJS()} />
                         {/* <span className="name">{ user.get('screenname') }</span> */}
                       </a>
                     </Link>

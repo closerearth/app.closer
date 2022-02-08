@@ -1,5 +1,5 @@
 module.exports = {
-  PLATFORM: 'closer',
+  PLATFORM: 'rebuild',
   PLATFORM_NAME: 'Closer',
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
   DEFAULT_TITLE: "Closer: the operating system for land stewardship communities",

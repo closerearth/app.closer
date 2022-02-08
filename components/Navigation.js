@@ -35,15 +35,6 @@ const Navigation = () => {
     <div className="NavContainer">
       <nav className={`${navOpen ? 'open' : 'closed'}`}>
         <div className="main-content flex flex-row justify-between items-center">
-          <div className="menu-left no-print flex text-sm flex-row justify-start items-center w-1/3">
-            <Link
-              href="/events"
-            >
-              <a className="mr-2" onClick={() => toggleNav(false)}>
-                Events
-              </a>
-            </Link>
-          </div>
           <h3 className="logo">
             <Link href="/">
               <a className="block">
@@ -55,11 +46,36 @@ const Navigation = () => {
             </Link>
           </h3>
 
-          <div className="menu-right no-print flex text-sm flex-row justify-end items-center w-1/3">
+          <div className="menu-right no-print flex text-sm flex-row justify-end items-center">
+            <Link
+              href="/events"
+            >
+              <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+                Events
+              </a>
+            </Link>
+            { isAuthenticated &&
+              <Link
+                href="/members"
+              >
+                <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+                  Members
+                </a>
+              </Link>
+            }
+            { isAuthenticated && user.roles.includes('community-curator') &&
+              <Link
+                href="/applications"
+              >
+                <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+                  Applications
+                </a>
+              </Link>
+            }
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="mr-2"
+                  className="mr-2 hidden md:flex"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -74,21 +90,21 @@ const Navigation = () => {
             ) : (
               <Link href="/login">
                 <a
-                  className="mr-2"
+                  className="mr-2 hidden md:flex"
                   onClick={() => toggleNav(false)}
                 >
                   Sign in
                 </a>
               </Link>
             )}
-            <Link href="/signup">
+            { !isAuthenticated && <Link href="/signup">
               <a
                 href="/signup"
-                className="btn-primary mr-2 hidden md:visible"
+                className="btn-primary mr-2 hidden md:flex"
               >
                 Get your membership
               </a>
-            </Link>
+            </Link> }
             {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
               target="_blank"
@@ -98,16 +114,27 @@ const Navigation = () => {
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
             </a> }
-            { user &&
+            { isAuthenticated &&
               <Link
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
-                <a title="View profile" onClick={() => toggleNav(false)}>
+                <a title="View profile" className="mr-2" onClick={() => toggleNav(false)}>
                   <ProfilePhoto user={ user } />
                 </a>
               </Link>
             }
+            {/* <a
+              class="space-y-2"
+              onClick={ (e) => {
+                e.preventDefault();
+                toggleNav(true);
+              } }
+            >
+              <span class="block rounded-full ml-3 w-5 h-0.5 bg-primary"></span>
+              <span class="block rounded-full w-8 h-0.5 bg-primary"></span>
+              <span class="block rounded-full w-5 h-0.5 bg-primary"></span>
+            </a> */}
           </div>
         </div>
       </nav>
