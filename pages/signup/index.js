@@ -54,7 +54,7 @@ const Signup = () => {
               <textarea id="home" value={ application.home } onChange={ e => updateApplication({ home: e.target.value }) } placeholder="Home is where..." />
             </div> */}
             { SIGNUP_FIELDS && SIGNUP_FIELDS.map(field => (
-              <div className="w-full mb-4">
+              <div className="w-full mb-4" key={ field.name }>
                 <label htmlFor={ field.name }>
                   { field.label }
                 </label>
