@@ -14,7 +14,7 @@ const Applications = ({ token }) => {
 
   const { user } = useAuth();
   const { platform } = usePlatform();
-  const [status, setStatus] = useState('conversation');
+  const [status, setStatus] = useState('open');
   const openApplications = { where: { status: 'open' } }
   const approvedApplications = { where: { status: 'approved' } }
   const inConversationApplications = { where: { status: 'conversation' } }
@@ -63,13 +63,13 @@ const Applications = ({ token }) => {
             <Tabs
               tabs={[
                 {
+                  title: 'Open applications',
+                  value: 'open'
+                },
+                {
                   title: 'In conversation',
                   value: 'conversation'
                 },
-                {
-                  title: 'Open applications',
-                  value: 'open'
-                }
               ]}
               onChange={ tab => setStatus(tab.value) }
             />

@@ -29,7 +29,7 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
         }
       </div>
       <div className="flex flex-row items-center justify-between">
-        { total && limit &&
+        { total > 0 && limit &&
           Array.from('.'.repeat(totalPages).split('')).map((v, i) => (
             <Link href={{query: { [queryParam]: i + 1 }}} key={ `page-${i + 1}` }>
               <a

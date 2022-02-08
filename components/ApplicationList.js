@@ -142,7 +142,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
             </div>
           </div>
         )):
-        <p>No applications.</p>
+        <p className="py-4">No applications.</p>
       }
 
       <Pagination
