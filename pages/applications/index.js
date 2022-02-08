@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
+import Tabs from '../../components/Tabs';
 import ApplicationList from '../../components/ApplicationList';
 import api, { formatSearch } from '../../utils/api';
 import PageNotAllowed from '../401';
@@ -13,6 +14,7 @@ const Applications = ({ token }) => {
 
   const { user } = useAuth();
   const { platform } = usePlatform();
+  const [status, setStatus] = useState('conversation');
   const openApplications = { where: { status: 'open' } }
   const approvedApplications = { where: { status: 'approved' } }
   const inConversationApplications = { where: { status: 'conversation' } }
@@ -58,10 +60,20 @@ const Applications = ({ token }) => {
             </div>
           </div>
           <div className="md:w-2/3">
-            <h3>In conversation</h3>
-            <ApplicationList status="conversation" managedBy={ user._id } />
-            <h3 className="mt-4">Open applications</h3>
-            <ApplicationList status="open" />
+            <Tabs
+              tabs={[
+                {
+                  title: 'In conversation',
+                  value: 'conversation'
+                },
+                {
+                  title: 'Open applications',
+                  value: 'open'
+                }
+              ]}
+              onChange={ tab => setStatus(tab.value) }
+            />
+            <ApplicationList status={ status } managedBy={ status === 'conversation' && user._id } />
           </div>
         </div>
       </main>

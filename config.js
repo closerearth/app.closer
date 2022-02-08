@@ -1,5 +1,5 @@
 module.exports = {
-  PLATFORM: 'closer',
+  PLATFORM: 'oasa',
   PLATFORM_NAME: 'Closer',
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
   DEFAULT_TITLE: "Closer: the operating system for land stewardship communities",
@@ -23,6 +23,13 @@ module.exports = {
   FEATURES: {
 
   },
+  SIGNUP_FIELDS: [
+    {
+      name: 'community',
+      label: 'Tell us about your community',
+      placeholder: 'A DAO for regenerative coffee farmers'
+    }
+  ],
   EN: {
     signup_title: 'Signup for Closer',
     signup_body: 'Closer is a platform for community creators',

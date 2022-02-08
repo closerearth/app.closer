@@ -5,12 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        'sans': ['Metropolis', 'Helvetica', 'Sans-Serif']
-      },
       colors: {
         primary: '#000000',
-        'primary-hover': '#2525b4',
+        'primary-hover': '#ffffff',
         background: '#EEEEEE',
         foreground: '#000'
       }

@@ -8,35 +8,60 @@ import TimeSince from './TimeSince';
 import { useAuth } from '../contexts/auth.js';
 
 const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
-  console.log('page', page)
+  const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="card-footer pagination">
-      { page > 1 &&
-        <Link href={{query: { [queryParam]: page - 1 }}} onClick={ (e) => {
-          loadPage(page - 1);
-        } }>
-          previous
-        </Link>
-      }
-      { total && limit &&
-        Array.from('.'.repeat(Math.ceil(total / limit)).split('')).map((v, i) => (
-          <Link href={{query: { [queryParam]: i + 1 }}} key={ `page-${i + 1}` } onClick={ (e) => {
-            loadPage(i + 1);
-          } }>
-            <a className={`${page === i + 1?'active':'not-active'}`}>
-              { `${i + 1}` }
+    <div className="card-footer pagination flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between">
+        { page > 1 &&
+          <Link href={{query: { [queryParam]: page - 1 }}}>
+            <a
+              className="p-1"
+              onClick={ (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                loadPage(page - 1);
+              } }
+            >
+              previous
             </a>
           </Link>
-        ))
-      }
-      { (items && items.length > 0 && items.length === limit) &&
-        <Link href={{query: { [queryParam]: page + 1 }}} onClick={ (e) => {
-          loadPage(page + 1);
-        } }>
-          next
-        </Link>
-      }
+        }
+      </div>
+      <div className="flex flex-row items-center justify-between">
+        { total && limit &&
+          Array.from('.'.repeat(totalPages).split('')).map((v, i) => (
+            <Link href={{query: { [queryParam]: i + 1 }}} key={ `page-${i + 1}` }>
+              <a
+                className={`p-1 mr-2 ${page === i + 1?'bg-primary text-primary-hover':'bg-gray-100'}`}
+                onClick={ (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  loadPage(i + 1);
+                } }
+              >
+                { `${i + 1}` }
+              </a>
+            </Link>
+          ))
+        }
+      </div>
+      <div className="flex flex-row items-center justify-between">
+        { page < totalPages &&
+          <Link href={{query: { [queryParam]: page + 1 }}}>
+            <a
+              className="p-1"
+              onClick={ (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                  loadPage(page + 1);
+                } }
+            >
+              next
+            </a>
+          </Link>
+        }
+      </div>
     </div>
   );
 };

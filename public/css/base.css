@@ -1,6 +1,6 @@
-@tailwind components;
+@tailwind base;
 
-@layer components {
+@layer base {
   body {
     @apply bg-background;
   }
@@ -16,6 +16,38 @@
   }
   .date-preview .date {
     @apply text-sm;
+  }
+  .validation-error {
+    padding: 1rem 0;
+    color: #9f1f42;
+  }
+  .success-toast {
+    position: fixed;
+    z-index: 20;
+    top: 5rem;
+    left: 50%;
+    margin-left: -10rem;
+    display: flex;
+    justify-content: space-between;
+    width: 20rem;
+    padding: 1rem;
+    color: #fafafa;
+    background-color: #68d09b;
+    border: 1px solid #469f72;
+  }
+  .error-toast {
+    position: fixed;
+    z-index: 20;
+    top: 5rem;
+    left: 50%;
+    margin-left: -10rem;
+    display: flex;
+    justify-content: space-between;
+    width: 20rem;
+    padding: 1rem;
+    color: #fafafa;
+    background-color: #9f1f42;
+    border: 1px solid #5b1226;
   }
   h1 {
     @apply text-4xl font-bold;

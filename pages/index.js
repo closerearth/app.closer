@@ -20,7 +20,6 @@ const index = () => (
         </div>
       </section>
     </main>
-
   </Layout>
 );
 

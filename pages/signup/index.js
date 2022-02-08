@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Head from 'next/head'
 import Layout from '../../components/Layout'
 import api from '../../utils/api'
-import { EN } from '../../config'
+import { EN, SIGNUP_FIELDS } from '../../config'
 
 const Signup = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -10,7 +10,7 @@ const Signup = () => {
     name: '',
     phone: '',
     email: '',
-    community: '',
+    fields: {},
     source: typeof window !== 'undefined' && window.location.href
   });
   const submit = async (e) => {
@@ -28,6 +28,7 @@ const Signup = () => {
   }
 
   const updateApplication = update => setApplication({ ...application, ...update });
+  const updateApplicationFields = update => setApplication({ ...application, fields: { ...application.fields, ...update } });
 
   return (
     <Layout>
@@ -52,12 +53,20 @@ const Signup = () => {
               </label>
               <textarea id="home" value={ application.home } onChange={ e => updateApplication({ home: e.target.value }) } placeholder="Home is where..." />
             </div> */}
-            <div className="w-full mb-4">
-              <label htmlFor="community">
-                Tell us about your community
-              </label>
-              <textarea className="textarea" id="community" value={ application.community } onChange={ e => updateApplication({ community: e.target.value }) } placeholder="" />
-            </div>
+            { SIGNUP_FIELDS && SIGNUP_FIELDS.map(field => (
+              <div className="w-full mb-4">
+                <label htmlFor={ field.name }>
+                  { field.label }
+                </label>
+                <textarea
+                  className="textarea"
+                  id={ field.name }
+                  value={ application.fields[field.name] }
+                  onChange={ e => updateApplicationFields({ [field.name]: e.target.value }) }
+                  placeholder={ field.placeholder }
+                />
+              </div>
+            )) }
             <div className="w-full mb-4">
               <label htmlFor="phone">
                 Phone number

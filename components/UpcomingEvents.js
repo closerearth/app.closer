@@ -12,9 +12,11 @@ const start = new Date();
 
 const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, attendees, allowCreate, showPagination }) => {
 
-  const eventsFilter = { where: { start: {
-    $gt: start
-  } } };
+  const eventsFilter = { where: {
+    start: {
+      $gt: start
+    }
+  }, limit, page };
 
   const { user } = useAuth();
   const { platform } = usePlatform();
@@ -23,7 +25,7 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
   const router = useRouter();
   const events = platform.event.find(eventsFilter);
 
-  const loadData = async (page, channel, limit) => {
+  const loadData = async () => {
     try {
       const action = await platform.event.get(eventsFilter);
     } catch (err) {
@@ -33,30 +35,17 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
   };
 
   useEffect(() => {
-    loadData(page, channel, limit);
-  }, [page, channel, limit]);
+    loadData();
+  }, [page, channel, limit, start]);
 
   return (
-    <section className="card">
-      <div className="card-title">
-        <h3>
-          { labelLink ?
-            <Link href={labelLink}><a>{ label }</a></Link>:
-            label
-          }
-        </h3>
-        { allowCreate &&
-          <div className="card-actions">
-            <Link href="/events/create"><a>Create event</a></Link>
-          </div>
-        }
-      </div>
+    <section>
       <div className="card-body event-list flex flex-row flex-wrap justify-center">
         { events && events.count() > 0?
           events.map(event => (
-            <div key={ event.get('_id') } className="event-preview relative live w-1/3 session flex flex-row pr-4 mb-8">
-              <div className="card rounded bg-white text-black overflow-hidden">
-                <div>
+            <div key={ event.get('_id') } className="event-preview relative live md:w-1/3 flex flex-row pr-4 mb-8">
+              <div className="card rounded bg-white overflow-hidden">
+                <div className="-mx-4 -mt-4">
                   <Link href={`/events/${event.get('slug')}`}><a>
                     <img
                       className="w-full object-cover md:h-full"
