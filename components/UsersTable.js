@@ -57,30 +57,30 @@ const UsersTable = ({ where, limit }) => {
         </thead>
         { loading ?
           <Loading />:
-          <tbody class="text-sm divide-y divide-gray-100">
+          <tbody className="text-sm divide-y divide-gray-100">
             { users && users.count() > 0 ?
               users.map((row) => {
                 // Fetch the itemized object which can have been patched
                 const user = platform.user.findOne(row.get('_id'));
 
                 return (
-                  <tr>
-                    <td class="p-2 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <div class="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                  <tr key={ row.get('_id') }>
+                    <td className="p-2 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
                           <ProfilePhoto user={ user.toJS() } size="sm" />
                         </div>
-                        <div class="font-medium text-gray-800">{ user.get('screenname') }</div>
+                        <div className="font-medium text-gray-800">{ user.get('screenname') }</div>
                       </div>
                     </td>
-                    <td class="p-2 whitespace-nowrap">
-                      <div class="flex items-center">
-                        <div class="font-medium text-gray-800">
+                    <td className="p-2 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="font-medium text-gray-800">
                           <TimeSince time={ user.get('created') } />
                         </div>
                       </div>
                     </td>
-                    <td class="p-2 whitespace-nowrap">
+                    <td className="p-2 whitespace-nowrap">
                       <div className="space-x-1 flex flex-wrap justify-start items-start">
                         { user.get('roles') && user.get('roles').map(role => (
                           <Tag
