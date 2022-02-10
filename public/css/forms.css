@@ -10,6 +10,9 @@
   .btn-primary, .btn-primary[type="submit"] {
     @apply btn hover:bg-primary hover:text-white bg-transparent border-2 border-primary disabled:bg-gray-500;
   }
+  .form-field {
+    @apply mb-4;
+  }
   input, textarea {
     @apply w-full;
   }

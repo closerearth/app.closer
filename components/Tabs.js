@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 
 const styleMap = {
@@ -8,33 +9,39 @@ const styleMap = {
   disabled: 'text-gray-400 cursor-not-allowed dark:text-gray-500'
 };
 
-const Tabs = ({ tabs, onChange }) => {
-  const [currentTab, setCurrentTab] = useState(0);
+const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
+  const [currentTab, setCurrentTab] = useState(initialCurrentTab);
 
   return (
     <div className="border-b border-gray-200 dark:border-gray-700">
       <ul className="flex flex-wrap -mb-px">
         { tabs && tabs.map((tab, index) => (
           <li className="mr-2" key={ `${tab.value || index}` }>
-            <a
-              href="#"
-              onClick={ (e) => {
-                e.preventDefault();
-                setCurrentTab(index);
-                if (onChange) {
-                  onChange(tab);
-                }
-              } }
-              className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }
-            >
-                { tab.title }
-            </a>
+            <Link href={ tab.href || '#' }>
+              <a
+                onClick={ (e) => {
+                  if (!tab.href) {
+                    e.preventDefault();
+                  }
+                  setCurrentTab(index);
+                  if (onChange) {
+                    onChange(tab);
+                  }
+                } }
+                className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }
+              >
+                  { tab.title }
+              </a>
+            </Link>
           </li>
         ))}
       </ul>
     </div>
   );
 }
+Tabs.defaultProps = {
+  initialCurrentTab: 1
+};
 Tabs.propTypes = {
   tabs: PropTypes.array,
   onChange: PropTypes.func

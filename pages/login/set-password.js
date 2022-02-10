@@ -34,7 +34,6 @@ const SetPasswordScreen = () => {
             </div>:
             actionCompleted?
             <div className="card">
-              <h1>Password set</h1>
               <p>Your new password was succesfully set, you can now proceed to sign in.</p>
               <div className="action-row">
                 <Link href="/login">
@@ -57,46 +56,48 @@ const SetPasswordScreen = () => {
                 }}
                 className="card"
               >
-              {/* { error && <div className="validation-error">
-                { error }
-              </div> } */}
-              { tokenContent && tokenContent.email &&
-                <p>You login email is <b>{tokenContent.email}</b>.</p>
-              }
-              { tokenContent && !tokenContent.screenname &&
-                <div className="form-field">
-                  <label htmlFor="screenname">Your name</label>
-                  <input
-                    type="text"
-                    name="screenname"
-                    id="screenname"
-                    value={screenname}
-                    placeholder="John Smith"
-                    onChange={e => setName(e.target.value)}
-                    required
-                  />
+                <div className="card-title">
+                  <h1>Complete registration</h1>
                 </div>
-              }
-              <div className="form-field">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  value={password}
-                  placeholder="#sup3rs3cr3t"
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="card-footer">
-                <div className="action-row">
-                  <button type="submit" className="button">
-                    Complete registration
-                  </button>
+                <div className="card-body">
+                  { tokenContent && tokenContent.email &&
+                    <p className="mb-4"><i>You login email is <b>{tokenContent.email}</b>.</i></p>
+                  }
+                  { tokenContent && !tokenContent.screenname &&
+                    <div className="form-field">
+                      <label htmlFor="screenname">Your name</label>
+                      <input
+                        type="text"
+                        name="screenname"
+                        id="screenname"
+                        value={screenname}
+                        placeholder="John Smith"
+                        onChange={e => setName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  }
+                  <div className="form-field">
+                    <label htmlFor="password">Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={password}
+                      placeholder="#sup3rs3cr3t"
+                      onChange={e => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
-            </form>
+                <div className="card-footer">
+                  <div className="action-row">
+                    <button type="submit" className="btn-primary">
+                      Complete registration
+                    </button>
+                  </div>
+                </div>
+              </form>
           ) :
           <div className="card">No token provided.</div> }
         </main>

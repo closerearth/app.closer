@@ -3,7 +3,7 @@ import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import EditModel from '../../components/EditModel';
+import AdminNav from '../../components/AdminNav';
 import Loading from '../../components/Loading';
 import api, { formatSearch } from '../../utils/api';
 import models from '../../models';
@@ -46,17 +46,7 @@ const Admin = ({ token }) => {
         <title>Admin</title>
       </Head>
       <main className="main-content center intro">
-        { invite &&
-          <div className="success-box">
-            Invite link:
-            <input value={ invite } className="copy-box" disabled />
-          </div>
-        }
-        { error &&
-          <div className="error-box">
-            { error }
-          </div>
-        }
+        <AdminNav />
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -64,6 +54,17 @@ const Admin = ({ token }) => {
           }}
           className="card"
         >
+          { invite &&
+            <div className="success-box">
+              Invite link:
+              <input value={ invite } className="copy-box" disabled />
+            </div>
+          }
+          { error &&
+            <div className="error-box">
+              { error }
+            </div>
+          }
           <div className="form-field">
             <label htmlFor="email">Get Invite Link</label>
             <input
@@ -77,7 +78,7 @@ const Admin = ({ token }) => {
           </div>
           <div className="card-footer">
             <div className="action-row">
-              <button type="submit" className="button">
+              <button type="submit" className="btn-primary">
                 Generate link
               </button>
             </div>

@@ -49,6 +49,17 @@
     background-color: #9f1f42;
     border: 1px solid #5b1226;
   }
+  .success-box {
+    @apply p-2 bg-gray-100 border border-gray-200 whitespace-pre-line mb-4;
+  }
+  .error-box {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    color: #fafafa;
+    background-color: #9f1f42;
+    border: 1px solid #5b1226;
+    white-space: pre-line;
+  }
   h1 {
     @apply text-4xl font-bold;
   }

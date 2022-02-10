@@ -76,7 +76,7 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
             </div>
           )):
           <div className="w-full py-4">
-            <p className="text-center italic">No upcoming events.</p>
+            <p className="italic">No upcoming events.</p>
           </div>
         }
       </div>

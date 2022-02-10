@@ -61,6 +61,15 @@ const reducer = (state, action) => {
     case constants.POST_INIT:
       return state
         .set([action.model, 'isPosting'], true);
+    case constants.PATCH_INIT:
+      return state
+        map.setIn([action.model, 'byId', action._id, 'loading'], true);
+    case constants.PATCH_ERROR:
+      return state
+        map.mergeIn([action.model, 'byId', action._id], Map({
+          loading: false,
+          error: action.error
+        }));
     case constants.POST_ERROR:
       return state
         .set([action.model, 'isPosting'], false)
@@ -69,6 +78,14 @@ const reducer = (state, action) => {
       return state
         .set([action.model, 'isPosting'], false)
         .mergeIn([action.model, 'byId', action.id], Map({
+          data: action.results,
+          loading: false,
+          error: null,
+          receivedAt: Date.now()
+        }));
+    case constants.PATCH_SUCCESS:
+      return state
+        .setIn([action.model, 'byId', action._id], Map({
           data: action.results,
           loading: false,
           error: null,
@@ -84,15 +101,20 @@ const reducer = (state, action) => {
         }));
     case constants.GET_SUCCESS:
       return state.withMutations(map => {
-          map.setIn([action.model, 'byFilter', action.filterKey], action.results);
-          if (action.results.get('data')) {
-            action.results.get('data').forEach((item) => {
+          map.setIn([action.model, 'byFilter', action.filterKey], Map({
+            data: action.results,
+            loading: false,
+            error: null,
+            receivedAt: action.receivedAt
+          }));
+          if (action.results) {
+            action.results.forEach((item) => {
               if (item.get('_id')) {
                 map.setIn([action.model, 'byId', item.get('_id')], Map({
                   data: item,
                   loading: false,
                   error: null,
-                  receivedAt: Date.now()
+                  receivedAt: action.receivedAt
                 }))
               }
             });
@@ -142,6 +164,9 @@ export const PlatformProvider = ({ children }) => {
       findGraph: filter => state.getIn([model, 'byGraph', filterToKey(filter), 'data']),
       findCount: filter => state.getIn([model, 'count', filterToKey(filter), 'data']),
 
+      isLoading: id => state.getIn([model, 'byId', id, 'loading']),
+      areLoading: filter => state.getIn([model, 'byFilter', filterToKey(filter), 'loading']),
+
       // Loaders
       getOne: (id, opts = {}) => {
         dispatch({ type: constants.GET_ONE_INIT, model, id });
@@ -172,16 +197,19 @@ export const PlatformProvider = ({ children }) => {
       get: (filter, opts = {}) => {
         const options = Object.assign({ sort_by: '-created' }, filter);
         const filterKey = filterToKey(filter);
-        dispatch({ type: constants.GET_INIT, model, filterKey });
         if (
           state.getIn([model, 'byFilter', filterKey, 'receivedAt']) > Date.now() - config.CACHE_DURATION
         ) {
           return new Promise(resolve => resolve({
+            filterKey,
             type: constants.GET_SUCCESS,
             fromCache: true,
-            results: state.getIn([model, 'byFilter', filterKey])
+            receivedAt: state.getIn([model, 'byFilter', filterKey, 'receivedAt']),
+            results: state.getIn([model, 'byFilter', filterKey, 'data'])
           }));
         }
+
+        dispatch({ type: constants.GET_INIT, model, filterKey });
         // ids_loading[model] = ids_loading[model].concat(id);
         return (
           api.get(`/${model}`, { params: {
@@ -190,11 +218,8 @@ export const PlatformProvider = ({ children }) => {
           }})
             .then(res => {
               const action = {
-                results: Map({
-                  data: fromJS(res.data.results),
-                  loading: false,
-                  receivedAt: Date.now()
-                }),
+                results: fromJS(res.data.results),
+                receivedAt: Date.now(),
                 filterKey,
                 model,
                 type: constants.GET_SUCCESS
@@ -243,6 +268,19 @@ export const PlatformProvider = ({ children }) => {
               return action;
             })
             .catch(error => dispatch({ error, data, filterKey, model, type: constants.POST_ERROR }))
+        );
+      },
+      patch: (_id, data, opts = {}) => {
+        dispatch({ type: constants.PATCH_INIT, model, _id, data });
+        return (
+          api.patch(`/${model}/${_id}`, data)
+            .then(res => {
+              const results = fromJS(res.data.results);
+              const action = { results, _id, data, model, type: constants.PATCH_SUCCESS };
+              dispatch(action);
+              return action;
+            })
+            .catch(error => dispatch({ error, _id, data, model, type: constants.PATCH_ERROR }))
         );
       },
     };
