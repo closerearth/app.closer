@@ -34,7 +34,7 @@ const Event = ({ event, error }) => {
   const end = event.end && dayjs(event.end);
   const duration = end.diff(start, 'hour', true);
   const isThisYear = dayjs().isSame(start, 'year');
-  const dateFormat = isThisYear ? 'Do HH:mm' : 'YYYY Do HH:mm';
+  const dateFormat = isThisYear ? 'MMMM Do HH:mm' : 'YYYY MMMM Do HH:mm';
   const myTickets = platform.ticket.find(myTicketFilter);
   const loadData = async () => {
     if (event.attendees && event.attendees.length > 0) {
