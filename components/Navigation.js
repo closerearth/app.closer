@@ -58,8 +58,8 @@ const Navigation = () => {
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
 
   return (
-    <div className="NavContainer">
-      <nav className={`${navOpen ? 'open' : 'closed'}`}>
+    <div className="NavContainer pt-20 md:pt-0">
+      <nav className="h-20 fixed top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
         <div className="main-content flex flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
@@ -76,7 +76,7 @@ const Navigation = () => {
             <Link
               href="/events"
             >
-              <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+              <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
                 Events
               </a>
             </Link>
@@ -84,7 +84,7 @@ const Navigation = () => {
               <Link
                 href="/members"
               >
-                <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
                   Members
                 </a>
               </Link>
@@ -93,7 +93,7 @@ const Navigation = () => {
               <Link
                 href="/applications"
               >
-                <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
                   Applications
                 </a>
               </Link>
@@ -102,7 +102,7 @@ const Navigation = () => {
               <Link
                 href="/admin"
               >
-                <a className="mr-2 hidden md:flex" onClick={() => toggleNav(false)}>
+                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
                   Admin
                 </a>
               </Link>
@@ -110,7 +110,7 @@ const Navigation = () => {
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="mr-2 hidden md:flex"
+                  className="mr-3 hidden md:flex"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -125,7 +125,7 @@ const Navigation = () => {
             ) : (
               <Link href="/login">
                 <a
-                  className="mr-2 hidden md:flex"
+                  className="mr-3 hidden md:flex"
                   onClick={() => toggleNav(false)}
                 >
                   Sign in
@@ -135,7 +135,7 @@ const Navigation = () => {
             { !isAuthenticated && <Link href="/signup">
               <a
                 href="/signup"
-                className="btn-primary mr-2 hidden md:flex"
+                className="btn-primary mr-3 hidden md:flex"
               >
                 Get your membership
               </a>
@@ -145,7 +145,7 @@ const Navigation = () => {
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center mr-2"
+              className="text-4xl flex justify-center items-center mr-3"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
             </a> }
@@ -154,25 +154,98 @@ const Navigation = () => {
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
-                <a title="View profile" className="mr-2" onClick={() => toggleNav(false)}>
+                <a title="View profile" className="mr-3" onClick={() => toggleNav(false)}>
                   <ProfilePhoto user={ user } />
                 </a>
               </Link>
             }
-            {/* <a
-              class="space-y-2"
+            <a
+              className="space-y-2 md:hidden"
               onClick={ (e) => {
                 e.preventDefault();
-                toggleNav(true);
+                toggleNav(!navOpen);
               } }
             >
               <span class="block rounded-full ml-3 w-5 h-0.5 bg-primary"></span>
               <span class="block rounded-full w-8 h-0.5 bg-primary"></span>
               <span class="block rounded-full w-5 h-0.5 bg-primary"></span>
-            </a> */}
+            </a>
           </div>
         </div>
       </nav>
+      { navOpen &&
+        <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
+          <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg">
+            <Link
+              href="/events"
+            >
+              <a className="mr-3" onClick={() => toggleNav(false)}>
+                Events
+              </a>
+            </Link>
+            { isAuthenticated &&
+              <Link
+                href="/members"
+              >
+                <a className="mr-3" onClick={() => toggleNav(false)}>
+                  Members
+                </a>
+              </Link>
+            }
+            { isAuthenticated && user.roles.includes('community-curator') &&
+              <Link
+                href="/applications"
+              >
+                <a className="mr-3" onClick={() => toggleNav(false)}>
+                  Applications
+                </a>
+              </Link>
+            }
+            { isAuthenticated && user.roles.includes('admin') &&
+              <Link
+                href="/admin"
+              >
+                <a className="mr-3" onClick={() => toggleNav(false)}>
+                  Admin
+                </a>
+              </Link>
+            }
+            { isAuthenticated ? (
+              <Link href="/">
+                <a
+                  className="mr-3"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleNav(false);
+                    logout();
+                    window.location.href = '/';
+                  }}
+                  title={user.screenname}
+                >
+                  Sign out
+                </a>
+              </Link>
+            ) : (
+              <Link href="/login">
+                <a
+                  className="mr-3"
+                  onClick={() => toggleNav(false)}
+                >
+                  Sign in
+                </a>
+              </Link>
+            )}
+            { !isAuthenticated && <Link href="/signup">
+              <a
+                href="/signup"
+                className="btn-primary mr-3"
+              >
+                Get your membership
+              </a>
+            </Link> }
+          </div>
+        </div>
+      }
       {error && (
         <div className="error-toast">
           {error}

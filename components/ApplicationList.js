@@ -61,7 +61,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
   return (
     <div className="application-list">
       { applications && applications.count() > 0 ?
-        applications.filter(app => app.get('status') === status).map(application => (
+        applications.map(application => (
           <div key={ application.get('_id') } className="application-preview card">
             <div className="card-title">
               <h3>{ application.get('name') }</h3>
