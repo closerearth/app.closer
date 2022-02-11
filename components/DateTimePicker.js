@@ -7,7 +7,7 @@ const DateTimePicker = ({ value, onChange }) => {
   const [datetime, updateTime] = useState(value ? dayjs(value) : defaultTime);
 
   useEffect(() => {
-    updateTime(dayjs(value));
+    updateTime(value ? dayjs(value) : defaultTime);
   }, [value]);
 
   return (

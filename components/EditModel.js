@@ -31,11 +31,14 @@ const getSample = (field) => {
     case 'number':
       return 0;
     case 'currency':
-      return 0;
+      return {
+        cur: currencies[0].value,
+        val: 0
+      };
     case 'tags':
       return [];
     case 'date':
-      return null;
+      return new Date();
     case 'switch':
       return false;
     case 'datetime':
