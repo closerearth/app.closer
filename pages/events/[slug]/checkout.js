@@ -108,10 +108,10 @@ const EventCheckout = ({ event, error }) => {
               <section>
                 <h3>Hello {user.screenname}</h3>
                 { isVolunteer &&
-                  <p className="text-small">Thank you for being a volunteer!</p>
+                  <p className="text-sm">Thank you for being a volunteer!</p>
                 }
                 { volunteerCapacityReached &&
-                  <p className="text-small">Thank you for applying to be a volunteer, unforturnately volunteer tickets are now sold out.</p>
+                  <p className="text-sm">Thank you for applying to be a volunteer, unforturnately volunteer tickets are now sold out.</p>
                 }
                 <hr className="divide-y divide-gray-400 my-4" />
               </section>:
@@ -164,19 +164,19 @@ const EventCheckout = ({ event, error }) => {
             { ticketOptions && ticketOptions.length > 0 ?
               <section>
                 <h3>Ticket options</h3>
-                <div className="ticket-options">
+                <div className="ticket-options my-4 flex flex-row flex-wrap">
                   {
                     ticketOptions.map(option => (
                       <button
                         key={ option.name }
-                        className={`ticket-option ${ticketOption && ticketOption.name === option.name ? 'active' : ''} ${option.available > 0 ? 'available' : 'unavailable'}`}
+                        className={`border-2 flex flex-col justify-center rounded-md shadow-lg mr-3 mb-3 p-4 hover:border-primary ${ticketOption && ticketOption.name === option.name ? 'border-primary' : 'border-gray-100'} ${option.available > 0 ? 'available' : 'unavailable'}`}
                         onClick={ () => setTicketOption(option) }
                         disabled={ option.available === 0 }
                       >
                         { optionToIcon[option.name] && <FontAwesomeIcon size="lg" icon={ optionToIcon[option.name] } /> }
                         <h4>{formatName(option.name)}</h4>
-                        <p className="price">{ priceFormat(option.price, option.currency) }</p>
-                        <p className="availability">
+                        <p className="price text-gray-500">{ priceFormat(option.price, option.currency) }</p>
+                        <p className="availability text-xs uppercase text-primary">
                           { option.available > 0 ? `${option.available} available` : 'not available'}
                         </p>
                       </button>
@@ -184,7 +184,7 @@ const EventCheckout = ({ event, error }) => {
                   }
                 </div>
                 { ticketOption && <div className="ticket-disclaimer">
-                  <p className="text-small">{ ticketOption.disclaimer }</p>
+                  <p className="text-sm">{ ticketOption.disclaimer }</p>
                 </div> }
                 <hr className="divide-y divide-gray-400 my-4" />
               </section>:
@@ -198,21 +198,20 @@ const EventCheckout = ({ event, error }) => {
                 onChange={e => setField('message', e.target.value)}
                 value={ signup.message }
                 placeholder="Add message for hosts"
-                type="text"
               />
               <hr className="divide-y divide-gray-400 my-4" />
             </section>
             { !paymentReceived && <section>
-              <h3>Payment</h3>
-              { isVolunteer && <p className="text-small">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
+              <h3 className="mb-2">Payment</h3>
+              { isVolunteer && <p className="text-sm">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
               { ticketOption &&
-                <p className="text-small">Total: <b>{ isVolunteer ? priceFormat(Math.max(ticketOption.price.val - event.volunteerDiscount, 0), event.price.cur) : priceFormat(ticketOption.price, event.price.cur) }</b></p>
+                <p className="text-sm mb-3">Total: <b>{ isVolunteer ? priceFormat(Math.max(ticketOption.price.val - event.volunteerDiscount, 0), event.price.cur) : priceFormat(ticketOption.price, event.price.cur) }</b></p>
               }
               { !ticketOption && (!ticketOptions || !ticketOptions.length) &&
-                <p className="text-small">Total: <b>{ isVolunteer ? priceFormat(Math.max(event.price.val - event.volunteerDiscount, 0), event.price.cur) : priceFormat(event.price.val, event.price.cur) }</b></p>
+                <p className="text-sm">Total: <b>{ isVolunteer ? priceFormat(Math.max(event.price.val - event.volunteerDiscount, 0), event.price.cur) : priceFormat(event.price.val, event.price.cur) }</b></p>
               }
-              <p className="text-small">The ticket is non-refundable, except in case of cancelation.</p>
-              <div className="my-4">
+              <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>
+              <div className="mt-2">
                 <Elements stripe={stripePromise}>
                   <CheckoutForm
                     type="event"

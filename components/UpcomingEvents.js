@@ -45,15 +45,15 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
           events.map(event => (
             <div key={ event.get('_id') } className="event-preview relative live md:w-1/3 flex flex-row pr-4 mb-8">
               <div className="card rounded bg-white overflow-hidden">
-                <div className="-mx-4 -mt-4">
+                { event.get('photo') && <div className="-mx-4 -mt-4">
                   <Link href={`/events/${event.get('slug')}`}><a>
                     <img
                       className="w-full object-cover md:h-full"
-                      src={ event.get('photo') ? `${cdn}${event.get('photo')}-post-md.jpg` : '/images/illustrations/placeholder-image.png' }
+                      src={ `${cdn}${event.get('photo')}-post-md.jpg`}
                       alt={ event.get('name') }
                     />
                   </a></Link>
-                </div>
+                </div> }
                 <div className="p-2 text-center">
                   <div className="event-description">
                     <h3 className="font-bold text-xl">
