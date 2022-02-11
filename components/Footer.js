@@ -24,6 +24,9 @@ const footer = () => (
             { TWITTER_URL && <a href={ TWITTER_URL } target="_blank" rel="noreferrer nofollow">
               <img src="/images/icons/twitter.svg" width="30" alt="twitter" />
             </a> }
+            { DISCORD_URL && <a href={ DISCORD_URL } target="_blank" rel="noreferrer nofollow">
+              <img src="/images/icons/discord.svg" width="30" alt="twitter" />
+            </a> }
           </div>
           <div className="border-t border-background pt-2">
             <a href={`mailto:${TEAM_EMAIL}`} className="text-sm text-white hover:underline">{TEAM_EMAIL}</a>

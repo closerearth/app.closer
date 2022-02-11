@@ -19,7 +19,8 @@ module.exports = {
   LOGO_HEADER: '/images/logo.png',
   // LOGO_FOOTER: "",
   // INSTAGRAM_URL: "https://instagram.com/closerearth",
-  TWITTER_URL: "https://twitter.com/closerearth",
+  DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',
+  TWITTER_URL: 'https://twitter.com/closerearth',
   FEATURES: {
 
   },

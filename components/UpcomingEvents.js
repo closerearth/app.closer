@@ -10,7 +10,7 @@ import Pagination from './Pagination';
 
 const start = new Date();
 
-const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, attendees, allowCreate, showPagination }) => {
+const UpcomingEvents = ({ center, channel, queryParam, page, limit, label, labelLink, attendees, allowCreate, showPagination }) => {
 
   const eventsFilter = { where: {
     start: {
@@ -40,7 +40,7 @@ const UpcomingEvents = ({ channel, queryParam, page, limit, label, labelLink, at
 
   return (
     <section>
-      <div className="card-body event-list flex flex-row flex-wrap justify-start">
+      <div className={`card-body event-list flex flex-row flex-wrap justify-${center?'center':'start'}`}>
         { events && events.count() > 0?
           events.map(event => (
             <div key={ event.get('_id') } className="event-preview relative live md:w-1/3 flex flex-row pr-4 mb-8">
