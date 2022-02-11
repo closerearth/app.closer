@@ -3,7 +3,7 @@ import Newsletter from './Newsletter'
 import Link from 'next/link'
 import api from '../utils/api'
 import { trackEvent } from './Analytics'
-import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER } from '../config';
+import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER, DISCORD_URL } from '../config';
 
 const footer = () => (
   <div className="footer-wrapper no-print bg-primary">
