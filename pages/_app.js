@@ -7,6 +7,7 @@ import Navigation from '../components/Navigation'
 import { AuthProvider } from '../contexts/auth';
 import { PlatformProvider } from '../contexts/platform'
 import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION } from '../config';
+import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
 import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
@@ -31,8 +32,6 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
         <meta charSet="utf-8" />
         <noscript>
           <link href="/reset.css" rel="stylesheet" />
-          <link href="/fonts/Avenir.css" rel="stylesheet" />
-          <link href="/fonts/Metropolis.css" rel="stylesheet" />
           <link href="/fonts/icons.css" rel="stylesheet" />
           <link href="/styles.css" rel="stylesheet" />
         </noscript>
@@ -40,7 +39,7 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
         <meta name="og:url" content={`${SEMANTIC_URL}${router.asPath}`} />
         <meta property="og:type" content="article" />
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-        <meta name="theme-color" content="#119977" />
+        <meta name="theme-color" content={ theme.extend.colors.primary } />
         <meta httpEquiv="content-language" content="en-us"/>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
