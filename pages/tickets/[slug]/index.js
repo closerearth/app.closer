@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import Layout from '../../../components/Layout';
 import api, { formatSearch, cdn } from '../../../utils/api';
 import PageNotFound from '../../404';
+import PageNotAllowed from '../../401';
+import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
@@ -14,6 +16,9 @@ const Ticket = ({ ticket, event, error }) => {
 
   if (!ticket) {
     return <PageNotFound error={ error } />;
+  }
+  if (!isAuthenticated || ticket.email !== user.email) {
+    return <PageNotAllowed error={ error } />;
   }
 
   return (
@@ -29,11 +34,10 @@ const Ticket = ({ ticket, event, error }) => {
               <i>You are going to</i><br/>
               <h2>{ event.name }</h2>
               <h4>Name: {ticket.name}</h4>
-              <h4>Email: {ticket.email}</h4>
               <h4>Ticket number: {ticket._id}</h4>
             </div>
             <br />
-            <p>Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to team@rebuild.co for support.</p>
+            <p>Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to {config.TEAM_EMAIL} for support.</p>
           </div>
           <div className="col third">
           </div>
