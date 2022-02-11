@@ -29,7 +29,7 @@ const Event = ({ event, error }) => {
   const [attendees, setAttendees] = useState(event.attendees || []);
   const [ticketsSold, setTicketsSold] = useState([]);
   const ticketsFilter = { where: { event: event._id, status: 'approved' } };
-  const myTicketFilter = { where: { event: event._id, status: 'approved', createdBy: user && user._id } };
+  const myTicketFilter = { where: { event: event._id, status: 'approved', email: user && user.email } };
   const start = event.start && dayjs(event.start);
   const end = event.end && dayjs(event.end);
   const duration = end.diff(start, 'hour', true);
@@ -105,7 +105,7 @@ const Event = ({ event, error }) => {
               { event.paid ?
                 <>
                   { myTickets && myTickets.count() > 0 ?
-                    <Link as={`/tickets/${myTickets.first().get('slug')}`} href="/tickets/[slug]">
+                    <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
                       <a className="btn-primary mr-2">See ticket</a>
                     </Link>:
                     event.ticket ?

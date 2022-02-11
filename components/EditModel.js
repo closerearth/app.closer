@@ -240,7 +240,7 @@ const EditModel = ({
                     <div className="currency-group flex justify-start items-center">
                       <select
                           value={ data[name]?.cur }
-                          onChange={e => update(name, { ...data[name], cur: e.target.value })}
+                          onChange={e => update(`${name}.cur`, e.target.value)}
                         >
                         {currencies.map(opt => (
                           <option value={ opt.value } key={opt.value}>
@@ -255,7 +255,7 @@ const EditModel = ({
                         step="1.00"
                         value={ data[name]?.val || '' }
                         placeholder={ placeholder }
-                        onChange={e => update(name, { ...data[name], val: e.target.value })}
+                        onChange={e => update(`${name}.val`, e.target.value)}
                         required={ required }
                       />
                   </div>}
