@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import slugify from 'slugify';
-import { useRouter } from 'next/router';
-import { trackEvent } from './Analytics';
-import { faTelegram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAuth } from '../contexts/auth.js';
-import ProfilePhoto from './ProfilePhoto';
-import Prompts from './Prompts';
-import { useStatic } from '../contexts/static';
-import { theme } from '../tailwind.config';
-import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from '../config';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import slugify from "slugify";
+import { useRouter } from "next/router";
+import { trackEvent } from "./Analytics";
+import { faTelegram } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../contexts/auth.js";
+import ProfilePhoto from "./ProfilePhoto";
+import Prompts from "./Prompts";
+import { useStatic } from "../contexts/static";
+import { theme } from "../tailwind.config";
+import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from "../config";
 
 dayjs.extend(relativeTime);
 
@@ -60,8 +60,8 @@ const Navigation = () => {
   return (
     <div className="NavContainer pt-20 md:pt-0">
       <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
-        <div className="main-content flex flex-row justify-between items-center">
-          <h3 className="logo">
+        <div className="main-content flex justify-between items-center bg-white border-b border-b-neutral-700">
+          {/* <h3 className="logo">
             <Link href="/">
               <a className="block">
                 { LOGO_HEADER ? <img
@@ -70,44 +70,48 @@ const Navigation = () => {
                 /> : PLATFORM_NAME }
               </a>
             </Link>
-          </h3>
+          </h3> */}
 
-          <div className="menu-right no-print flex text-sm flex-row justify-end items-center">
-            <Link
-              href="/events"
-            >
-              <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
+          <div className="menu-right no-print hidden md:flex text-sm flex-row justify-end items-center">
+            <Link href="/events">
+              <a
+                className="mr-3 hidden md:flex"
+                onClick={() => toggleNav(false)}
+              >
                 Events
               </a>
             </Link>
-            { isAuthenticated &&
-              <Link
-                href="/members"
-              >
-                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
+            {isAuthenticated && (
+              <Link href="/members">
+                <a
+                  className="mr-3 hidden md:flex"
+                  onClick={() => toggleNav(false)}
+                >
                   Members
                 </a>
               </Link>
-            }
-            { isAuthenticated && user.roles.includes('community-curator') &&
-              <Link
-                href="/applications"
-              >
-                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
+            )}
+            {isAuthenticated && user.roles.includes("community-curator") && (
+              <Link href="/applications">
+                <a
+                  className="mr-3 hidden md:flex"
+                  onClick={() => toggleNav(false)}
+                >
                   Applications
                 </a>
               </Link>
-            }
-            { isAuthenticated && user.roles.includes('admin') &&
-              <Link
-                href="/admin"
-              >
-                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
+            )}
+            {isAuthenticated && user.roles.includes("admin") && (
+              <Link href="/admin">
+                <a
+                  className="mr-3 hidden md:flex"
+                  onClick={() => toggleNav(false)}
+                >
                   Admin
                 </a>
               </Link>
-            }
-            { isAuthenticated ? (
+            )}
+            {isAuthenticated ? (
               <Link href="/">
                 <a
                   className="mr-3 hidden md:flex"
@@ -115,7 +119,7 @@ const Navigation = () => {
                     e.preventDefault();
                     toggleNav(false);
                     logout();
-                    window.location.href = '/';
+                    window.location.href = "/";
                   }}
                   title={user.screenname}
                 >
@@ -132,15 +136,28 @@ const Navigation = () => {
                 </a>
               </Link>
             )}
-            { !isAuthenticated && <Link href="/signup">
-              <a
-                href="/signup"
-                className="btn-primary mr-3 hidden md:flex"
+            {!isAuthenticated && (
+              <Link href="/signup">
+                <a href="/signup" className="btn-primary mr-3 hidden md:flex">
+                  Get your membership
+                </a>
+              </Link>
+            )}
+
+            { isAuthenticated &&
+              <Link
+                href="/members/[slug]"
+                as={ `/members/${ user.slug }` }
               >
-                Get your membership
-              </a>
-            </Link> }
-            {TELEGRAM_URL && !isAuthenticated && <a
+                <a title="View profile" className="ml-3 hidden md:flex" onClick={() => toggleNav(false)}>
+                  <ProfilePhoto user={ user } />
+                </a>
+              </Link>
+            }
+
+            </div>
+
+            {/* {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noreferrer nofollow"
@@ -148,69 +165,70 @@ const Navigation = () => {
               className="text-4xl flex justify-center items-center mr-3"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
-            </a> }
-            { isAuthenticated &&
-              <Link
-                href="/members/[slug]"
-                as={ `/members/${ user.slug }` }
+            </a> } */}
+
+            <div className="flex items-center">
+              <a
+                className="space-y-2 md:hidden"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNav(!navOpen);
+                }}
               >
-                <a title="View profile" className="mr-3" onClick={() => toggleNav(false)}>
-                  <ProfilePhoto user={ user } />
-                </a>
-              </Link>
-            }
-            <a
-              className="space-y-2 md:hidden"
-              onClick={ (e) => {
-                e.preventDefault();
-                toggleNav(!navOpen);
-              } }
-            >
-              <span className="block rounded-full ml-3 w-5 h-0.5 bg-primary"></span>
-              <span className="block rounded-full w-8 h-0.5 bg-primary"></span>
-              <span className="block rounded-full w-5 h-0.5 bg-primary"></span>
-            </a>
+                <span className="block rounded-full ml-3 w-5 h-0.5 bg-primary"></span>
+                <span className="block rounded-full w-8 h-0.5 bg-primary"></span>
+                <span className="block rounded-full w-5 h-0.5 bg-primary"></span>
+              </a>
+            </div>
+
+            <div className="flex items-center">
+              
+
+              <h3 className="logo">
+                <Link href="/">
+                  <p className="ml-3 font-normal">
+                    {/* { LOGO_HEADER ? <img
+                      src={LOGO_HEADER}
+                      alt={PLATFORM_NAME}
+                    /> : PLATFORM_NAME } */}
+                    ReFI Spring
+                  </p>
+                </Link>
+              </h3>
+            
           </div>
         </div>
       </nav>
-      { navOpen &&
+      {navOpen && (
         <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
           <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg">
-            <Link
-              href="/events"
-            >
+            <Link href="/events">
               <a className="mr-3" onClick={() => toggleNav(false)}>
                 Events
               </a>
             </Link>
-            { isAuthenticated &&
-              <Link
-                href="/members"
-              >
+            {isAuthenticated && (
+              <Link href="/members">
                 <a className="mr-3" onClick={() => toggleNav(false)}>
                   Members
                 </a>
               </Link>
-            }
-            { isAuthenticated && user.roles.includes('community-curator') &&
-              <Link
-                href="/applications"
-              >
+            )}
+            {isAuthenticated && user.roles.includes("community-curator") && (
+              <Link href="/applications">
                 <a className="mr-3" onClick={() => toggleNav(false)}>
                   Applications
                 </a>
               </Link>
-            }
-            { isAuthenticated && user.roles.includes('admin') &&
-              <Link
-                href="/admin"
-              >
+            )}
+            {isAuthenticated && user.roles.includes("admin") && (
+              <Link href="/admin">
                 <a className="mr-3" onClick={() => toggleNav(false)}>
                   Admin
                 </a>
               </Link>
-            }
-            { isAuthenticated ? (
+            )}
+            {isAuthenticated ? (
               <Link href="/">
                 <a
                   className="mr-3"
@@ -218,7 +236,7 @@ const Navigation = () => {
                     e.preventDefault();
                     toggleNav(false);
                     logout();
-                    window.location.href = '/';
+                    window.location.href = "/";
                   }}
                   title={user.screenname}
                 >
@@ -227,25 +245,21 @@ const Navigation = () => {
               </Link>
             ) : (
               <Link href="/login">
-                <a
-                  className="mr-3"
-                  onClick={() => toggleNav(false)}
-                >
+                <a className="mr-3" onClick={() => toggleNav(false)}>
                   Sign in
                 </a>
               </Link>
             )}
-            { !isAuthenticated && <Link href="/signup">
-              <a
-                href="/signup"
-                className="btn-primary mr-3"
-              >
-                Get your membership
-              </a>
-            </Link> }
+            {!isAuthenticated && (
+              <Link href="/signup">
+                <a href="/signup" className="btn-primary mr-3">
+                  Get your membership
+                </a>
+              </Link>
+            )}
           </div>
         </div>
-      }
+      )}
       {error && (
         <div className="error-toast">
           {error}
@@ -260,7 +274,7 @@ const Navigation = () => {
           </a>
         </div>
       )}
-      { isAuthenticated && <Prompts /> }
+      {isAuthenticated && <Prompts />}
     </div>
   );
 };

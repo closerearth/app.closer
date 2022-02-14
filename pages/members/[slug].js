@@ -24,7 +24,6 @@ const MemberPage = ({ member, loadError }) => {
   const [sendError, setSendErrors] = useState(false);
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
-  const image = (photo || member.photo);
 
   const saveAbout = async (about) => {
     try {
@@ -93,23 +92,23 @@ const MemberPage = ({ member, loadError }) => {
             </div>
           </div>
         }
-        <div className="columns vertical-center">
-          <div className="col">
-            <div
-              className={`profile-photo xl ${image?'has-image':'placeholder'}`}
-              style={ { backgroundImage: image && `url("${cdn}${image}-max-lg.jpg")` } }
-            >
+        <div className="flex flex-col items-start">
+          <div className="flex flex-col">
+            <div>
+              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="h-18 mt-6 rounded-full animate-bounce cursor-pointer transition duration-150 transform hover:scale-110" />
+            </div>
+            <div>
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                 model="user"
                 id={member._id}
                 onSave={id => setPhoto(id)}
-                label={ image ? 'Change photo': 'Add photo' }
+                label={ member.photo ? 'Change photo': 'Add photo' }
               /> }
             </div>
           </div>
           <div className="col col-spacer" />
           <div className="col lg">
-            <h1>
+            <h3 className='font-medium text-4xl'>
               {member.screenname}{' '}
               { isAuthenticated && member._id !== currentUser._id &&
                 <a
@@ -122,7 +121,7 @@ const MemberPage = ({ member, loadError }) => {
                   <FontAwesomeIcon icon={faEnvelope}/>
                 </a>
               }
-            </h1>
+            </h3>
             { error && <p className="validation-error">Error: { error }</p> }
             { editAbout?
               <textarea

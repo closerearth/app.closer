@@ -8,7 +8,7 @@ module.exports = {
       colors: {
         primary: '#000000',
         'primary-hover': '#ffffff',
-        background: '#EEEEEE',
+        background: 'white',
         foreground: '#000'
       }
     },
