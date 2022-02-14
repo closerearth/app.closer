@@ -10,10 +10,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
+import UpcomingEvents from '../../components/UpcomingEvents';
 
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
+
 
 const MemberPage = ({ member, loadError }) => {
   const [photo, setPhoto] = useState(null);
@@ -24,6 +26,10 @@ const MemberPage = ({ member, loadError }) => {
   const [sendError, setSendErrors] = useState(false);
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
+  const urlSearchParams = typeof window !== 'undefined' && new URLSearchParams(window.location.search);
+  const params = urlSearchParams && Object.fromEntries(urlSearchParams.entries());
+  const page = params && parseFloat(params.page);
+
 
   const saveAbout = async (about) => {
     try {
@@ -94,20 +100,27 @@ const MemberPage = ({ member, loadError }) => {
         }
         <div className="flex flex-col items-start">
           <div className="flex flex-col">
+            <Link  href={'/members'}>
+              <p className="text-lg cursor-pointer">
+            {'< All Profiles'}
+              </p>
+            </Link>
             <div>
-              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="h-18 mt-6 rounded-full animate-bounce cursor-pointer transition duration-150 transform hover:scale-110" />
+              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="h-18 mt-10 rounded-full animate-bounce cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
-            <div>
+            <div >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                 model="user"
                 id={member._id}
                 onSave={id => setPhoto(id)}
                 label={ member.photo ? 'Change photo': 'Add photo' }
+                
               /> }
             </div>
           </div>
-          <div className="col col-spacer" />
-          <div className="col lg">
+         
+
+          <div className="flex flex-col items-start">
             <h3 className='font-medium text-4xl'>
               {member.screenname}{' '}
               { isAuthenticated && member._id !== currentUser._id &&
@@ -122,6 +135,14 @@ const MemberPage = ({ member, loadError }) => {
                 </a>
               }
             </h3>
+            
+            <div className='mt-4'>
+              <p>This is where the tagline description is placed.</p>
+            <div className="font-semibold text-sm">
+              {member.timezone}
+            </div>
+            </div>
+
             { error && <p className="validation-error">Error: { error }</p> }
             { editAbout?
               <textarea
@@ -135,7 +156,7 @@ const MemberPage = ({ member, loadError }) => {
                 } }
               />:
               (isAuthenticated && member._id === currentUser._id) ?
-              <p className="about-text" onClick={ () => toggleEditAbout(true) }>
+              <p className="mt-6" onClick={ () => toggleEditAbout(true) }>
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -176,6 +197,35 @@ const MemberPage = ({ member, loadError }) => {
                 </Linkify>
               </p>
             }
+
+        <div className="page-title flex justify-between">
+          <h3 className="mt-6 mb-4">Upcoming events {member.screenname} is going to:</h3>
+          {/* <div className="action">
+            { member && member.roles.includes('event-creator') &&
+              <Link href="/events/create">
+                <a className="btn-primary">Create event</a>
+              </Link>
+            }
+          </div> */}
+        </div>
+          <div>
+          <UpcomingEvents
+          allowCreate
+          limit={ 30 }
+          page={ page }
+          labelLink={null}
+        />
+        </div>
+
+          <div className="flex flex-col items-start mb-10">
+            <p className='font-semibold text-sm mt-8'>Stay Social</p>
+              <ul className='space-y-1 mt-4'>
+                <li>Facebook</li>
+                <li>Twitter</li>
+                <li>Instagram</li>
+              </ul>
+          </div>
+
           </div>
         </div>
       </main>

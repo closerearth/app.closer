@@ -60,7 +60,7 @@ const Navigation = () => {
   return (
     <div className="NavContainer pt-20 md:pt-0">
       <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
-        <div className="main-content flex justify-between items-center bg-white border-b border-b-neutral-700">
+        <div className="main-content flex justify-between items-center bg-background border-b border-b-neutral-700">
           {/* <h3 className="logo">
             <Link href="/">
               <a className="block">
