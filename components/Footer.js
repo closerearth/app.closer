@@ -12,8 +12,9 @@ const footer = () => (
         {/* <div className="flex flex-row items-center justify-start">
           { LOGO_FOOTER && <img src={LOGO_FOOTER} width="110" alt={ PLATFORM_NAME } /> }
         </div> */}
-        <div className="flex flex-col py-2">
-          <div className="flex flex-row space-x-7 self-center p-4 m-6">
+        <div className="flex flex-col md:flex-row py-2 items-center w-11/12 justify-between">
+          <div className='flex flex-col items-center'>
+          <div className="flex flex-row space-x-7 self-center p-4 mb-8 md:mb-1">
             { INSTAGRAM_URL && <a href={ INSTAGRAM_URL } target="_blank" rel="noreferrer nofollow">
               <img src="/images/icons/instagram.svg" width="40" alt="instagram" className="bg-primary rounded-3xl p-1"/>
             </a> }
@@ -27,9 +28,12 @@ const footer = () => (
               <img src="/images/icons/discord.svg" width="40" alt="twitter" className="bg-primary rounded-3xl p-1"/>
             </a> }
           </div>
+          <p className='m-2 p-2 hidden md:flex'>Powered by: closer</p>
+          </div>
           {/* <div className="border-t border-background pt-2">
             <a href={`mailto:${TEAM_EMAIL}`} className="text-sm text-white hover:underline">{TEAM_EMAIL}</a>
           </div> */}
+          
           <div className='flex flex-col items-start text-sm'>
             <p className='mb-2'>Keep in the loop, subscribe:</p>
           <form>
@@ -42,9 +46,8 @@ const footer = () => (
               <button type="submit" className='self-center'>Sign up</button>
             </div>
           </form>
-          <p className='m-4 p-2 self-center'>Powered by: closer</p>
           </div>
-
+          <p className='m-4 p-2 self-center md:hidden'>Powered by: closer</p>
       </div>
     </footer>
   </div>

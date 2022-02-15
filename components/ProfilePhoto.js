@@ -1,4 +1,5 @@
 import React from 'react';
+import MemberPage from '../pages/members/[slug]';
 import { cdn } from '../utils/api';
 
 const ProfilePhoto = ({ user, size, stack }) => {

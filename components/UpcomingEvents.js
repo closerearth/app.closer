@@ -43,7 +43,7 @@ const UpcomingEvents = ({ center, channel, queryParam, page, limit, label, label
       <div className={`card-body event-list flex flex-row flex-wrap justify-${center?'center':'start'}`}>
         { events && events.count() > 0?
           events.map(event => (
-            <div key={ event.get('_id') } className="event-preview relative live md:w-1/3 flex flex-row pr-4 mb-8">
+            <div key={ event.get('_id') } className="event-preview relative live md:w-10/12 flex flex-row pr-4 mb-8">
               <div className="card rounded bg-white overflow-hidden">
                 { event.get('photo') && <div className="-mx-4 -mt-4">
                   <Link href={`/events/${event.get('slug')}`}><a>

@@ -65,7 +65,7 @@ const MemberPage = ({ member, loadError }) => {
       <Head>
         <title>{ member.screenname }</title>
       </Head>
-      <main className="main-content">
+      <main className="flex flex-col items-start p-6">
         { openIntro &&
           <div className="introduction">
             <div className="main-content">
@@ -98,15 +98,16 @@ const MemberPage = ({ member, loadError }) => {
             </div>
           </div>
         }
-        <div className="flex flex-col items-start">
-          <div className="flex flex-col">
+
+        <div className='flex flex-col md:flex-row items-start'>
+        <div className='flex flex-col items-start md:w-fit'>
             <Link  href={'/members'}>
               <p className="text-lg cursor-pointer">
             {'< All Profiles'}
               </p>
             </Link>
             <div>
-              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="h-18 mt-10 rounded-full animate-bounce cursor-pointer transition duration-150 transform hover:scale-110" />
+              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="w-24 md:w-40 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
             <div >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
@@ -117,7 +118,7 @@ const MemberPage = ({ member, loadError }) => {
                 
               /> }
             </div>
-          </div>
+
          
 
           <div className="flex flex-col items-start">
@@ -142,6 +143,7 @@ const MemberPage = ({ member, loadError }) => {
               {member.timezone}
             </div>
             </div>
+          </div>
 
             { error && <p className="validation-error">Error: { error }</p> }
             { editAbout?
@@ -156,7 +158,7 @@ const MemberPage = ({ member, loadError }) => {
                 } }
               />:
               (isAuthenticated && member._id === currentUser._id) ?
-              <p className="mt-6" onClick={ () => toggleEditAbout(true) }>
+              <p className="mt-6 w-10/12" onClick={ () => toggleEditAbout(true) }>
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -176,7 +178,7 @@ const MemberPage = ({ member, loadError }) => {
                     }
                 </Linkify>
               </p>:
-              <p className="about-text">
+              <p className="">
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -197,7 +199,9 @@ const MemberPage = ({ member, loadError }) => {
                 </Linkify>
               </p>
             }
+            </div>
 
+      <div className="flex flex-col items-start md:w-2/3">
         <div className="page-title flex justify-between">
           <h3 className="mt-6 mb-4">Upcoming events {member.screenname} is going to:</h3>
           {/* <div className="action">
@@ -208,15 +212,13 @@ const MemberPage = ({ member, loadError }) => {
             }
           </div> */}
         </div>
-          <div>
+        
           <UpcomingEvents
           allowCreate
           limit={ 30 }
           page={ page }
           labelLink={null}
         />
-        </div>
-
           <div className="flex flex-col items-start mb-10">
             <p className='font-semibold text-sm mt-8'>Stay Social</p>
               <ul className='space-y-1 mt-4'>

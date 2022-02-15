@@ -149,8 +149,9 @@ const Navigation = () => {
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
-                <a title="View profile" className="ml-3 hidden md:flex" onClick={() => toggleNav(false)}>
+                <a title="View profile" className="ml-4 hidden md:flex items-center" onClick={() => toggleNav(false)}>
                   <ProfilePhoto user={ user } />
+                  <p className="ml-3">{user.screenname}</p>
                 </a>
               </Link>
             }
