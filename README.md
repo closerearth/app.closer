@@ -2,6 +2,16 @@
 
 The platform for sovereign communities.
 
+## UI
+
+### Tailwind
+
+https://tailwindcss.com/docs
+
+### Icons
+
+https://heroicons.com/
+
 ## API
 
 This platform is developed on top of the Closer API.

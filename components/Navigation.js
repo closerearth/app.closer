@@ -15,7 +15,7 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
-import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from '../config';
+import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 dayjs.extend(relativeTime);
 
@@ -146,12 +146,18 @@ const Navigation = () => {
                 </a>
               </Link>
             )}
-            { !isAuthenticated && <Link href="/signup">
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
                 href="/signup"
                 className="btn-primary mr-3 hidden md:flex"
               >
-                Get your membership
+                {
+                  REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                  'Apply':
+                  'Signup'
+                }
               </a>
             </Link> }
             {TELEGRAM_URL && !isAuthenticated && <a
@@ -159,7 +165,7 @@ const Navigation = () => {
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center mr-3"
+              className="text-4xl flex justify-center items-center"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
             </a> }
@@ -168,7 +174,7 @@ const Navigation = () => {
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
-                <a title="View profile" className="mr-3" onClick={() => toggleNav(false)}>
+                <a title="View profile" className="" onClick={() => toggleNav(false)}>
                   <ProfilePhoto user={ user } />
                 </a>
               </Link>
