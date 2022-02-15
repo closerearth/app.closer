@@ -30,7 +30,7 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
-import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from '../config';
+import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 
 dayjs.extend(relativeTime);
@@ -166,6 +166,7 @@ const Navigation = () => {
                 </a>
               </Link>
             )}
+
             {!isAuthenticated && (
               <Link href="/signup">
                 <a href="/signup" className="btn-primary mr-3 hidden md:flex">
@@ -174,11 +175,36 @@ const Navigation = () => {
               </Link>
             )}
 
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
+              <a
+                href="/signup"
+                className="btn-primary mr-3 hidden md:flex"
+              >
+                {
+                  REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                  'Apply':
+                  'Signup'
+                }
+              </a>
+            </Link> }
+            {TELEGRAM_URL && !isAuthenticated && <a
+              href={TELEGRAM_URL}
+              target="_blank"
+              rel="noreferrer nofollow"
+              title="Join Telegram Group"
+              className="text-4xl flex justify-center items-center"
+            >
+              <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
+            </a> }
+
             { isAuthenticated &&
               <Link
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
+
                 <a title="View profile" className="ml-4 hidden md:flex items-center" onClick={() => toggleNav(false)}>
                   <ProfilePhoto user={ user } />
                   <p className="ml-3">{user.screenname}</p>

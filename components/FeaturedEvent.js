@@ -31,7 +31,11 @@ const FeaturedEvent = ({ event }) => {
           </div>
         </div>
         <div className="flex items-center justify-end">
-          <Link href={`/events/${event.get('slug')}`}><a className="btn-primary text-sm">Get your ticket</a></Link>
+          <Link href={`/events/${event.get('slug')}`}>
+            <a className="btn-primary text-sm">
+              {event.get('paid') ? 'Get your ticket' : 'See event' }
+            </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -21,40 +21,45 @@ const Prompts = () => {
 
   if (!user?.photo && !isClosed) {
     return (
-      <div className="main-content">
-        <section className="prompts-overlay">
-          <div className="prompt-text">
+      <div>
+        <div className="main-content p-2 justify-between flex flex-col relative text-center">
+          <div className="p-2">
             { image ?
               <p>Looking good {user.screenname} ♥️</p>:
               <p>It&apos;s nice to have you here {user.screenname}. Now let&apos;s add a photo to your profile ♥️</p>
             }
-            <p>
-              <a
-                href="#"
-                onClick={ e => {
-                  e.preventDefault();
-                  setIsClosed(true);
-                } }
-              >
-                Close this
-              </a>
-            </p>
           </div>
-          <div
-            className={`profile-photo xl ${image?'has-image':'placeholder'}`}
-            style={ { backgroundImage: image && `url("${cdn}${image}-max-lg.jpg")` } }
-          >
-            <UploadPhoto
-              model="user"
-              id={user._id}
-              onSave={id => {
-                setPhoto(id);
-                setTimeout(() => setUser({ ...user, photo: id }), 4000);
-              }}
-              label={ image ? 'Change photo': 'Add photo' }
-            />
+          <div className="flex flex-row justify-center items-center">
+            <div>
+              { image && <img
+                src={`${cdn}${image}-max-lg.jpg`}
+                className={`w-16 h-16 rounded-full`}
+              /> }
+            </div>
+            <div className="ml-4">
+              <UploadPhoto
+                model="user"
+                id={user._id}
+                onSave={id => {
+                  setPhoto(id);
+                  setTimeout(() => setUser({ ...user, photo: id }), 4000);
+                }}
+                label={ image ? 'Change photo': 'Add photo' }
+              />
+            </div>
           </div>
-        </section>
+          <div className="absolute top-0 right-0 p-4">
+            <a
+              href="#"
+              onClick={ e => {
+                e.preventDefault();
+                setIsClosed(true);
+              } }
+            >
+              Close this
+            </a>
+          </div>
+        </div>
       </div>
     );
   }

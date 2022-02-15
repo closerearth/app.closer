@@ -14,6 +14,7 @@ import UploadPhoto from '../../../components/UploadPhoto';
 import CreatePost from '../../../components/CreatePost';
 import PostList from '../../../components/PostList';
 import ProfilePhoto from '../../../components/ProfilePhoto';
+import Photo from '../../../components/Photo';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
@@ -23,6 +24,10 @@ dayjs.extend(advancedFormat)
 const Event = ({ event, error }) => {
 
   const [photo, setPhoto] = useState(event && event.photo);
+  const [partnerToAdd, setPartnerToAdd] = useState({
+    name: '',
+    photo: null
+  });
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
@@ -38,6 +43,7 @@ const Event = ({ event, error }) => {
   const isThisYear = dayjs().isSame(start, 'year');
   const dateFormat = isThisYear ? 'MMMM Do HH:mm' : 'YYYY MMMM Do HH:mm';
   const myTickets = platform.ticket.find(myTicketFilter);
+
   const loadData = async () => {
     if (event.attendees && event.attendees.length > 0) {
       const params = { where: { _id: { $in: event.attendees } } };
@@ -55,6 +61,17 @@ const Event = ({ event, error }) => {
       setAttendees(attend ? event.attendees.concat(user._id) : event.attendees.filter(a => a !== user._id));
     } catch (err) {
       alert(`Could not RSVP: ${err.message}`)
+    }
+  }
+
+  const addPartner = async (e, partner) => {
+    e.preventDefault();
+    try {
+      await platform.event.patch(event._id, {
+        partners: (event.partners || []).concat(partner)
+      });
+    } catch (err) {
+      alert(`Could not add partner: ${err.message}`)
     }
   }
 
@@ -164,12 +181,12 @@ const Event = ({ event, error }) => {
                     </>
                   }
 
-                  {(isAuthenticated) && user._id === event.createdBy &&
+                  {isAuthenticated && user._id === event.createdBy &&
                     <Link as={`/events/edit/${event.slug}`} href="/events/edit/[slug]">
                       <a className="btn-primary mr-2">Edit event</a>
                     </Link>
                   }
-                  {(isAuthenticated) && user.roles.includes('admin') &&
+                  {isAuthenticated && user.roles.includes('admin') &&
                     <a
                       className={`btn-primary inline-flex items-center ${featured?'active':''}`}
                       href="#"
@@ -193,6 +210,43 @@ const Event = ({ event, error }) => {
             </div>
           </section>
           <main className="main-content event-page py-10">
+            { ((event.partners && event.partners.length > 0) || (isAuthenticated && user._id === event.createdBy)) &&
+              <section className="mb-6">
+                <div className="flex flex-row flex-wrap justify-center items-center">
+                  { event.partners && event.partners.map(partner => (
+                    <a href={ partner.url || '#' } target="_blank" key={ partner.name } className="mr-3">
+                      <Photo id={ partner.photo } photoUrl={ partner.photoUrl.replace('https://re-build.co','')+"?2" } size="sm" width="32" height="12" title={ partner.name } />
+                    </a>
+                  )) }
+                </div>
+                {/* { (isAuthenticated && user._id === event.createdBy) &&
+                  <div className="m-4">
+                    <h3>Add partner</h3>
+                    <form className="flex flex-row p-2" onSubmit={ e => addPartner(e, partnerToAdd) }>
+                      <div className="w-2/3">
+                        <input
+                          type="text"
+                          value={ partnerToAdd.name }
+                          placeholder="Partner Name"
+                          onChange={ e => setPartnerToAdd({ ...partnerToAdd, name: e.target.value }) }
+                        />
+                      </div>
+                      <div className="w-1/3">
+                        { partnerToAdd.photo && <Photo id={ partnerToAdd.photo } /> }
+                        <div className="flex flex-row``">
+                          <UploadPhoto
+                            onSave={ photo => setPartnerToAdd({ ...partnerToAdd, photo }) }
+                            label="Upload logo"
+                          />
+                          <button className="btn-primary">Add</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                } */}
+              </section>
+            }
+
             <section className="attendees card-body mb-6">
               <h3 className="text-2xl font-bold">Who&apos;s coming?</h3>
               { event.price || event.ticketOptions?
@@ -205,7 +259,7 @@ const Event = ({ event, error }) => {
 
                       return (
                         <Link key={ attendee.get('_id') } as={`/members/${attendee.get('slug')}`} href="/members/[slug]">
-                          <a className="from user-preview">
+                          <a className="from user-preview z-10">
                             <ProfilePhoto size="sm" user={attendee.toJS()} />
                             {/* <span className="name">{ user.get('screenname') }</span> */}
                           </a>
