@@ -15,7 +15,8 @@ const UpcomingEvents = ({ center, channel, queryParam, page, limit, label, label
   const eventsFilter = { where: {
     start: {
       $gt: start
-    }
+    },
+    visibility: 'public'
   }, limit, page };
 
   const { user } = useAuth();

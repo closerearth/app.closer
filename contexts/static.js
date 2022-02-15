@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react'
 import dayjs from 'dayjs';
 import PageNotAllowed from '../pages/401';
 
-import api from '../utils/api';
+import api, { formatSearch } from '../utils/api';
 import config from '../config';
 
 const StaticContext = createContext({});

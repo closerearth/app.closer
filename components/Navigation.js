@@ -13,6 +13,25 @@ import Prompts from "./Prompts";
 import { useStatic } from "../contexts/static";
 import { theme } from "../tailwind.config";
 import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from "../config";
+import React, { useState, useEffect } from 'react';
+import { fromJS } from 'immutable'
+import Link from 'next/link';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import slugify from 'slugify';
+import { useRouter } from 'next/router';
+import { trackEvent } from './Analytics';
+import { faTelegram } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuth } from '../contexts/auth.js';
+import ProfilePhoto from './ProfilePhoto';
+import Prompts from './Prompts';
+import FeaturedEvent from './FeaturedEvent';
+import { useStatic } from '../contexts/static';
+import { theme } from '../tailwind.config';
+import api, { formatSearch } from '../utils/api';
+import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from '../config';
+
 
 dayjs.extend(relativeTime);
 
@@ -44,9 +63,10 @@ DEMOP
 
 const Navigation = () => {
   const [navOpen, toggleNav] = useState(false);
+  const [featuredEvents, setFeaturedEvents] = useState(null);
   const [now, setNow] = useState(dayjs());
   const router = useRouter();
-  const { cache } = useStatic();
+  const { cache, getStaticCache } = useStatic();
 
   useEffect(() => {
     const tick = setInterval(() => {
@@ -55,10 +75,20 @@ const Navigation = () => {
     return () => clearInterval(tick);
   }, []);
 
+  useEffect(async () => {
+    const start = new Date();
+    const where = formatSearch({ featured: true, start: { $gt: start } });
+    const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
+    setFeaturedEvents(fromJS(events));
+  }, []);
+
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
 
   return (
     <div className="NavContainer pt-20 md:pt-0">
+      { featuredEvents && featuredEvents.first() &&
+        <FeaturedEvent event={ featuredEvents.first() } />
+      }
       <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
         <div className="main-content flex justify-between items-center bg-background border-b border-b-neutral-700">
           {/* <h3 className="logo">
