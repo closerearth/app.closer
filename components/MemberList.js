@@ -10,6 +10,9 @@ import Pagination from './Pagination';
 import Loading from './Loading';
 import { useAuth } from '../contexts/auth.js';
 
+import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const MemberList = ({ children, channel, filter, title, limit }) => {
 
   const { user } = useAuth();
@@ -42,20 +45,31 @@ const MemberList = ({ children, channel, filter, title, limit }) => {
   }, [filter, channel, page]);
 
   return (
-    <section className="member-page card">
-      <h3 className="card-title">
-        { title || 'Members' }
+    <section className="member-page">
+      <Link href={"/"}>
+      <button className='flex flex-row justify-evenly items-center w-28 h-6 self-start rounded-full border border-neutral-900 text-xs'>
+      <FontAwesomeIcon icon={faLongArrowAltLeft} className='w-10/12' />
+         go back
+      </button>
+      </Link>
+      <h3 className="mt-4 mb-12 text-4xl font-light">
+        { title || 'Community members' }
       </h3>
       { loading ?
         <Loading />:
-        <div className="user-list flex flex-row justify-start flex-wrap">
+        <div className="grid gap-4 md:grid-cols-2 justify-start items-center">
           { users && users.count() > 0 ?
             users.map(user => (
               <Link key={ user.get('_id') } as={`/members/${user.get('slug')}`} href="/members/[slug]">
-                <a className="user-preview flex flex-row justify-start items-center mb-2 p-2 w-1/2 md:w-1/5">
-                  <ProfilePhoto user={user.toJS()} size="lg" />
-                  <h4 className="font-sm ml-2">{ user.get('screenname') }</h4>
-                </a>
+                <div className="flex flex-col justify-start items-center p-5 w-12/12 max-w-md md:max-w-xl md:w-11/12 border border-zinc-400 rounded-sm">
+                  <div className='flex flex-row items-center justify-between w-full'>
+                  <h4 className="font-light text-2xl md:text-2xl">{ user.get('screenname') }</h4>
+                  <ProfilePhoto user={user.toJS()} width={"12"} height={"12"}/>
+                  </div>
+                  <p className='mb-3 w-10/12 self-start text-zinc-400 text-sm'>Lorem ipsum dolor sit amet, consectetur adipscing elit, sed do eiusmod tempor incididunt t labore et dolore.</p>
+                  <h4 className="text-xs flex self-start mb-3">{user.get('timezone')}</h4>
+                  <button className='w-full md:w-52 self-start rounded-full border border-neutral-900 h-9'>See profile</button>
+                </div>
               </Link>
             )):
             <p>No members.</p>

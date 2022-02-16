@@ -2,13 +2,13 @@ import React from 'react';
 import MemberPage from '../pages/members/[slug]';
 import { cdn } from '../utils/api';
 
-const ProfilePhoto = ({ user, size, stack }) => {
+const ProfilePhoto = ({ user, size, stack, width, height }) => {
   const placeholder = '/images/profile-placeholder.png';
   const url = user.photo ? `${cdn}${user.photo}-profile-${size}.jpg` : placeholder;
 
   return (
     <span
-      className={`${stack ? 'border-white border-2 ':''}w-9 h-9 inline-flex justify-center items-center text-center rounded-full overflow-hidden bg-primary`}
+      className={`${stack ? 'border-white border-2 ':''} w-${width? width : "9"} h-${height? height : "9"} inline-flex justify-center items-center text-center rounded-full overflow-hidden bg-primary`}
       title={ user.screenname }
     >
       { user.photo ? <img
