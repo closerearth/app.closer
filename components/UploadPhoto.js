@@ -51,7 +51,7 @@ const UploadPhoto = ({ model, id, onSave, label }) => {
           <p>Uploading...</p>:
           isDragActive ?
             <p>Drop files here</p> :
-            <p>{ label }</p>
+            <p className="btn-primary">{ label }</p>
       }
     </div>
   );

@@ -55,15 +55,29 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const signup = async (data) => {
+    try {
+      const { data: { access_token: token, results: userData } } = await api.post('/signup', data);
+      if (token && userData) {
+        Cookies.set('token', token, { expires: 60 })
+        setUser(userData);
+      }
+      return userData;
+    } catch (err) {
+      throw new Error(err.response?.data?.error || err.message);
+    }
+  }
+
   const completeRegistration = async (signup_token, data, onSuccess) => {
     try {
       const postData = Object.assign({ signup_token }, data)
-      const { data: { access_token: token, results: user } } = await api.post('/signup', postData)
+      const { data: { access_token: token, results: userData } } = await api.post('/signup', postData)
       if (token) {
         Cookies.set('token', token, { expires: 60 })
-        if (user) setUser(user)
+        if (userData) setUser(userData)
         if (onSuccess) onSuccess()
       }
+      return userData;
     } catch (err) {
       setError(err.response?.data?.error || err.message);
     }
@@ -94,6 +108,7 @@ export const AuthProvider = ({ children }) => {
         isLoading,
         logout,
         error,
+        signup,
         completeRegistration,
         updatePassword,
         setUser,

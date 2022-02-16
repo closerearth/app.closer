@@ -10,10 +10,22 @@ import Pagination from './Pagination';
 import Loading from './Loading';
 import { useAuth } from '../contexts/auth.js';
 
+
 import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const MemberList = ({ children, channel, filter, title, limit }) => {
+
+const MemberList = ({
+  list,
+  card,
+  children,
+  channel,
+  filter,
+  title,
+  limit
+}) => {
+
 
   const { user } = useAuth();
   const { platform } = usePlatform();
@@ -21,9 +33,9 @@ const MemberList = ({ children, channel, filter, title, limit }) => {
   const [error, setErrors] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const where = filter || (channel && {
+  const where = Object.assign({}, filter, (channel && {
     category: channel
-  });
+  }));
   const params = { where, sort_by: 'created', limit, page };
   const users = platform.user.find(params);
   const totalUsers = platform.user.findCount(params);
@@ -70,6 +82,21 @@ const MemberList = ({ children, channel, filter, title, limit }) => {
                   <h4 className="text-xs flex self-start mb-3">{user.get('timezone')}</h4>
                   <button className='w-full md:w-52 self-start rounded-full border border-neutral-900 h-9'>See profile</button>
                 </div>
+
+    <section className={card ? 'card' : ''}>
+      { title && <h3 className={card ? 'card-title' : ''}>
+        { title }
+      </h3> }
+      { loading ?
+        <Loading />:
+        <div className={`user-list ${card?'card-body':''} flex ${list?'flex-col':'flex-row flex-wrap'} justify-start`}>
+          { users && users.count() > 0 ?
+            users.map(user => (
+              <Link key={ user.get('_id') } as={`/members/${user.get('slug')}`} href="/members/[slug]">
+                <a className={`user-preview flex flex-row justify-start items-center mb-2 p-2 ${list?'':'w-1/2 md:w-1/5'}`}>
+                  <ProfilePhoto user={user.toJS()} size="lg" />
+                  <h4 className="font-sm ml-2">{ user.get('screenname') }</h4>
+                </a>
               </Link>
             )):
             <p>No members.</p>

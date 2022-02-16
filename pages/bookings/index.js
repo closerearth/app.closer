@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../contexts/auth';
