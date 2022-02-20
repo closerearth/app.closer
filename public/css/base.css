@@ -78,4 +78,13 @@
   .logo img {
     height: 3rem;
   }
+  .tag {
+    background-color: #13301e;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    margin: 0 0.25rem 0.25rem 0;
+    border-radius: 1.1rem;
+    color: white;
+  }
 }

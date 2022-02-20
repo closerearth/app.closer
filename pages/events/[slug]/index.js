@@ -213,9 +213,9 @@ const Event = ({ event, error }) => {
             { ((event.partners && event.partners.length > 0) || (isAuthenticated && user._id === event.createdBy)) &&
               <section className="mb-6">
                 <div className="flex flex-row flex-wrap justify-center items-center">
-                  { event.partners && event.partners.map(partner => (
+                  { event.partners && event.partners.map(partner => partner.photoUrl && (
                     <a href={ partner.url || '#' } target="_blank" key={ partner.name } className="mr-3">
-                      <Photo id={ partner.photo } photoUrl={ partner.photoUrl.replace('https://re-build.co','')+"?2" } size="sm" width="32" height="12" title={ partner.name } />
+                      <Photo id={ partner.photo } photoUrl={ partner.photoUrl } size="sm" width="32" height="12" title={ partner.name } />
                     </a>
                   )) }
                 </div>
