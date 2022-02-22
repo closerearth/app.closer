@@ -61,7 +61,7 @@ const MemberPage = ({ member, loadError }) => {
       <Head>
         <title>{ member.screenname }</title>
       </Head>
-      <div className='main-content'>
+      <div className='main-content bg-slate-50'>
       <main className="flex flex-col justify-between p-6">
         { openIntro &&
           <div className="introduction">
@@ -106,7 +106,7 @@ const MemberPage = ({ member, loadError }) => {
               </p>
             </Link>
             <div>
-              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
+              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : 'Add a photo'} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
             <div >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
@@ -137,7 +137,7 @@ const MemberPage = ({ member, loadError }) => {
             </h3>
             
             <div className='mt-4'>
-              <p>This is where the tagline description is placed.</p>
+              {/* <p>This is where the tagline description is placed.</p> */}
             <div className="font-semibold text-sm">
               {member.timezone}
             </div>

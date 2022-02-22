@@ -22,7 +22,7 @@ const Newsletter = ({ tags, placement }) => {
   // }
 
   return (
-    <div className="Newsletter bg-gray-900 py-10 text-white">
+    <div className="Newsletter py-10 text-neutral-900">
       { signupCompleted ?
         <h3>Thanks, we will be in touch soon!</h3> :
         <form
@@ -44,11 +44,17 @@ const Newsletter = ({ tags, placement }) => {
           { signupError &&
             <div className="error">{ signupError }</div>
           }
-          <div className="flex flex-row items-center justify-center px-2">
-            <input type="email" className="mr-2" value={email} placeholder="Email" onChange={e => setEmail(e.target.value)} required />
-            <button type="submit" name="subscribe" className="btn-primary text-white">
-              Subscribe
-            </button>
+          <div className="flex flex-col items-center justify-start px-2">
+            <p className='mb-2 self-start'>Keep in the loop, subscribe:</p>
+            <input type="email" className="mr-2" value={email} placeholder="Your email" onChange={e => setEmail(e.target.value)} required />
+
+            <div className='flex flex-row justify-between w-80'>
+              <div className='flex flex-row mt-2'>
+              <input type="checkbox"/>
+              <label className='ml-4'> I agree to the T&C. Read.</label>
+              </div>
+              <button type="submit" name="subscribe" className='self-center'>Sign up</button>
+            </div>
           </div>
         </form>
       }
@@ -57,3 +63,4 @@ const Newsletter = ({ tags, placement }) => {
 }
 
 export default Newsletter;
+
