@@ -174,7 +174,7 @@ const Navigation = () => {
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
-                <a title="View profile" className="" onClick={() => toggleNav(false)}>
+                <a title="View profile" className="mr-3 md:mr-0" onClick={() => toggleNav(false)}>
                   <ProfilePhoto user={ user } />
                 </a>
               </Link>
