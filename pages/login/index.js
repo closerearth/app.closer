@@ -13,6 +13,8 @@ const Login = () => {
   const [password, setPassword] = useState('');
 
   if (isAuthenticated && typeof window.location !== 'undefined') {
+    // router.push('/');
+    // For some reason, cache needs to get reset.
     window.location.href = '/';
   }
 
