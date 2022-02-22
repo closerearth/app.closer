@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
+import UpcomingEvents from '../../components/UpcomingEvents';
 
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
@@ -60,7 +61,8 @@ const MemberPage = ({ member, loadError }) => {
       <Head>
         <title>{ member.screenname }</title>
       </Head>
-      <main className="main-content">
+      <div className='main-content'>
+      <main className="flex flex-col justify-between p-6">
         { openIntro &&
           <div className="introduction">
             <div className="main-content">
@@ -93,23 +95,33 @@ const MemberPage = ({ member, loadError }) => {
             </div>
           </div>
         }
-        <div className="columns vertical-center">
-          <div className="col">
-            <div
-              className={`profile-photo xl ${image?'has-image':'placeholder'}`}
-              style={ { backgroundImage: image && `url("${cdn}${image}-max-lg.jpg")` } }
-            >
+
+        <div className='flex flex-col md:flex-row items-start'>
+
+        <div className='flex flex-col items-start md:w-full'>
+
+            <Link  href={'/members'}>
+              <p className="text-lg cursor-pointer">
+            {'< All Profiles'}
+              </p>
+            </Link>
+            <div>
+              <img src={`${cdn}${member.photo}-profile-sm.jpg`} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
+            </div>
+            <div >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                 model="user"
                 id={member._id}
                 onSave={id => setPhoto(id)}
-                label={ image ? 'Change photo': 'Add photo' }
+                label={ member.photo ? 'Change photo': 'Add photo' }
+                
               /> }
             </div>
-          </div>
-          <div className="col col-spacer" />
-          <div className="col lg">
-            <h1>
+
+         
+
+          <div className="flex flex-col items-start">
+            <h3 className='font-medium text-4xl'>
               {member.screenname}{' '}
               { isAuthenticated && member._id !== currentUser._id &&
                 <a
@@ -122,7 +134,16 @@ const MemberPage = ({ member, loadError }) => {
                   <FontAwesomeIcon icon={faEnvelope}/>
                 </a>
               }
-            </h1>
+            </h3>
+            
+            <div className='mt-4'>
+              <p>This is where the tagline description is placed.</p>
+            <div className="font-semibold text-sm">
+              {member.timezone}
+            </div>
+            </div>
+          </div>
+
             { error && <p className="validation-error">Error: { error }</p> }
             { editAbout?
               <textarea
@@ -136,7 +157,7 @@ const MemberPage = ({ member, loadError }) => {
                 } }
               />:
               (isAuthenticated && member._id === currentUser._id) ?
-              <p className="about-text" onClick={ () => toggleEditAbout(true) }>
+              <p className="mt-6 w-10/12" onClick={ () => toggleEditAbout(true) }>
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -156,7 +177,7 @@ const MemberPage = ({ member, loadError }) => {
                     }
                 </Linkify>
               </p>:
-              <p className="about-text">
+              <p className="">
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -177,12 +198,43 @@ const MemberPage = ({ member, loadError }) => {
                 </Linkify>
               </p>
             }
+            </div>
+
+      <div className="flex flex-col items-start md:w-2/3">
+        <div className="page-title flex justify-between">
+          <h3 className="mt-6 mb-4">Upcoming events {member.screenname} is going to:</h3>
+          {/* <div className="action">
+            { member && member.roles.includes('event-creator') &&
+              <Link href="/events/create">
+                <a className="btn-primary">Create event</a>
+              </Link>
+            }
+          </div> */}
+        </div>
+        
+          <UpcomingEvents
+          allowCreate
+          limit={ 30 }
+          page={ 1 }
+          labelLink={null}
+        />
+          <div className="flex flex-col items-start mb-10">
+            <p className='font-semibold text-sm mt-8'>Stay Social</p>
+              <ul className='space-y-1 mt-4'>
+                <li>Facebook</li>
+                <li>Twitter</li>
+                <li>Instagram</li>
+              </ul>
+          </div>
+
           </div>
         </div>
       </main>
+      </div>
     </Layout>
   );
 }
+
 MemberPage.getInitialProps = async ({ req, query }) => {
   try {
     const res = await api.get(`/user/${query.slug}`);
