@@ -115,7 +115,9 @@ const EventCheckout = ({ event, error }) => {
       <div className="main-content intro booking">
         <div className="md:flex md:flex-row justify-start items-start">
           <div className="md:w-1/2 pr-4">
-            <h1>{ event.name }</h1>
+            <h1>
+              <Link as={ `/events/${event.slug}` } href="/events/[slug]"><a>{ event.name }</a></Link>
+            </h1>
             { event.start &&
               <p className="text-gray-500 text-sm">
                 {start.format('MMM D, YYYY')} at {start.format('HH:mm')} { event.end && <span>until {end.format('MMM D, YYYY')} at {end.format('HH:mm')}</span>}

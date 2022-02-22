@@ -114,7 +114,7 @@ const Event = ({ event, error }) => {
         <div>
           <section className="py-5">
             <div className="main-content md:flex flex-row justify-center items-center">
-              <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 h-80">
+              <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-80">
                 { photo && <img
                   className="object-cover md:h-full md:w-full"
                   src={ `${cdn}${photo}-max-lg.jpg` }
