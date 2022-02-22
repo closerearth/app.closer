@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import Head from 'next/head'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import Layout from '../../components/Layout'
-import api from '../../utils/api'
-import { useAuth } from '../../contexts/auth.js'
+import React, { useState } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Layout from '../../components/Layout';
+import api from '../../utils/api';
+import { useAuth } from '../../contexts/auth';
 
 const Login = () => {
   const router = useRouter();
@@ -66,7 +66,7 @@ const Login = () => {
                 </button>
                 <hr className="my-4"/>
                 <p>
-                  <Link href="/forgot-password" as="/forgot-password"><a>Forgot password?</a></Link>
+                  <Link href="/login/forgot-password" as="/login/forgot-password"><a>Forgot password?</a></Link>
                 </p>
               </div>
             </div>

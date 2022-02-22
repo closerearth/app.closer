@@ -1,7 +1,11 @@
 import ReactGA from 'react-ga';
+import { GA_ANALYTICS } from '../config';
 
 export const initAnalytics = () => {
-  ReactGA.initialize('UA-178334677-1');
+  if (GA_ANALYTICS) {
+    console.log(`Start Analytics ${GA_ANALYTICS}`)
+    ReactGA.initialize(GA_ANALYTICS);
+  }
 };
 
 export const trackPageView = () => {

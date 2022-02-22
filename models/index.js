@@ -85,7 +85,9 @@ export default {
         { label: 'Public', value: 'public' },
         { label: 'Private', value: 'private' },
       ]
-    }
+    },
+    { name: 'password', label: 'Event password', type: 'text', placeholder: '(If set, user will need the password to see)' },
+    { name: 'participationGuideUrl', label: 'Participation guide', type: 'text', placeholder: 'https://event.com/participation' },
   ],
   listing: [
     { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },

@@ -1,18 +1,23 @@
-import {React, useState, useEffect } from "react";
-import Link from "next/link";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import slugify from "slugify";
-import { useRouter } from "next/router";
-import { trackEvent } from "./Analytics";
-import { faTelegram } from "@fortawesome/free-brands-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAuth } from "../contexts/auth.js";
-import ProfilePhoto from "./ProfilePhoto";
-import Prompts from "./Prompts";
-import { useStatic } from "../contexts/static";
-import { theme } from "../tailwind.config";
-import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL } from "../config";
+
+import React, { useState, useEffect } from 'react';
+import { fromJS } from 'immutable'
+import Link from 'next/link';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import slugify from 'slugify';
+import { useRouter } from 'next/router';
+import { trackEvent } from './Analytics';
+import { faTelegram } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useAuth } from '../contexts/auth.js';
+import ProfilePhoto from './ProfilePhoto';
+import Prompts from './Prompts';
+import FeaturedEvent from './FeaturedEvent';
+import { useStatic } from '../contexts/static';
+import { theme } from '../tailwind.config';
+import api, { formatSearch } from '../utils/api';
+import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config'
+f1655b7ab2d872ec6158440055148eb5dcec5731
 
 dayjs.extend(relativeTime);
 
@@ -44,15 +49,23 @@ DEMOP
 
 const Navigation = () => {
   const [navOpen, toggleNav] = useState(false);
+  const [featuredEvents, setFeaturedEvents] = useState(null);
   const [now, setNow] = useState(dayjs());
   const router = useRouter();
-  const { cache } = useStatic();
+  const { cache, getStaticCache } = useStatic();
 
   useEffect(() => {
     const tick = setInterval(() => {
       setNow(dayjs());
     }, 1000);
     return () => clearInterval(tick);
+  }, []);
+
+  useEffect(async () => {
+    const start = new Date();
+    const where = formatSearch({ featured: true, start: { $gt: start } });
+    const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
+    setFeaturedEvents(fromJS(events));
   }, []);
 
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
@@ -62,6 +75,12 @@ const Navigation = () => {
       <nav className="h-20 fixed z-20 top-0 left-0 right-0 drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
         <div className="main-content flex justify-between items-center bg-background border-b border-b-neutral-700">
           {/* <h3 className="logo">
+      { featuredEvents && featuredEvents.first() &&
+        <FeaturedEvent event={ featuredEvents.first() } />
+      }
+      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
+        <div className="main-content flex flex-row justify-between items-center">
+          <h3 className="logo">
             <Link href="/">
               <a className="block">
                 { LOGO_HEADER ? <img
@@ -159,11 +178,26 @@ const Navigation = () => {
             </div>
 
             {/* {TELEGRAM_URL && !isAuthenticated && <a
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
+              <a
+                href="/signup"
+                className="btn-primary mr-3 hidden md:flex"
+              >
+                {
+                  REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                  'Apply':
+                  'Signup'
+                }
+              </a>
+            </Link> }
+            {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center mr-3"
+              className="text-4xl flex justify-center items-center"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
             </a> } */}
@@ -196,6 +230,22 @@ const Navigation = () => {
                 </Link>
               </h3>
             
+                <a title="View profile" className="" onClick={() => toggleNav(false)}>
+                  <ProfilePhoto user={ user } />
+                </a>
+          
+          
+            <a
+              className="space-y-2 md:hidden"
+              onClick={ (e) => {
+                e.preventDefault();
+                toggleNav(!navOpen);
+              } }
+            >
+              <span className="block rounded-full ml-3 w-5 h-0.5 bg-primary"></span>
+              <span className="block rounded-full w-8 h-0.5 bg-primary"></span>
+              <span className="block rounded-full w-5 h-0.5 bg-primary"></span>
+            </a>
           </div>
         </div>
       </nav>
