@@ -214,7 +214,7 @@ const Event = ({ event, error }) => {
               <section className="mb-6">
                 <div className="flex flex-row flex-wrap justify-center items-center">
                   { event.partners && event.partners.map(partner => partner.photoUrl && (
-                    <a href={ partner.url || '#' } target="_blank" key={ partner.name } className="mr-3">
+                    <a href={ partner.url || '#' } target="_blank" rel="noreferrer" key={ partner.name } className="mr-3">
                       <Photo id={ partner.photo } photoUrl={ partner.photoUrl } size="sm" width="32" height="12" title={ partner.name } />
                     </a>
                   )) }
