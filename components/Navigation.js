@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import {React, useState, useEffect } from "react";
 import Link from "next/link";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -59,7 +59,7 @@ const Navigation = () => {
 
   return (
     <div className="NavContainer pt-20 md:pt-0">
-      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
+      <nav className="h-20 fixed z-20 top-0 left-0 right-0 drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
         <div className="main-content flex justify-between items-center bg-background border-b border-b-neutral-700">
           {/* <h3 className="logo">
             <Link href="/">
@@ -187,13 +187,12 @@ const Navigation = () => {
 
               <h3 className="logo">
                 <Link href="/">
-                  <p className="ml-3 font-normal">
-                    {/* { LOGO_HEADER ? <img
+                  <span className="">
+                    { LOGO_HEADER ? <img
                       src={LOGO_HEADER}
                       alt={PLATFORM_NAME}
-                    /> : PLATFORM_NAME } */}
-                    ReFI Spring
-                  </p>
+                    /> : PLATFORM_NAME }
+                  </span>
                 </Link>
               </h3>
             

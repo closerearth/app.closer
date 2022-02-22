@@ -7,7 +7,6 @@ import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TW
 
 const footer = () => (
   <div className="bg-slate-50  border-t border-t-neutral-700">
-    { NEWSLETTER && <Newsletter placement="Footer" /> }
     <footer className="flex flex-col items-center p-4">
         {/* <div className="flex flex-row items-center justify-start">
           { LOGO_FOOTER && <img src={LOGO_FOOTER} width="110" alt={ PLATFORM_NAME } /> }
@@ -30,11 +29,12 @@ const footer = () => (
           </div>
           <p className='m-2 p-2 hidden md:flex'>Powered by: closer</p>
           </div>
+          
           {/* <div className="border-t border-background pt-2">
             <a href={`mailto:${TEAM_EMAIL}`} className="text-sm text-white hover:underline">{TEAM_EMAIL}</a>
-          </div> */}
-          
-          <div className='flex flex-col items-start text-sm'>
+          </div>
+           */}
+          {/* <div className='flex flex-col items-start text-sm'>
             <p className='mb-2'>Keep in the loop, subscribe:</p>
           <form>
             <input type="text" placeholder='Your email' />
@@ -47,7 +47,10 @@ const footer = () => (
             </div>
           </form>
           </div>
-          <p className='m-4 p-2 self-center md:hidden'>Powered by: closer</p>
+          <p className='m-4 p-2 self-center md:hidden'>Powered by: closer</p> */}
+
+<Newsletter placement="Footer" />
+
       </div>
     </footer>
   </div>

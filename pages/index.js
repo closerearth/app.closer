@@ -9,7 +9,7 @@ const index = () => (
     <Head>
       <title>Closer Community</title>
     </Head>
-    <main className="homepag">
+    <main className="homepage">
       <section className="text-center flex flex-column items-center justify-center pb-10">
         <div className="main-content">
           <h1 className="page-title">Closer</h1>

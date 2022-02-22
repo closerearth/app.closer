@@ -65,7 +65,8 @@ const MemberPage = ({ member, loadError }) => {
       <Head>
         <title>{ member.screenname }</title>
       </Head>
-      <main className="flex flex-col items-start p-6">
+      <div className='main-content'>
+      <main className="flex flex-col justify-between p-6">
         { openIntro &&
           <div className="introduction">
             <div className="main-content">
@@ -100,7 +101,9 @@ const MemberPage = ({ member, loadError }) => {
         }
 
         <div className='flex flex-col md:flex-row items-start'>
-        <div className='flex flex-col items-start md:w-fit'>
+
+        <div className='flex flex-col items-start md:w-full'>
+
             <Link  href={'/members'}>
               <p className="text-lg cursor-pointer">
             {'< All Profiles'}
@@ -231,6 +234,7 @@ const MemberPage = ({ member, loadError }) => {
           </div>
         </div>
       </main>
+      </div>
     </Layout>
   );
 }
