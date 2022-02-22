@@ -40,8 +40,27 @@ const EventCheckout = ({ event, error }) => {
   const now = dayjs();
   const start = event.start && dayjs(event.start);
   const end = event.end && dayjs(event.end);
+  const discount = router.query.discount && event.discounts && event.discounts.find(d => d.code === router.query.discount);
   const isVolunteer = !!router.query.volunteer && volunteerTicketsSold < maxVolunteers;
   const volunteerCapacityReached = !!router.query.volunteer && volunteerTicketsSold >= maxVolunteers;
+
+  let total = event.price ? event.price.val : 0;
+  let currency = event.price ? event.price.cur : 'usd';
+
+  if (ticketOption && ticketOption.price) {
+    total = ticketOption.price;
+  }
+  if (ticketOption && ticketOption.currency) {
+    currency = ticketOption.currency;
+  }
+  if (isVolunteer) {
+    total -= event.volunteerDiscount;
+  }
+
+  if (discount && discount.percent) {
+    total = total - (total * discount.percent);
+  }
+  total = Math.max(Math.round(total * 100) / 100, 0);
 
   const setField = (field, value) => {
     updateSignup(oldFields => Object.assign({}, signup, { [field]: value }));
@@ -204,18 +223,19 @@ const EventCheckout = ({ event, error }) => {
             { !paymentReceived && <section>
               <h3 className="mb-2">Payment</h3>
               { isVolunteer && <p className="text-sm">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
-              { ticketOption &&
-                <p className="text-sm mb-3">Total: <b>{ isVolunteer ? priceFormat(Math.max(ticketOption.price.val - event.volunteerDiscount, 0), event.price.cur) : priceFormat(ticketOption.price, event.price.cur) }</b></p>
+              { discount &&
+                <p className="text-sm">Discount code applied ({ router.query.discount }) <b>{ Math.round(discount.percent * 10000) / 100 }% off</b></p>
               }
-              { !ticketOption && (!ticketOptions || !ticketOptions.length) &&
-                <p className="text-sm">Total: <b>{ isVolunteer ? priceFormat(Math.max(event.price.val - event.volunteerDiscount, 0), event.price.cur) : priceFormat(event.price.val, event.price.cur) }</b></p>
-              }
+              <p className="text-sm mb-3">Total: <b>{ priceFormat(total, currency) }</b></p>
               <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>
               <div className="mt-2">
                 <Elements stripe={stripePromise}>
                   <CheckoutForm
                     type="event"
                     ticketOption={ ticketOption }
+                    total={ total }
+                    currency={ currency }
+                    discountCode={ router.query.discount }
                     _id={ event._id }
                     volunteer={ isVolunteer }
                     onSuccess={ payment => router.push(`/tickets/${payment._id}`) }
@@ -247,7 +267,10 @@ EventCheckout.getInitialProps = async ({ req, query }) => {
     console.log('Error', err.message);
 
     return {
-      error: err.message
+      error: err.message,
+      event: {
+        title: 'Error'
+      }
     };
   }
 }

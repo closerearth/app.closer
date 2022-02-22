@@ -1,5 +1,5 @@
 module.exports = {
-  PLATFORM: 'closer',
+  PLATFORM: 'rebuild',
   PLATFORM_NAME: 'Closer',
   GA_ANALYTICS: false,
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
@@ -9,7 +9,7 @@ module.exports = {
   TEAM_EMAIL: 'team@closer.earth',
   START_TIME: '2021-04-30T15:00:00.000Z',
   EXPOSE_STORE: true,
-  API_URL: 'https://api.oasa.co',
+  API_URL: 'http://localhost:4002',//'https://api.oasa.co',
   CDN_URL: 'https://cdn.oasa.co/photo/',
   TELEGRAM_URL: 'https://t.me/closerdao',
   NEWSLETTER: false,
