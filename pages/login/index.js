@@ -12,8 +12,8 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  if (isAuthenticated) {
-    router.push('/');
+  if (isAuthenticated && typeof window.location !== 'undefined') {
+    window.location.href = '/';
   }
 
   return (
