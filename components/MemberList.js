@@ -9,6 +9,9 @@ import ProfilePhoto from './ProfilePhoto';
 import Pagination from './Pagination';
 import Loading from './Loading';
 import { useAuth } from '../contexts/auth.js';
+import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const MemberList = ({
   list,
