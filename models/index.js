@@ -23,10 +23,60 @@ export default {
   event: [
     { name: 'name', label: 'Event title', type: 'text', placeholder: 'My event', required: true },
     { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
-    { name: 'location', label: 'Location (link)', type: 'text', placeholder: 'https://zoom.com/wakeup' },
-    { name: 'price', label: 'Price', type: 'currency', placeholder: '0.00' },
-    { name: 'start', label: 'Start date', type: 'date', required: true },
-    { name: 'end', label: 'End', type: 'date', required: true },
+    {
+      name: 'virtual',
+      label: 'Is this a virtual event?',
+      type: 'switch',
+      defaultValue: false
+    },
+    {
+      name: 'location',
+      label: 'Event URL',
+      defaultValue: '',
+      type: 'text',
+      placeholder: 'https://zoom.com/wakeup',
+      showIf: [
+        {
+          field: 'virtual',
+          value: true
+        }
+      ]
+    },
+    {
+      name: 'paid',
+      label: 'Is this a paid event?',
+      type: 'switch',
+      defaultValue: false
+    },
+    {
+      name: 'price',
+      label: 'Price',
+      defaultValue: 0,
+      type: 'currency',
+      placeholder: '0.00',
+      showIf: [
+        {
+          field: 'paid',
+          value: true
+        }
+      ]
+    },
+    {
+      name: 'ticket',
+      label: 'External ticketing URL',
+      defaultValue: '',
+      type: 'text',
+      placeholder: 'eventbrite.com/my-ticket',
+      // toggleFeature: true,
+      showIf: [
+        {
+          field: 'paid',
+          value: true
+        }
+      ]
+    },
+    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true },
+    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true },
     {
       name: 'visibility',
       label: 'Visibility',
@@ -35,7 +85,9 @@ export default {
         { label: 'Public', value: 'public' },
         { label: 'Private', value: 'private' },
       ]
-    }
+    },
+    { name: 'password', label: 'Event password', type: 'text', placeholder: '(If set, user will need the password to see)' },
+    { name: 'participationGuideUrl', label: 'Participation guide', type: 'text', placeholder: 'https://event.com/participation' },
   ],
   listing: [
     { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },

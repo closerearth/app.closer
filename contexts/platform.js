@@ -1,5 +1,5 @@
-import React, { createContext, useState, useContext, useEffect, useReducer } from 'react'
-import { Map, fromJS } from 'immutable'
+import React, { createContext, useState, useContext, useEffect, useReducer } from 'react';
+import { Map, fromJS } from 'immutable';
 
 import api, { formatSearch } from '../utils/api';
 import * as constants from '../constants';
@@ -84,13 +84,12 @@ const reducer = (state, action) => {
           receivedAt: Date.now()
         }));
     case constants.PATCH_SUCCESS:
-      return state
-        .setIn([action.model, 'byId', action._id], Map({
+      return state.setIn([action.model, 'byId', action._id], Map({
           data: action.results,
           loading: false,
           error: null,
           receivedAt: Date.now()
-        }));
+      }));
     case constants.GET_INIT:
       return state.setIn([action.model, 'byFilter', action.filterKey, 'loading'], true);
     case constants.GET_ERROR:
@@ -167,6 +166,18 @@ export const PlatformProvider = ({ children }) => {
       isLoading: id => state.getIn([model, 'byId', id, 'loading']),
       areLoading: filter => state.getIn([model, 'byFilter', filterToKey(filter), 'loading']),
 
+      // Manually store an object in the store
+      set: (object) => {
+        const results = fromJS(object);
+        const action = {
+          results,
+          receivedAt: Date.now(),
+          id: results.get('_id'),
+          model,
+          type: constants.GET_ONE_SUCCESS
+        };
+        dispatch(action);
+      },
       // Loaders
       getOne: (id, opts = {}) => {
         dispatch({ type: constants.GET_ONE_INIT, model, id });

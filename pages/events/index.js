@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
@@ -30,26 +29,22 @@ const Events = () => {
         <div className="validation-error">{ error }</div>
       }
       <div className="main-content intro">
-        <div className="md:flex md:flex-row-reverse">
-          <div className="md:w-1/3 md:ml-4">
+        <div className="page-title flex justify-between">
+          <h1 className="mb-4">Events</h1>
+          <div className="action">
             { user && user.roles.includes('event-creator') &&
               <Link href="/events/create">
                 <a className="btn-primary">Create event</a>
               </Link>
             }
           </div>
-          <div className="md:w-2/3">
-            <div className="page-title">
-              <h1 className="mb-4">Events</h1>
-            </div>
-            <UpcomingEvents
-              allowCreate
-              limit={ 30 }
-              page={ page }
-              labelLink={null}
-            />
-          </div>
         </div>
+        <UpcomingEvents
+          allowCreate
+          limit={ 30 }
+          page={ page }
+          labelLink={null}
+        />
       </div>
     </Layout>
   );

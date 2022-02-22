@@ -10,8 +10,22 @@
   .btn-primary, .btn-primary[type="submit"] {
     @apply btn hover:bg-primary hover:text-white bg-transparent border-2 border-primary disabled:bg-gray-500;
   }
+  .btn-primary.active {
+    @apply bg-primary text-white hover:bg-transparent hover:text-primary;
+  }
   .form-field {
     @apply mb-4;
+  }
+  .toggle-bg:after {
+    content: '';
+    @apply absolute top-0.5 left-0.5 bg-white border border-gray-300 rounded-full h-5 w-5 transition shadow-sm;
+  }
+  input:checked + .toggle-bg:after {
+    transform: translateX(100%);
+    @apply border-white;
+  }
+  input:checked + .toggle-bg {
+      @apply bg-blue-600 border-blue-600;
   }
   input, textarea {
     @apply w-full;
@@ -19,10 +33,16 @@
   textarea, .textarea {
     @apply bg-transparent mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black resize-none;
   }
-  .input, input[type="email"], input[type="password"], input[type="text"], input[type="phone"], input[type="number"], input[type="date"] {
+  .input, input[type="email"], input[type="password"], input[type="text"], input[type="phone"], input[type="number"], input[type="date"], input[type="time"] {
     @apply bg-transparent mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black;
   }
-  label {
+  select {
+    @apply h-10 pl-3 pr-6 text-base placeholder-gray-600 border-b-2 border-gray-200 rounded-lg appearance-none focus:border-black outline-none;
+  }
+  label, .label {
     @apply block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2;
+  }
+  .switch .label {
+    @apply mb-0 ml-2;
   }
 }

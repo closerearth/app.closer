@@ -10,7 +10,7 @@ import models from '../../models';
 import { useAuth } from '../../contexts/auth.js';
 import { usePlatform } from '../../contexts/platform';
 
-const Applications = ({ token }) => {
+const Applications = () => {
 
   const { user } = useAuth();
   const { platform } = usePlatform();
@@ -31,7 +31,7 @@ const Applications = ({ token }) => {
     if (user && user.roles.includes('community-curator')){
       loadData();
     }
-  }, [user]);
+  }, [user, platform]);
 
   if (!user || !user.roles.includes('community-curator')) {
     return <PageNotAllowed />;

@@ -22,7 +22,7 @@ const Newsletter = ({ tags, placement }) => {
   // }
 
   return (
-    <div className="Newsletter bg-gray-900 py-10">
+    <div className="Newsletter bg-gray-900 py-10 text-white">
       { signupCompleted ?
         <h3>Thanks, we will be in touch soon!</h3> :
         <form
@@ -46,7 +46,7 @@ const Newsletter = ({ tags, placement }) => {
           }
           <div className="flex flex-row items-center justify-center px-2">
             <input type="email" className="mr-2" value={email} placeholder="Email" onChange={e => setEmail(e.target.value)} required />
-            <button type="submit" name="subscribe" className="btn-primary">
+            <button type="submit" name="subscribe" className="btn-primary text-white">
               Subscribe
             </button>
           </div>

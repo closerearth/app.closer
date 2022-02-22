@@ -3,7 +3,7 @@ import Newsletter from './Newsletter'
 import Link from 'next/link'
 import api from '../utils/api'
 import { trackEvent } from './Analytics'
-import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER } from '../config';
+import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER, DISCORD_URL } from '../config';
 
 const footer = () => (
   <div className="footer-wrapper no-print bg-primary">
@@ -23,6 +23,9 @@ const footer = () => (
             </a> }
             { TWITTER_URL && <a href={ TWITTER_URL } target="_blank" rel="noreferrer nofollow">
               <img src="/images/icons/twitter.svg" width="30" alt="twitter" />
+            </a> }
+            { DISCORD_URL && <a href={ DISCORD_URL } target="_blank" rel="noreferrer nofollow">
+              <img src="/images/icons/discord.svg" width="30" alt="twitter" />
             </a> }
           </div>
           <div className="border-t border-background pt-2">

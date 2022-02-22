@@ -40,7 +40,7 @@ const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
   );
 }
 Tabs.defaultProps = {
-  initialCurrentTab: 1
+  initialCurrentTab: 0
 };
 Tabs.propTypes = {
   tabs: PropTypes.array,
