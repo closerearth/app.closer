@@ -3,7 +3,7 @@ import Newsletter from './Newsletter'
 import Link from 'next/link'
 import api from '../utils/api'
 import { trackEvent } from './Analytics'
-import { PLATFORM_NAME, LOGO_FOOTER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER, DISCORD_URL } from '../config';
+import { PLATFORM_NAME, LOGO_FOOTER, LOGO_HEADER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER, DISCORD_URL } from '../config';
 
 const footer = () => (
   <div className="bg-slate-50  border-t border-t-neutral-700">
@@ -27,7 +27,19 @@ const footer = () => (
               <img src="/images/icons/discord.svg" width="40" alt="twitter" className="bg-primary rounded-3xl p-1"/>
             </a> }
           </div>
-          <p className='m-2 p-2 hidden md:flex'>Powered by: closer</p>
+          <div className='flex flex-row items-center'>
+          <p className='p-2'>Powered by:</p>
+          <h3 className="logo">
+            <Link href="/">
+              <a className="block">
+                { LOGO_HEADER ? <img
+                  src={LOGO_HEADER}
+                  alt={PLATFORM_NAME}
+                /> : PLATFORM_NAME }
+              </a>
+            </Link>
+          </h3>
+          </div>
           </div>
           
           {/* <div className="border-t border-background pt-2">

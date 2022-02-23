@@ -64,7 +64,7 @@ const UpcomingEvents = ({
             return (
               <div
                 key={ event.get('_id') }
-                className={`event-preview relative ${list?'':'pr-4 md:w-1/3 mb-8'}`}
+                className={`event-preview relative ${list?'':'pr-4 md:w-12/12 mb-8'}`}
               >
                 <div
                   className={`${list?'flex flex-row':'card rounded bg-white overflow-hidden'}`}
