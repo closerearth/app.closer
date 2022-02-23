@@ -8,7 +8,7 @@ module.exports = {
       colors: {
         primary: '#000000',
         'primary-hover': '#ffffff',
-        background: 'rgb(248 250 252)',
+        background: '#F8FAFC',
         foreground: '#000',
         line: '#404040'
       }

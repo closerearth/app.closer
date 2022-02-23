@@ -22,9 +22,9 @@ const Newsletter = ({ tags, placement }) => {
     // }
     
     return (
-      <div className="Newsletter py-10 text-neutral-900">
+      <div className="Newsletter py-5 text-neutral-900">
         { signupError &&
-          <div className="error">{ signupError }</div>
+          <div className="error-box">{ signupError }</div>
         }
       { signupCompleted ?
         <h3>Thanks, we will be in touch soon!</h3> :
@@ -44,16 +44,16 @@ const Newsletter = ({ tags, placement }) => {
             }
           className="flex flex-row items-center justify-center"
         >
-          <div className="flex flex-col items-center justify-start px-2">
+          <div className="flex flex-col items-center justify-start px-2 mt-12 md:mt-0">
             <p className='mb-2 self-start'>Keep in the loop, subscribe:</p>
-            <input type="email" className="mr-2" value={email} placeholder="Your email" onChange={e => setEmail(e.target.value)} required />
 
-            <div className='flex flex-row justify-between w-80'>
-              <div className='flex flex-row mt-2'>
+            <div className='flex flex-row justify-end w-96'>
+              {/* <div className='flex flex-row mt-2'>
               <input type="checkbox"/>
               <label className='ml-4'> I agree to the T&C. Read.</label>
-              </div>
-              <button type="submit" name="subscribe" className='self-center'>Sign up</button>
+              </div> */}
+              <input type="email" className="mr-2" value={email} placeholder="Your email" onChange={e => setEmail(e.target.value)} required />
+              <button type="submit" name="subscribe" className='btn-primary w-36'>Sign up</button>
             </div>
           </div>
         </form>

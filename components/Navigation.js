@@ -73,7 +73,7 @@ const Navigation = () => {
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
-      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-slate-50 border-b border-b-line drop-shadow-sm md:relative md:drop-shadow-none">
+      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background border-b border-b-line drop-shadow-sm md:relative md:drop-shadow-none">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
@@ -86,7 +86,7 @@ const Navigation = () => {
             </Link>
           </h3>
 
-          <div className="menu-right no-print flex text-sm flex-row justify-end items-center">
+          <div className="menu-right no-print flex text-md flex-row justify-end items-center">
             <Link
               href="/events"
             >
@@ -175,6 +175,7 @@ const Navigation = () => {
                 as={ `/members/${ user.slug }` }
               >
                 <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
+                  <span className='h-8 border-l border-l-line mr-3' />
                   <ProfilePhoto user={ user } />
                   <p className='ml-3'>{user.screenname}</p>
                 </a>

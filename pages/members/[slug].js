@@ -224,11 +224,12 @@ const MemberPage = ({ member, loadError }) => {
         
           <div className="flex flex-col items-start mb-10">
             <p className='font-semibold text-sm mt-8'>Stay Social</p>
-              <ul className='space-y-1 mt-4'>
-                <li>Facebook</li>
-                <li>Twitter</li>
-                <li>Instagram</li>
-              </ul>
+             {/* <ul className='space-y-1 mt-4'>
+               {platform.user.find(userId)?.get('links').map((link) => {
+               <li><a href={link.url}>{link.name}</a></li>
+               })
+               }
+             </ul> */}
           </div>
 
 
