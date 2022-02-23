@@ -18,11 +18,14 @@ const Newsletter = ({ tags, placement }) => {
   const router = useRouter();
 
   // if (didCompleteSignup) {
-  //   return null;
-  // }
-
-  return (
-    <div className="Newsletter py-10 text-neutral-900">
+    //   return null;
+    // }
+    
+    return (
+      <div className="Newsletter py-10 text-neutral-900">
+        { signupError &&
+          <div className="error">{ signupError }</div>
+        }
       { signupCompleted ?
         <h3>Thanks, we will be in touch soon!</h3> :
         <form
@@ -41,9 +44,6 @@ const Newsletter = ({ tags, placement }) => {
             }
           className="flex flex-row items-center justify-center"
         >
-          { signupError &&
-            <div className="error">{ signupError }</div>
-          }
           <div className="flex flex-col items-center justify-start px-2">
             <p className='mb-2 self-start'>Keep in the loop, subscribe:</p>
             <input type="email" className="mr-2" value={email} placeholder="Your email" onChange={e => setEmail(e.target.value)} required />
