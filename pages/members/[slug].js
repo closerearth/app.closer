@@ -62,7 +62,7 @@ const MemberPage = ({ member, loadError }) => {
         <title>{ member.screenname }</title>
       </Head>
       <div className='main-content bg-slate-50'>
-      <main className="flex flex-col justify-between p-6">
+      <main className="flex flex-col justify-between">
         { openIntro &&
           <div className="introduction">
             <div className="main-content">

@@ -9,7 +9,8 @@ module.exports = {
         primary: '#000000',
         'primary-hover': '#ffffff',
         background: 'rgb(248 250 252)',
-        foreground: '#000'
+        foreground: '#000',
+        line: '#404040'
       }
     },
   },

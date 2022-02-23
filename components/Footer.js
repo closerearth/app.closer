@@ -6,8 +6,8 @@ import { trackEvent } from './Analytics'
 import { PLATFORM_NAME, LOGO_FOOTER, LOGO_HEADER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TWITTER_URL, NEWSLETTER, DISCORD_URL } from '../config';
 
 const footer = () => (
-  <div className="bg-slate-50  border-t border-t-neutral-700">
-    <footer className="flex flex-col items-center p-4">
+  <div className=" border-t border-t-line">
+    <footer className="main-content flex flex-col items-center p-4">
         {/* <div className="flex flex-row items-center justify-start">
           { LOGO_FOOTER && <img src={LOGO_FOOTER} width="110" alt={ PLATFORM_NAME } /> }
         </div> */}

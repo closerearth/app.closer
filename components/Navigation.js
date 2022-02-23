@@ -73,7 +73,7 @@ const Navigation = () => {
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
-      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-slate-50 border-b border-b-neutral-700 drop-shadow-sm md:relative md:drop-shadow-none">
+      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-slate-50 border-b border-b-line drop-shadow-sm md:relative md:drop-shadow-none">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
