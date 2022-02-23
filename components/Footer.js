@@ -13,7 +13,7 @@ const footer = () => (
         </div> */}
         <div className="flex flex-col md:flex-row py-2 items-center w-11/12 justify-between">
           <div className='flex flex-col items-center'>
-          <div className="flex flex-row space-x-7 self-center p-4 mb-8 md:mb-1">
+          <div className="flex flex-row space-x-5 self-center p-4 mb-8 md:mb-1">
             { INSTAGRAM_URL && <a href={ INSTAGRAM_URL } target="_blank" rel="noreferrer nofollow">
               <img src="/images/icons/instagram.svg" width="40" alt="instagram" className="bg-primary rounded-3xl p-1"/>
             </a> }
@@ -39,6 +39,7 @@ const footer = () => (
               </a>
             </Link>
           </h3>
+          <p className='p-2'>Closer:</p>
           </div>
           </div>
           

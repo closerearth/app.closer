@@ -98,7 +98,7 @@ const MemberPage = ({ member, loadError }) => {
 
         <div className='flex flex-col md:flex-row items-start'>
 
-        <div className='flex flex-col items-start md:w-full'>
+        <div className='flex flex-col items-start space-y-5 md:w-full'>
 
             <Link  href={'/members'}>
               <p className="text-lg cursor-pointer">
@@ -108,7 +108,7 @@ const MemberPage = ({ member, loadError }) => {
             <div>
               <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : 'Add a photo'} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
-            <div >
+            <div className='mt-1 mb-3' >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                 model="user"
                 id={member._id}
@@ -201,8 +201,9 @@ const MemberPage = ({ member, loadError }) => {
             </div>
 
       <div className="flex flex-col items-start md:w-2/3">
+        <div>
         <div className="page-title flex justify-between">
-          <h3 className="mt-6 mb-4">Upcoming events {member.screenname} is going to:</h3>
+          <h3 className="mt-16 mb-4">Upcoming events {member.screenname} is going to:</h3>
           {/* <div className="action">
             { member && member.roles.includes('event-creator') &&
               <Link href="/events/create">
@@ -218,6 +219,9 @@ const MemberPage = ({ member, loadError }) => {
           page={ 1 }
           labelLink={null}
         />
+        </div>
+        
+        
           <div className="flex flex-col items-start mb-10">
             <p className='font-semibold text-sm mt-8'>Stay Social</p>
               <ul className='space-y-1 mt-4'>
@@ -227,7 +231,8 @@ const MemberPage = ({ member, loadError }) => {
               </ul>
           </div>
 
-          </div>
+
+        </div>
         </div>
       </main>
       </div>
