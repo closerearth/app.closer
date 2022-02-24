@@ -15,6 +15,7 @@ import UpcomingEvents from '../../components/UpcomingEvents';
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
+import { usePlatform } from '../../contexts/platform';
 
 const MemberPage = ({ member, loadError }) => {
   const [photo, setPhoto] = useState(null);
@@ -23,9 +24,13 @@ const MemberPage = ({ member, loadError }) => {
   const [editAbout, toggleEditAbout] = useState(false);
   const [error, setErrors] = useState(false);
   const [sendError, setSendErrors] = useState(false);
+  const [name, setName] = useState('');
+  const [url, setUrl] = useState('');
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const image = (photo || member.photo);
+  const { platform } = usePlatform()
+  const links = platform.user.find(member._id)?.get('links')
 
   const saveAbout = async (about) => {
     try {
@@ -221,17 +226,25 @@ const MemberPage = ({ member, loadError }) => {
         />
         </div>
         
-        
+        <div className="flex flex-col">
           <div className="flex flex-col items-start mb-10">
-            <p className='font-semibold text-sm mt-8'>Stay Social</p>
-             {/* <ul className='space-y-1 mt-4'>
-               {platform.user.find(userId)?.get('links').map((link) => {
+             <p className='font-semibold text-md mt-8'>Stay Social</p>
+             <ul className='space-y-1 mt-4'>
+               {links ? links.map((link) => {
                <li><a href={link.url}>{link.name}</a></li>
                })
+               : 'No links yet'
                }
-             </ul> */}
+             </ul>
           </div>
-
+          <div className="flex items-start mb-10 border border-line p-4 w-fit">
+              <form className='flex flex-col space-y-6 w-96' onSubmit={() => platform.user.patch(member._id, { links: [ { name: name, url: url } ] })}>
+                <input id='name'  type='text' placeholder='Name...' value={name} onChange={e => setName(e.target.value)} required />
+                <input id='url'  type='url' placeholder='Url...' value={url} onChange={e => setUrl(e.target.value)} required />
+                <button type='submit' className='btn-primary w-24 self-center'>Save</button>
+              </form>
+          </div>
+        </div>    
 
         </div>
         </div>
