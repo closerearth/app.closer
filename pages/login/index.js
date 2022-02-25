@@ -15,7 +15,7 @@ const Login = () => {
   if (isAuthenticated && typeof window.location !== 'undefined') {
     // router.push('/');
     // For some reason, cache needs to get reset.
-    window.location.href = '/';
+    window.location.href = router.query.back || '/';
   }
 
   return (

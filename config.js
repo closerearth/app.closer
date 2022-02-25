@@ -2,6 +2,7 @@ module.exports = {
   PLATFORM: 'closer',
   PLATFORM_NAME: 'Closer',
   GA_ANALYTICS: false,
+  FB_DOMAIN_VERIFICATION: false,
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
   DEFAULT_TITLE: "Closer: the operating system for land stewardship communities",
   DEFAULT_DESCRIPTION: '',

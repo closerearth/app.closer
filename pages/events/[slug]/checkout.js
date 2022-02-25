@@ -139,7 +139,7 @@ const EventCheckout = ({ event, error }) => {
               tabs={ [
                 {
                   title: 'Login',
-                  href: '/login'
+                  href: `/login?back=${encodeURIComponent(router.asPath)}`
                 },
                 {
                   title: 'Checkout as guest',
