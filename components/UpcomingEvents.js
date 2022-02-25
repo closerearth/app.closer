@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { trackEvent } from './Analytics';
 import api, { formatSearch, cdn } from '../utils/api';
 import { usePlatform } from '../contexts/platform';
-import { useAuth } from '../contexts/auth.js';
+import { useAuth } from '../contexts/auth';
 import Pagination from './Pagination';
 
 const start = new Date();
@@ -64,12 +64,14 @@ const UpcomingEvents = ({
             return (
               <div
                 key={ event.get('_id') }
-                className={`event-preview relative ${list?'':'pr-4 md:w-12/12 mb-8'}`}
+
+                className={`event-preview relative ${list?'mb-2':'pr-4 md:w-1/3 mb-8'}`}
+
               >
                 <div
                   className={`${list?'flex flex-row':'card rounded bg-white overflow-hidden'}`}
                 >
-                  { event.get('photo') && <div className={`${list?'w-32':'-mx-4 -mt-4'}`}>
+                  { event.get('photo') && <div className={`${list?'w-20':'-mx-4 -mt-4'}`}>
                     <Link href={`/events/${event.get('slug')}`}><a>
                       <img
                         className="w-full object-cover md:h-full"
@@ -78,11 +80,11 @@ const UpcomingEvents = ({
                       />
                     </a></Link>
                   </div> }
-                  <div className="p-2 text-center">
+                  <div className={`p-2 ${list?'w-2/3':'text-center'}`}>
                     <div className="event-description">
-                      <h3 className="font-bold text-xl">
+                      <h4 className={`${list?'text-sm':'font-bold text-xl'}`}>
                         <Link href={`/events/${event.get('slug')}`}><a>{event.get('name')}</a></Link>
-                      </h3>
+                      </h4>
                       { list?
                         ( start && <p className="text-gray-400 text-xs">
                           { start.format('MMM Do') }

@@ -6,7 +6,6 @@ import DatePicker from 'react-datepicker';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import Slider from '../../components/Slider';
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 import api from '../../utils/api';

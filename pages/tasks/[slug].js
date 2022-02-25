@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';

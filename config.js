@@ -2,6 +2,7 @@ module.exports = {
   PLATFORM: 'closer',
   PLATFORM_NAME: 'Closer',
   GA_ANALYTICS: false,
+  FB_DOMAIN_VERIFICATION: false,
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
   DEFAULT_TITLE: "Closer: the operating system for land stewardship communities",
   DEFAULT_DESCRIPTION: '',
@@ -9,7 +10,7 @@ module.exports = {
   TEAM_EMAIL: 'team@closer.earth',
   START_TIME: '2021-04-30T15:00:00.000Z',
   EXPOSE_STORE: true,
-  API_URL: 'https://api.oasa.co',
+  API_URL: 'https://api.oasa.co', //'http://localhost:4002'
   CDN_URL: 'https://cdn.oasa.co/photo/',
   TELEGRAM_URL: 'https://t.me/closerdao',
   NEWSLETTER: false,

@@ -48,7 +48,9 @@ export const AuthProvider = ({ children }) => {
       })
       if (token) {
         Cookies.set('token', token, { expires: 60 })
-        if (user) setUser(user)
+        if (user) {
+          setUser(user)
+        }
       }
     } catch (err) {
       setError(err.response?.data?.error || err.message);

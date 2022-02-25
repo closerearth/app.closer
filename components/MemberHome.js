@@ -7,6 +7,7 @@ import Layout from './Layout';
 import UpcomingEvents from './UpcomingEvents';
 import MemberList from './MemberList';
 import Post from './Post';
+import PostList from './PostList';
 
 import api, { formatSearch, cdn } from '../utils/api';
 import { useAuth } from '../contexts/auth.js'
@@ -49,10 +50,10 @@ const MemberHome = () => {
   return (
     <main className="main-content w-full">
       <div className="flex flex-row">
-        <div className="md:w-2/3">
+        <div className="md:w-2/3 md:mr-8">
           <div className="channel">
-            <div className="channel-header">
-              <h1>Aloha {user?.screenname || 'you'}!</h1>
+            <div className="channel-header mb-4">
+              <h3>Aloha {user?.screenname || 'you'}!</h3>
             </div>
             <div className="channel-sub-header">
               { user.roles.includes('admin') &&
@@ -63,9 +64,9 @@ const MemberHome = () => {
             </div>
             { error && <div className="error-box">{ error }</div> }
             <section>
-              { posts.map(post => (
-                <Post {...post} usersById={ usersById } key={post._id} channelsById={ channelsById } showChannel />
-              )) }
+              <PostList
+                allowCreate
+              />
             </section>
           </div>
         </div>

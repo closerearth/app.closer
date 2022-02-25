@@ -15,7 +15,7 @@ const Login = () => {
   if (isAuthenticated && typeof window.location !== 'undefined') {
     // router.push('/');
     // For some reason, cache needs to get reset.
-    window.location.href = '/';
+    window.location.href = decodeURIComponent(router.query.back || '/');
   }
 
   return (
@@ -24,7 +24,7 @@ const Login = () => {
         <title>Sign in</title>
       </Head>
       <div className="mural">
-        <main className="main-content center intro">
+        <main className="main-content max-w-prose center intro">
           <form
             onSubmit={(e) => {
               e.preventDefault();

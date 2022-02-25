@@ -165,14 +165,17 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
         }
       </div>
       { !isReply && <div className="card-footer">
-        <div className="action-row">
+        <div className="flex flex-row justify-between items-end">
           <UploadPhoto
+            minimal
             onSave={id => setNewPost({ ...newPost, photo: id })}
             label={ newPost.photo ? 'Change photo': 'Add photo' }
           />
-          <button type="submit" className="button" disabled={ newPost.content.length === 0 }>
-            Publish
-          </button>
+          <div>
+            <button type="submit" className="btn-primary" disabled={ newPost.content.length === 0 }>
+              Publish
+            </button>
+          </div>
         </div>
       </div> }
     </form>

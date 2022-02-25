@@ -27,9 +27,9 @@ const Ticket = ({ ticket, event, error }) => {
       </Head>
       <main className="main-content invoice-page">
         <div className="card">
-          <h3>Invoice #{ticket._id}</h3>
+          <h3 className="mb-2">Invoice #{ticket._id}</h3>
           <h3>Date: {dayjs(ticket.created).format('LLL')}</h3>
-          <div className="columns">
+          <div className="flex flex-row mt-4">
             <div className="from col">
               <b>{ PLATFORM_NAME }</b><br/>
               { PLATFORM_LEGAL_ADDRESS }

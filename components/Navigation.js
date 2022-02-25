@@ -148,7 +148,6 @@ const Navigation = () => {
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                href="/signup"
                 className="btn-primary mr-3 hidden md:flex"
               >
                 {
@@ -165,7 +164,7 @@ const Navigation = () => {
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center"
+              className="text-4xl flex justify-center items-center mr-3"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
             </a> }
@@ -174,8 +173,10 @@ const Navigation = () => {
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
               >
+
                 <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
                   <span className='h-8 border-l border-l-line mr-3' />
+=======
                   <ProfilePhoto user={ user } />
                   <p className='ml-3'>{user.screenname}</p>
                 </a>
@@ -257,12 +258,17 @@ const Navigation = () => {
                 </a>
               </Link>
             )}
-            { !isAuthenticated && <Link href="/signup">
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                href="/signup"
-                className="btn-primary mr-3"
+                className="btn-primary mr-3 hidden md:flex"
               >
-                Get your membership
+                {
+                  REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                  'Apply':
+                  'Signup'
+                }
               </a>
             </Link> }
           </div>

@@ -18,6 +18,9 @@ const CheckoutForm = ({
   name,
   message,
   volunteer,
+  total,
+  currency,
+  discountCode,
   onSuccess
 }) => {
   const stripe = useStripe();
@@ -45,6 +48,9 @@ const CheckoutForm = ({
         token: token.id,
         type,
         ticketOption,
+        total,
+        currency,
+        discountCode,
         _id,
         email,
         name,

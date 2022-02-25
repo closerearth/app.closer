@@ -8,9 +8,15 @@ module.exports = {
       colors: {
         primary: '#000000',
         'primary-hover': '#ffffff',
+<<<<<<< HEAD
         background: '#F8FAFC',
         foreground: '#000',
         line: '#404040'
+=======
+        background: '#EEEEEE',
+        foreground: '#000',
+        error: '#9f1f42'
+>>>>>>> ae3d8d3167917d151f00ac77a8fcf3085bfb913e
       }
     },
   },

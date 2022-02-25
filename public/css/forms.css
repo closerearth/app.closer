@@ -8,7 +8,7 @@
     @apply btn bg-black text-white hover:bg-stone-800;
   }
   .btn-primary, .btn-primary[type="submit"] {
-    @apply btn hover:bg-primary hover:text-white bg-transparent border-2 border-primary disabled:bg-gray-500;
+    @apply btn hover:bg-primary hover:text-white bg-transparent border-2 border-primary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
   }
   .btn-primary.active {
     @apply bg-primary text-white hover:bg-transparent hover:text-primary;

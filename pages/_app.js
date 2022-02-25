@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'
 import { AuthProvider } from '../contexts/auth';
 import { PlatformProvider } from '../contexts/platform'
-import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION } from '../config';
+import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATION } from '../config';
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
@@ -41,6 +41,7 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
         <meta name="theme-color" content={ theme.extend.colors.primary } />
         <meta httpEquiv="content-language" content="en-us"/>
+        { FB_DOMAIN_VERIFICATION && <meta name="facebook-domain-verification" content={ FB_DOMAIN_VERIFICATION } /> }
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
       </Head>
       <AuthProvider>

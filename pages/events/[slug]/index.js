@@ -114,7 +114,7 @@ const Event = ({ event, error }) => {
         <div>
           <section className="py-5">
             <div className="main-content md:flex flex-row justify-center items-center">
-              <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 h-80">
+              <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-80">
                 { photo && <img
                   className="object-cover md:h-full md:w-full"
                   src={ `${cdn}${photo}-max-lg.jpg` }
@@ -209,12 +209,16 @@ const Event = ({ event, error }) => {
               </div>
             </div>
           </section>
-          <main className="main-content event-page py-10">
+          <main className="main-content max-w-prose event-page py-10">
             { ((event.partners && event.partners.length > 0) || (isAuthenticated && user._id === event.createdBy)) &&
               <section className="mb-6">
                 <div className="flex flex-row flex-wrap justify-center items-center">
                   { event.partners && event.partners.map(partner => partner.photoUrl && (
+<<<<<<< HEAD
                     <a href={ partner.url || '#' } target="_blank" rel="noreferrer nofollow" key={ partner.name } className="mr-3">
+=======
+                    <a href={ partner.url || '#' } target="_blank" rel="noreferrer" key={ partner.name } className="mr-3">
+>>>>>>> ae3d8d3167917d151f00ac77a8fcf3085bfb913e
                       <Photo id={ partner.photo } photoUrl={ partner.photoUrl } size="sm" width="32" height="12" title={ partner.name } />
                     </a>
                   )) }
@@ -247,11 +251,11 @@ const Event = ({ event, error }) => {
               </section>
             }
 
-            <section className="attendees card-body mb-6">
+            { attendees && attendees.length > 0 && <section className="attendees card-body mb-6">
               <h3 className="text-2xl font-bold">Who&apos;s coming?</h3>
               { event.price || event.ticketOptions?
                   <div className="-space-x-3 flex flex-row flex-wrap">
-                    { attendees && Array.from(new Set(attendees)).map((_id) => {
+                    { Array.from(new Set(attendees)).map((_id) => {
                       const attendee = platform.user.findOne(_id);
                       if (!attendee) {
                         return null;
@@ -289,9 +293,9 @@ const Event = ({ event, error }) => {
                 </div>:
                 'No results'
               }
-            </section>
+            </section> }
 
-            <section className="mb-6">
+            { event.description && <section className="mb-6">
               <h3 className="font-bold text-2xl">Event description</h3>
               <p className="whitespace-pre-line">
                 <Linkify
@@ -310,7 +314,7 @@ const Event = ({ event, error }) => {
                   {event.description}
                 </Linkify>
               </p>
-            </section>
+            </section> }
           </main>
         </div>
       }

@@ -61,7 +61,7 @@ const SetPasswordScreen = () => {
                 </div>
                 <div className="card-body">
                   { tokenContent && tokenContent.email &&
-                    <p className="mb-4"><i>You login email is <b>{tokenContent.email}</b>.</i></p>
+                    <p className="mb-4"><i>Your login email is <b>{tokenContent.email}</b>.</i></p>
                   }
                   { tokenContent && !tokenContent.screenname &&
                     <div className="form-field">

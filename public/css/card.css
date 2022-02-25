@@ -19,3 +19,6 @@
 .card p:last-child{
   margin-bottom: 0;
 }
+.card .action-row {
+  @apply flex flex-row justify-between;
+}
