@@ -148,7 +148,6 @@ const Navigation = () => {
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                href="/signup"
                 className="btn-primary mr-3 hidden md:flex"
               >
                 {
