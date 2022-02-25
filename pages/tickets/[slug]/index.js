@@ -17,9 +17,6 @@ const Ticket = ({ ticket, event, error }) => {
   if (!ticket) {
     return <PageNotFound error={ error } />;
   }
-  if (!isAuthenticated || ticket.email !== user.email) {
-    return <PageNotAllowed error={ error } />;
-  }
 
   return (
     <Layout>
