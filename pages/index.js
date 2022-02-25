@@ -6,7 +6,7 @@ import Layout from '../components/Layout';
 import UpcomingEvents from '../components/UpcomingEvents';
 import { useAuth } from '../contexts/auth';
 
-const index = () => {
+const Index = () => {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
@@ -34,4 +34,4 @@ const index = () => {
   );
 }
 
-export default index;
+export default Index;
