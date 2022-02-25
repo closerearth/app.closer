@@ -21,8 +21,11 @@ const FeaturedEvent = ({ event }) => {
             </a></Link>
           </div> }
           <div className="event-description flex flex-col items-start justify-center">
-            <h4 className="font-bold">
-              <Link href={`/events/${event.get('slug')}`}><a>{event.get('name')}</a></Link>
+            <h4 className="text-sm md:text-md font-bold">
+              <Link href={`/events/${event.get('slug')}`}><a>
+                {event.get('name').slice(0, 50)}
+                {event.get('name').length > 50 && '...'}
+              </a></Link>
             </h4>
             { start && <p className="text-gray-400 text-xs">
               { start.format('MMM Do') }
@@ -30,7 +33,7 @@ const FeaturedEvent = ({ event }) => {
             </p> }
           </div>
         </div>
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end grow w-48">
           <Link href={`/events/${event.get('slug')}`}>
             <a className="btn-primary text-sm">
               {event.get('paid') ? 'Get your ticket' : 'See event' }
