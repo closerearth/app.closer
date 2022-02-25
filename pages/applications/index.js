@@ -7,17 +7,16 @@ import ApplicationList from '../../components/ApplicationList';
 import api, { formatSearch } from '../../utils/api';
 import PageNotAllowed from '../401';
 import models from '../../models';
-import { useAuth } from '../../contexts/auth.js';
+import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 
 const Applications = () => {
-
   const { user } = useAuth();
   const { platform } = usePlatform();
   const [status, setStatus] = useState('open');
-  const openApplications = { where: { status: 'open' } }
-  const approvedApplications = { where: { status: 'approved' } }
-  const inConversationApplications = { where: { status: 'conversation' } }
+  const openApplications = { where: { status: 'open' } };
+  const approvedApplications = { where: { status: 'approved' } };
+  const inConversationApplications = { where: { status: 'conversation' } };
 
   const loadData = async () => {
     await Promise.all([

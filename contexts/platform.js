@@ -141,6 +141,24 @@ const reducer = (state, action) => {
           receivedAt: Date.now()
         })
       );
+    case constants.GET_GRAPH_INIT:
+      return state.setIn([action.model, 'graph', action.filterKey, 'loading'], true);
+    case constants.GET_GRAPH_ERROR:
+      return state
+        .mergeIn([action.model, 'graph', action.filterKey], Map({
+          error: action.error,
+          loading: false
+        }));
+    case constants.GET_GRAPH_SUCCESS:
+      return state.setIn(
+        [action.model, 'graph', action.filterKey],
+        Map({
+          data: action.results,
+          loading: false,
+          error: null,
+          receivedAt: Date.now()
+        })
+      );
     default:
       console.log('Unknown action type', action.type);
       return null;
@@ -160,8 +178,8 @@ export const PlatformProvider = ({ children }) => {
       // Find data in the state
       find: filter => state.getIn([model, 'byFilter', filterToKey(filter), 'data']),
       findOne: id => state.getIn([model, 'byId'].concat(id, 'data')),
-      findGraph: filter => state.getIn([model, 'byGraph', filterToKey(filter), 'data']),
       findCount: filter => state.getIn([model, 'count', filterToKey(filter), 'data']),
+      findGraph: filter => state.getIn([model, 'graph', filterToKey(filter), 'data']),
 
       isLoading: id => state.getIn([model, 'byId', id, 'loading']),
       areLoading: filter => state.getIn([model, 'byFilter', filterToKey(filter), 'loading']),
@@ -265,6 +283,29 @@ export const PlatformProvider = ({ children }) => {
               return action;
             })
             .catch(error => dispatch({ error, filterKey, model, type: constants.GET_COUNT_ERROR }))
+        );
+      },
+      getGraph: (params, opts = {}) => {
+        const filterKey = filterToKey(params);
+        dispatch({ type: constants.GET_GRAPH_INIT, model, filterKey });
+        if (
+          state.getIn([model, 'graph', filterKey, 'receivedAt']) > Date.now() - config.CACHE_DURATION
+        ) {
+          return new Promise(resolve => resolve({
+            type: constants.GET_GRAPH_SUCCESS,
+            fromCache: true,
+            results: state.getIn([model, 'graph', filterKey, 'data'])
+          }));
+        }
+        return (
+          api.get(`/graph/${model}`, { params })
+            .then(res => {
+              const results = fromJS(res.data.results);
+              const action = { results, filterKey, model, type: constants.GET_GRAPH_SUCCESS };
+              dispatch(action);
+              return action;
+            })
+            .catch(error => dispatch({ error, filterKey, model, type: constants.GET_GRAPH_ERROR }))
         );
       },
       post: (data, opts = {}) => {
