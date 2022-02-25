@@ -254,12 +254,17 @@ const Navigation = () => {
                 </a>
               </Link>
             )}
-            { !isAuthenticated && <Link href="/signup">
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                href="/signup"
-                className="btn-primary mr-3"
+                className="btn-primary mr-3 hidden md:flex"
               >
-                Get your membership
+                {
+                  REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                  'Apply':
+                  'Signup'
+                }
               </a>
             </Link> }
           </div>
