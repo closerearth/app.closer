@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import api, { formatSearch } from '../utils/api';
 import { useAuth } from '../contexts/auth.js';
 
-const UploadPhoto = ({ model, id, onSave, label }) => {
+const UploadPhoto = ({ model, id, onSave, label, minimal }) => {
 
   const { isAuthenticated, user } = useAuth();
   const [error, setErrors] = useState(false);
@@ -44,7 +44,7 @@ const UploadPhoto = ({ model, id, onSave, label }) => {
   }
 
   return (
-    <div {...getRootProps()} className="upload-photo cursor-pointer p-2 w-full h-full flex items-center justify-center">
+    <div {...getRootProps()} className={`upload-photo cursor-pointer ${minimal?'':'p-2 w-full h-full flex items-center justify-center'}`}>
       <input {...getInputProps()} />
       {
         loading?
@@ -55,6 +55,9 @@ const UploadPhoto = ({ model, id, onSave, label }) => {
       }
     </div>
   );
+}
+UploadPhoto.defaultProps = {
+  minimal: false
 }
 
 export default UploadPhoto;

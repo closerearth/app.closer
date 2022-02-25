@@ -87,9 +87,9 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
       <div className="card-title">
         { usersById[createdBy] &&
           <Link key={ createdBy } as={`/members/${usersById[createdBy].slug}`} href="/members/[slug]">
-            <a className="from user-preview">
+            <a className="from user-preview flex flex-row justify-start items-center">
               <ProfilePhoto size="sm" user={usersById[createdBy]} />
-              <span className="name">{ usersById[createdBy].screenname }</span>
+              <span className="name ml-4">{ usersById[createdBy].screenname }</span>
             </a>
           </Link>
         }
@@ -195,24 +195,24 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
                   setLocalReplyCount(localReplyCount + 1);
                 } }
               />
-              { posts.map(post => (
+              { posts.map(post => usersById[post.createdBy] && (
                 <div className="reply" key={ post._id }>
                   { post.photo &&
                     <div className="reply-photo">
                       <img src={ `${cdn}${post.photo}-max-lg.jpg` } />
                     </div>
                   }
-                  { usersById[post.createdBy] &&
+                  <div className="flex flex-row items-center">
                     <Link as={`/members/${usersById[post.createdBy].slug}`} href="/members/[slug]">
-                      <a className="from user-preview">
+                      <a className="from user-preview mr-2">
                         <ProfilePhoto size="sm" user={usersById[post.createdBy]} />
                       </a>
                     </Link>
-                  }
-                  <p>
-                    <b>{ usersById[post.createdBy] && usersById[post.createdBy].screenname || 'Anonymous otter' }: </b>
-                    { post.content }
-                  </p>
+                    <p>
+                      <b className="mr-2">{ usersById[post.createdBy].screenname || 'Anonymous otter' }: </b>
+                      { post.content }
+                    </p>
+                  </div>
                 </div>
               )) }
             </div>

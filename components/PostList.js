@@ -73,5 +73,8 @@ const PostList = ({ allowCreate, channel, parentType, parentId, visibility }) =>
     </div>
   )
 };
+PostList.defaultProps = {
+  parentType: 'channel'
+};
 
 export default PostList;

@@ -49,6 +49,9 @@
     background-color: #9f1f42;
     border: 1px solid #5b1226;
   }
+  .danger-link {
+    @apply text-error;
+  }
   .success-box {
     @apply p-2 bg-gray-100 border border-gray-200 whitespace-pre-line mb-4;
   }
