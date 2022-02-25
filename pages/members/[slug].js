@@ -27,7 +27,8 @@ const MemberPage = ({ member, loadError }) => {
   const [linkUrl, setLinkUrl] = useState('');
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
-  const [editAbout, toggleEditAbout] = useState(false);
+  const [tagline, setTagline] = useState(member && member.tagline);
+  const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform()
   const links = platform.user.find(currentUser?._id)?.get('links')
@@ -41,6 +42,13 @@ const MemberPage = ({ member, loadError }) => {
     }
   }
 
+  const handleClick = (event) => {
+    event.preventDefault()
+    saveAbout(about);
+    saveTagline(tagline)
+    toggleEditProfile(!editProfile)
+  }
+
   const saveAbout = async (about) => {
     try {
       const { data: { results: savedData } } = await api.patch(`/user/${member._id}`, { about });
@@ -51,6 +59,19 @@ const MemberPage = ({ member, loadError }) => {
       setErrors(error);
     }
   }
+
+  const saveTagline = async (tagline) => {
+    try {
+      const { data: { results: savedData } } = await api.patch(`/user/${member._id}`,  { tagline });
+      setTagline(savedData.tagline)
+      setErrors(null);
+    } catch (err) {
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
+    }
+  }
+
+
   const sendMessage = async (content) => {
     try {
       setSendErrors(null);
@@ -64,6 +85,7 @@ const MemberPage = ({ member, loadError }) => {
 
   useEffect(() => {
     setAbout(member.about);
+    setTagline(member.tagline)
   }, [member]);
 
   if (!member) {
@@ -151,13 +173,58 @@ const MemberPage = ({ member, loadError }) => {
             </h3>
             
             <div className='mt-1'>
-              <h5>
-              { member.tagline }
-                    { !member.tagline &&
+            { editProfile?
+              <textarea
+                autoFocus
+                value={tagline}
+                className="w-96 h-20"
+                onChange={ (e) => setTagline(e.target.value) }
+                onBlur={ () => {
+                  saveTagline(tagline);
+                } }
+              />:
+              (isAuthenticated && member._id === currentUser._id) ?
+              <p className="mt-6 w-10/12" >
+                <Linkify
+                  componentDecorator={(decoratedHref, decoratedText, key) => (
+                      <a
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        href={decoratedHref}
+                        key={key}
+                        onClick={e => e.stopPropagation()}
+                      >
+                          {decoratedText}
+                      </a>
+                  )}
+                >
+                    { tagline }
+                    { !tagline &&
+                      <span className="placeholder">Please write a tagline.</span>
+                    }
+                </Linkify>
+              </p>:
+              <p className="" >
+                <Linkify
+                  componentDecorator={(decoratedHref, decoratedText, key) => (
+                      <a
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        href={decoratedHref}
+                        key={key}
+                        onClick={e => e.stopPropagation()}
+                      >
+                          {decoratedText}
+                      </a>
+                  )}
+                >
+                    { tagline }
+                    { !tagline &&
                       <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
                     }
-
-              </h5>
+                </Linkify>
+              </p>
+            }
             <div className="font-semibold text-sm mt-1">
               {member.timezone}
             </div>
@@ -165,19 +232,18 @@ const MemberPage = ({ member, loadError }) => {
           </div>
 
             { error && <p className="validation-error">Error: { error }</p> }
-            { editAbout?
+            { editProfile?
               <textarea
                 autoFocus
                 value={about}
                 className="w-10/12 h-36"
                 onChange={ (e) => setAbout(e.target.value) }
                 onBlur={ () => {
-                  toggleEditAbout(false);
                   saveAbout(about);
                 } }
               />:
               (isAuthenticated && member._id === currentUser._id) ?
-              <p className="mt-6 w-10/12" onClick={ () => toggleEditAbout(true) }>
+              <p className="mt-6 w-10/12" >
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -220,7 +286,7 @@ const MemberPage = ({ member, loadError }) => {
             }
 
               { isAuthenticated && member._id === currentUser._id &&
-               <button type='button' className='btn-primary w-24' onClick={ () => toggleEditAbout(true)}>{editAbout ? "Save" : "Edit"}</button> }
+               <button type='button' className='btn-primary w-24' onClick={handleClick}>{editProfile ? "Save" : "Edit"}</button> }
 
             </div>
 
