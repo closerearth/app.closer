@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import Layout from '../../components/Layout';
-import AdminNav from '../../components/AdminNav';
 import Loading from '../../components/Loading';
+import Tabs from '../../components/Tabs';
+import UsersTable from '../../components/UsersTable';
+import Dashboard from '../../components/admin/Dashboard';
 import api, { formatSearch } from '../../utils/api';
 import models from '../../models';
 import { useAuth } from '../../contexts/auth';
 import PageNotAllowed from '../401';
 
 const Admin = ({ token }) => {
-
   const { user, isLoading } = useAuth();
   const [email, setInviteEmail] = useState('');
   const [error, setError] = useState(null);
@@ -46,44 +46,20 @@ const Admin = ({ token }) => {
         <title>Admin</title>
       </Head>
       <main className="main-content center intro">
-        <AdminNav />
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            inviteUser(email);
-          }}
-          className="card"
-        >
-          { invite &&
-            <div className="success-box">
-              Invite link:
-              <input value={ invite } className="copy-box" disabled />
-            </div>
-          }
-          { error &&
-            <div className="error-box">
-              { error }
-            </div>
-          }
-          <div className="form-field">
-            <label htmlFor="email">Get Invite Link</label>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              placeholder="name@awesomeproject.co"
-              onChange={e => setInviteEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="card-footer">
-            <div className="action-row">
-              <button type="submit" className="btn-primary">
-                Generate link
-              </button>
-            </div>
-          </div>
-        </form>
+        <Tabs
+          tabs={ [
+            {
+              title: 'Dashboard',
+              value: 'dashboard',
+              content: <Dashboard />
+            },
+            {
+              title: 'Users',
+              value: 'users',
+              content: <UsersTable />
+            },
+          ] }
+        />
       </main>
     </Layout>
   );

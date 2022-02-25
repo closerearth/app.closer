@@ -13,30 +13,35 @@ const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
   const [currentTab, setCurrentTab] = useState(initialCurrentTab);
 
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700">
-      <ul className="flex flex-wrap -mb-px">
-        { tabs && tabs.map((tab, index) => (
-          <li className="mr-2" key={ `${tab.value || index}` }>
-            <Link href={ tab.href || '#' }>
-              <a
-                onClick={ (e) => {
-                  if (!tab.href) {
-                    e.preventDefault();
-                  }
-                  setCurrentTab(index);
-                  if (onChange) {
-                    onChange(tab);
-                  }
-                } }
-                className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }
-              >
-                  { tab.title }
-              </a>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <div className="border-b border-gray-200 dark:border-gray-700">
+        <ul className="flex flex-wrap -mb-px">
+          { tabs && tabs.map((tab, index) => (
+            <li className="mr-2" key={ `${tab.value || index}` }>
+              <Link href={ tab.href || '#' }>
+                <a
+                  onClick={ (e) => {
+                    if (!tab.href) {
+                      e.preventDefault();
+                    }
+                    setCurrentTab(index);
+                    if (onChange) {
+                      onChange(tab);
+                    }
+                  } }
+                  className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }
+                >
+                    { tab.title }
+                </a>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="tab-content mb-8">
+        { tabs && tabs[currentTab] && tabs[currentTab].content }
+      </div>
+    </>
   );
 }
 Tabs.defaultProps = {

@@ -40,99 +40,103 @@ const UsersTable = ({ where, limit }) => {
   }, [where, page]);
 
   return (
-    <div className="users-table">
-      <table className="card table-auto w-full">
-        <thead className="card-header text-xs font-semibold uppercase text-gray-400 bg-gray-50">
-          <tr>
-            <th className="p-2 whitespace-nowrap">
-              <div className="font-semibold text-left">Name</div>
-            </th>
-            <th className="p-2 whitespace-nowrap">
-              <div className="font-semibold text-left">Created</div>
-            </th>
-            <th className="p-2 whitespace-nowrap">
-              <div className="font-semibold text-left">Roles</div>
-            </th>
-          </tr>
-        </thead>
-        { loading ?
-          <Loading />:
-          <tbody className="text-sm divide-y divide-gray-100">
-            { users && users.count() > 0 ?
-              users.map((row) => {
-                // Fetch the itemized object which can have been patched
-                const user = platform.user.findOne(row.get('_id'));
+    <div className="card">
+      { loading ?
+        <Loading />:
+        users && users.count() > 0 ?
+          <div className="users-table -mt-4 -ml-4 -mr-4">
+            <table className="table-auto w-full">
+              <thead className="card-header text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+                <tr>
+                  <th className="p-2 whitespace-nowrap">
+                    <div className="font-semibold text-left">Name</div>
+                  </th>
+                  <th className="p-2 whitespace-nowrap">
+                    <div className="font-semibold text-left">Created</div>
+                  </th>
+                  <th className="p-2 whitespace-nowrap">
+                    <div className="font-semibold text-left">Roles</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-sm divide-y divide-gray-100">
+              {
+                users.map((row) => {
+                  // Fetch the itemized object which can have been patched
+                  const user = platform.user.findOne(row.get('_id'));
 
-                return (
-                  <tr key={ row.get('_id') }>
-                    <td className="p-2 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                          <ProfilePhoto user={ user.toJS() } size="sm" />
+                  return (
+                    <tr key={ row.get('_id') }>
+                      <td className="p-2 whitespace-nowrap">
+                        <span className="flex items-center">
+                          <span className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                            <ProfilePhoto user={ user.toJS() } size="sm" />
+                          </span>
+                          <span className="font-medium text-gray-800">{ user.get('screenname') }</span>
+                        </span>
+                      </td>
+                      <td className="p-2 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="font-medium text-gray-800">
+                            <TimeSince time={ user.get('created') } />
+                          </div>
                         </div>
-                        <div className="font-medium text-gray-800">{ user.get('screenname') }</div>
-                      </div>
-                    </td>
-                    <td className="p-2 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="font-medium text-gray-800">
-                          <TimeSince time={ user.get('created') } />
-                        </div>
-                      </div>
-                    </td>
-                    <td className="p-2 whitespace-nowrap">
-                      <div className="space-x-1 flex flex-wrap justify-start items-start">
-                        { user.get('roles') && user.get('roles').map(role => (
-                          <Tag
-                            key={ role }
-                            color="green"
-                            remove={ () => platform.user.patch(user.get('_id'), { roles: user.get('roles').filter(r => r !== role) }) }
-                          >
-                            { role }
-                          </Tag>
-                        )) }
-                        <form
-                          onSubmit={ (e) => {
-                            e.preventDefault();
-                            if (addRole[user.get('_id')]) {
-                              platform.user.patch(user.get('_id'), { roles: user.get('roles').concat(addRole[user.get('_id')]) });
-                              setAddRole({ ...addRole, [user.get('_id')]: '' });
-                            } else {
-                              console.log('Cannot add empty role!')
-                            }
-                          } }
-                        >
-                          <input
-                            type="text"
-                            value={ addRole[user.get('_id')] || '' }
-                            placeholder="Add role"
-                            onChange={ e => {
-                              setAddRole({ ...addRole, [user.get('_id')]: e.target.value })
+                      </td>
+                      <td className="p-2 whitespace-nowrap">
+                        <div className="space-x-1 flex flex-wrap justify-start items-start">
+                          { user.get('roles') && user.get('roles').map(role => (
+                            <Tag
+                              key={ role }
+                              color="green"
+                              remove={ () => platform.user.patch(user.get('_id'), { roles: user.get('roles').filter(r => r !== role) }) }
+                            >
+                              { role }
+                            </Tag>
+                          )) }
+                          <form
+                            onSubmit={ (e) => {
+                              e.preventDefault();
+                              if (addRole[user.get('_id')]) {
+                                platform.user.patch(user.get('_id'), { roles: user.get('roles').concat(addRole[user.get('_id')]) });
+                                setAddRole({ ...addRole, [user.get('_id')]: '' });
+                              } else {
+                                console.log('Cannot add empty role!')
+                              }
                             } }
-                          />
-                        </form>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              }):
-              <i>No users found</i>
-            }
-          </tbody>
-        }
-      </table>
-      <div className="card-footer">
-        <Pagination
-          loadPage={ (page) => {
-            setPage(page);
-            loadData();
-          }}
-          page={ page }
-          limit={ limit }
-          total={ totalUsers }
-          items={ users }
-        />
-      </div>
+                          >
+                            <input
+                              type="text"
+                              value={ addRole[user.get('_id')] || '' }
+                              placeholder="Add role"
+                              onChange={ e => {
+                                setAddRole({ ...addRole, [user.get('_id')]: e.target.value })
+                              } }
+                            />
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+          <div className="card-footer">
+            <Pagination
+              loadPage={ (page) => {
+                setPage(page);
+                loadData();
+              }}
+              page={ page }
+              limit={ limit }
+              total={ totalUsers }
+              items={ users }
+            />
+          </div>
+        </div>:
+        <div className="p-8 text-center">
+          <i>No users found</i>
+        </div>
+      }
     </div>
   )
 };
