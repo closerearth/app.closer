@@ -24,13 +24,21 @@ const MemberPage = ({ member, loadError }) => {
   const [editAbout, toggleEditAbout] = useState(false);
   const [error, setErrors] = useState(false);
   const [sendError, setSendErrors] = useState(false);
-  const [name, setName] = useState('');
-  const [url, setUrl] = useState('');
+  const [linkName, setLinkName] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const image = (photo || member.photo);
   const { platform } = usePlatform()
-  const links = platform.user.find(member._id)?.get('links')
+  const links = platform.user.find(currentUser?._id)?.get('links')
+  
+  const handleSubmit = async () => {
+    try {
+       await platform.user.patch(currentUser._id, { links: [ { name: linkName, url: linkUrl } ] })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   const saveAbout = async (about) => {
     try {
@@ -154,7 +162,7 @@ const MemberPage = ({ member, loadError }) => {
               <textarea
                 autoFocus
                 value={about}
-                className="edit-about-text"
+                className="w-10/12 h-36"
                 onChange={ (e) => setAbout(e.target.value) }
                 onBlur={ () => {
                   toggleEditAbout(false);
@@ -182,7 +190,7 @@ const MemberPage = ({ member, loadError }) => {
                     }
                 </Linkify>
               </p>:
-              <p className="">
+              <p className="" >
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                       <a
@@ -203,6 +211,10 @@ const MemberPage = ({ member, loadError }) => {
                 </Linkify>
               </p>
             }
+
+              { isAuthenticated && member._id === currentUser._id &&
+               <button type='button' className='btn-primary w-24' onClick={ () => toggleEditAbout(true)}>{editAbout ? "Save" : "Edit"}</button> }
+
             </div>
 
       <div className="flex flex-col items-start md:w-2/3">
@@ -237,14 +249,17 @@ const MemberPage = ({ member, loadError }) => {
                }
              </ul>
           </div>
+          { isAuthenticated && member._id === currentUser._id &&
           <div className="flex items-start mb-10 border border-line p-4 w-fit">
-              <form className='flex flex-col space-y-6 w-96' onSubmit={() => platform.user.patch(member._id, { links: [ { name: name, url: url } ] })}>
-                <input id='name'  type='text' placeholder='Name...' value={name} onChange={e => setName(e.target.value)} required />
-                <input id='url'  type='url' placeholder='Url...' value={url} onChange={e => setUrl(e.target.value)} required />
+              <form className='flex flex-col space-y-6 w-96' onSubmit={handleSubmit}>
+                <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
+                <input id='url'  type='url' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
                 <button type='submit' className='btn-primary w-24 self-center'>Save</button>
               </form>
           </div>
-        </div>    
+            }
+        </div> 
+             
 
         </div>
         </div>

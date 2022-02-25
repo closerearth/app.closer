@@ -196,7 +196,7 @@ const Navigation = () => {
         </div>
       </nav>
       { navOpen &&
-        <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-slate-50 no-print">
+        <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
           <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg">
             <Link
               href="/events"
