@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import api from '../utils/api';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+
+import api from '../utils/api';
+import { useNextQueryParams } from '../utils/helpers';
 import { useAuth } from '../contexts/auth';
 import { EN, SIGNUP_FIELDS } from '../config';
 
 const SignupForm = () => {
+  const router = useRouter();
+  const { back } = useNextQueryParams();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const router = useRouter();
   const { signup, isAuthenticated } = useAuth();
   const [application, setApplication] = useState({
     screenname: '',
@@ -32,7 +35,7 @@ const SignupForm = () => {
     try {
       const user = await signup(application);
       setSubmitted(true);
-      router.push('/community');
+      window.location.href = decodeURIComponent(back || '/community');
 
     } catch (err) {
       setError(err.message);
@@ -40,9 +43,8 @@ const SignupForm = () => {
   }
 
   if (isAuthenticated) {
-    router.push('/community');
+    router.push(decodeURIComponent(back || '/community'));
   }
-
   const updateApplication = update => setApplication({ ...application, ...update });
   const updateApplicationFields = update => setApplication({ ...application, fields: { ...application.fields, ...update } });
 
@@ -52,6 +54,7 @@ const SignupForm = () => {
       { submitted?
         <h2 className="my-4">{ EN.signup_success }</h2>:
         <form className="join mt-24 flex flex-col" onSubmit={ submit }>
+          <input type="hidden" name="backurl" value={ decodeURIComponent(back || '/community') } />
           <div className="w-full mb-4">
             <label htmlFor="screenname">
               Name

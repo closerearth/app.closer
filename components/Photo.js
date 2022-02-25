@@ -9,10 +9,11 @@ const sizes = {
 const Photo = ({ id, size, title, cover, rounded, width, height, photoUrl }) => {
   const placeholder = '/images/profile-placeholder.png';
   const url = photoUrl ? photoUrl : id ? `${cdn}${id}-profile-${size}.jpg` : placeholder;
+  const sizes = cover ? `w-${width || sizes[size]} h-${height || sizes[size]} `:''
 
   return (
     <span
-      className={`${cover?`w-${width || sizes[size]} h-${height || sizes[size]} `:''}inline-flex justify-center items-center text-center ${rounded?'rounded-full overflow-hidden':''}`}
+      className={`${sizes} inline-flex justify-center items-center text-center ${rounded?'rounded-full overflow-hidden':''}`}
       title={ title }
     >
       { url && <img

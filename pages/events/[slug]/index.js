@@ -157,7 +157,11 @@ const Event = ({ event, error }) => {
                       }
                     </>:
                     <>
-                      { isAuthenticated && attendees?.includes(user._id) ?
+                      { !isAuthenticated ?
+                        <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                          <a className="btn-primary mr-2">Signup to RSVP</a>
+                        </Link>:
+                        attendees?.includes(user._id) ?
                         <a
                           href="#"
                           className="btn-primary mr-2"
@@ -168,7 +172,7 @@ const Event = ({ event, error }) => {
                         >
                           Cancel RSVP
                         </a>:
-                        isAuthenticated && <button
+                        <button
                           onClick={ e => {
                             e.preventDefault();
                             attendEvent(event._id, !(attendees?.includes(user._id)));
