@@ -24,7 +24,7 @@ const Login = () => {
         <title>Sign in</title>
       </Head>
       <div className="mural">
-        <main className="main-content center intro">
+        <main className="main-content max-w-prose center intro">
           <form
             onSubmit={(e) => {
               e.preventDefault();
