@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from '../../components/Layout';
@@ -21,20 +21,21 @@ const MemberPage = ({ member, loadError }) => {
   const [photo, setPhoto] = useState(null);
   const [introMessage, setMessage] = useState('');
   const [openIntro, setOpenIntro] = useState(false);
-  const [editAbout, toggleEditAbout] = useState(false);
   const [error, setErrors] = useState(false);
   const [sendError, setSendErrors] = useState(false);
   const [linkName, setLinkName] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
+  const [editAbout, toggleEditAbout] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform()
   const links = platform.user.find(currentUser?._id)?.get('links')
   
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault()
     try {
-       await platform.user.patch(currentUser._id, { links: [ { name: linkName, url: linkUrl } ] })
+       await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
     } catch (err) {
       console.log(err)
     }
@@ -119,7 +120,7 @@ const MemberPage = ({ member, loadError }) => {
               </p>
             </Link>
             <div>
-              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : 'Add a photo'} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
+              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
             <div className='mt-1 mb-3' >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
@@ -149,9 +150,15 @@ const MemberPage = ({ member, loadError }) => {
               }
             </h3>
             
-            <div className='mt-4'>
-              {/* <p>This is where the tagline description is placed.</p> */}
-            <div className="font-semibold text-sm">
+            <div className='mt-1'>
+              <h5>
+              { member.tagline }
+                    { !member.tagline &&
+                      <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
+                    }
+
+              </h5>
+            <div className="font-semibold text-sm mt-1">
               {member.timezone}
             </div>
             </div>
@@ -218,25 +225,19 @@ const MemberPage = ({ member, loadError }) => {
             </div>
 
       <div className="flex flex-col items-start md:w-2/3">
-        <div>
+       <div>
         <div className="page-title flex justify-between">
           <h3 className="mt-16 mb-4">Upcoming events {member.screenname} is going to:</h3>
-          {/* <div className="action">
-            { member && member.roles.includes('event-creator') &&
-              <Link href="/events/create">
-                <a className="btn-primary">Create event</a>
-              </Link>
-            }
-          </div> */}
         </div>
         
-          <UpcomingEvents
+        <UpcomingEvents
           allowCreate
           limit={ 30 }
           page={ 1 }
           labelLink={null}
+          list={true}
         />
-        </div>
+       </div>
         
         <div className="flex flex-col">
           <div className="flex flex-col items-start mb-10">
