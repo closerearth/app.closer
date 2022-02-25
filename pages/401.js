@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 
-const notallowed = () => {
+const PageNotAllowed = () => {
   const router = useRouter();
 
   return (
@@ -20,4 +20,4 @@ const notallowed = () => {
   );
 }
 
-export default notallowed;
+export default PageNotAllowed;
