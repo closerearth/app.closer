@@ -164,7 +164,7 @@ const Navigation = () => {
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center"
+              className="text-4xl flex justify-center items-center mr-3"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
             </a> }
