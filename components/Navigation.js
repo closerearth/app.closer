@@ -176,7 +176,6 @@ const Navigation = () => {
 
                 <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
                   <span className='h-8 border-l border-l-line mr-3' />
-=======
                   <ProfilePhoto user={ user } />
                   <p className='ml-3'>{user.screenname}</p>
                 </a>
