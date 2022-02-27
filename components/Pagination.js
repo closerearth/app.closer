@@ -10,7 +10,7 @@ import { useAuth } from '../contexts/auth.js';
 const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages }) => {
   const totalPages = Math.ceil(total / limit);
   const pageOffset = totalPages > maxPages ?
-    Math.max(Math.ceil(page - (maxPages / 2)),0):
+    Math.max(Math.floor(page - (maxPages / 2)),0):
     0;
 
   return (
@@ -34,12 +34,12 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
       <div className="flex flex-row items-center justify-between">
         { total > 0 && limit &&
           Array.from('.'.repeat(Math.min(totalPages, maxPages)).split('')).map((v, i) => {
-            const toPage = i + pageOffset;
+            const toPage = i + pageOffset + 1;
             if (toPage > totalPages) {
               return;
             }
             return (
-              <Link href={{query: { [queryParam]: toPage }}} key={ `page-${toPage}` }>
+              <Link href={{query: { [queryParam]: toPage  }}} key={ `page-${toPage}` }>
                 <a
                   className={`p-1 mr-2 ${page === toPage?'bg-primary text-white':'bg-gray-100'}`}
                   onClick={ (e) => {
@@ -79,7 +79,7 @@ Pagination.defaultProps = {
   queryParam: 'page',
   page: 1,
   limit: 50,
-  maxPages: 7
+  maxPages: 5
 };
 
 export default Pagination;

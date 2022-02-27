@@ -58,8 +58,12 @@ const EventCheckout = ({ event, error }) => {
     total -= event.volunteerDiscount;
   }
 
-  if (discount && discount.percent) {
-    total = total - (total * discount.percent);
+  if (discount && (!discount.name || !ticketOption || discount.name === ticketOption.name)) {
+    if (discount.percent) {
+      total = total - (total * discount.percent);
+    } else if (discount.val) {
+      total = total - discount.val;
+    }
   }
   total = Math.max(Math.round(total * 100) / 100, 0);
 
@@ -230,8 +234,13 @@ const EventCheckout = ({ event, error }) => {
         { !paymentReceived && <section>
           <h3 className="mb-2">Payment</h3>
           { isVolunteer && <p className="text-sm">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
+          { router.query.discount && !discount && <p className="validation-error">Discount code not found.</p> }
           { discount &&
-            <p className="text-sm">Discount code applied ({ router.query.discount }) <b>{ Math.round(discount.percent * 10000) / 100 }% off</b></p>
+            <p className="text-sm">
+              Discount code applied ({ router.query.discount }) { discount.percent?
+                <b>{ Math.round(discount.percent * 10000) / 100 }% off</b>:
+                <b>{ priceFormat(discount.val, currency) } off</b>
+              }</p>
           }
           <p className="text-sm mb-3">Total: <b>{ priceFormat(total, currency) }</b></p>
           <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>

@@ -69,7 +69,7 @@ const Navigation = () => {
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
 
   return (
-    <div className="NavContainer">
+    <div className="NavContainer pt-20 md:pt-0">
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
