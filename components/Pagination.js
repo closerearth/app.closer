@@ -7,8 +7,11 @@ import TimeSince from './TimeSince';
 
 import { useAuth } from '../contexts/auth.js';
 
-const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
+const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages }) => {
   const totalPages = Math.ceil(total / limit);
+  const pageOffset = totalPages > maxPages ?
+    Math.max(Math.ceil(page - (maxPages / 2)),0):
+    0;
 
   return (
     <div className="pagination flex flex-row items-center justify-between">
@@ -23,27 +26,33 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
                 loadPage(page - 1);
               } }
             >
-              previous
+              prev
             </a>
           </Link>
         }
       </div>
       <div className="flex flex-row items-center justify-between">
         { total > 0 && limit &&
-          Array.from('.'.repeat(totalPages).split('')).map((v, i) => (
-            <Link href={{query: { [queryParam]: i + 1 }}} key={ `page-${i + 1}` }>
-              <a
-                className={`p-1 mr-2 ${page === i + 1?'bg-primary text-primary-hover':'bg-gray-100'}`}
-                onClick={ (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  loadPage(i + 1);
-                } }
-              >
-                { `${i + 1}` }
-              </a>
-            </Link>
-          ))
+          Array.from('.'.repeat(Math.min(totalPages, maxPages)).split('')).map((v, i) => {
+            const toPage = i + pageOffset;
+            if (toPage > totalPages) {
+              return;
+            }
+            return (
+              <Link href={{query: { [queryParam]: toPage }}} key={ `page-${toPage}` }>
+                <a
+                  className={`p-1 mr-2 ${page === toPage?'bg-primary text-white':'bg-gray-100'}`}
+                  onClick={ (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    loadPage(toPage);
+                  } }
+                >
+                  { `${toPage}` }
+                </a>
+              </Link>
+            )
+          })
         }
       </div>
       <div className="flex flex-row items-center justify-between">
@@ -52,7 +61,6 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
             <a
               className="p-1"
               onClick={ (e) => {
-                console.log('set page, ', page, page + 1)
                 e.preventDefault();
                 e.stopPropagation();
                   loadPage(page + 1);
@@ -70,7 +78,8 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit }) => {
 Pagination.defaultProps = {
   queryParam: 'page',
   page: 1,
-  limit: 50
+  limit: 50,
+  maxPages: 7
 };
 
 export default Pagination;

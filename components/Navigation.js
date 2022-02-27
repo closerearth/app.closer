@@ -15,7 +15,7 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
-import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
+import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 dayjs.extend(relativeTime);
 
@@ -69,18 +69,19 @@ const Navigation = () => {
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
 
   return (
-    <div className="NavContainer pt-20 md:pt-0">
+    <div className="NavContainer">
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
-      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:relative md:drop-shadow-none">
+      <nav className="h-20 fixed md:relative top-0 z-50 left-0 right-0 bg-background drop-shadow-sm md:bg-transparent md:drop-shadow-none">
         <div className="main-content flex flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
               <a className="block">
                 { LOGO_HEADER ? <img
-                  src={LOGO_HEADER}
-                  alt={PLATFORM_NAME}
+                  src={ LOGO_HEADER }
+                  alt={ PLATFORM_NAME }
+                  width={ LOGO_WIDTH }
                 /> : PLATFORM_NAME }
               </a>
             </Link>

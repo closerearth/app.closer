@@ -48,7 +48,7 @@ const MemberHome = () => {
   }
 
   return (
-    <main className="main-content w-full">
+    <main className="main-content w-full relative">
       <div className="flex flex-row">
         <div className="md:w-2/3 md:mr-8">
           <div className="channel">
