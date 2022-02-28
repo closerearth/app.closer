@@ -28,11 +28,12 @@ const MemberPage = ({ member, loadError }) => {
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const [tagline, setTagline] = useState(member && member.tagline);
-  const [links, setLinks] = useState(member && member.links);
   const [showForm, toggleShowForm] = useState(false)
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform()
+  const  links = platform.user.find(currentUser?._id)?.get('links')
+
 
   
   const handleSubmit = async (event) => {
@@ -88,7 +89,6 @@ const MemberPage = ({ member, loadError }) => {
   useEffect(() => {
     setAbout(member.about);
     setTagline(member.tagline)
-    setLinks(member.links)
   }, [member]);
 
   if (!member) {
@@ -331,6 +331,7 @@ const MemberPage = ({ member, loadError }) => {
                })
                : 'No links yet'
                }
+               
              </ul>
           </div>
 
