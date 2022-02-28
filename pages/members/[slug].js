@@ -144,11 +144,11 @@ const MemberPage = ({ member, loadError }) => {
 
 
             <div className='flex flex-col md:flex-row w-full'>
-            <div className='md:w-72'>
+            <div className='md:w-72 items-center justify-start'>
             <div>
               <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-32 md:w-44 mt-4 md:mt-0 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
-            <div className='mt-1 mb-3' >
+            <div className='mt-1 mb-3 justify-self-start' >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                 model="user"
                 id={member._id}
