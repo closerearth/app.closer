@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { faEnvelope, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faPlus, faMinus, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from '../../components/Layout';
@@ -28,10 +28,12 @@ const MemberPage = ({ member, loadError }) => {
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const [tagline, setTagline] = useState(member && member.tagline);
+  const [links, setLinks] = useState(member && member.links);
+  const [showForm, toggleShowForm] = useState(false)
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform()
-  const links = platform.user.find(currentUser?._id)?.get('links') || []
+
   
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -86,6 +88,7 @@ const MemberPage = ({ member, loadError }) => {
   useEffect(() => {
     setAbout(member.about);
     setTagline(member.tagline)
+    setLinks(member.links)
   }, [member]);
 
   if (!member) {
@@ -100,8 +103,10 @@ const MemberPage = ({ member, loadError }) => {
       <div className='main-content bg-slate-50'>
       <main className="flex flex-col justify-between">
         { openIntro &&
-          <div className="introduction">
-            <div className="main-content">
+        <>
+          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+            <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
               { sendError && <p className="validation-error">Error: { sendError }</p> }
               <form
                 onSubmit={ (e) => {
@@ -116,8 +121,9 @@ const MemberPage = ({ member, loadError }) => {
                     setMessage(e.target.value);
                   } }
                   value={ introMessage }
+                  className='w-full h-32'
                 />
-                <button type="submit">Send</button>{' '}
+                <button type="submit" className='btn-primary mt-8 mr-2'>Send</button>{' '}
                 <a
                   href="#"
                   onClick={ (e) => {
@@ -130,6 +136,9 @@ const MemberPage = ({ member, loadError }) => {
               </form>
             </div>
           </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
         }
 
         <div className='flex flex-col md:flex-row items-start'>
@@ -146,7 +155,7 @@ const MemberPage = ({ member, loadError }) => {
             <div className='flex flex-col md:flex-row w-full'>
             <div className='md:w-72 items-center justify-start'>
             <div>
-              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-32 md:w-44 mt-4 md:mt-0 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
+              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-32 md:w-44 mt-4 md:mt-0 rounded-full" />
             </div>
             <div className='mt-1 mb-3 justify-self-start' >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
@@ -315,23 +324,40 @@ const MemberPage = ({ member, loadError }) => {
           <div className="flex flex-col items-start mb-10">
              <p className='font-semibold text-md mt-8'>Stay Social</p>
              <ul className='space-y-1 mt-4'>
-               {console.log(links)}
                {links ? links.map((link) => {
-               <li className='bg-black'><a href={link.url}>{link.name}</a></li>
+                 <a href={link.url} key={link._id}>
+               <li className='bg-black'>{link.name}</li>
+               </a>
                })
                : 'No links yet'
                }
              </ul>
           </div>
-          { isAuthenticated && member._id === currentUser._id &&
-          <div className="flex items-start mb-10 border border-line p-4 w-fit">
-              <form className='flex flex-col space-y-6 w-96' onSubmit={handleSubmit}>
+
+          { isAuthenticated && member._id === currentUser._id && !showForm &&
+           <FontAwesomeIcon icon={faPlus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
+          }
+
+          { isAuthenticated && member._id === currentUser._id && showForm &&
+           <FontAwesomeIcon icon={faMinus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
+          }
+
+          { isAuthenticated && member._id === currentUser._id && showForm &&
+          <div className="flex items-start mb-10 border border-line p-4 w-fit mt-10">
+              <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
+                <div>
+                <label>Name</label>
                 <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
-                <input id='url'  type='url' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
-                <button type='submit' className='btn-primary w-24 self-center'>Save</button>
+                </div>
+                <div>
+                <label>Url</label>
+                <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
+                </div>
+                <button type='submit' className='btn-primary w-24 self-center'>Add</button>
               </form>
           </div>
             }
+
         </div> 
              
 

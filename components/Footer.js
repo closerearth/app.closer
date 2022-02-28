@@ -8,9 +8,6 @@ import { PLATFORM_NAME, LOGO_FOOTER, LOGO_HEADER, TEAM_EMAIL, INSTAGRAM_URL, FAC
 const footer = () => (
   <div className=" border-t border-t-line">
     <footer className="main-content flex flex-col items-center p-4">
-        {/* <div className="flex flex-row items-center justify-start">
-          { LOGO_FOOTER && <img src={LOGO_FOOTER} width="110" alt={ PLATFORM_NAME } /> }
-        </div> */}
         <div className="flex flex-col md:flex-row py-2 items-center w-full justify-between">
           <div className='flex flex-col items-center'>
           <div className="flex flex-row space-x-5 self-center p-4 mb-8 md:mb-1">
@@ -42,27 +39,8 @@ const footer = () => (
           <p className='p-2'>Closer:</p>
           </div>
           </div>
-          
-          {/* <div className="border-t border-background pt-2">
-            <a href={`mailto:${TEAM_EMAIL}`} className="text-sm text-white hover:underline">{TEAM_EMAIL}</a>
-          </div>
-           */}
-          {/* <div className='flex flex-col items-start text-sm'>
-            <p className='mb-2'>Keep in the loop, subscribe:</p>
-          <form>
-            <input type="text" placeholder='Your email' />
-            <div className='flex flex-row justify-between w-80'>
-              <div className='flex flex-row mt-2'>
-              <input type="checkbox"/>
-              <label className='ml-4'> I agree to the T&C. Read.</label>
-              </div>
-              <button type="submit" className='self-center'>Sign up</button>
-            </div>
-          </form>
-          </div>
-          <p className='m-4 p-2 self-center md:hidden'>Powered by: closer</p> */}
 
-      <Newsletter placement="Footer" />
+         <Newsletter placement="Footer" />
 
       </div>
     </footer>

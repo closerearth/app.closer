@@ -49,7 +49,7 @@ const MemberHome = () => {
 
   return (
     <main className="main-content w-full">
-      <div className="flex flex-row">
+      <div className="flex flex-col md:flex-row">
         <div className="md:w-2/3 md:mr-8">
           <div className="channel">
             <div className="channel-header mb-4">
@@ -70,10 +70,11 @@ const MemberHome = () => {
             </section>
           </div>
         </div>
-        <div className="md:w-1/3">
+        <div className="md:w-2/3">
           {/* Wait for user to be loaded in order to fetch private data */}
           <MemberList
             list
+            preview
             card
             title="Members"
             limit={ 3 }

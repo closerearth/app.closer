@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const MemberList = ({
   list,
+  preview,
   card,
   children,
   channel,
@@ -35,6 +36,8 @@ const MemberList = ({
   const params = { where, sort_by: 'created', limit, page };
   const users = platform.user.find(params);
   const totalUsers = platform.user.findCount(params);
+
+
 
   const loadData = async () => {
     try {
@@ -65,7 +68,7 @@ const MemberList = ({
       </h3>
       { loading ?
         <Loading />:
-        <div className="grid gap-10 md:grid-cols-2 justify-start items-center mb-8">
+        <div className={`grid gap-10 ${list ? 'md:grid-cols-1' : 'md:grid-cols-2'}  justify-start items-center mb-8`}>
           { users && users.count() > 0 ?
             users.map(user => (
               <Link key={ user.get('_id') } as={`/members/${user.get('slug')}`} href="/members/[slug]">
@@ -74,7 +77,7 @@ const MemberList = ({
                   <h4 className="font-light text-2xl md:text-2xl">{ user.get('screenname') }</h4>
                   <ProfilePhoto user={user.toJS()} width={"12"} height={"12"}/>
                   </div>
-                  <p className='mb-3 w-10/12 self-start text-zinc-400 text-sm'>{user.get('about')}</p>
+                  <p className='mb-3 w-10/12 self-start text-zinc-400 text-sm'>{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p>
                   <h4 className="text-xs flex self-start mb-3">{user.get('timezone')}</h4>
                   <button className='w-full md:w-52 self-start rounded-full border border-neutral-900 h-9'>See profile</button>
                 </div>
