@@ -11,7 +11,7 @@ const footer = () => (
         {/* <div className="flex flex-row items-center justify-start">
           { LOGO_FOOTER && <img src={LOGO_FOOTER} width="110" alt={ PLATFORM_NAME } /> }
         </div> */}
-        <div className="flex flex-col md:flex-row py-2 items-center w-11/12 justify-between">
+        <div className="flex flex-col md:flex-row py-2 items-center w-full justify-between">
           <div className='flex flex-col items-center'>
           <div className="flex flex-row space-x-5 self-center p-4 mb-8 md:mb-1">
             { INSTAGRAM_URL && <a href={ INSTAGRAM_URL } target="_blank" rel="noreferrer nofollow">

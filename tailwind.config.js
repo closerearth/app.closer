@@ -11,7 +11,7 @@ module.exports = {
         background: '#F8FAFC',
         foreground: '#000',
         error: '#9f1f42',
-        line: '#404040'
+        line: '#a3a3a3'
       }
     },
   },

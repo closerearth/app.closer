@@ -31,7 +31,7 @@ const MemberPage = ({ member, loadError }) => {
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform()
-  const links = platform.user.find(currentUser?._id)?.get('links')
+  const links = platform.user.find(currentUser?._id)?.get('links') || []
   
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -141,8 +141,12 @@ const MemberPage = ({ member, loadError }) => {
             {'< All Profiles'}
               </p>
             </Link>
+
+
+            <div className='flex flex-col md:flex-row w-full'>
+            <div className='md:w-72'>
             <div>
-              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-24 mt-4 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
+              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-32 md:w-44 mt-4 md:mt-0 rounded-full cursor-pointer transition duration-150 transform hover:scale-110" />
             </div>
             <div className='mt-1 mb-3' >
               { isAuthenticated && member._id === currentUser._id && <UploadPhoto
@@ -153,11 +157,12 @@ const MemberPage = ({ member, loadError }) => {
                 
               /> }
             </div>
+            </div>
 
          
 
-          <div className="flex flex-col items-start">
-            <h3 className='font-medium text-4xl'>
+          <div className="flex flex-col items-start w-full">
+            <h3 className='font-medium text-4xl md:text-7xl md:w-8/12 '>
               {member.screenname}{' '}
               { isAuthenticated && member._id !== currentUser._id &&
                 <a
@@ -172,12 +177,12 @@ const MemberPage = ({ member, loadError }) => {
               }
             </h3>
             
-            <div className='mt-1'>
+            <div className='mt-1 w-full'>
             { editProfile?
               <textarea
                 autoFocus
                 value={tagline}
-                className="w-96 h-20"
+                className="w-10/12 h-20"
                 onChange={ (e) => setTagline(e.target.value) }
                 onBlur={ () => {
                   saveTagline(tagline);
@@ -229,6 +234,7 @@ const MemberPage = ({ member, loadError }) => {
               {member.timezone}
             </div>
             </div>
+          </div>
           </div>
 
             { error && <p className="validation-error">Error: { error }</p> }
@@ -293,7 +299,7 @@ const MemberPage = ({ member, loadError }) => {
       <div className="flex flex-col items-start md:w-2/3">
        <div>
         <div className="page-title flex justify-between">
-          <h3 className="mt-16 mb-4">Upcoming events {member.screenname} is going to:</h3>
+          <h3 className="mt-16 md:mt-10 mb-4">Upcoming events {member.screenname} is going to:</h3>
         </div>
         
         <UpcomingEvents
@@ -309,8 +315,9 @@ const MemberPage = ({ member, loadError }) => {
           <div className="flex flex-col items-start mb-10">
              <p className='font-semibold text-md mt-8'>Stay Social</p>
              <ul className='space-y-1 mt-4'>
+               {console.log(links)}
                {links ? links.map((link) => {
-               <li><a href={link.url}>{link.name}</a></li>
+               <li className='bg-black'><a href={link.url}>{link.name}</a></li>
                })
                : 'No links yet'
                }
