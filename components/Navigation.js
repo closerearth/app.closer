@@ -15,7 +15,7 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
-import { LOGO_HEADER, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
+import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 dayjs.extend(relativeTime);
 
@@ -79,8 +79,9 @@ const Navigation = () => {
             <Link href="/">
               <a className="block">
                 { LOGO_HEADER ? <img
-                  src={LOGO_HEADER}
-                  alt={PLATFORM_NAME}
+                  src={ LOGO_HEADER }
+                  alt={ PLATFORM_NAME }
+                  width={ LOGO_WIDTH }
                 /> : PLATFORM_NAME }
               </a>
             </Link>

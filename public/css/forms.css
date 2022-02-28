@@ -2,13 +2,16 @@
 
 @layer components {
   .btn {
-    @apply inline-block py-2 px-4 rounded-full focus:outline-none border-2 border-gray-900 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+    @apply inline-block py-2 px-4 rounded-full focus:outline-none border-2 border-gray-900 focus:ring-2 focus:ring-primary focus:ring-opacity-75;
   }
   .btn-black {
     @apply btn bg-black text-white hover:bg-stone-800;
   }
   .btn-primary, .btn-primary[type="submit"] {
-    @apply btn hover:bg-primary hover:text-white bg-transparent border-2 border-primary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
+    @apply btn hover:bg-primary text-primary hover:text-white bg-transparent border-2 border-primary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
+  }
+  .btn-primary.btn-large {
+    @apply border-8 py-4 px-8 focus:ring-4;
   }
   .btn-primary.active {
     @apply bg-primary text-white hover:bg-transparent hover:text-primary;

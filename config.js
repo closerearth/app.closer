@@ -19,6 +19,7 @@ module.exports = {
   STRIPE_TEST_KEY: 'pk_test_51Gv17cGtt5D0VKR2Gt2RUVIDfrHRGJTfMSwRFpdbF5B4VfZ2zFOxM62ckAj4aQN5q6mDexpjZAqQKLpKdmwcnQfJ00sJwfbVWK',
   STRIPE_PUB_KEY: 'pk_live_YxOUUf7iOvQj104TG4JyWMAE003w80ISH6',
   LOGO_HEADER: '/images/logo.png',
+  LOGO_WIDTH: undefined,
   REGISTRATION_MODE: 'open', // curated, paid, open
   // LOGO_FOOTER: "",
   // INSTAGRAM_URL: "https://instagram.com/closerearth",

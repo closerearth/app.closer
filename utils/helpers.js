@@ -1,4 +1,7 @@
 import dayjs from 'dayjs';
+import { useMemo } from 'react';
+import { useRouter } from 'next/router';
+
 
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
@@ -83,3 +86,20 @@ export const prependHttp = (url, {https = true} = {}) => {
 
 	return url.replace(/^(?!(?:\w+?:)?\/\/)/, https ? 'https://' : 'http://');
 }
+
+export const useNextQueryParams = () => {
+  const router = useRouter();
+  const value = useMemo(() => {
+    // @see https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+    const queryParamsStr = router.asPath
+      .split("?")
+      .slice(1)
+      .join("");
+    const urlSearchParams = new URLSearchParams(queryParamsStr);
+    // the first key might be in the shape "/assets?foobar", we must change to "foobar"
+    const params = Object.fromEntries(urlSearchParams.entries());
+    return params;
+  }, [router.asPath]);
+
+  return value;
+};

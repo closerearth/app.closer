@@ -137,7 +137,7 @@ const Event = ({ event, error }) => {
                   { end && duration > 24 && ` - ${ end.format(dateFormat) }` }
                   { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
                 </h2>
-                <h1 className="text-4xl mt-4 font-bold">{event.name}</h1>
+                <h1 className="md:text-4xl mt-4 font-bold">{event.name}</h1>
                 { loadError && <div className="validation-error">{loadError}</div> }
 
                 <div className="mt-4 event-actions flex items-center">
@@ -157,7 +157,11 @@ const Event = ({ event, error }) => {
                       }
                     </>:
                     <>
-                      { isAuthenticated && attendees?.includes(user._id) ?
+                      { !isAuthenticated ?
+                        <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                          <a className="btn-primary mr-2">Signup to RSVP</a>
+                        </Link>:
+                        attendees?.includes(user._id) ?
                         <a
                           href="#"
                           className="btn-primary mr-2"
@@ -168,7 +172,7 @@ const Event = ({ event, error }) => {
                         >
                           Cancel RSVP
                         </a>:
-                        isAuthenticated && <button
+                        <button
                           onClick={ e => {
                             e.preventDefault();
                             attendEvent(event._id, !(attendees?.includes(user._id)));
@@ -215,7 +219,7 @@ const Event = ({ event, error }) => {
                 <div className="flex flex-row flex-wrap justify-center items-center">
                   { event.partners && event.partners.map(partner => partner.photoUrl && (
                     <a href={ partner.url || '#' } target="_blank" rel="noreferrer" key={ partner.name } className="mr-3">
-                      <Photo id={ partner.photo } photoUrl={ partner.photoUrl } size="sm" width="32" height="12" title={ partner.name } />
+                      <Photo id={ partner.photo } photoUrl={ partner.photoUrl } className="w-32 h-16" title={ partner.name } />
                     </a>
                   )) }
                 </div>

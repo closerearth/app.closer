@@ -1,18 +1,13 @@
 import React from 'react';
 import { cdn } from '../utils/api';
 
-const sizes = {
-  lg: '20',
-  sm: '9'
-}
-
-const Photo = ({ id, size, title, cover, rounded, width, height, photoUrl }) => {
+const Photo = ({ id, className, size, title, cover, rounded, width, height, photoUrl }) => {
   const placeholder = '/images/profile-placeholder.png';
   const url = photoUrl ? photoUrl : id ? `${cdn}${id}-profile-${size}.jpg` : placeholder;
 
   return (
     <span
-      className={`${cover?`w-${width || sizes[size]} h-${height || sizes[size]} `:''}inline-flex justify-center items-center text-center ${rounded?'rounded-full overflow-hidden':''}`}
+      className={`${className} inline-flex justify-center items-center text-center ${rounded?'rounded-full overflow-hidden':''}`}
       title={ title }
     >
       { url && <img
@@ -27,7 +22,8 @@ const Photo = ({ id, size, title, cover, rounded, width, height, photoUrl }) => 
 
 Photo.defaultProps = {
   size: 'sm',
-  cover: true
+  cover: true,
+  className: ''
 };
 
 export default Photo;
