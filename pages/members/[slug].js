@@ -31,11 +31,12 @@ const MemberPage = ({ member, loadError }) => {
   const [showForm, toggleShowForm] = useState(false)
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
-  const { platform } = usePlatform()
-  const  links = platform.user.find(currentUser?._id)?.get('links')
+  const { platform } = usePlatform();
+  const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
+  console.log('links', currentUser?._id, links)
 
 
-  
+
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
@@ -163,12 +164,12 @@ const MemberPage = ({ member, loadError }) => {
                 id={member._id}
                 onSave={id => setPhoto(id)}
                 label={ member.photo ? 'Change photo': 'Add photo' }
-                
+
               /> }
             </div>
             </div>
 
-         
+
 
           <div className="flex flex-col items-start w-full">
             <h3 className='font-medium text-4xl md:text-7xl md:w-8/12 '>
@@ -185,7 +186,7 @@ const MemberPage = ({ member, loadError }) => {
                 </a>
               }
             </h3>
-            
+
             <div className='mt-1 w-full'>
             { editProfile?
               <textarea
@@ -310,7 +311,7 @@ const MemberPage = ({ member, loadError }) => {
         <div className="page-title flex justify-between">
           <h3 className="mt-16 md:mt-10 mb-4">Upcoming events {member.screenname} is going to:</h3>
         </div>
-        
+
         <UpcomingEvents
           allowCreate
           limit={ 30 }
@@ -319,19 +320,21 @@ const MemberPage = ({ member, loadError }) => {
           list={true}
         />
        </div>
-        
+
         <div className="flex flex-col">
           <div className="flex flex-col items-start mb-10">
              <p className='font-semibold text-md mt-8'>Stay Social</p>
              <ul className='space-y-1 mt-4'>
-               {links ? links.map((link) => {
-                 <a href={link.url} key={link._id}>
-               <li className='bg-black'>{link.name}</li>
-               </a>
-               })
-               : 'No links yet'
+               {links ? links.map((link) => (
+                 <li key={link._id} className="mb-1">
+                   <a href={link.url}>
+                     {link.name}
+                   </a>
+                  </li>
+               )):
+               'No links yet'
                }
-               
+
              </ul>
           </div>
 
@@ -359,8 +362,8 @@ const MemberPage = ({ member, loadError }) => {
           </div>
             }
 
-        </div> 
-             
+        </div>
+
 
         </div>
         </div>

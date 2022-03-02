@@ -49,3 +49,10 @@ pm2 save
 ```
 certbot --nginx -d MYDOMAIN.ORG
 ```
+
+## [Licence](./LICENCE.md)
+
+This software has been created by holders of Closer DAO.
+You may use, reproduce & adapt this code for non-commercial use.
+
+If you wish to use this software for commercial purposes (i.e if your village or community needs to sell tickets or members) you can contact team@closer.earth for information. If your community profits are owned by a non-profit, you can contact us for a commercial license for this entity (please send along all documentation).
