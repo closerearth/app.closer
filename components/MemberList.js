@@ -57,12 +57,6 @@ const MemberList = ({
 
   return (
     <section className="member-page">
-      <Link href={"/"}>
-      <button className='flex flex-row justify-evenly items-center w-28 h-6 self-start rounded-full border border-neutral-900 text-xs'>
-      <FontAwesomeIcon icon={faLongArrowAltLeft} className='w-10/12' />
-         go back
-      </button>
-      </Link>
       <h3 className="mt-9 mb-8 text-4xl font-light">
         { title || 'Community members' }
       </h3>
