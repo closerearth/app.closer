@@ -182,7 +182,7 @@ const MemberPage = ({ member, loadError }) => {
                     setOpenIntro(!openIntro);
                   }}
                 >
-                  <FontAwesomeIcon icon={faEnvelope}/>
+                  <FontAwesomeIcon icon={faEnvelope} size="xs" />
                 </a>
               }
             </h3>
@@ -241,7 +241,7 @@ const MemberPage = ({ member, loadError }) => {
               </p>
             } */}
             <div className="font-semibold text-sm mt-1">
-              {member.timezone}
+              {member.timezone.replace(/[^a-zA-Z]/g, " ")}
             </div>
             </div>
           </div>
