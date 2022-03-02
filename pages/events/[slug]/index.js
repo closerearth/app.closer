@@ -144,13 +144,6 @@ const Event = ({ event, error }) => {
 
                 <div className="mt-4 event-actions flex items-center">
                   {
-                    end.isBefore(dayjs()) ?
-                    <span className="p3 mr-2 italic">
-                      Event ended{' '}
-                      <TimeSince
-                        time={ event.end }
-                      />
-                    </span>:
                     start.isAfter(dayjs()) &&
                     <span className="p3 mr-2 italic">
                       Event is happening{' '}
