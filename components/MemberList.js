@@ -57,7 +57,7 @@ const MemberList = ({
 
   return (
     <section className="member-page">
-      <h3 className="mt-9 mb-8 text-4xl font-light">
+      <h3 className="mt-3 mb-8 text-4xl font-light">
         { title || 'Community members' }
       </h3>
       { loading ?
@@ -81,6 +81,7 @@ const MemberList = ({
           }
         </div>
       }
+      
       <div className="card-footer">
         <Pagination
           loadPage={ (page) => {

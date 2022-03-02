@@ -160,7 +160,7 @@ const Navigation = () => {
                 }
               </a>
             </Link> }
-            {TELEGRAM_URL && !isAuthenticated && <a
+            {/* {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noreferrer nofollow"
@@ -168,7 +168,7 @@ const Navigation = () => {
               className="text-4xl flex justify-center items-center mr-3"
             >
               <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
-            </a> }
+            </a> } */}
             { isAuthenticated &&
               <Link
                 href="/members/[slug]"

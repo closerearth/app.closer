@@ -51,7 +51,7 @@ const MemberHome = () => {
     <main className="main-content w-full">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-2/3 md:mr-8">
-          <div className="channel">
+          <div className="channel mt-5">
             <div className="channel-header mb-4">
               <h3>Aloha {user?.screenname || 'you'}!</h3>
             </div>
