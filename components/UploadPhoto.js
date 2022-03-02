@@ -44,7 +44,7 @@ const UploadPhoto = ({ model, id, onSave, label, minimal }) => {
   }
 
   return (
-    <div {...getRootProps()} className={`upload-photo cursor-pointer ${minimal?'':'p-2 w-full h-full flex items-center justify-center'}`}>
+    <div {...getRootProps()} className={`upload-photo cursor-pointer ${minimal?'':'mt-2 w-full h-full flex items-center justify-start'}`}>
       <input {...getInputProps()} />
       {
         loading?

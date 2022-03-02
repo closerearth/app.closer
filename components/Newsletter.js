@@ -18,11 +18,14 @@ const Newsletter = ({ tags, placement }) => {
   const router = useRouter();
 
   // if (didCompleteSignup) {
-  //   return null;
-  // }
-
-  return (
-    <div className="Newsletter bg-gray-900 py-10 text-white">
+    //   return null;
+    // }
+    
+    return (
+      <div className="Newsletter py-5 text-neutral-900">
+        { signupError &&
+          <div className="error-box">{ signupError }</div>
+        }
       { signupCompleted ?
         <h3>Thanks, we will be in touch soon!</h3> :
         <form
@@ -41,14 +44,17 @@ const Newsletter = ({ tags, placement }) => {
             }
           className="flex flex-row items-center justify-center"
         >
-          { signupError &&
-            <div className="error">{ signupError }</div>
-          }
-          <div className="flex flex-row items-center justify-center px-2">
-            <input type="email" className="mr-2" value={email} placeholder="Email" onChange={e => setEmail(e.target.value)} required />
-            <button type="submit" name="subscribe" className="btn-primary text-white">
-              Subscribe
-            </button>
+          <div className="flex flex-col items-center justify-start px-2 mt-12 md:mt-0">
+            <p className='mb-2 self-start'>Keep in the loop, subscribe:</p>
+
+            <div className='flex flex-row justify-end w-96'>
+              {/* <div className='flex flex-row mt-2'>
+              <input type="checkbox"/>
+              <label className='ml-4'> I agree to the T&C. Read.</label>
+              </div> */}
+              <input type="email" className="mr-2" value={email} placeholder="Your email" onChange={e => setEmail(e.target.value)} required />
+              <button type="submit" name="subscribe" className='btn-primary w-36'>Sign up</button>
+            </div>
           </div>
         </form>
       }
@@ -57,3 +63,4 @@ const Newsletter = ({ tags, placement }) => {
 }
 
 export default Newsletter;
+

@@ -8,12 +8,18 @@ module.exports = {
       colors: {
         primary: '#000000',
         'primary-hover': '#ffffff',
-        background: '#EEEEEE',
+        background: '#F8FAFC',
         foreground: '#000',
-        error: '#9f1f42'
+        error: '#9f1f42',
+        line: '#a3a3a3'
       }
     },
   },
+  variants: {
+    extend: {
+        display: ["group-hover"],
+    },
+},
   plugins: [
     require('@tailwindcss/forms'),
   ],
