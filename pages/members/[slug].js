@@ -27,7 +27,7 @@ const MemberPage = ({ member, loadError }) => {
   const [linkUrl, setLinkUrl] = useState('');
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
-  const [tagline, setTagline] = useState(member && member.tagline);
+  // const [tagline, setTagline] = useState(member && member.tagline);
   const [showForm, toggleShowForm] = useState(false)
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
@@ -49,7 +49,7 @@ const MemberPage = ({ member, loadError }) => {
   const handleClick = (event) => {
     event.preventDefault()
     saveAbout(about);
-    saveTagline(tagline)
+    // saveTagline(tagline)
     toggleEditProfile(!editProfile)
   }
 
@@ -64,16 +64,16 @@ const MemberPage = ({ member, loadError }) => {
     }
   }
 
-  const saveTagline = async (tagline) => {
-    try {
-      const { data: { results: savedData } } = await api.patch(`/user/${member._id}`,  { tagline });
-      setTagline(savedData.tagline)
-      setErrors(null);
-    } catch (err) {
-      const error = err?.response?.data?.error || err.message;
-      setErrors(error);
-    }
-  }
+  // const saveTagline = async (tagline) => {
+  //   try {
+  //     const { data: { results: savedData } } = await api.patch(`/user/${member._id}`,  { tagline });
+  //     setTagline(savedData.tagline)
+  //     setErrors(null);
+  //   } catch (err) {
+  //     const error = err?.response?.data?.error || err.message;
+  //     setErrors(error);
+  //   }
+  // }
 
 
   const sendMessage = async (content) => {
@@ -89,7 +89,7 @@ const MemberPage = ({ member, loadError }) => {
 
   useEffect(() => {
     setAbout(member.about);
-    setTagline(member.tagline)
+    // setTagline(member.tagline)
   }, [member]);
 
   if (!member) {
@@ -188,7 +188,7 @@ const MemberPage = ({ member, loadError }) => {
             </h3>
 
             <div className='mt-1 w-full'>
-            { editProfile?
+            {/* { editProfile?
               <textarea
                 autoFocus
                 value={tagline}
@@ -239,7 +239,7 @@ const MemberPage = ({ member, loadError }) => {
                     }
                 </Linkify>
               </p>
-            }
+            } */}
             <div className="font-semibold text-sm mt-1">
               {member.timezone}
             </div>
