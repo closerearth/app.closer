@@ -143,6 +143,22 @@ const Event = ({ event, error }) => {
                 { loadError && <div className="validation-error">{loadError}</div> }
 
                 <div className="mt-4 event-actions flex items-center">
+                  {
+                    end.isBefore(dayjs()) ?
+                    <span className="p3 mr-2 italic">
+                      Event ended{' '}
+                      <TimeSince
+                        time={ event.end }
+                      />
+                    </span>:
+                    start.isAfter(dayjs()) &&
+                    <span className="p3 mr-2 italic">
+                      Event is happening{' '}
+                      <TimeSince
+                        time={ event.start }
+                      />
+                    </span>
+                  }
                   { event.paid ?
                     <>
                       { myTickets && myTickets.count() > 0 ?
@@ -162,20 +178,6 @@ const Event = ({ event, error }) => {
                     </>:
                     <>
                       {
-                        end.isBefore(dayjs()) ?
-                        <span className="p3 mr-2 italic">
-                          Event ended{' '}
-                          <TimeSince
-                            time={ event.end }
-                          />
-                        </span>:
-                        start.isAfter(dayjs()) ?
-                        <span className="p3 mr-2 italic">
-                          Event is happening{' '}
-                          <TimeSince
-                            time={ event.start }
-                          />
-                        </span>:
                         start.isBefore(dayjs()) && end.isAfter(dayjs()) && event.location?
                         <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
                         start.isBefore(dayjs()) && end.isAfter(dayjs()) ?
