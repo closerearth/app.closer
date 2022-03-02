@@ -15,6 +15,7 @@ import CreatePost from '../../../components/CreatePost';
 import PostList from '../../../components/PostList';
 import ProfilePhoto from '../../../components/ProfilePhoto';
 import Photo from '../../../components/Photo';
+import TimeSince from '../../../components/TimeSince';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
@@ -40,6 +41,7 @@ const Event = ({ event, error }) => {
   const start = event && event.start && dayjs(event.start);
   const end = event && event.end && dayjs(event.end);
   const duration = end && end.diff(start, 'hour', true);
+  const timeUntil = start && start.diff(dayjs(), 'hour', true);
   const isThisYear = dayjs().isSame(start, 'year');
   const dateFormat = isThisYear ? 'MMMM Do HH:mm' : 'YYYY MMMM Do HH:mm';
   const myTickets = platform.ticket.find(myTicketFilter);
@@ -147,20 +149,45 @@ const Event = ({ event, error }) => {
                         <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
                           <a className="btn-primary mr-2">See ticket</a>
                         </Link>:
-                        event.ticket ?
+                        event.ticket && start.isAfter(dayjs()) ?
                         <Link href={ prependHttp(event.ticket) }>
                           <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
                         </Link>:
+                        start.isAfter(dayjs())?
                         <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
                           <a className="btn-primary mr-2">Buy ticket</a>
-                        </Link>
+                        </Link>:
+                        null
                       }
                     </>:
                     <>
-                      { !isAuthenticated ?
+                      {
+                        end.isBefore(dayjs()) ?
+                        <span className="p3 mr-2 italic">
+                          Event ended{' '}
+                          <TimeSince
+                            time={ event.end }
+                          />
+                        </span>:
+                        start.isAfter(dayjs()) ?
+                        <span className="p3 mr-2 italic">
+                          Event is happening{' '}
+                          <TimeSince
+                            time={ event.start }
+                          />
+                        </span>:
+                        start.isBefore(dayjs()) && end.isAfter(dayjs()) && event.location?
+                        <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
+                        start.isBefore(dayjs()) && end.isAfter(dayjs()) ?
+                        <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
+                        !isAuthenticated ?
                         <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                           <a className="btn-primary mr-2">Signup to RSVP</a>
                         </Link>:
+                        end.isBefore(dayjs()) ?
+                        start.isAfter(dayjs()) && end.isBefore(dayjs()) && event.location ?
+                        <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
+                        <span className="p3 mr-2 italic">This event has ended.</span>:
                         attendees?.includes(user._id) ?
                         <a
                           href="#"
@@ -324,6 +351,16 @@ const Event = ({ event, error }) => {
 Event.getInitialProps = async ({ req, query }) => {
   try {
     const { data: { results: event } } = await api.get(`/event/${query.slug}`);
+    // Test cases:
+    // Event is ongoing
+    // event.start = '2022-02-02T19:00:00.000Z';
+    // event.end = '2029-04-02T19:00:00.000Z';
+    // Event ended
+    // event.start = '2022-02-02T19:00:00.000Z';
+    // event.end = '2022-02-03T19:00:00.000Z';
+    // Event is starting soon
+    // event.start = '2022-03-02T21:00:00.000Z';
+    // event.end = '2022-03-03T19:00:00.000Z';
     return { event };
   } catch (err) {
     console.log('Error', err.message);
