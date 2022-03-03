@@ -165,9 +165,9 @@ const Event = ({ event, error }) => {
                   <p className="absolute top-5 bottom-50 left-5 text-lg cursor-pointer text-background">{"< All Events"}</p>
                 </Link>
               </div>
-              <div className="flex flex-col md:flex-row items-center justify-between w-full md:ml-32 md:mr-32 pb-14 pt-6 border-b border-black">
+              <div className="flex flex-col md:flex-row items-center justify-between w-full md:ml-32 md:mr-32 pb-14 pt-8 border-b border-black">
                 <div className="hidden md:flex w-5/12"></div>
-                <div className="flex flex-col md:flex-row items-start justify-be w-full md:w-7/12">
+                <div className="flex flex-col md:flex-row items-start justify-between w-full md:w-7/12">
                   <div className="flex flex-col w-full md:w-1/2">
                       <p className="font-extralight text-gray-400">From</p>
                       <p className="w-10/12">{`${start} to ${end}`}</p>
@@ -207,6 +207,15 @@ const Event = ({ event, error }) => {
                 )}
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-32 md:mr-32 pb-14 pt-8 border-b border-black">
+                <div className="flex flex-col  w-full md:w-5/12">
+                  <h4 className="text-xl font-light">About this edition</h4>
+                </div>
+                <div className="flex flex-col w-full md:w-7/12">
+                  <p className="w-10/12">{event.description}</p>
                 </div>
               </div>
               
