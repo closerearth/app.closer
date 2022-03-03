@@ -72,7 +72,7 @@ const MemberList = ({
                   <ProfilePhoto user={user.toJS()} width={"12"} height={"12"}/>
                   </div>
                   <p className='mb-3 w-10/12 self-start text-zinc-400 text-sm'>{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p>
-                  <h4 className="text-xs flex self-start mb-3">{user.get('timezone')}</h4>
+                  <h4 className="text-xs flex self-start mb-3">{user.get('timezone').replace(/[^a-zA-Z]/g, " ")}</h4>
                   <button className='w-full md:w-52 self-start rounded-full border border-neutral-900 h-9'>See profile</button>
                 </div>
               </Link>
