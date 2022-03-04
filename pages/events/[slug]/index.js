@@ -234,11 +234,48 @@ const Event = ({ event, error }) => {
                   <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 7</div>
                 </div>
                 </div>
-              
-               </div>
+              </div>
+
+              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-full md:mr-full pb-12 pt-12 border-b border-black" >
+                <div className="flex flex-col w-full md:w-5/12">
+                  <h4 className="text-xl font-light">Featured Speakers</h4>
+                </div>
+                <div className="flex flex-col w-full space-y-8 md:w-7/12">
+                  <div className="flex flex-row w-full md:w-10/12 items-start justify-start">
+                    <img src="/images/icons/avatar.jpg" alt="avatar" className="flex w-40"/>
+                    <div className="flex flex-col w-96 space-y-1 items-start justify-start">
+                      <h3 className="font-medium">Speaker Name</h3>
+                      <h5 className="text-sm font-medium">Website</h5>
+                      <p className="flex w-84 text-xs"> Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+                        ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        Duis aute irure dolor in reprehenderit in voluptate velit 
+                        esse cillum dolore eu fugiat nulla pariatur.</p>
+                      <p className="underline text-sm">learn more</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row w-full md:w-10/12 items-start justify-start">
+                    <img src="/images/icons/avatar.jpg" alt="avatar" className="flex w-40"/>
+                    <div className="flex flex-col w-96 space-y-1 items-start justify-start">
+                      <h3 className="font-medium">Speaker Name</h3>
+                      <h5 className="text-sm font-medium">Website</h5>
+                      <p className="flex w-72 text-xs"> Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna
+                        aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+                        ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+                        Duis aute irure dolor in reprehenderit in voluptate velit 
+                        esse cillum dolore eu fugiat nulla pariatur.</p>
+                      <p className="underline text-sm">learn more</p>
+                    </div>
+                  </div>
+                  
+                  <button className="btn-primary w-52 mt-8">See more speakers</button>
+                </div>
+              </div>
 
 
-              
+{/*               
               <div className="w-1/2 p-2">
                 <h2 className="text-xl font-light">
                   {start && start.format(dateFormat)}
@@ -381,15 +418,15 @@ const Event = ({ event, error }) => {
                       </svg>
                     </a>
                   )}
-                  {/* <AddToCalendar event={{
+                  <AddToCalendar event={{
                     title: `${config.PLATFORM_NAME}: ${event.name}`,
                     description: event.description,
                     // location: 'Fábrica de Sonhos Tradicional, 7540-011, Abela, Santiago do Cacém, Portugal',
                     startTime: event.start,
                     endTime: event.end,
-                  }} buttonLabel="Add to calendar" /> */}
+                  }} buttonLabel="Add to calendar" />
                 </div>
-              </div>
+              </div> */}
             </div>
           </section>
           <main className="main-content max-w-prose event-page py-10">
