@@ -165,7 +165,7 @@ const Event = ({ event, error }) => {
                   <p className="absolute top-5 bottom-50 left-5 text-lg cursor-pointer text-background">{"< All Events"}</p>
                 </Link>
               </div>
-              <div className="flex flex-col md:flex-row items-center justify-between w-full md:ml-32 md:mr-32 pb-14 pt-8 border-b border-black">
+              <div className="flex flex-col md:flex-row items-center justify-between w-full md:ml-32 md:mr-32 pb-12 pt-6 border-b border-black">
                 <div className="hidden md:flex w-5/12"></div>
                 <div className="flex flex-col md:flex-row items-start justify-between w-full md:w-7/12">
                   <div className="flex flex-col w-full md:w-1/2">
@@ -210,7 +210,7 @@ const Event = ({ event, error }) => {
                 </div>
               </div>
 
-              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-32 md:mr-32 pb-14 pt-8 border-b border-black">
+              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-32 md:mr-32 pb-12 pt-12 border-b border-black">
                 <div className="flex flex-col  w-full md:w-5/12">
                   <h4 className="text-xl font-light">About this edition</h4>
                 </div>
@@ -218,6 +218,68 @@ const Event = ({ event, error }) => {
                   <p className="w-10/12">{event.description}</p>
                 </div>
               </div>
+
+              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-32 md:mr-32 pb-12 pt-12 border-b border-black" >
+                <div className="flex flex-col w-full md:w-5/12">
+                  <h4 className="text-xl font-light">Partners</h4>
+                </div>
+              {((event.partners && event.partners.length > 0) ||
+              (isAuthenticated && user._id === event.createdBy)) && (
+                <div className="flex flex-col w-full md:w-7/12">
+                <div className="grid grid-flow-col gap-2">
+                  {event.partners &&
+                    event.partners.map(
+                      (partner) =>
+                        partner.photoUrl && (
+                          <a
+                            href={partner.url || "#"}
+                            target="_blank"
+                            rel="noreferrer"
+                            key={partner.name}
+                            className="mr-3"
+                          >
+                            <Photo
+                              id={partner.photo}
+                              photoUrl={partner.photoUrl}
+                              className="w-32 h-16"
+                              title={partner.name}
+                            />
+                          </a>
+                        )
+                    )}
+                  </div>
+                { (isAuthenticated && user._id === event.createdBy) &&
+                  <div className="flex flex-col items-start">
+                    { partnerToAdd.photo && <Photo id={ partnerToAdd.photo } /> }
+                    <h3>Add partner</h3>
+                    <form className="flex flex-col w-full" onSubmit={ e => addPartner(e, partnerToAdd) }>
+                      <div className="w-2/3">
+                        <label>Partner name</label>
+                        <input
+                          type="text"
+                          value={ partnerToAdd.name }
+                          placeholder="Partner Name"
+                          onChange={ e => setPartnerToAdd({ ...partnerToAdd, name: e.target.value }) }
+                        />
+                      </div>
+                      <div className="w-1/3">
+                      
+                        <div className="flex flex-row items-center">
+                          <UploadPhoto
+                            onSave={ photo => setPartnerToAdd({ ...partnerToAdd, photo }) }
+                            label="Upload logo"
+                          />
+                          <button className="btn-primary w-24 h-fit">Add</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                }
+              </div>
+            )}
+            </div>
+
+
               
               <div className="w-1/2 p-2">
                 <h2 className="text-xl font-light">
@@ -398,7 +460,7 @@ const Event = ({ event, error }) => {
                         )
                     )}
                 </div>
-                {/* { (isAuthenticated && user._id === event.createdBy) &&
+                { (isAuthenticated && user._id === event.createdBy) &&
                   <div className="m-4">
                     <h3>Add partner</h3>
                     <form className="flex flex-row p-2" onSubmit={ e => addPartner(e, partnerToAdd) }>
@@ -422,7 +484,7 @@ const Event = ({ event, error }) => {
                       </div>
                     </form>
                   </div>
-                } */}
+                }
               </section>
             )}
 
