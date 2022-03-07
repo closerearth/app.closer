@@ -142,7 +142,7 @@ const Event = ({ event, error }) => {
         <div>
           <section>
             <div className="main-content flex flex-col justify-center items-center">
-              <div className="w-full mb-4 relative bg-gray-200 md:h-80">
+              <div className="w-full mb-4 relative bg-gray-200 h-[450px]">
                 {photo && (
                   <img
                     className="object-cover h-full w-full"
