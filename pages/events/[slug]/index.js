@@ -222,15 +222,28 @@ const Event = ({ event, error }) => {
                 <div className="flex flex-col w-full md:w-5/12">
                   <h4 className="text-xl font-light">Partners</h4>
                 </div>
-                <div className="flex flex-col w-full md:w-7/12">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-8 w-full md:w-10/12">
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 1</div>
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 2</div>
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 3</div>
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 4</div>
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 5</div>
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 6</div>
-                  <div className="flex bg-gray-400 w-full h-20 items-center justify-center">logo 7</div>
+               
+                <div className="flex w-full md:w-7/12">
+                  <div className="flex flex-row flex-wrap w-full">
+                  {event.partners &&
+                    event.partners.map(
+                      (partner) => (
+                          <a
+                            href={partner.url || "#"}
+                            target="_blank"
+                            rel="noreferrer"
+                            key={partner.name}
+                            className="mr-10 mb-7"
+                          >
+                            <Photo
+                              id={partner.photo}
+                              photoUrl={partner.photoUrl}
+                              className="w-full h-20"
+                              title={partner.name}
+                            />
+                          </a>
+                        )
+                    )}
                 </div>
                 </div>
               </div>
@@ -462,8 +475,7 @@ const Event = ({ event, error }) => {
                 <div className="flex flex-row flex-wrap justify-center items-center">
                   {event.partners &&
                     event.partners.map(
-                      (partner) =>
-                        partner.photoUrl && (
+                      (partner) => (
                           <a
                             href={partner.url || "#"}
                             target="_blank"
