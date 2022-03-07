@@ -177,13 +177,15 @@ const Event = ({ event, error }) => {
                   </div>
                   <div className="flex flex-col w-full md:w-1/2 mt-10 md:mt-0">
                     <p className="font-extralight text-gray-400">{"Who's coming"}</p>
-                    <div className="grid grid-flow-col-dense">
-                    { platform && attendees.length > 0 ? (
                     <div>
+                    { platform && attendees.length > 0 ? (
+                    <div className="grid grid-flow-col-dense gap-3 w-fit mt-2">
                     {attendees.map((uid) => {
                       const attendee = platform.user.findOne(uid);
                       if (!attendee) {
-                        return null;
+                        return (
+                          <p>No attendees</p>
+                        );
                       }
 
                       return (
@@ -194,9 +196,6 @@ const Event = ({ event, error }) => {
                         >
                           <a className="from user-preview">
                             <ProfilePhoto size="sm" user={attendee.toJS()} />
-                            <span className="name">
-                              {attendee.get("screenname")}
-                            </span>
                           </a>
                         </Link>
                       );
@@ -302,7 +301,7 @@ const Event = ({ event, error }) => {
               </div>
 
 
-{/*               
+              
               <div className="w-1/2 p-2">
                 <h2 className="text-xl font-light">
                   {start && start.format(dateFormat)}
@@ -445,15 +444,15 @@ const Event = ({ event, error }) => {
                       </svg>
                     </a>
                   )}
-                  <AddToCalendar event={{
+                  {/* <AddToCalendar event={{
                     title: `${config.PLATFORM_NAME}: ${event.name}`,
                     description: event.description,
-                    // location: 'Fábrica de Sonhos Tradicional, 7540-011, Abela, Santiago do Cacém, Portugal',
+                    location: 'Fábrica de Sonhos Tradicional, 7540-011, Abela, Santiago do Cacém, Portugal',
                     startTime: event.start,
                     endTime: event.end,
-                  }} buttonLabel="Add to calendar" />
+                  }} buttonLabel="Add to calendar" /> */}
                 </div>
-              </div> */}
+                </div>
             </div>
           </section>
           <main className="main-content max-w-prose event-page py-10">
