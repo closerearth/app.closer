@@ -144,7 +144,7 @@ const MemberPage = ({ member, loadError }) => {
 
         <div className='flex flex-col md:flex-row items-start'>
 
-        <div className='flex flex-col items-start space-y-5 md:w-full'>
+        <div className='flex flex-col items-start space-y-5 md:w-8/12'>
 
             <Link  href={'/members'}>
               <p className="text-lg cursor-pointer">
@@ -306,7 +306,7 @@ const MemberPage = ({ member, loadError }) => {
 
             </div>
 
-      <div className="flex flex-col items-start md:w-2/3">
+      <div className="flex flex-col items-start md:w-4/12">
        <div>
         <div className="page-title flex justify-between">
           <h3 className="mt-16 md:mt-10 mb-4">Upcoming events {member.screenname} is going to:</h3>
@@ -321,9 +321,13 @@ const MemberPage = ({ member, loadError }) => {
         />
        </div>
 
-        <div className="flex flex-col">
-          <div className="flex flex-col items-start mb-10">
-             <p className='font-semibold text-md mt-8'>Stay Social</p>
+        <div className="flex flex-col mb-5 w-full">
+            <div className='flex flex-row items-center justify-start mt-8 w-full'>
+             <p className='flex font-semibold text-md w-fit mr-4'>Stay Social</p>
+            { isAuthenticated && member._id === currentUser._id && !showForm &&
+             <FontAwesomeIcon icon={faPlus} size='sm' title='Add a social link' onClick={() => toggleShowForm(!showForm)} className='flex hover:cursor-pointer'/>
+            }
+            </div>
              <ul className='space-y-1 mt-4'>
                {links ? links.map((link) => (
                  <li key={link._id} className="mb-1">
@@ -336,19 +340,19 @@ const MemberPage = ({ member, loadError }) => {
                }
 
              </ul>
-          </div>
 
-          { isAuthenticated && member._id === currentUser._id && !showForm &&
-           <FontAwesomeIcon icon={faPlus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
-          }
 
-          { isAuthenticated && member._id === currentUser._id && showForm &&
+
+          {/* { isAuthenticated && member._id === currentUser._id && showForm &&
            <FontAwesomeIcon icon={faMinus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
-          }
+          } */}
 
           { isAuthenticated && member._id === currentUser._id && showForm &&
-          <div className="flex items-start mb-10 border border-line p-4 w-fit mt-10">
-              <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
+          <>
+          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+          <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+          <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
+              <form className='flex flex-col space-y-7 w-full' onSubmit={handleSubmit}>
                 <div>
                 <label>Name</label>
                 <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
@@ -357,9 +361,24 @@ const MemberPage = ({ member, loadError }) => {
                 <label>Url</label>
                 <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
                 </div>
-                <button type='submit' className='btn-primary w-24 self-center'>Add</button>
+                <div className='flex flex-row items-center justify-start'>
+                <button type='submit' className='btn-primary w-24 mr-4'>Add</button>
+                <a
+                  href="#"
+                  onClick={ (e) => {
+                    e.preventDefault();
+                    toggleShowForm(!showForm);
+                  }}
+                >
+                  Cancel
+                </a>
+                </div>
               </form>
           </div>
+          </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
             }
 
         </div>
