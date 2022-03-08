@@ -364,7 +364,7 @@ const Event = ({ event, error }) => {
                 </div>
                
                 <div className="flex flex-col w-full md:w-7/12">
-                  <div className="flex flex-row flex-wrap w-full">
+                  <div className="flex flex-row flex-wrap w-full md:w-10/12">
                   {event.partners &&
                     event.partners.map(
                       (partner) => (
@@ -493,7 +493,7 @@ const Event = ({ event, error }) => {
 
 
               
-              <div className="w-1/2 p-2">
+              {/* <div className="w-1/2 p-2">
                 <h2 className="text-xl font-light">
                   {start && start.format(dateFormat)}
                   {end && duration > 24 && ` - ${end.format(dateFormat)}`}
@@ -635,15 +635,15 @@ const Event = ({ event, error }) => {
                       </svg>
                     </a>
                   )}
-                  {/* <AddToCalendar event={{
+                  <AddToCalendar event={{
                     title: `${config.PLATFORM_NAME}: ${event.name}`,
                     description: event.description,
                     location: 'Fábrica de Sonhos Tradicional, 7540-011, Abela, Santiago do Cacém, Portugal',
                     startTime: event.start,
                     endTime: event.end,
-                  }} buttonLabel="Add to calendar" /> */}
+                  }} buttonLabel="Add to calendar" />
                 </div>
-                </div>
+              </div> */}
             </div>
           </section>
           
