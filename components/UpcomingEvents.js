@@ -9,7 +9,7 @@ import { usePlatform } from '../contexts/platform';
 import { useAuth } from '../contexts/auth';
 import Pagination from './Pagination';
 
-const start = new Date();
+const now = new Date();
 dayjs.extend(advancedFormat);
 
 const UpcomingEvents = ({
@@ -25,8 +25,8 @@ const UpcomingEvents = ({
 }) => {
 
   const eventsFilter = { where: {
-    start: {
-      $gt: start
+    end: {
+      $gt: now
     },
     visibility: 'public'
   }, limit, page };
@@ -49,7 +49,7 @@ const UpcomingEvents = ({
 
   useEffect(() => {
     loadData();
-  }, [page, channel, limit, start]);
+  }, [page, channel, limit, now]);
 
   return (
     <div className={ card ? 'card': '' }>

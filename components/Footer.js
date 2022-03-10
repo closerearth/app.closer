@@ -9,7 +9,7 @@ const footer = () => (
   <div className=" border-t border-t-line">
     <footer className="main-content flex flex-col items-center p-4">
         <div className="flex flex-col md:flex-row py-2 items-center w-full justify-between">
-          <div className='flex flex-col items-start'>
+          <div className='flex flex-col items-center md:items-start'>
             <div className="flex flex-row mb-8 md:mb-1">
               { INSTAGRAM_URL && <a href={ INSTAGRAM_URL } target="_blank" rel="noreferrer nofollow">
                 <img src="/images/icons/instagram.svg" width="40" alt="instagram" className="bg-primary rounded-3xl p-1 mr-2"/>

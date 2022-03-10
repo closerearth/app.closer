@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { faEnvelope, faPlus, faMinus, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPlus, faMinus, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from '../../components/Layout';
@@ -101,42 +101,42 @@ const MemberPage = ({ member, loadError }) => {
       <Head>
         <title>{ member.screenname }</title>
       </Head>
-      <div className='main-content bg-slate-50'>
+      <div className='main-content'>
       <main className="flex flex-col justify-between">
         { openIntro &&
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
             <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
-            <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-              { sendError && <p className="validation-error">Error: { sendError }</p> }
-              <form
-                onSubmit={ (e) => {
-                  e.preventDefault();
-                  sendMessage(introMessage);
-                }}
-              >
-                <label>Contact {member.screenname}</label>
-                <textarea
-                  placeholder="Type your message"
-                  onChange={ e => {
-                    setMessage(e.target.value);
-                  } }
-                  value={ introMessage }
-                  className='w-full h-32'
-                />
-                <button type="submit" className='btn-primary mt-8 mr-2'>Send</button>{' '}
-                <a
-                  href="#"
-                  onClick={ (e) => {
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
+                { sendError && <p className="validation-error">Error: { sendError }</p> }
+                <form
+                  onSubmit={ (e) => {
                     e.preventDefault();
-                    setOpenIntro(false);
+                    sendMessage(introMessage);
                   }}
                 >
-                  Cancel
-                </a>
-              </form>
+                  <label>Contact {member.screenname}</label>
+                  <textarea
+                    placeholder="Type your message"
+                    onChange={ e => {
+                      setMessage(e.target.value);
+                    } }
+                    value={ introMessage }
+                    className='w-full h-32'
+                  />
+                  <button type="submit" className='btn-primary mt-8 mr-2'>Send</button>{' '}
+                  <a
+                    href="#"
+                    onClick={ (e) => {
+                      e.preventDefault();
+                      setOpenIntro(false);
+                    }}
+                  >
+                    Cancel
+                  </a>
+                </form>
+              </div>
             </div>
-          </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
@@ -145,106 +145,108 @@ const MemberPage = ({ member, loadError }) => {
         <div className='flex flex-col md:flex-row items-start'>
 
         <div className='flex flex-col items-start space-y-5 md:w-full'>
-
-            <Link  href={'/members'}>
-              <p className="text-lg cursor-pointer">
-            {'< All Profiles'}
-              </p>
-            </Link>
-
-
-            <div className='flex flex-col md:flex-row w-full'>
+          <div className='flex flex-col md:flex-row w-full'>
             <div className='md:w-72 items-center justify-start'>
-            <div>
-              <img src={member.photo? `${cdn}${member.photo}-profile-sm.jpg` : '../../images/icons/user-icon.png'} loading="lazy" alt="this is an image" className="w-32 md:w-44 mt-4 md:mt-0 rounded-full" />
+              <div className="flex justify-center items-center h-full">
+                {member.photo?
+                  <img
+                    src={`${cdn}${member.photo}-profile-sm.jpg`}
+                    loading="lazy"
+                    alt={ member.screenname }
+                    className="w-32 md:w-44 mt-4 md:mt-0 rounded-full"
+                  />:
+                  <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
+                }
+              </div>
+              <div className='mt-1 mb-3 justify-self-start' >
+                { isAuthenticated && member._id === currentUser._id && <UploadPhoto
+                  model="user"
+                  id={member._id}
+                  onSave={id => setPhoto(id)}
+                  label={ member.photo ? 'Change photo': 'Add photo' }
+
+                /> }
+              </div>
             </div>
-            <div className='mt-1 mb-3 justify-self-start' >
-              { isAuthenticated && member._id === currentUser._id && <UploadPhoto
-                model="user"
-                id={member._id}
-                onSave={id => setPhoto(id)}
-                label={ member.photo ? 'Change photo': 'Add photo' }
 
-              /> }
-            </div>
-            </div>
+            <div className="flex flex-col items-start w-full">
+              <h3 className='font-medium text-4xl md:text-5xl md:w-8/12 '>
+                {member.screenname}
+              </h3>
 
-
-
-          <div className="flex flex-col items-start w-full">
-            <h3 className='font-medium text-4xl md:text-7xl md:w-8/12 '>
-              {member.screenname}{' '}
               { isAuthenticated && member._id !== currentUser._id &&
-                <a
-                  href="#"
-                  onClick={ (e) => {
-                    e.preventDefault();
-                    setOpenIntro(!openIntro);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faEnvelope}/>
-                </a>
+                <div className="my-3">
+                  <a
+                    href="#"
+                    onClick={ (e) => {
+                      e.preventDefault();
+                      setOpenIntro(!openIntro);
+                    }}
+                    className="btn-primary"
+                  >
+                    Get introduced
+                  </a>
+                </div>
               }
-            </h3>
 
-            <div className='mt-1 w-full'>
-            { editProfile?
-              <textarea
-                autoFocus
-                value={tagline}
-                className="w-10/12 h-20"
-                onChange={ (e) => setTagline(e.target.value) }
-                onBlur={ () => {
-                  saveTagline(tagline);
-                } }
-              />:
-              (isAuthenticated && member._id === currentUser._id) ?
-              <p className="mt-6 w-10/12" >
-                <Linkify
-                  componentDecorator={(decoratedHref, decoratedText, key) => (
-                      <a
-                        target="_blank"
-                        rel="nofollow noreferrer"
-                        href={decoratedHref}
-                        key={key}
-                        onClick={e => e.stopPropagation()}
-                      >
-                          {decoratedText}
-                      </a>
-                  )}
-                >
-                    { tagline }
-                    { !tagline &&
-                      <span className="placeholder">Please write a tagline.</span>
-                    }
-                </Linkify>
-              </p>:
-              <p className="" >
-                <Linkify
-                  componentDecorator={(decoratedHref, decoratedText, key) => (
-                      <a
-                        target="_blank"
-                        rel="nofollow noreferrer"
-                        href={decoratedHref}
-                        key={key}
-                        onClick={e => e.stopPropagation()}
-                      >
-                          {decoratedText}
-                      </a>
-                  )}
-                >
-                    { tagline }
-                    { !tagline &&
-                      <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
-                    }
-                </Linkify>
-              </p>
-            }
-            <div className="font-semibold text-sm mt-1">
-              {member.timezone}
+              <div className='mt-1 w-full'>
+              { editProfile?
+                <textarea
+                  autoFocus
+                  value={tagline}
+                  className="w-10/12 h-20"
+                  onChange={ (e) => setTagline(e.target.value) }
+                  onBlur={ () => {
+                    saveTagline(tagline);
+                  } }
+                />:
+                (isAuthenticated && member._id === currentUser._id) ?
+                <p className="mt-6 w-10/12" >
+                  <Linkify
+                    componentDecorator={(decoratedHref, decoratedText, key) => (
+                        <a
+                          target="_blank"
+                          rel="nofollow noreferrer"
+                          href={decoratedHref}
+                          key={key}
+                          onClick={e => e.stopPropagation()}
+                        >
+                            {decoratedText}
+                        </a>
+                    )}
+                  >
+                      { tagline }
+                      { !tagline &&
+                        <span className="placeholder">Please write a tagline.</span>
+                      }
+                  </Linkify>
+                </p>:
+                <p className="" >
+                  <Linkify
+                    componentDecorator={(decoratedHref, decoratedText, key) => (
+                        <a
+                          target="_blank"
+                          rel="nofollow noreferrer"
+                          href={decoratedHref}
+                          key={key}
+                          onClick={e => e.stopPropagation()}
+                        >
+                            {decoratedText}
+                        </a>
+                    )}
+                  >
+                      { tagline }
+                      { !tagline &&
+                        <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
+                      }
+                  </Linkify>
+                </p>
+              }
+              <div className="font-semibold text-sm mt-1">
+                {member.timezone}
+              </div>
+              </div>
             </div>
-            </div>
-          </div>
           </div>
 
             { error && <p className="validation-error">Error: { error }</p> }
