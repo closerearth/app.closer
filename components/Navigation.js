@@ -61,7 +61,7 @@ const Navigation = () => {
 
   useEffect(async () => {
     const start = new Date();
-    const where = formatSearch({ featured: true, start: { $gt: start } });
+    const where = formatSearch({ featured: true, end: { $gt: start } });
     const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
     setFeaturedEvents(fromJS(events));
   }, []);
@@ -198,11 +198,11 @@ const Navigation = () => {
       </nav>
       { navOpen &&
         <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
-          <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg">
+          <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg text-center">
             <Link
               href="/events"
             >
-              <a className="mr-3" onClick={() => toggleNav(false)}>
+              <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
                 Events
               </a>
             </Link>
@@ -210,7 +210,7 @@ const Navigation = () => {
               <Link
                 href="/members"
               >
-                <a className="mr-3" onClick={() => toggleNav(false)}>
+                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
                   Members
                 </a>
               </Link>
@@ -219,7 +219,7 @@ const Navigation = () => {
               <Link
                 href="/applications"
               >
-                <a className="mr-3" onClick={() => toggleNav(false)}>
+                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
                   Applications
                 </a>
               </Link>
@@ -228,7 +228,7 @@ const Navigation = () => {
               <Link
                 href="/admin"
               >
-                <a className="mr-3" onClick={() => toggleNav(false)}>
+                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
                   Admin
                 </a>
               </Link>
@@ -236,7 +236,7 @@ const Navigation = () => {
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="mr-3"
+                  className="flex justify-center items-center"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -251,7 +251,7 @@ const Navigation = () => {
             ) : (
               <Link href="/login">
                 <a
-                  className="mr-3"
+                  className="flex justify-center items-center"
                   onClick={() => toggleNav(false)}
                 >
                   Sign in

@@ -1,36 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
 import UpcomingEvents from '../../components/UpcomingEvents';
+import EventsList from '../../components/EventsList';
+import { PLATFORM_NAME } from '../../config';
+import { useAuth } from '../../contexts/auth.js';
 
-import { useAuth } from '../../contexts/auth.js'
-
-const pickColor = () => colors[Math.floor(Math.random() * colors.length)];
+const now = new Date();
 
 const Events = () => {
-  const router = useRouter();
-  const [error, setErrors] = useState(false);
-  const [events, setEvents] = useState([]);
-  const urlSearchParams = typeof window !== 'undefined' && new URLSearchParams(window.location.search);
-  const params = urlSearchParams && Object.fromEntries(urlSearchParams.entries());
-  const page = params && parseFloat(params.page);
 
   const { user } = useAuth();
 
   return (
     <Layout>
       <Head>
-        <title>Calendar</title>
+        <title>{PLATFORM_NAME} Events</title>
       </Head>
-      { error &&
-        <div className="validation-error">{ error }</div>
-      }
       <div className="main-content intro">
         <div className="page-title flex justify-between">
-          <h1 className="mb-4">Events</h1>
+          <h1 className="mb-4">Upcoming events</h1>
           <div className="action">
             { user && user.roles.includes('event-creator') &&
               <Link href="/events/create">
@@ -39,11 +30,28 @@ const Events = () => {
             }
           </div>
         </div>
-        <UpcomingEvents
-          allowCreate
+        <EventsList
           limit={ 30 }
-          page={ page }
-          labelLink={null}
+          where={{
+            end: {
+              $gt: now
+            },
+            visibility: 'public'
+          }}
+        />
+      </div>
+      <div className="main-content intro">
+        <div className="page-title flex justify-between">
+          <h1 className="mb-4">Past events</h1>
+        </div>
+        <EventsList
+          limit={ 30 }
+          where={{
+            end: {
+              $lt: now
+            },
+            visibility: 'public'
+          }}
         />
       </div>
     </Layout>

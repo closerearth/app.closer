@@ -43,6 +43,13 @@ export default {
       ]
     },
     {
+      name: 'recording',
+      label: 'Youtube recording URL',
+      defaultValue: '',
+      type: 'text',
+      placeholder: 'https://www.youtube.com/watch?v=r2-Ux4RRMKE'
+    },
+    {
       name: 'paid',
       label: 'Is this a paid event?',
       type: 'switch',
