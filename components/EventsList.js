@@ -39,7 +39,6 @@ const EventsList = ({
         platform.event.get(eventsFilter),
         platform.event.getCount(eventsFilter)
       ]);
-      const action = await platform.event.get(eventsFilter);
     } catch (err) {
       console.log('Load error', err);
       setErrors(err.message)
@@ -48,7 +47,7 @@ const EventsList = ({
 
   useEffect(() => {
     loadData();
-  }, [page, channel, limit, now]);
+  }, [eventsFilter]);
 
   return (
     <div className={ card ? 'card': '' }>

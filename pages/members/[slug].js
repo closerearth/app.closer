@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
-import UpcomingEvents from '../../components/UpcomingEvents';
+import EventsList from '../../components/EventsList';
 
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
@@ -148,7 +148,7 @@ const MemberPage = ({ member, loadError }) => {
               <div className="flex justify-center items-center h-full">
                 {member.photo?
                   <img
-                    src={`${cdn}${member.photo}-profile-sm.jpg`}
+                    src={`${cdn}${member.photo}-profile-lg.jpg`}
                     loading="lazy"
                     alt={ member.screenname }
                     className="w-32 md:w-44 mt-4 md:mt-0 rounded-full"
@@ -309,15 +309,17 @@ const MemberPage = ({ member, loadError }) => {
       <div className="flex flex-col items-start md:w-2/3">
        <div>
         <div className="page-title flex justify-between">
-          <h3 className="mt-16 md:mt-10 mb-4">Upcoming events {member.screenname} is going to:</h3>
+          <h3 className="mt-16 md:mt-10 mb-4">Meet {member.screenname} at:</h3>
         </div>
 
-        <UpcomingEvents
-          allowCreate
-          limit={ 30 }
-          page={ 1 }
-          labelLink={null}
-          list={true}
+        <EventsList
+          limit={ 7 }
+          list
+          showPagination={ false }
+          where={{
+            attendees: member._id,
+            visibility: 'public'
+          }}
         />
        </div>
 

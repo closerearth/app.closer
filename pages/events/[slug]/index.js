@@ -159,7 +159,7 @@ const Event = ({ event, error }) => {
 
                 <div className="mt-4 event-actions flex items-center">
                   {
-                    end && end.isAfter(dayjs())?
+                    end && end.isBefore(dayjs())?
                     <span className="p3 mr-2 italic">
                       Event ended
                     </span>:
