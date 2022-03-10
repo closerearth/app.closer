@@ -243,6 +243,10 @@ const Event = ({ event, error }) => {
                 </div>
               </div>
 
+              <div className="flex flex-col space-y-4 md:space-y-0 items-center justify-center w-full md:ml-full md:mr-full pb-12 pt-12">
+                <button className="btn-primary w-72 h-full mt-8">Get tickets</button>
+              </div>
+
 
 
               
