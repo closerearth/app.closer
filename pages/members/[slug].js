@@ -33,8 +33,6 @@ const MemberPage = ({ member, loadError }) => {
   const image = (photo || member.photo);
   const { platform } = usePlatform();
   const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
-  console.log('links', currentUser?._id, links)
-
 
 
   const handleSubmit = async (event) => {
@@ -146,7 +144,7 @@ const MemberPage = ({ member, loadError }) => {
 
         <div className='flex flex-col items-start space-y-5 md:w-full'>
           <div className='flex flex-col md:flex-row w-full'>
-            <div className='md:w-72 items-center justify-start'>
+            <div className='md:w-72 items-center justify-start relative'>
               <div className="flex justify-center items-center h-full">
                 {member.photo?
                   <img
@@ -158,7 +156,7 @@ const MemberPage = ({ member, loadError }) => {
                   <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
                 }
               </div>
-              <div className='mt-1 mb-3 justify-self-start' >
+              <div className='mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full' >
                 { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                   model="user"
                   id={member._id}

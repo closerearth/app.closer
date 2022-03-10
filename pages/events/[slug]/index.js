@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
+import Youtube from 'react-youtube-embed';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { useRouter } from 'next/router';
@@ -116,23 +117,37 @@ const Event = ({ event, error }) => {
         <div>
           <section className="py-5">
             <div className="main-content md:flex flex-row justify-center items-center">
-              <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-80">
-                { photo && <img
-                  className="object-cover md:h-full md:w-full"
-                  src={ `${cdn}${photo}-max-lg.jpg` }
-                  alt={ event.name }
-                /> }
-                { (isAuthenticated && user._id === event.createdBy) &&
-                  <div className="absolute left-0 top-0 bottom-0 right-0 flex items-center justify-center opacity-0 hover:opacity-80">
-                    <UploadPhoto
-                      model="event"
-                      id={event._id}
-                      onSave={id => setPhoto(id)}
-                      label={ photo ? 'Change photo': 'Add photo' }
+              {event.recording && isAuthenticated?
+                <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-100">
+                  <Youtube id={ event.recording } />
+                </div>:
+                <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-80">
+                  {
+                    photo ?
+                    <img
+                      className="object-cover md:h-full md:w-full"
+                      src={ `${cdn}${photo}-max-lg.jpg` }
+                      alt={ event.name }
+                    />:
+                    event.visual&&
+                    <img
+                      className="object-cover md:h-full md:w-full"
+                      src={ event.visual }
+                      alt={ event.name }
                     />
-                  </div>
-                }
-              </div>
+                  }
+                  { (isAuthenticated && user._id === event.createdBy) &&
+                    <div className="absolute left-0 top-0 bottom-0 right-0 flex items-center justify-center opacity-0 hover:opacity-80">
+                      <UploadPhoto
+                        model="event"
+                        id={event._id}
+                        onSave={id => setPhoto(id)}
+                        label={ photo ? 'Change photo': 'Add photo' }
+                      />
+                    </div>
+                  }
+                </div>
+              }
               <div className="md:w-1/2 p-2">
                 <h2 className="text-xl font-light">
                   { start && start.format(dateFormat) }
@@ -144,13 +159,18 @@ const Event = ({ event, error }) => {
 
                 <div className="mt-4 event-actions flex items-center">
                   {
-                    start.isAfter(dayjs()) &&
+                    end && end.isAfter(dayjs())?
+                    <span className="p3 mr-2 italic">
+                      Event ended
+                    </span>:
+                    start.isAfter(dayjs())?
                     <span className="p3 mr-2 italic">
                       Event is happening{' '}
                       <TimeSince
                         time={ event.start }
                       />
-                    </span>
+                    </span>:
+                    null
                   }
                   { event.paid ?
                     <>
@@ -171,16 +191,20 @@ const Event = ({ event, error }) => {
                     </>:
                     <>
                       {
-                        start.isBefore(dayjs()) && end.isAfter(dayjs()) && event.location?
+                        start.isBefore(dayjs()) && end && end.isAfter(dayjs()) && event.location?
                         <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                        start.isBefore(dayjs()) && end.isAfter(dayjs()) ?
+                        start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
                         <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
-                        !isAuthenticated ?
+                        !isAuthenticated && event.recording ?
+                        <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                          <a className="btn-primary mr-2">Signup to watch recording</a>
+                        </Link>:
+                        !isAuthenticated && start.isAfter(dayjs()) ?
                         <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                           <a className="btn-primary mr-2">Signup to RSVP</a>
                         </Link>:
-                        end.isBefore(dayjs()) ?
-                        start.isAfter(dayjs()) && end.isBefore(dayjs()) && event.location ?
+                        end && end.isBefore(dayjs()) ?
+                        start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location ?
                         <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
                         <span className="p3 mr-2 italic">This event has ended.</span>:
                         attendees?.includes(user._id) ?
@@ -274,7 +298,7 @@ const Event = ({ event, error }) => {
             }
 
             { attendees && attendees.length > 0 && <section className="attendees card-body mb-6">
-              <h3 className="text-2xl font-bold">Who&apos;s coming?</h3>
+              <h3 className="text-2xl font-bold">{start && start.isAfter(dayjs()) ? 'Who&apos;s coming?' : 'Who attended?'}</h3>
               { event.price || event.ticketOptions?
                   <div className="-space-x-3 flex flex-row flex-wrap">
                     { Array.from(new Set(attendees)).map((_id) => {

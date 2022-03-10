@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
 import UpcomingEvents from '../../components/UpcomingEvents';
+import EventsList from '../../components/EventsList';
 
 import { useAuth } from '../../contexts/auth.js'
 
@@ -30,7 +31,7 @@ const Events = () => {
       }
       <div className="main-content intro">
         <div className="page-title flex justify-between">
-          <h1 className="mb-4">Events</h1>
+          <h1 className="mb-4">Upcoming events</h1>
           <div className="action">
             { user && user.roles.includes('event-creator') &&
               <Link href="/events/create">
@@ -44,6 +45,16 @@ const Events = () => {
           limit={ 30 }
           page={ page }
           labelLink={null}
+        />
+      </div>
+      <div className="main-content intro">
+        <div className="page-title flex justify-between">
+          <h1 className="mb-4">Past events</h1>
+        </div>
+        <EventsList
+          limit={ 30 }
+          page={ page }
+          where={ { visibility: 'public' } }
         />
       </div>
     </Layout>
