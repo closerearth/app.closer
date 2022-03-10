@@ -9,6 +9,10 @@ import Layout from "../../../components/Layout";
 import api, { formatSearch, cdn } from "../../../utils/api";
 import { prependHttp } from "../../../utils/helpers";
 import config from "../../../config";
+import EventInformation from "../../../components/EventInformation";
+import EventMainImage from "../../../components/EventMainImage";
+import EventAbout from "../../../components/EventAbout";
+import EventPartners from "../../../components/EventPartners";
 import UpcomingEvents from "../../../components/UpcomingEvents";
 import UploadPhoto from "../../../components/UploadPhoto";
 import CreatePost from "../../../components/CreatePost";
@@ -21,6 +25,7 @@ import { useAuth } from "../../../contexts/auth";
 import { usePlatform } from "../../../contexts/platform";
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 
 dayjs.extend(advancedFormat);
@@ -146,285 +151,14 @@ const Event = ({ event, error }) => {
         <div>
           <section>
             <div className="main-content flex flex-col justify-center items-center">
-              <div className="w-full mb-4 relative bg-gray-200 h-[450px]">
-                {photo && (
-                  <img
-                    className="object-cover h-full w-full"
-                    src={`${cdn}${photo}-max-lg.jpg`}
-                    alt={event.name}
-                  />
-                )}
-                {isAuthenticated && user._id === event.createdBy && (
-                  <div className="absolute top-50 bottom-5 right-5 flex items-center justify-center hover:opacity-80">
-                    <UploadPhoto
-                      model="event"
-                      id={event._id}
-                      onSave={(id) => setPhoto(id)}
-                      label={photo ? "Change photo" : "Add photo"}
-                    />
-                  </div>
-                )}
-                <h2 className="absolute inset-0 top-1/3 ml-auto mr-auto w-max text-background text-6xl">{event.name}</h2>
-                <Link href={"/events"}>
-                  <p className="absolute top-5 bottom-50 left-5 text-lg cursor-pointer text-background">{"< All Events"}</p>
-                </Link>
-              </div>
-              <div className="flex flex-col md:flex-row items-center justify-between w-full md:ml-full md:mr-full pb-12 pt-6 border-b border-black">
-                <div className="hidden md:flex w-5/12">
-                </div>
-                <div className="flex flex-col items-start justify-start w-full md:w-7/12">
-                 <div className="flex flex-col md:flex-row items-start justify-between w-full">
-                  <div className="flex flex-col w-full md:w-1/2">
-                      <p className="font-extralight text-gray-400">From</p>
-                      <p className="w-10/12">{`${start} to ${end}`}</p>
-                      <p className="font-extralight text-gray-400 mt-4">Location</p>
-                      <p>{event.location}</p>
-                    <button className="btn-primary w-72 h-full mt-8">Get tickets</button>
-                  </div>
-                  <div className="flex flex-col w-full md:w-1/2 mt-10 md:mt-0">
-                    <p className="font-extralight text-gray-400">{"Who's coming"}</p>
-                    <div>
-                    { platform && attendees.length > 0 ? (
-                    <div className="grid grid-flow-col-dense gap-3 w-fit mt-2">
-                    {attendees.map((uid) => {
-                      const attendee = platform.user.findOne(uid);
-                      if (!attendee) {
-                        return (
-                          <p>No attendees</p>
-                        );
-                      }
 
-                      return (
-                        <Link
-                          key={uid}
-                          as={`/members/${attendee.get("slug")}`}
-                          href="/members/[slug]"
-                        >
-                          <a className="from user-preview">
-                            <ProfilePhoto size="sm" user={attendee.toJS()} />
-                          </a>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                    ) : (
-                     "No results"
-                    )}
-                    </div>
-                  </div>
-                  </div>
+              <EventMainImage event={event}  photo={photo} cdn={cdn} isAuthenticated={isAuthenticated} user={user} setPhoto={setPhoto}  />
 
-                  <div className="mt-12 event-actions flex flex-wrap items-center w-full">
-                  {start.isAfter(dayjs()) && (
-                    <span className="p3 mr-2 italic">
-                      Event is happening <TimeSince time={event.start} />
-                    </span>
-                  )}
-                  {event.paid ? (
-                    <>
-                      {myTickets && myTickets.count() > 0 ? (
-                        <Link
-                          as={`/tickets/${myTickets.first().get("_id")}`}
-                          href="/tickets/[slug]"
-                        >
-                          <a className="btn-primary mr-2">See ticket</a>
-                        </Link>
-                      ) : event.ticket && start.isAfter(dayjs()) ? (
-                        <Link href={prependHttp(event.ticket)}>
-                          <a
-                            className="btn-primary mr-2"
-                            target="_blank"
-                            rel="noreferrer nofollow"
-                          >
-                            Buy ticket
-                          </a>
-                        </Link>
-                      ) : start.isAfter(dayjs()) ? (
-                        <Link
-                          as={`/events/${event.slug}/checkout`}
-                          href="/events/[slug]/checkout"
-                        >
-                          <a className="btn-primary mr-2">Buy ticket</a>
-                        </Link>
-                      ) : null}
-                    </>
-                  ) : (
-                    <>
-                      {start.isBefore(dayjs()) &&
-                      end.isAfter(dayjs()) &&
-                      event.location ? (
-                        <a className="btn-primary mr-2" href={event.location}>
-                          Hop on!
-                        </a>
-                      ) : start.isBefore(dayjs()) && end.isAfter(dayjs()) ? (
-                        <span className="p3 mr-2" href={event.location}>
-                          ONGOING
-                        </span>
-                      ) : !isAuthenticated ? (
-                        <Link
-                          as={`/signup?back=${encodeURIComponent(
-                            `/events/${event.slug}`
-                          )}`}
-                          href="/signup"
-                        >
-                          <a className="btn-primary mr-2">Signup to RSVP</a>
-                        </Link>
-                      ) : end.isBefore(dayjs()) ? (
-                        start.isAfter(dayjs()) &&
-                        end.isBefore(dayjs()) &&
-                        event.location ? (
-                          <a className="btn-primary mr-2" href={event.location}>
-                            Hop on!
-                          </a>
-                        ) : (
-                          <span className="p3 mr-2 italic">
-                            This event has ended.
-                          </span>
-                        )
-                      ) : attendees?.includes(user._id) ? (
-                        <a
-                          href="#"
-                          className="btn-primary mr-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            attendEvent(
-                              event._id,
-                              !attendees?.includes(user._id)
-                            );
-                          }}
-                        >
-                          Cancel RSVP
-                        </a>
-                      ) : (
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            attendEvent(
-                              event._id,
-                              !attendees?.includes(user._id)
-                            );
-                          }}
-                          className="btn-primary mr-2"
-                        >
-                          Attend
-                        </button>
-                      )}
-                    </>
-                  )}
+              <EventInformation event={event} user={user}  start={start} end={end} platform={platform} dayjs={dayjs} myTickets={myTickets} prependHttp={prependHttp} isAuthenticated={isAuthenticated} encodeURIComponent={encodeURIComponent} attendees={attendees} attendEvent={attendEvent} featured={featured} featureEvent={featureEvent}  />
 
-                  {isAuthenticated && user._id === event.createdBy && (
-                    <Link
-                      as={`/events/edit/${event.slug}`}
-                      href="/events/edit/[slug]"
-                    >
-                      <a className="btn-primary mr-2">Edit event</a>
-                    </Link>
-                  )}
-                  {isAuthenticated && user.roles.includes("admin") && (
-                    <a
-                      className={`btn-primary inline-flex items-center ${
-                        featured ? "active" : ""
-                      }`}
-                      href="#"
-                      title="Feature event"
-                      onClick={(e) => featureEvent(e, event._id, !featured)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                        />
-                      </svg>
-                    </a>
-                  )}
-                </div>
-                </div>
-              </div>
+              <EventAbout event={event}/>
 
-              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-full md:mr-full pb-12 pt-12 border-b border-black">
-                <div className="flex flex-col  w-full md:w-5/12">
-                  <h4 className="text-xl font-light">About this edition</h4>
-                </div>
-                <div className="flex flex-col w-full md:w-7/12">
-                  <p className="w-full md:w-10/12">{event.description}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-full md:mr-full pb-12 pt-12 border-b border-black" >
-                <div className="flex flex-col w-full md:w-5/12">
-                  <h4 className="text-xl font-light">Partners</h4>
-                </div>
-               
-                <div className="flex flex-col w-full md:w-7/12">
-                  <div className="flex flex-row flex-wrap w-full md:w-10/12">
-                  {event.partners &&
-                    event.partners.map(
-                      (partner) => (
-                          <a
-                            href={partner.url || "#"}
-                            target="_blank"
-                            rel="noreferrer"
-                            key={partner.name}
-                            className="mr-10 mb-7"
-                          >
-                            <Photo
-                              id={partner.photo}
-                              photoUrl={partner.photoUrl}
-                              className="w-full h-20"
-                              title={partner.name}
-                            />
-                          </a>
-                        )
-                    )}
-                    </div>
-                  <button className="btn-primary h-fit self-start" onClick={() => togglePartnerForm(!partnerForm)}>Add Partner</button>
-                  { (isAuthenticated && user._id === event.createdBy && partnerForm) &&
-                  <>
-                   <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
-                    <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-y-1 w-full bg-background outline-none focus:outline-none p-10">
-                    <div className="flex flex-row items-center justify-between w-full">
-                    <h3>Add partner</h3>
-                    <FontAwesomeIcon icon={faTimes} className="hover:cursor-pointer" onClick={() => togglePartnerForm(!partnerForm)} />
-                    </div>  
-                    <form className="flex flex-col" onSubmit={ e => addPartner(e, partnerToAdd) }>
-                      <div className="flex flex-col w-full mt-5">
-                        <label>Partner</label>
-                        <input
-                          type="text"
-                          value={ partnerToAdd.name }
-                          placeholder="Partner Name"
-                          onChange={ e => setPartnerToAdd({ ...partnerToAdd, name: e.target.value }) }
-                        />
-                      </div>
-                      <div className="flex flex-col mt-5 w-full">
-                        <div className="flex flex-col items-center justify-start">
-                          <label className="self-start">Logo</label>
-                          { partnerToAdd.photo && <Photo id={ partnerToAdd.photo } className="self-start" /> }
-                          <UploadPhoto
-                            onSave={ photo => setPartnerToAdd({ ...partnerToAdd, photo }) }
-                            label="Upload logo"
-                          />
-                        </div>
-                          <button className="btn-primary mt-5">Add</button>
-                      </div>
-                    </form>
-                  </div>
-                  </div>
-                  </div>
-                  <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-                  </>
-                   }
-                </div>
-              </div>
+              <EventPartners event={event} user={user} togglePartnerForm={togglePartnerForm} partnerForm={partnerForm} isAuthenticated={isAuthenticated} faTimes={faTimes} addPartner={addPartner} partnerToAdd={partnerToAdd} setPartnerToAdd={setPartnerToAdd} photo={photo}  />
 
               <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-full md:mr-full pb-12 pt-12 border-b border-black" >
                 <div className="flex flex-col w-full md:w-5/12">
@@ -809,3 +543,6 @@ Event.getInitialProps = async ({ req, query }) => {
 };
 
 export default Event;
+
+
+
