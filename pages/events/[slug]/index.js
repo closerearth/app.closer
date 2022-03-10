@@ -36,10 +36,12 @@ const Event = ({ event, error }) => {
     name: "",
     photo: null,
   });
+  const [speakerToAdd, setSpeakerToAdd] = useState(event && (event.speakers || []));
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState("");
   const [featured, setFeatured] = useState(event && !!event.featured);
   const [partnerForm, togglePartnerForm] = useState(false)
+  const [speakerForm, toggleSpeakerForm] = useState(false)
   const { platform } = usePlatform();
   const { user, isAuthenticated } = useAuth();
   const [attendees, setAttendees] = useState(event && (event.attendees || []));
@@ -57,6 +59,8 @@ const Event = ({ event, error }) => {
   const isThisYear = dayjs().isSame(start, "year");
   const dateFormat = isThisYear ? "MMMM Do HH:mm" : "YYYY MMMM Do HH:mm";
   const myTickets = platform.ticket.find(myTicketFilter);
+  const params = { where : { user: 'created'}};
+  const users = platform.user.find(params);
 
   const loadData = async () => {
     if (event.attendees && event.attendees.length > 0) {
@@ -92,6 +96,17 @@ const Event = ({ event, error }) => {
       });
     } catch (err) {
       alert(`Could not add partner: ${err.message}`);
+    }
+  };
+
+  const addSpeaker = async (e, speaker) => {
+    e.preventDefault();
+    try {
+      await platform.event.patch(event._id, {
+        speakers: (event.speakers || []).concat(speaker),
+      });
+    } catch (err) {
+      alert(`Could not add speaker: ${err.message}`);
     }
   };
 
@@ -163,7 +178,37 @@ const Event = ({ event, error }) => {
               <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row items-start justify-start w-full md:ml-full md:mr-full pb-12 pt-12 border-b border-black" >
                 <div className="flex flex-col w-full md:w-5/12">
                   <h4 className="text-xl font-light">Featured Speakers</h4>
+                  <button className="btn-primary h-fit w-44 mt-4" onClick={() => toggleSpeakerForm(!speakerForm)}>Add Speaker</button>
                 </div>
+
+                {isAuthenticated && user._id === event.createdBy && speakerForm && <>
+                 <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+                  <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-y-1 w-full bg-background outline-none focus:outline-none p-10">
+                  <div className="flex flex-row items-center justify-between w-full">
+                  <h3>Add Speaker</h3>
+                  <FontAwesomeIcon icon={faTimes} className="hover:cursor-pointer" onClick={() => toggleSpeakerForm(!speakerForm)} />
+                  </div>  
+                  <form className="flex flex-col" onSubmit={e => addSpeaker(e, speakerToAdd)}>
+                    <div className="flex flex-col w-full mt-5">
+                      <label>All users</label>
+                      <select id="select_speaker" onChange={(e) => setSpeakerToAdd(e.target.value)}>
+                        <option default value ="All">All</option>
+                          {users? users.map((_id, user) => (
+                        <option key={user._id} value={user.screenname}>{user.screenname}</option>
+                      )) : <p>No users found</p>} 
+                      </select>
+                    </div>
+                    <div className="flex flex-col mt-5 w-full">
+                        <button className="btn-primary mt-5" type="submit">Add Speaker</button>
+                    </div>
+                  </form>
+                </div>
+                </div>
+                </div>
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                </>}
+
                 <div className="flex flex-col w-full space-y-8 md:w-7/12">
                   <div className="flex flex-row w-full md:w-10/12 items-start justify-start">
                     <img src="/images/icons/avatar.jpg" alt="avatar" className="flex w-40"/>
