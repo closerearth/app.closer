@@ -28,42 +28,41 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
     }
   };
 
-  const loadData = async () => {
-    try {
-      const usersMap = { ...usersById };
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const usersMap = { ...usersById };
 
-      const where = {
-        channel,
-        parentType: 'post',
-        parentId: _id
-      };
-      const params = where && { params: { where: formatSearch(where), sort_by: '-created', limit: 100 } };
-      const { data: { results: posts } } = await api.get('/post', params);
-      setPosts(posts);
+        const where = {
+          channel,
+          parentType: 'post',
+          parentId: _id
+        };
+        const params = where && { params: { where: formatSearch(where), sort_by: '-created', limit: 100 } };
+        const { data: { results: posts } } = await api.get('/post', params);
+        setPosts(posts);
 
-      if (posts && posts.length > 0) {
-        const usersToLoad = posts.map(post => post.createdBy).filter(u => !usersById[u]);
-        if (usersToLoad.length > 0) {
-          const params = { where: formatSearch({ _id: { $in: usersToLoad } }) };
-          const { data: { results: users }} = await api.get('/user', { params });
-          if (setUsersById) {
-            users.forEach(u => {
-              usersMap[u._id] = u;
-            });
-            setUsersById(usersMap);
+        if (posts && posts.length > 0) {
+          const usersToLoad = posts.map(post => post.createdBy).filter(u => !usersById[u]);
+          if (usersToLoad.length > 0) {
+            const params = { where: formatSearch({ _id: { $in: usersToLoad } }) };
+            const { data: { results: users }} = await api.get('/user', { params });
+            if (setUsersById) {
+              users.forEach(u => {
+                usersMap[u._id] = u;
+              });
+              setUsersById(usersMap);
+            }
           }
         }
+        // Add current user to map in case of posting
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message)
       }
-      // Add current user to map in case of posting
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message)
-    }
-  };
-
-  useEffect(() => {
+    };
     loadData();
-  }, [_id]);
+  }, [_id, channel, setUsersById, usersById]);
 
   if (deleted) {
     return (
@@ -97,7 +96,7 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
       </div>
       { photo &&
         <div className="card-body">
-          <img src={ `${cdn}${photo}-max-lg.jpg` } />
+          <img src={ `${cdn}${photo}-max-lg.jpg` } alt="" />
         </div>
       }
       { error && <div className="card-body">
@@ -109,18 +108,18 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
         <div className="body">
           <Linkify
             componentDecorator={(decoratedHref, decoratedText, key) => (
-                <a
-                  target="_blank"
-                  rel="nofollow noreferrer"
-                  href={decoratedHref}
-                  key={key}
-                  onClick={e => e.stopPropagation()}
-                >
-                    {decoratedText}
-                </a>
+              <a
+                target="_blank"
+                rel="nofollow noreferrer"
+                href={decoratedHref}
+                key={key}
+                onClick={e => e.stopPropagation()}
+              >
+                {decoratedText}
+              </a>
             )}
           >
-              {content}
+            {content}
           </Linkify>
         </div>
         { tags && tags.length > 0 &&
@@ -132,14 +131,14 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
                   </a>
                 </Link>
               ))}
-          </div>
+            </div>
         }
       </div>
       { attachment &&
         <div className="card-body">
           { attachment.image && attachment.image &&
             <a href={ attachment.url } target="_blank" rel="nofollow noreferrer">
-              <img src={ attachment.image } />
+              <img src={ attachment.image } alt={ `${attachment.url} preview` } />
             </a>
           }
           { attachment.title &&
@@ -199,7 +198,7 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
                 <div className="reply" key={ post._id }>
                   { post.photo &&
                     <div className="reply-photo">
-                      <img src={ `${cdn}${post.photo}-max-lg.jpg` } />
+                      <img src={ `${cdn}${post.photo}-max-lg.jpg` } alt="" />
                     </div>
                   }
                   <div className="flex flex-row items-center">

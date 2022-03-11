@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
@@ -29,25 +29,24 @@ const EventsList = ({
   const [error, setErrors] = useState(false);
   const [page, setPage] = useState(1);
   const router = useRouter();
-  const eventsFilter = { where, limit, page };
+  const eventsFilter = useMemo(() => ({ where, limit, page }), [where, limit, page]);
   const events = platform.event.find(eventsFilter);
   const totalEvents = platform.event.findCount(eventsFilter);
 
-  const loadData = async () => {
-    try {
-      await Promise.all([
-        platform.event.get(eventsFilter),
-        platform.event.getCount(eventsFilter)
-      ]);
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message)
-    }
-  };
 
   useEffect(() => {
-    loadData();
-  }, [eventsFilter]);
+    (async () => {
+      try {
+        await Promise.all([
+          platform.event.get(eventsFilter),
+          platform.event.getCount(eventsFilter)
+        ]);
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message)
+      }
+    })();
+  }, [eventsFilter, platform]);
 
   return (
     <div className={ card ? 'card': '' }>

@@ -82,19 +82,6 @@ const EventCheckout = ({ event, error }) => {
     }
   };
 
-  const loadData = async () => {
-    try {
-      const {
-        data: { ticketOptions: availability, volunteerTicketsSold },
-      } = await api.get(`/bookings/event/${event._id}/availability`);
-      if (JSON.stringify(availability) !== JSON.stringify(ticketOptions)) {
-        setTicketOptions(availability);
-        setVolunteerTicketsSold(volunteerTicketsSold);
-      }
-    } catch (err) {
-      console.log('Error:', err);
-    }
-  };
   const submitSignupForm = (e) => {
     e.preventDefault();
     if (paymentReceived) {
@@ -103,7 +90,21 @@ const EventCheckout = ({ event, error }) => {
   };
 
   useEffect(() => {
-    if (event && event._id) loadData();
+    if (event && event._id) {
+      (async () => {
+        try {
+          const {
+            data: { ticketOptions: availability, volunteerTicketsSold },
+          } = await api.get(`/bookings/event/${event._id}/availability`);
+          if (JSON.stringify(availability) !== JSON.stringify(ticketOptions)) {
+            setTicketOptions(availability);
+            setVolunteerTicketsSold(volunteerTicketsSold);
+          }
+        } catch (err) {
+          console.log('Error:', err);
+        }
+      })();
+    }
     const refreshAvailability = setInterval(loadData, 30000);
     return () => clearInterval(refreshAvailability);
   }, [event]);

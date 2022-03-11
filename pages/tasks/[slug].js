@@ -64,15 +64,15 @@ const Task = ({ task, error }) => {
                 <p className="about-text">
                   <Linkify
                     componentDecorator={(decoratedHref, decoratedText, key) => (
-                        <a
-                          target="_blank"
-                          rel="nofollow noreferrer"
-                          href={decoratedHref}
-                          key={key}
-                          onClick={e => e.stopPropagation()}
-                        >
-                            {decoratedText}
-                        </a>
+                      <a
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        href={decoratedHref}
+                        key={key}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        {decoratedText}
+                      </a>
                     )}
                   >
                     {task.description}
@@ -91,43 +91,43 @@ const Task = ({ task, error }) => {
                         <div>
                           <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]"><a>Edit task</a></Link>
                           <select
-                              value={ status }
-                              onChange={e => updateStatus(task._id, e.target.value)}
-                            >
-                              <option value="opening">
+                            value={ status }
+                            onChange={e => updateStatus(task._id, e.target.value)}
+                          >
+                            <option value="opening">
                                 Open
-                              </option>
-                              <option value="completed">
+                            </option>
+                            <option value="completed">
                                 Completed
-                              </option>
-                              <option value="closed">
+                            </option>
+                            <option value="closed">
                                 Closed
-                              </option>
-                              <option value="draft">
+                            </option>
+                            <option value="draft">
                                 Draft
-                              </option>
+                            </option>
                           </select>
                         </div>:
                         applicants?.includes(user._id) ?
-                        <p className="text-small">
-                          <a
-                            href="#"
+                          <p className="text-small">
+                            <a
+                              href="#"
+                              onClick={ e => {
+                                e.preventDefault();
+                                apply(task._id, !(applicants?.includes(user._id)));
+                              }}
+                            >
+                            Cancel application
+                            </a>
+                          </p>:
+                          <button
                             onClick={ e => {
                               e.preventDefault();
                               apply(task._id, !(applicants?.includes(user._id)));
                             }}
                           >
-                            Cancel application
-                          </a>
-                        </p>:
-                        <button
-                          onClick={ e => {
-                            e.preventDefault();
-                            apply(task._id, !(applicants?.includes(user._id)));
-                          }}
-                        >
                           Apply for task
-                        </button>
+                          </button>
                       }
                     </div>
                   </section>
@@ -141,7 +141,7 @@ const Task = ({ task, error }) => {
                           </a>
                         </Link>
                       ))}
-                  </div>
+                    </div>
                 }
                 { user && (user._id === task.createdBy || (task.team && user._id === task.team[0])) &&
                   <section className="applicants card-body">

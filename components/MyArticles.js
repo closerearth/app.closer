@@ -15,28 +15,26 @@ const MyArticles = () => {
 
   const { user } = useAuth();
 
-  const loadData = async () => {
-    try {
-      if (!user) {
-        return;
-      }
-      const [
-        { data: { results: articles }},
-        { data: { results: others }}
-      ] = await Promise.all([
-        api.get('/article', { params: { where: formatSearch({ createdBy: user._id }) } }),
-        api.get('/article', { params: { where: formatSearch({ createdBy: { $ne: user._id } }) } })
-      ]);
-      setArticles(articles);
-      setOthers(others);
-    } catch (err) {
-      setErrors(err.message)
-    }
-  };
-
   useEffect(() => {
-    loadData();
-  }, []);
+    (async () => {
+      try {
+        if (!user) {
+          return;
+        }
+        const [
+          { data: { results: articles }},
+          { data: { results: others }}
+        ] = await Promise.all([
+          api.get('/article', { params: { where: formatSearch({ createdBy: user._id }) } }),
+          api.get('/article', { params: { where: formatSearch({ createdBy: { $ne: user._id } }) } })
+        ]);
+        setArticles(articles);
+        setOthers(others);
+      } catch (err) {
+        setErrors(err.message)
+      }
+    })();
+  }, [user]);
 
   if (!user) {
     return null;

@@ -18,14 +18,14 @@ const Newsletter = ({ tags, placement }) => {
   const router = useRouter();
 
   // if (didCompleteSignup) {
-    //   return null;
-    // }
+  //   return null;
+  // }
     
-    return (
-      <div className="Newsletter py-5 text-neutral-900">
-        { signupError &&
+  return (
+    <div className="Newsletter py-5 text-neutral-900">
+      { signupError &&
           <div className="error-box">{ signupError }</div>
-        }
+      }
       { signupCompleted ?
         <h3>Thanks, we will be in touch soon!</h3> :
         <form
@@ -41,7 +41,7 @@ const Newsletter = ({ tags, placement }) => {
                 trackEvent(placement, 'LeadError');
                 setSignupError((err.response && err.response.data && err.response.data.error) || err.message);
               })
-            }
+          }
           className="flex flex-row items-center justify-center"
         >
           <div className="flex flex-col items-center justify-start px-2 mt-12 md:mt-0">

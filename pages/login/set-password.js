@@ -33,37 +33,37 @@ const SetPasswordScreen = () => {
               Please sign out before taking this action.
             </div>:
             actionCompleted?
-            <div className="card">
-              <p>Your new password was succesfully set, you can now proceed to sign in.</p>
-              <div className="action-row">
-                <Link href="/login">
-                  <a className="button">Sign in</a>
-                </Link>
-              </div>
-            </div>:
-            (router.query.signup_token || router.query.reset_token) ? (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (router.query.reset_token) {
-                    updatePassword(router.query.reset_token, password, () => setActionCompleted(true));
-                  } else if (router.query.signup_token) {
-                    completeRegistration(router.query.signup_token, {
-                      password,
-                      screenname
-                    }, () => router.push('/'));
-                  }
-                }}
-                className="card"
-              >
-                <div className="card-title">
-                  <h1>Complete registration</h1>
+              <div className="card">
+                <p>Your new password was succesfully set, you can now proceed to sign in.</p>
+                <div className="action-row">
+                  <Link href="/login">
+                    <a className="button">Sign in</a>
+                  </Link>
                 </div>
-                <div className="card-body">
-                  { tokenContent && tokenContent.email &&
+              </div>:
+              (router.query.signup_token || router.query.reset_token) ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (router.query.reset_token) {
+                      updatePassword(router.query.reset_token, password, () => setActionCompleted(true));
+                    } else if (router.query.signup_token) {
+                      completeRegistration(router.query.signup_token, {
+                        password,
+                        screenname
+                      }, () => router.push('/'));
+                    }
+                  }}
+                  className="card"
+                >
+                  <div className="card-title">
+                    <h1>Complete registration</h1>
+                  </div>
+                  <div className="card-body">
+                    { tokenContent && tokenContent.email &&
                     <p className="mb-4"><i>Your login email is <b>{tokenContent.email}</b>.</i></p>
-                  }
-                  { tokenContent && !tokenContent.screenname &&
+                    }
+                    { tokenContent && !tokenContent.screenname &&
                     <div className="form-field">
                       <label htmlFor="screenname">Your name</label>
                       <input
@@ -76,30 +76,30 @@ const SetPasswordScreen = () => {
                         required
                       />
                     </div>
-                  }
-                  <div className="form-field">
-                    <label htmlFor="password">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={password}
-                      placeholder="#sup3rs3cr3t"
-                      onChange={e => setPassword(e.target.value)}
-                      required
-                    />
+                    }
+                    <div className="form-field">
+                      <label htmlFor="password">Password</label>
+                      <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={password}
+                        placeholder="#sup3rs3cr3t"
+                        onChange={e => setPassword(e.target.value)}
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="card-footer">
-                  <div className="action-row">
-                    <button type="submit" className="btn-primary">
+                  <div className="card-footer">
+                    <div className="action-row">
+                      <button type="submit" className="btn-primary">
                       Complete registration
-                    </button>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </form>
-          ) :
-          <div className="card">No token provided.</div> }
+                </form>
+              ) :
+                <div className="card">No token provided.</div> }
         </main>
       </div>
     </Layout>

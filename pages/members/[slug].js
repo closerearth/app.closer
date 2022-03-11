@@ -38,7 +38,7 @@ const MemberPage = ({ member, loadError }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-       await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
+      await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
     } catch (err) {
       console.log(err)
     }
@@ -100,8 +100,8 @@ const MemberPage = ({ member, loadError }) => {
         <title>{ member.screenname }</title>
       </Head>
       <div className='main-content'>
-      <main className="flex flex-col justify-between">
-        { openIntro &&
+        <main className="flex flex-col justify-between">
+          { openIntro &&
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
             <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
@@ -137,42 +137,42 @@ const MemberPage = ({ member, loadError }) => {
             </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-          </>
-        }
+        </>
+          }
 
-        <div className='flex flex-col md:flex-row items-start'>
+          <div className='flex flex-col md:flex-row items-start'>
 
-        <div className='flex flex-col items-start space-y-5 md:w-full'>
-          <div className='flex flex-col md:flex-row w-full'>
-            <div className='md:w-72 items-center justify-start relative'>
-              <div className="flex justify-center items-center h-full">
-                {member.photo?
-                  <img
-                    src={`${cdn}${member.photo}-profile-lg.jpg`}
-                    loading="lazy"
-                    alt={ member.screenname }
-                    className="w-32 md:w-44 mt-4 md:mt-0 rounded-full"
-                  />:
-                  <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
-                }
-              </div>
-              <div className='mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full' >
-                { isAuthenticated && member._id === currentUser._id && <UploadPhoto
-                  model="user"
-                  id={member._id}
-                  onSave={id => setPhoto(id)}
-                  label={ member.photo ? 'Change photo': 'Add photo' }
+            <div className='flex flex-col items-start space-y-5 md:w-full'>
+              <div className='flex flex-col md:flex-row w-full'>
+                <div className='md:w-72 items-center justify-start relative'>
+                  <div className="flex justify-center items-center h-full">
+                    {member.photo?
+                      <img
+                        src={`${cdn}${member.photo}-profile-lg.jpg`}
+                        loading="lazy"
+                        alt={ member.screenname }
+                        className="w-32 md:w-44 mt-4 md:mt-0 rounded-full"
+                      />:
+                      <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
+                    }
+                  </div>
+                  <div className='mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full' >
+                    { isAuthenticated && member._id === currentUser._id && <UploadPhoto
+                      model="user"
+                      id={member._id}
+                      onSave={id => setPhoto(id)}
+                      label={ member.photo ? 'Change photo': 'Add photo' }
 
-                /> }
-              </div>
-            </div>
+                    /> }
+                  </div>
+                </div>
 
-            <div className="flex flex-col items-start w-full">
-              <h3 className='font-medium text-4xl md:text-5xl md:w-8/12 '>
-                {member.screenname}
-              </h3>
+                <div className="flex flex-col items-start w-full">
+                  <h3 className='font-medium text-4xl md:text-5xl md:w-8/12 '>
+                    {member.screenname}
+                  </h3>
 
-              { isAuthenticated && member._id !== currentUser._id &&
+                  { isAuthenticated && member._id !== currentUser._id &&
                 <div className="my-3">
                   <a
                     href="#"
@@ -185,23 +185,83 @@ const MemberPage = ({ member, loadError }) => {
                     Get introduced
                   </a>
                 </div>
-              }
+                  }
 
-              <div className='mt-1 w-full'>
+                  <div className='mt-1 w-full'>
+                    { editProfile?
+                      <textarea
+                        autoFocus
+                        value={tagline}
+                        className="w-10/12 h-20"
+                        onChange={ (e) => setTagline(e.target.value) }
+                        onBlur={ () => {
+                          saveTagline(tagline);
+                        } }
+                      />:
+                      (isAuthenticated && member._id === currentUser._id) ?
+                        <p className="mt-6 w-10/12" >
+                          <Linkify
+                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                              <a
+                                target="_blank"
+                                rel="nofollow noreferrer"
+                                href={decoratedHref}
+                                key={key}
+                                onClick={e => e.stopPropagation()}
+                              >
+                                {decoratedText}
+                              </a>
+                            )}
+                          >
+                            { tagline }
+                            { !tagline &&
+                        <span className="placeholder">Please write a tagline.</span>
+                            }
+                          </Linkify>
+                        </p>:
+                        <p className="" >
+                          <Linkify
+                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                              <a
+                                target="_blank"
+                                rel="nofollow noreferrer"
+                                href={decoratedHref}
+                                key={key}
+                                onClick={e => e.stopPropagation()}
+                              >
+                                {decoratedText}
+                              </a>
+                            )}
+                          >
+                            { tagline }
+                            { !tagline &&
+                        <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
+                            }
+                          </Linkify>
+                        </p>
+                    }
+                    <div className="font-semibold text-sm mt-1">
+                      {member.timezone}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              { error && <p className="validation-error">Error: { error }</p> }
               { editProfile?
                 <textarea
                   autoFocus
-                  value={tagline}
-                  className="w-10/12 h-20"
-                  onChange={ (e) => setTagline(e.target.value) }
+                  value={about}
+                  className="w-10/12 h-36"
+                  onChange={ (e) => setAbout(e.target.value) }
                   onBlur={ () => {
-                    saveTagline(tagline);
+                    saveAbout(about);
                   } }
                 />:
                 (isAuthenticated && member._id === currentUser._id) ?
-                <p className="mt-6 w-10/12" >
-                  <Linkify
-                    componentDecorator={(decoratedHref, decoratedText, key) => (
+                  <p className="mt-6 w-10/12" >
+                    <Linkify
+                      componentDecorator={(decoratedHref, decoratedText, key) => (
                         <a
                           target="_blank"
                           rel="nofollow noreferrer"
@@ -209,167 +269,107 @@ const MemberPage = ({ member, loadError }) => {
                           key={key}
                           onClick={e => e.stopPropagation()}
                         >
-                            {decoratedText}
-                        </a>
-                    )}
-                  >
-                      { tagline }
-                      { !tagline &&
-                        <span className="placeholder">Please write a tagline.</span>
-                      }
-                  </Linkify>
-                </p>:
-                <p className="" >
-                  <Linkify
-                    componentDecorator={(decoratedHref, decoratedText, key) => (
-                        <a
-                          target="_blank"
-                          rel="nofollow noreferrer"
-                          href={decoratedHref}
-                          key={key}
-                          onClick={e => e.stopPropagation()}
-                        >
-                            {decoratedText}
-                        </a>
-                    )}
-                  >
-                      { tagline }
-                      { !tagline &&
-                        <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
-                      }
-                  </Linkify>
-                </p>
-              }
-              <div className="font-semibold text-sm mt-1">
-                {member.timezone}
-              </div>
-              </div>
-            </div>
-          </div>
-
-            { error && <p className="validation-error">Error: { error }</p> }
-            { editProfile?
-              <textarea
-                autoFocus
-                value={about}
-                className="w-10/12 h-36"
-                onChange={ (e) => setAbout(e.target.value) }
-                onBlur={ () => {
-                  saveAbout(about);
-                } }
-              />:
-              (isAuthenticated && member._id === currentUser._id) ?
-              <p className="mt-6 w-10/12" >
-                <Linkify
-                  componentDecorator={(decoratedHref, decoratedText, key) => (
-                      <a
-                        target="_blank"
-                        rel="nofollow noreferrer"
-                        href={decoratedHref}
-                        key={key}
-                        onClick={e => e.stopPropagation()}
-                      >
                           {decoratedText}
-                      </a>
-                  )}
-                >
-                    { about }
-                    { !about &&
+                        </a>
+                      )}
+                    >
+                      { about }
+                      { !about &&
                       <span className="placeholder">Tell us more about you.</span>
-                    }
-                </Linkify>
-              </p>:
-              <p className="" >
-                <Linkify
-                  componentDecorator={(decoratedHref, decoratedText, key) => (
-                      <a
-                        target="_blank"
-                        rel="nofollow noreferrer"
-                        href={decoratedHref}
-                        key={key}
-                        onClick={e => e.stopPropagation()}
-                      >
+                      }
+                    </Linkify>
+                  </p>:
+                  <p className="" >
+                    <Linkify
+                      componentDecorator={(decoratedHref, decoratedText, key) => (
+                        <a
+                          target="_blank"
+                          rel="nofollow noreferrer"
+                          href={decoratedHref}
+                          key={key}
+                          onClick={e => e.stopPropagation()}
+                        >
                           {decoratedText}
-                      </a>
-                  )}
-                >
-                    { about }
-                    { !about &&
+                        </a>
+                      )}
+                    >
+                      { about }
+                      { !about &&
                       <span className="placeholder">{ member.screenname } has not yet set a description</span>
-                    }
-                </Linkify>
-              </p>
-            }
+                      }
+                    </Linkify>
+                  </p>
+              }
 
               { isAuthenticated && member._id === currentUser._id &&
                <button type='button' className='btn-primary w-24' onClick={handleClick}>{editProfile ? "Save" : "Edit"}</button> }
 
             </div>
 
-      <div className="flex flex-col items-start md:w-2/3">
-       <div>
-        <div className="page-title flex justify-between">
-          <h3 className="mt-16 md:mt-10 mb-4">Meet {member.screenname} at:</h3>
-        </div>
+            <div className="flex flex-col items-start md:w-2/3">
+              <div>
+                <div className="page-title flex justify-between">
+                  <h3 className="mt-16 md:mt-10 mb-4">Meet {member.screenname} at:</h3>
+                </div>
 
-        <EventsList
-          limit={ 7 }
-          list
-          showPagination={ false }
-          where={{
-            attendees: member._id,
-            visibility: 'public'
-          }}
-        />
-       </div>
+                <EventsList
+                  limit={ 7 }
+                  list
+                  showPagination={ false }
+                  where={{
+                    attendees: member._id,
+                    visibility: 'public'
+                  }}
+                />
+              </div>
 
-        <div className="flex flex-col">
-          <div className="flex flex-col items-start mb-10">
-             <p className='font-semibold text-md mt-8'>Stay Social</p>
-             <ul className='space-y-1 mt-4'>
-               {links ? links.map((link) => (
-                 <li key={link._id} className="mb-1">
-                   <a href={link.url}>
-                     {link.name}
-                   </a>
-                  </li>
-               )):
-               'No links yet'
-               }
+              <div className="flex flex-col">
+                <div className="flex flex-col items-start mb-10">
+                  <p className='font-semibold text-md mt-8'>Stay Social</p>
+                  <ul className='space-y-1 mt-4'>
+                    {links ? links.map((link) => (
+                      <li key={link._id} className="mb-1">
+                        <a href={link.url}>
+                          {link.name}
+                        </a>
+                      </li>
+                    )):
+                      'No links yet'
+                    }
 
-             </ul>
-          </div>
+                  </ul>
+                </div>
 
-          { isAuthenticated && member._id === currentUser._id && !showForm &&
+                { isAuthenticated && member._id === currentUser._id && !showForm &&
            <FontAwesomeIcon icon={faPlus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
-          }
+                }
 
-          { isAuthenticated && member._id === currentUser._id && showForm &&
+                { isAuthenticated && member._id === currentUser._id && showForm &&
            <FontAwesomeIcon icon={faMinus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
-          }
+                }
 
-          { isAuthenticated && member._id === currentUser._id && showForm &&
+                { isAuthenticated && member._id === currentUser._id && showForm &&
           <div className="flex items-start mb-10 border border-line p-4 w-fit mt-10">
-              <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
-                <div>
+            <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
+              <div>
                 <label>Name</label>
                 <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
-                </div>
-                <div>
+              </div>
+              <div>
                 <label>Url</label>
                 <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
-                </div>
-                <button type='submit' className='btn-primary w-24 self-center'>Add</button>
-              </form>
+              </div>
+              <button type='submit' className='btn-primary w-24 self-center'>Add</button>
+            </form>
           </div>
-            }
+                }
 
-        </div>
+              </div>
 
 
-        </div>
-        </div>
-      </main>
+            </div>
+          </div>
+        </main>
       </div>
     </Layout>
   );

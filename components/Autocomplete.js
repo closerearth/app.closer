@@ -61,39 +61,39 @@ const Autocomplete = ({ endpoint, where, placeholder, value, onChange, multi }) 
             <div className="results">
               { options.filter(o => !value.map(v => v._id).includes(o._id)).map((option) => {
                 switch (endpoint) {
-                  case '/user':
-                    return (
-                      <a
-                        href="#"
-                        key={ option._id }
-                        onClick={ (e) => {
-                          e.preventDefault();
-                          setSearch('');
-                          onChange(value.concat(option), option, 'ADD');
-                        } }
-                        className="user-preview"
-                      >
-                        <figure className="profile-photo"></figure>
-                        <span>{ option.screenname }</span>
-                      </a>
-                    );
-                  case '/channel':
-                    return (
-                      <a
-                        href="#"
-                        key={ option._id }
-                        onClick={ (e) => {
-                          e.preventDefault();
-                          setSearch('');
-                          onChange(value.concat(option), option, 'ADD');
-                        } }
-                        className="channel-preview"
-                      >
-                        <span>{ option.name }</span>
-                      </a>
-                    );
-                  default:
-                    return `No render method for ${endpoint}`;
+                case '/user':
+                  return (
+                    <a
+                      href="#"
+                      key={ option._id }
+                      onClick={ (e) => {
+                        e.preventDefault();
+                        setSearch('');
+                        onChange(value.concat(option), option, 'ADD');
+                      } }
+                      className="user-preview"
+                    >
+                      <figure className="profile-photo"></figure>
+                      <span>{ option.screenname }</span>
+                    </a>
+                  );
+                case '/channel':
+                  return (
+                    <a
+                      href="#"
+                      key={ option._id }
+                      onClick={ (e) => {
+                        e.preventDefault();
+                        setSearch('');
+                        onChange(value.concat(option), option, 'ADD');
+                      } }
+                      className="channel-preview"
+                    >
+                      <span>{ option.name }</span>
+                    </a>
+                  );
+                default:
+                  return `No render method for ${endpoint}`;
                 }
               }) }
             </div>:

@@ -63,8 +63,8 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
               onClick={ (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                  loadPage(page + 1);
-                } }
+                loadPage(page + 1);
+              } }
             >
               next
             </a>
