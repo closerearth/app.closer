@@ -56,13 +56,12 @@ const Dashboard = ({ token }) => {
     }
   }
 
-  const loadData = async () => {
-    await Promise.all(metricsToPlot.map(metric =>
-      platform[metric].getGraph(metricFilter)
-    ));
-  }
-
   useEffect(() => {
+    const loadData = async () => {
+      await Promise.all(metricsToPlot.map(metric =>
+        platform[metric].getGraph(metricFilter)
+      ));
+    }
     if (user && (user.roles.includes('admin') || user.roles.includes('analyst'))){
       loadData();
     }

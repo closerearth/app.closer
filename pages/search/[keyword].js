@@ -25,12 +25,12 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
                   <div className="article-preview" key={ article._id }>
                     <Link as={ `/${article.slug}` } href="/[slug]">
                       <a role="button">
-                      <span className="title">
-                        {article.title}
-                      </span>
-                      { article.summary &&
+                        <span className="title">
+                          {article.title}
+                        </span>
+                        { article.summary &&
                         <span className="summary">{ article.summary }</span>
-                      }
+                        }
                       </a>
                     </Link>
                   </div>
@@ -45,7 +45,7 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
           <p className="tags">
             { tags ?
               tags.map(tag => (
-                  <Link as={ `/search/${encodeURIComponent(tag)}` } href="/search/[keyword]" key={ tag }><a className="tag">{tag}</a></Link>
+                <Link as={ `/search/${encodeURIComponent(tag)}` } href="/search/[keyword]" key={ tag }><a className="tag">{tag}</a></Link>
               )):
               <span className="Loading">Loading...</span>
             }

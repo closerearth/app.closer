@@ -10,23 +10,24 @@ import models from '../../models';
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 
+const openApplications = { where: { status: 'open' } };
+const approvedApplications = { where: { status: 'approved' } };
+const inConversationApplications = { where: { status: 'conversation' } };
+
 const Applications = () => {
   const { user } = useAuth();
   const { platform } = usePlatform();
   const [status, setStatus] = useState('open');
-  const openApplications = { where: { status: 'open' } };
-  const approvedApplications = { where: { status: 'approved' } };
-  const inConversationApplications = { where: { status: 'conversation' } };
-
-  const loadData = async () => {
-    await Promise.all([
-      platform.application.getCount(openApplications),
-      platform.application.getCount(approvedApplications),
-      platform.application.getCount(inConversationApplications)
-    ]);
-  }
 
   useEffect(() => {
+    const loadData = async () => {
+      await Promise.all([
+        platform.application.getCount(openApplications),
+        platform.application.getCount(approvedApplications),
+        platform.application.getCount(inConversationApplications)
+      ]);
+    }
+
     if (user && user.roles.includes('community-curator')){
       loadData();
     }

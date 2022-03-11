@@ -37,7 +37,7 @@ const EditEvent = ({ event }) => {
           deleteButton="Delete Event"
           onDelete={ () => router.push('/') }
         />
-        </div>
+      </div>
     </Layout>
   );
 }

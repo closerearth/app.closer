@@ -145,11 +145,11 @@ const Book = ({ token }) => {
                 value={ booking.listing || (listings && listings.first() && listings.first().get('_id')) }
                 onChange={e => updateBooking({ ...booking, listing: e.target.value })}
               >
-              {listings && listings.map(listing => (
-                <option value={ listing.get('_id') } key={ listing.get('_id') }>
-                  { listing.get('name') }
-                </option>
-              ))}
+                {listings && listings.map(listing => (
+                  <option value={ listing.get('_id') } key={ listing.get('_id') }>
+                    { listing.get('name') }
+                  </option>
+                ))}
               </select>
             </fieldset>
             <fieldset className="center-content">

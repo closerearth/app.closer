@@ -14,23 +14,22 @@ const TaskList = ({ channel, limit }) => {
   const [error, setErrors] = useState(false);
   const router = useRouter();
 
-  const loadData = async () => {
-    try {
-      const where = channel && {
-        viewChannels: channel
-      };
-      const params = { where: where && formatSearch(where), sort_by: '-created', limit };
-      const { data: { results } } = await api.get('/task', { params });
-      setTasks(results);
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message)
-    }
-  };
-
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        const where = channel && {
+          viewChannels: channel
+        };
+        const params = { where: where && formatSearch(where), sort_by: '-created', limit };
+        const { data: { results } } = await api.get('/task', { params });
+        setTasks(results);
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message)
+      }
+    };
     loadData();
-  }, [channel]);
+  }, [channel, limit]);
 
 
   return (
@@ -46,7 +45,7 @@ const TaskList = ({ channel, limit }) => {
                   { task.tags && task.tags.length > 0 &&
                       <div className="tags">
                         { task.tags.map(tag => <span className="tag" key={tag}>{tag}</span>)}
-                    </div>
+                      </div>
                   }
                   <TimeSince time={ task.created } />
                 </a>

@@ -9,34 +9,33 @@ const UploadPhoto = ({ model, id, onSave, label, minimal }) => {
   const [error, setErrors] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const upload = async (file) => {
-    setErrors(null);
-    setLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      const { data: { results: photo } } = await api.post('/upload/photo', formData, {
+  const onDrop = useCallback(acceptedFiles => {
+    const upload = async (file) => {
+      setErrors(null);
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const { data: { results: photo } } = await api.post('/upload/photo', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
-      });
-      if (model && id) {
-        await api.patch(`/${model}/${id}`, { photo: photo._id });
+        });
+        if (model && id) {
+          await api.patch(`/${model}/${id}`, { photo: photo._id });
+        }
+        setLoading(false);
+        console.log('Photo uploaded!', photo);
+        if (onSave) {
+          onSave(photo._id);
+        }
+      } catch (err) {
+        console.log(err);
+        setErrors(err.message);
       }
-      setLoading(false);
-      console.log('Photo uploaded!', photo);
-      if (onSave) {
-        onSave(photo._id);
-      }
-    } catch (err) {
-      console.log(err);
-      setErrors(err.message);
-    }
-  };
-
-  const onDrop = useCallback(acceptedFiles => {
+    };
     acceptedFiles.forEach(file => upload(file))
-  }, [])
+  }, [id, model, onSave])
   const {getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop });
 
   if (!isAuthenticated) {

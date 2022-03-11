@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -18,25 +18,15 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
   const [applicationMeta, setApplicationMeta] = useState({});
   const [error, setErrors] = useState(false);
   const router = useRouter();
-  const filter = {
+  const filter = useMemo(() => ({
     where: { status },
     limit,
     page
-  };
+  }), [status, limit, page]);
   if (managedBy) {
     filter.where.managedBy = { $in: [managedBy] };
   }
   const applications = platform.application.find(filter);
-
-  const loadData = async () => {
-    try {
-      platform.application.getCount(filter);
-      platform.application.get(filter);
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message)
-    }
-  };
 
   const updateApplication = async (id, status, app={}) => {
     try {
@@ -48,8 +38,16 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
   }
 
   useEffect(() => {
-    loadData();
-  }, [managedBy, status, page]);
+    (async () => {
+      try {
+        platform.application.getCount(filter);
+        platform.application.get(filter);
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message)
+      }
+    })();
+  }, [platform, filter]);
 
   return (
     <div className="application-list">
@@ -102,16 +100,16 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     Start conversation
                   </button> :
                   application.get('status') === 'conversation'?
-                  <button
-                    onClick={ (e) => {
-                      e.preventDefault();
-                      updateApplication(application.get('_id'), 'approved', applicationMeta[application.get('_id')] || {});
-                    }}
-                    className="btn-primary mr-4"
-                  >
+                    <button
+                      onClick={ (e) => {
+                        e.preventDefault();
+                        updateApplication(application.get('_id'), 'approved', applicationMeta[application.get('_id')] || {});
+                      }}
+                      className="btn-primary mr-4"
+                    >
                     Approve member
-                  </button>:
-                  <span />
+                    </button>:
+                    <span />
                 }
                 <a
                   className="text-red-400"

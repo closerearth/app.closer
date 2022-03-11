@@ -124,12 +124,12 @@ const Event = ({ event, error }) => {
                 <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-80">
                   {
                     photo ?
-                    <img
-                      className="object-cover md:h-full md:w-full"
-                      src={ `${cdn}${photo}-max-lg.jpg` }
-                      alt={ event.name }
-                    />:
-                    event.visual&&
+                      <img
+                        className="object-cover md:h-full md:w-full"
+                        src={ `${cdn}${photo}-max-lg.jpg` }
+                        alt={ event.name }
+                      />:
+                      event.visual&&
                     <img
                       className="object-cover md:h-full md:w-full"
                       src={ event.visual }
@@ -160,17 +160,17 @@ const Event = ({ event, error }) => {
                 <div className="mt-4 event-actions flex items-center">
                   {
                     end && end.isBefore(dayjs())?
-                    <span className="p3 mr-2 italic">
+                      <span className="p3 mr-2 italic">
                       Event ended
-                    </span>:
-                    start.isAfter(dayjs())?
-                    <span className="p3 mr-2 italic">
+                      </span>:
+                      start.isAfter(dayjs())?
+                        <span className="p3 mr-2 italic">
                       Event is happening{' '}
-                      <TimeSince
-                        time={ event.start }
-                      />
-                    </span>:
-                    null
+                          <TimeSince
+                            time={ event.start }
+                          />
+                        </span>:
+                        null
                   }
                   { event.paid ?
                     <>
@@ -179,54 +179,54 @@ const Event = ({ event, error }) => {
                           <a className="btn-primary mr-2">See ticket</a>
                         </Link>:
                         event.ticket && start.isAfter(dayjs()) ?
-                        <Link href={ prependHttp(event.ticket) }>
-                          <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
-                        </Link>:
-                        start.isAfter(dayjs())?
-                        <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
-                          <a className="btn-primary mr-2">Buy ticket</a>
-                        </Link>:
-                        null
+                          <Link href={ prependHttp(event.ticket) }>
+                            <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
+                          </Link>:
+                          start.isAfter(dayjs())?
+                            <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
+                              <a className="btn-primary mr-2">Buy ticket</a>
+                            </Link>:
+                            null
                       }
                     </>:
                     <>
                       {
                         start.isBefore(dayjs()) && end && end.isAfter(dayjs()) && event.location?
-                        <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                        start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
-                        <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
-                        !isAuthenticated && event.recording ?
-                        <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                          <a className="btn-primary mr-2">Signup to watch recording</a>
-                        </Link>:
-                        !isAuthenticated && start.isAfter(dayjs()) ?
-                        <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                          <a className="btn-primary mr-2">Signup to RSVP</a>
-                        </Link>:
-                        end && end.isBefore(dayjs()) ?
-                        start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location ?
-                        <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                        <span className="p3 mr-2 italic">This event has ended.</span>:
-                        attendees?.includes(user._id) ?
-                        <a
-                          href="#"
-                          className="btn-primary mr-2"
-                          onClick={ e => {
-                            e.preventDefault();
-                            attendEvent(event._id, !(attendees?.includes(user._id)));
-                          }}
-                        >
+                          <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
+                          start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
+                            <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
+                            !isAuthenticated && event.recording ?
+                              <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                                <a className="btn-primary mr-2">Signup to watch recording</a>
+                              </Link>:
+                              !isAuthenticated && start.isAfter(dayjs()) ?
+                                <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                                  <a className="btn-primary mr-2">Signup to RSVP</a>
+                                </Link>:
+                                end && end.isBefore(dayjs()) ?
+                                  start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location ?
+                                    <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
+                                    <span className="p3 mr-2 italic">This event has ended.</span>:
+                                  attendees?.includes(user._id) ?
+                                    <a
+                                      href="#"
+                                      className="btn-primary mr-2"
+                                      onClick={ e => {
+                                        e.preventDefault();
+                                        attendEvent(event._id, !(attendees?.includes(user._id)));
+                                      }}
+                                    >
                           Cancel RSVP
-                        </a>:
-                        <button
-                          onClick={ e => {
-                            e.preventDefault();
-                            attendEvent(event._id, !(attendees?.includes(user._id)));
-                          }}
-                          className="btn-primary mr-2"
-                        >
+                                    </a>:
+                                    <button
+                                      onClick={ e => {
+                                        e.preventDefault();
+                                        attendEvent(event._id, !(attendees?.includes(user._id)));
+                                      }}
+                                      className="btn-primary mr-2"
+                                    >
                           Attend
-                        </button>
+                                    </button>
                       }
                     </>
                   }
@@ -300,25 +300,25 @@ const Event = ({ event, error }) => {
             { attendees && attendees.length > 0 && <section className="attendees card-body mb-6">
               <h3 className="text-2xl font-bold">{start && start.isAfter(dayjs()) ? 'Who&apos;s coming?' : 'Who attended?'}</h3>
               { event.price || event.ticketOptions?
-                  <div className="-space-x-3 flex flex-row flex-wrap">
-                    { Array.from(new Set(attendees)).map((_id) => {
-                      const attendee = platform.user.findOne(_id);
-                      if (!attendee) {
-                        return null;
-                      }
+                <div className="-space-x-3 flex flex-row flex-wrap">
+                  { Array.from(new Set(attendees)).map((_id) => {
+                    const attendee = platform.user.findOne(_id);
+                    if (!attendee) {
+                      return null;
+                    }
 
-                      return (
-                        <Link key={ attendee.get('_id') } as={`/members/${attendee.get('slug')}`} href="/members/[slug]">
-                          <a className="from user-preview z-10">
-                            <ProfilePhoto size="sm" user={attendee.toJS()} />
-                            {/* <span className="name">{ user.get('screenname') }</span> */}
-                          </a>
-                        </Link>
-                      );
-                    })
+                    return (
+                      <Link key={ attendee.get('_id') } as={`/members/${attendee.get('slug')}`} href="/members/[slug]">
+                        <a className="from user-preview z-10">
+                          <ProfilePhoto size="sm" user={attendee.toJS()} />
+                          {/* <span className="name">{ user.get('screenname') }</span> */}
+                        </a>
+                      </Link>
+                    );
+                  })
                   }
                 </div>:
-                  platform && attendees.length > 0 ?
+                platform && attendees.length > 0 ?
                   <div>
                     { attendees.map(uid => {
                       const attendee = platform.user.findOne(uid);
@@ -335,9 +335,9 @@ const Event = ({ event, error }) => {
                         </Link>
                       );
                     })
-                  }
-                </div>:
-                'No results'
+                    }
+                  </div>:
+                  'No results'
               }
             </section> }
 

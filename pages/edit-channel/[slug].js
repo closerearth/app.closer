@@ -37,7 +37,7 @@ const EditChannel = ({ channel }) => {
           deleteButton="Delete Channel"
           onDelete={ () => window.location.href = '/community' }
         />
-        </div>
+      </div>
     </Layout>
   );
 }

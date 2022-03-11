@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import api, { formatSearch } from '../utils/api';
@@ -18,26 +18,25 @@ const UsersTable = ({ where, limit }) => {
   const [page, setPage] = useState(1);
   const [addRole, setAddRole] = useState({});
   const [error, setErrors] = useState(false);
-  const params = { where, sort_by: '-created', limit, page };
+  const params = useMemo(() => ({ where, sort_by: '-created', limit, page }), [where, limit, page]);
   const users = platform.user.find(params);
   const totalUsers = platform.user.findCount(params);
   const loading = platform.user.areLoading(params);
 
-  const loadData = async () => {
-    try {
-      await Promise.all([
-        platform.user.get(params),
-        platform.user.getCount(params)
-      ]);
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message);
-    }
-  };
-
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        await Promise.all([
+          platform.user.get(params),
+          platform.user.getCount(params)
+        ]);
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message);
+      }
+    };
     loadData();
-  }, [where, page]);
+  }, [where, page, params, platform.user]);
 
   return (
     <div className="card">
@@ -60,8 +59,7 @@ const UsersTable = ({ where, limit }) => {
                 </tr>
               </thead>
               <tbody className="text-sm divide-y divide-gray-100">
-              {
-                users.map((row) => {
+                { users.map((row) => {
                   // Fetch the itemized object which can have been patched
                   const user = platform.user.findOne(row.get('_id'));
 
@@ -118,28 +116,29 @@ const UsersTable = ({ where, limit }) => {
                     </tr>
                   );
                 })}
-            </tbody>
-          </table>
-          <div className="card-footer">
-            <Pagination
-              loadPage={ (page) => {
-                setPage(page);
-                loadData();
-              }}
-              page={ page }
-              limit={ limit }
-              total={ totalUsers }
-              items={ users }
-            />
+              </tbody>
+            </table>
+            <div className="card-footer">
+              <Pagination
+                loadPage={ (page) => {
+                  setPage(page);
+                  loadData();
+                }}
+                page={ page }
+                limit={ limit }
+                total={ totalUsers }
+                items={ users }
+              />
+            </div>
+          </div>:
+          <div className="p-8 text-center">
+            <i>No users found</i>
           </div>
-        </div>:
-        <div className="p-8 text-center">
-          <i>No users found</i>
-        </div>
       }
     </div>
-  )
-};
+  );
+}
+
 UsersTable.defaultProps = {
   limit: 50
 }

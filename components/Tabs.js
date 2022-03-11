@@ -31,7 +31,7 @@ const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
                   } }
                   className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }
                 >
-                    { tab.title }
+                  { tab.title }
                 </a>
               </Link>
             </li>

@@ -37,7 +37,7 @@ const EditTask = ({ task }) => {
           deleteButton="Delete Task"
           onDelete={ () => router.push('/') }
         />
-        </div>
+      </div>
     </Layout>
   );
 }

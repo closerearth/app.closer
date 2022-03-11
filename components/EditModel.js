@@ -23,38 +23,38 @@ export const currencies = [
 
 const getSample = (field) => {
   switch(field.type) {
-    case 'text':
-    case 'longtext':
-    case 'email':
-    case 'phone':
-      return '';
-    case 'number':
-      return 0;
-    case 'currency':
-      return {
+  case 'text':
+  case 'longtext':
+  case 'email':
+  case 'phone':
+    return '';
+  case 'number':
+    return 0;
+  case 'currency':
+    return {
+      cur: currencies[0].value,
+      val: 0
+    };
+  case 'tags':
+    return [];
+  case 'date':
+    return new Date();
+  case 'switch':
+    return false;
+  case 'datetime':
+    return null;
+  case 'select':
+    return field.options && field.options[0] && field.options[0].value;
+  case 'autocomplete':
+  case 'currencies':
+    return [
+      {
         cur: currencies[0].value,
         val: 0
-      };
-    case 'tags':
-      return [];
-    case 'date':
-      return new Date();
-    case 'switch':
-      return false;
-    case 'datetime':
-      return null;
-    case 'select':
-      return field.options && field.options[0] && field.options[0].value;
-    case 'autocomplete':
-    case 'currencies':
-      return [
-        {
-          cur: currencies[0].value,
-          val: 0
-        }
-      ];
-    default:
-      throw new Error(`Invalid model type:${field.type}`);
+      }
+    ];
+  default:
+    throw new Error(`Invalid model type:${field.type}`);
   }
 }
 // If no id is passed, we are creating a new model
@@ -93,29 +93,6 @@ const EditModel = ({
   };
   const [error, setErrors] = useState(false);
 
-  const loadData = async () => {
-    try {
-      if (id && !initialData) {
-        const { data: { results: modelData } } = await api.get(`${endpoint}/${id}`);
-        setData(modelData);
-        // Look out for dependent data
-        await Promise.all(fields.map(async (field) => {
-          if (
-            field.type === 'autocomplete' &&
-            field.endpoint &&
-            modelData[field.name] &&
-            typeof modelData[field.name][0] !== 'object'
-          ) {
-            const params = { where: { _id: { $in: modelData[field.name] } } };
-            const { data: { results } } = await api.get(field.endpoint, { params });
-            update(field.name, results);
-          }
-        }));
-      }
-    } catch (err) {
-      setErrors(err.response?.data?.error || err.message)
-    }
-  };
   const validate = updatedData => {
     const validationErrors = [];
     fields.forEach(field => {
@@ -165,8 +142,30 @@ const EditModel = ({
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    (async () => {
+      try {
+        if (id && !initialData) {
+          const { data: { results: modelData } } = await api.get(`${endpoint}/${id}`);
+          setData(modelData);
+          // Look out for dependent data
+          await Promise.all(fields.map(async (field) => {
+            if (
+              field.type === 'autocomplete' &&
+              field.endpoint &&
+              modelData[field.name] &&
+              typeof modelData[field.name][0] !== 'object'
+            ) {
+              const params = { where: { _id: { $in: modelData[field.name] } } };
+              const { data: { results } } = await api.get(field.endpoint, { params });
+              update(field.name, results);
+            }
+          }));
+        }
+      } catch (err) {
+        setErrors(err.response?.data?.error || err.message)
+      }
+    })();
+  }, [endpoint, id, initialData, fields, update]);
 
   if (!isPublic && !isAuthenticated) {
     return <div className="validation-error card">User not authenticated.</div>;
@@ -187,36 +186,36 @@ const EditModel = ({
       }
       {
         fields && fields
-        .filter((field) => {
-          if (field.showIf) {
-            if (field.showIf.some(({ field, value }) => data[field] === value)) {
-              return true;
+          .filter((field) => {
+            if (field.showIf) {
+              if (field.showIf.some(({ field, value }) => data[field] === value)) {
+                return true;
+              }
+              return false;
             }
-            return false;
-          }
-          return true;
-        })
-        .map(({ label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel }) => {
-          const currency = type === 'currency' && currencies.find(cur => cur.value === data[name]?.cur);
+            return true;
+          })
+          .map(({ label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel }) => {
+            const currency = type === 'currency' && currencies.find(cur => cur.value === data[name]?.cur);
 
-          return (
-            <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
-              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label }</label>
-              { toggleFeature && (
-                <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
-                  <Switch
-                    checked={ featureToggles[name] }
-                    onChange={ () => {
-                      setFeatureToggles({ ...featureToggles, [name]: !featureToggles[name] });
-                      if (!featureToggles[name]) {
-                        update(name, defaultValue || '')
-                      }
-                    } }
-                    label={ toggleLabel }
-                  />
-                </div>
-              ) }
-              { (!toggleFeature || featureToggles[name]) &&
+            return (
+              <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
+                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label }</label>
+                { toggleFeature && (
+                  <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
+                    <Switch
+                      checked={ featureToggles[name] }
+                      onChange={ () => {
+                        setFeatureToggles({ ...featureToggles, [name]: !featureToggles[name] });
+                        if (!featureToggles[name]) {
+                          update(name, defaultValue || '')
+                        }
+                      } }
+                      label={ toggleLabel }
+                    />
+                  </div>
+                ) }
+                { (!toggleFeature || featureToggles[name]) &&
                 <>
                   { ['text', 'email', 'phone', 'hidden', 'number', 'date'].includes(type) && <input
                     type={ type }
@@ -242,9 +241,9 @@ const EditModel = ({
                   { type === 'currency' &&
                     <div className="currency-group flex justify-start items-center">
                       <select
-                          value={ data[name]?.cur }
-                          onChange={e => update(`${name}.cur`, e.target.value)}
-                        >
+                        value={ data[name]?.cur }
+                        onChange={e => update(`${name}.cur`, e.target.value)}
+                      >
                         {currencies.map(opt => (
                           <option value={ opt.value } key={opt.value}>
                             {opt.symbol} - {opt.label}
@@ -261,15 +260,15 @@ const EditModel = ({
                         onChange={e => update(`${name}.val`, e.target.value)}
                         required={ required }
                       />
-                  </div>}
+                    </div>}
                   { type === 'currencies' &&
                     <div className="currencies-group">
                       { (data[name] || []).map((currencyGroup, index) => (
                         <div className="currency-group" key={ `${name}.${index}.cur` }>
                           <select
-                              value={ data[name]?.cur }
-                              onChange={e => update(`${name}.${index}.cur`, e.target.value)}
-                            >
+                            value={ data[name]?.cur }
+                            onChange={e => update(`${name}.${index}.cur`, e.target.value)}
+                          >
                             {currencies.map(opt => (
                               <option value={ opt.value } key={opt.value}>
                                 {opt.symbol} - {opt.label}
@@ -299,9 +298,9 @@ const EditModel = ({
                   }
                   { type === 'select' &&
                     <select
-                        value={ data[name] }
-                        onChange={e => update(name, e.target.value)}
-                      >
+                      value={ data[name] }
+                      onChange={e => update(name, e.target.value)}
+                    >
                       {options.map(opt => (
                         <option value={ opt.value } key={opt.value}>
                           {opt.label}
@@ -320,16 +319,16 @@ const EditModel = ({
                     <div className="tags">
                       { data[name] && data[name].length > 0 && data[name].map(tag => (
                         <div className="tag" key={ tag } >
-                            <span className="ellipsis">{ tag }</span>
-                            <a
-                              href="#"
-                              className="remove"
-                              onClick={ () => {
-                                update(name, data[name].filter(el => el !== tag), tag, 'DELETE')
-                              }}
-                            >
+                          <span className="ellipsis">{ tag }</span>
+                          <a
+                            href="#"
+                            className="remove"
+                            onClick={ () => {
+                              update(name, data[name].filter(el => el !== tag), tag, 'DELETE')
+                            }}
+                          >
                               X
-                            </a>
+                          </a>
                         </div>
                       ))}
                       <input
@@ -379,11 +378,11 @@ const EditModel = ({
                     </div>
                   }
                 </>
-              }
+                }
               </div>
             );
           }
-        )
+          )
       }
       <div className="mt-2">
         <button type="submit" className="btn-primary">

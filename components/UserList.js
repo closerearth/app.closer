@@ -15,20 +15,6 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
   const [error, setErrors] = useState(false);
   const router = useRouter();
 
-  const loadData = async () => {
-    try {
-      const where = channel && {
-        viewChannels: channel
-      };
-      const params = { where: where && formatSearch(where), sort_by: '-created', limit };
-      const { data: { results } } = await api.get('/user', { params });
-      setUsers(results);
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message)
-    }
-  };
-
   const addMember = async (member) => {
     try {
       await api.post(`/moderator/channel/${channel}/add`, member);
@@ -40,8 +26,21 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
   };
 
   useEffect(() => {
+    const loadData = async () => {
+      try {
+        const where = channel && {
+          viewChannels: channel
+        };
+        const params = { where: where && formatSearch(where), sort_by: '-created', limit };
+        const { data: { results } } = await api.get('/user', { params });
+        setUsers(results);
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message)
+      }
+    };
     loadData();
-  }, [channel]);
+  }, [channel, limit, setUsers]);
 
 
   return (

@@ -47,15 +47,15 @@ const ChannelPage = ({ channel }) => {
                   <p className="about-text">
                     <Linkify
                       componentDecorator={(decoratedHref, decoratedText, key) => (
-                          <a
-                            target="_blank"
-                            rel="nofollow noreferrer"
-                            href={decoratedHref}
-                            key={key}
-                            onClick={e => e.stopPropagation()}
-                          >
-                              {decoratedText}
-                          </a>
+                        <a
+                          target="_blank"
+                          rel="nofollow noreferrer"
+                          href={decoratedHref}
+                          key={key}
+                          onClick={e => e.stopPropagation()}
+                        >
+                          {decoratedText}
+                        </a>
                       )}
                     >
                       {channel.description}

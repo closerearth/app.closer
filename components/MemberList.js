@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
@@ -33,27 +33,23 @@ const MemberList = ({
   const where = Object.assign({}, filter, (channel && {
     category: channel
   }));
-  const params = { where, sort_by: 'created', limit, page };
+  const params = useMemo(() => ({ where, sort_by: 'created', limit, page }), [where, limit, page]);
   const users = platform.user.find(params);
   const totalUsers = platform.user.findCount(params);
 
-
-
-  const loadData = async () => {
-    try {
-      await Promise.all([
-        platform.user.get(params),
-        platform.user.getCount(params)
-      ]);
-    } catch (err) {
-      console.log('Load error', err);
-      setErrors(err.message);
-    }
-  };
-
   useEffect(() => {
-    loadData();
-  }, [filter, channel, page]);
+    (async () => {
+      try {
+        await Promise.all([
+          platform.user.get(params),
+          platform.user.getCount(params)
+        ]);
+      } catch (err) {
+        console.log('Load error', err);
+        setErrors(err.message);
+      }
+    })();
+  }, [params, platform]);
 
   return (
     <section className="member-page">
@@ -65,11 +61,11 @@ const MemberList = ({
         <div className={`grid gap-10 ${list ? 'md:grid-cols-1' : 'md:grid-cols-2'}  justify-start items-center mb-8`}>
           { users && users.count() > 0 ?
             users.map(user => (
-              <Link key={ user.get('_id') } as={`/members/${user.get('slug')}`} href="/members/[slug]">
+              <Link key={ user.get('_id') } passHref as={`/members/${user.get('slug')}`} href="/members/[slug]">
                 <div className="flex flex-col justify-start items-center p-5 w-12/12 max-w-md md:max-w-xl md:w-11/12 border border-zinc-400 rounded-sm">
                   <div className='flex flex-row items-center justify-between w-full'>
-                  <h4 className="font-light text-2xl md:text-2xl">{ user.get('screenname') }</h4>
-                  <ProfilePhoto user={user.toJS()} width={"12"} height={"12"}/>
+                    <h4 className="font-light text-2xl md:text-2xl">{ user.get('screenname') }</h4>
+                    <ProfilePhoto user={user.toJS()} width={"12"} height={"12"}/>
                   </div>
                   { user.get('about') && <p className='mb-3 w-10/12 self-start text-zinc-400 text-sm'>{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p> }
                   <h4 className="text-xs flex self-start mb-3">{user.get('timezone')}</h4>

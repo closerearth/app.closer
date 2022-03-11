@@ -45,25 +45,20 @@ DEMOP
   </nav>
 */
 
+const start = new Date();
+
 const Navigation = () => {
   const [navOpen, toggleNav] = useState(false);
   const [featuredEvents, setFeaturedEvents] = useState(null);
-  const [now, setNow] = useState(dayjs());
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
 
   useEffect(() => {
-    const tick = setInterval(() => {
-      setNow(dayjs());
-    }, 1000);
-    return () => clearInterval(tick);
-  }, []);
-
-  useEffect(async () => {
-    const start = new Date();
-    const where = formatSearch({ featured: true, end: { $gt: start } });
-    const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
-    setFeaturedEvents(fromJS(events));
+    (async () => {
+      const where = formatSearch({ featured: true, end: { $gt: start } });
+      const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
+      setFeaturedEvents(fromJS(events));
+    })();
   }, []);
 
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
@@ -153,10 +148,10 @@ const Navigation = () => {
               >
                 {
                   REGISTRATION_MODE === 'paid' ?
-                  'Get your membership' :
-                  REGISTRATION_MODE === 'curated' ?
-                  'Apply':
-                  'Signup'
+                    'Get your membership' :
+                    REGISTRATION_MODE === 'curated' ?
+                      'Apply':
+                      'Signup'
                 }
               </a>
             </Link> }
@@ -264,10 +259,10 @@ const Navigation = () => {
               >
                 {
                   REGISTRATION_MODE === 'paid' ?
-                  'Get your membership' :
-                  REGISTRATION_MODE === 'curated' ?
-                  'Apply':
-                  'Signup'
+                    'Get your membership' :
+                    REGISTRATION_MODE === 'curated' ?
+                      'Apply':
+                      'Signup'
                 }
               </a>
             </Link> }
