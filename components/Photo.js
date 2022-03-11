@@ -11,7 +11,7 @@ const Photo = ({ id, className, size, title, cover, rounded, width, height, phot
       title={ title }
     >
       { url && <img
-        className={cover ? `relative z-10 object-contain w-full h-full` : ''}
+        className={cover ? 'relative z-10 object-contain w-full h-full' : ''}
         src={ url }
         alt={ title }
         title={ title }

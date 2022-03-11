@@ -2,6 +2,7 @@
   "extends": ["next", "next/core-web-vitals", "prettier"],
   "rules": {
     "@next/next/no-img-element": "off",
-    "indent": ["error", 2]
+    "indent": ["error", 2],
+    "quotes": ["error", "single"]
   }
 }

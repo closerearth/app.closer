@@ -34,7 +34,7 @@ const Prompts = () => {
               { image && <img
                 src={`${cdn}${image}-max-lg.jpg`}
                 alt={ user.screenname }
-                className={`w-16 h-16 rounded-full`}
+                className="w-16 h-16 rounded-full"
               /> }
             </div>
             <div className="ml-4">

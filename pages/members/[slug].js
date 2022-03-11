@@ -302,7 +302,10 @@ const MemberPage = ({ member, loadError }) => {
               }
 
               { isAuthenticated && member._id === currentUser._id &&
-               <button type='button' className='btn-primary w-24' onClick={handleClick}>{editProfile ? "Save" : "Edit"}</button> }
+                <button type="button" className="btn-primary w-24" onClick={handleClick}>
+                  {editProfile ? 'Save' : 'Edit'}
+                </button>
+              }
 
             </div>
 

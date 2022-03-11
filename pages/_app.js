@@ -10,8 +10,8 @@ import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATIO
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
-import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
-import { config } from "@fortawesome/fontawesome-svg-core";
+import '@fortawesome/fontawesome-svg-core/styles.css'; // import Font Awesome CSS
+import { config } from '@fortawesome/fontawesome-svg-core';
 config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically
 
 const Application = ({ tags, query, signedIn, Component, pageProps, token, user }) => {
