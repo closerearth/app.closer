@@ -123,7 +123,7 @@ const Event = ({ event, error }) => {
                 <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-100">
                   <Youtube id={ event.recording } />
                 </div>:
-                  <EventMainImage event={event}  photo={photo} cdn={cdn} isAuthenticated={isAuthenticated} user={user} setPhoto={setPhoto}  />
+                <EventMainImage event={event}  photo={photo} cdn={cdn} isAuthenticated={isAuthenticated} user={user} setPhoto={setPhoto}  />
               }
               <div className="md:w-1/2 p-2">
                 <h2 className="text-xl font-light">
