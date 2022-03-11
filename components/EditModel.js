@@ -83,7 +83,7 @@ const EditModel = ({
 
   // Name: visibleBy, value: [1], option: 1, actionType: ADD
   const update = (name, value, option, actionType) => {
-    const copy = {...data};
+    const copy = { ...data };
     objectPath.set(copy, name, value);
     setData(copy);
 

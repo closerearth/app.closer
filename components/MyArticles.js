@@ -22,8 +22,8 @@ const MyArticles = () => {
           return;
         }
         const [
-          { data: { results: articles }},
-          { data: { results: others }}
+          { data: { results: articles } },
+          { data: { results: others } }
         ] = await Promise.all([
           api.get('/article', { params: { where: formatSearch({ createdBy: user._id }) } }),
           api.get('/article', { params: { where: formatSearch({ createdBy: { $ne: user._id } }) } })

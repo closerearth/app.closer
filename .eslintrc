@@ -3,6 +3,7 @@
   "rules": {
     "@next/next/no-img-element": "off",
     "indent": ["error", 2],
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "object-curly-spacing": ["error", "always"]
   }
 }

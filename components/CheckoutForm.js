@@ -33,7 +33,7 @@ const CheckoutForm = ({
     setProcessing(true);
 
     try {
-      const {error, token} = await stripe.createToken(elements.getElement(CardElement));
+      const { error, token } = await stripe.createToken(elements.getElement(CardElement));
       if (error) {
         setProcessing(false);
         setError(error.message);

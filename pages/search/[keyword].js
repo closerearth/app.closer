@@ -61,7 +61,7 @@ Search.getInitialProps = async ({ req, query }) => {
   try {
     const rawKeyword = (req && req.url.replace('/search/', '')) || (query && query.keyword);
     const keyword = typeof decodeURIComponent !== 'undefined' ? decodeURIComponent(rawKeyword) : rawKeyword;
-    const search = formatSearch({ tags: { $elemMatch: { $eq: keyword  }}});
+    const search = formatSearch({ tags: { $elemMatch: { $eq: keyword  } } });
     const [tags, articles] = await Promise.all([
       api.get(`/distinct/article/tags?where=${search}`),
       api.get(`/article?where=${search}&limit=50`)

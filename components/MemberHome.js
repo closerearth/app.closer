@@ -22,16 +22,16 @@ const MemberHome = () => {
   const loadData = async () => {
     try {
       const params = { sort_by: '-created', where: formatSearch({ parentType: 'channel' }) };
-      const { data: { results: posts }} = await api.get('/post', { params });
+      const { data: { results: posts } } = await api.get('/post', { params });
       const usersToLoad = posts && posts.map(post => post.createdBy);
       const userParams = { params: { where: formatSearch({ _id: { $in: usersToLoad } }) } };
-      const { data: { results: users }} = usersToLoad && await api.get('/user', userParams);
+      const { data: { results: users } } = usersToLoad && await api.get('/user', userParams);
       const channelsToLoad = posts && posts.map(post => post.channel);
       const channelsParams = { params: { where: formatSearch({ _id: { $in: channelsToLoad } }) } };
-      const { data: { results: channels }} = channelsParams && await api.get('/channel', channelsParams);
-      users && setUsersById(users.reduce((acc, val) => ({...acc, [val._id]: val}), {}));
+      const { data: { results: channels } } = channelsParams && await api.get('/channel', channelsParams);
+      users && setUsersById(users.reduce((acc, val) => ({ ...acc, [val._id]: val }), {}));
       posts && setPosts(posts);
-      channels && setChannelsById(channels.reduce((acc, val) => ({...acc, [val._id]: val}), {}));
+      channels && setChannelsById(channels.reduce((acc, val) => ({ ...acc, [val._id]: val }), {}));
     } catch (err) {
       console.log('Load error', err);
       setErrors(err.response?.data?.error || err.message)

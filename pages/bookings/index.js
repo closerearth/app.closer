@@ -15,7 +15,7 @@ const Bookings = () => {
 
   const loadData = async () => {
     await Promise.all([
-      platform.booking.get({ where: { createdBy: user._id }})
+      platform.booking.get({ where: { createdBy: user._id } })
     ]);
   }
 

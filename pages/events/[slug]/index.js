@@ -60,7 +60,7 @@ const Event = ({ event, error }) => {
 
   const attendEvent = async (_id, attend) => {
     try {
-      const {data: { results: event }} = await api.post(`/attend/event/${_id}`, { attend });
+      const { data: { results: event } } = await api.post(`/attend/event/${_id}`, { attend });
       setAttendees(attend ? event.attendees.concat(user._id) : event.attendees.filter(a => a !== user._id));
     } catch (err) {
       alert(`Could not RSVP: ${err.message}`)

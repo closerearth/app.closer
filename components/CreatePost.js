@@ -25,7 +25,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
   const fetchUrlMeta = async (url) => {
     try {
       const { data: { results: attachment } } = await api.get(`/url-lookup/${encodeURIComponent(url)}`);
-      setNewPost({...newPost, attachment });
+      setNewPost({ ...newPost, attachment });
     } catch (err) {
       console.log('Failed to fetch attached URL', err);
     }

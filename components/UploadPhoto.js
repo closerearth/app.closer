@@ -36,7 +36,7 @@ const UploadPhoto = ({ model, id, onSave, label, minimal }) => {
     };
     acceptedFiles.forEach(file => upload(file))
   }, [id, model, onSave])
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   if (!isAuthenticated) {
     return null;

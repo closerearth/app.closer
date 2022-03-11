@@ -27,7 +27,7 @@ const Task = ({ task, error }) => {
 
   const apply = async (_id, application) => {
     try {
-      const {data: { results: task }} = await api.post(`/apply/task/${_id}`, { application });
+      const { data: { results: task } } = await api.post(`/apply/task/${_id}`, { application });
       setApplicants(task.applicants);
     } catch (err) {
       alert(`Could not apply: ${err.message}`)
@@ -36,7 +36,7 @@ const Task = ({ task, error }) => {
 
   const updateStatus = async (_id, status) => {
     try {
-      const {data: { results: task }} = await api.patch(`/task/${_id}`, { status });
+      const { data: { results: task } } = await api.patch(`/task/${_id}`, { status });
       setStatus(task.status);
     } catch (err) {
       alert(`Could not update status: ${err.message}`)

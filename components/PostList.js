@@ -35,7 +35,7 @@ const PostList = ({ allowCreate, channel, parentType, parentId, visibility }) =>
         if (posts && posts.length > 0) {
           const usersToLoad = posts.map(post => post.createdBy);
           const params = { where: formatSearch({ _id: { $in: usersToLoad } }) };
-          const { data: { results }} = await api.get('/user', { params });
+          const { data: { results } } = await api.get('/user', { params });
           if (results) {
             results.forEach(u => {
               usersMap[u._id] = u;
