@@ -194,7 +194,7 @@ const EventCheckout = ({ event, error }) => {
             />
           </section>
         }
-        { ticketOptions && ticketOptions.length > 0 ?
+        { event.paid && ticketOptions && ticketOptions.length > 0 ?
           <section>
             <h3>Ticket options</h3>
             <div className="ticket-options my-4 flex flex-row flex-wrap">
@@ -234,7 +234,7 @@ const EventCheckout = ({ event, error }) => {
           />
           <hr className="divide-y divide-gray-400 my-4" />
         </section>
-        { !paymentReceived && <section>
+        { event.paid && !paymentReceived && <section>
           <h3 className="mb-2">Payment</h3>
           { isVolunteer && <p className="text-sm">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
           { router.query.discount && !discount && <p className="validation-error">Discount code not found.</p> }
@@ -267,6 +267,14 @@ const EventCheckout = ({ event, error }) => {
             </Elements>
           </div>
         </section> }
+        { !event.paid &&
+          <div className="validation-error">
+            This is a free event.
+            <div className="mt-4">
+              <Link href={ `/events/${event.slug}` }><a className="btn-primary">Go back</a></Link>
+            </div>
+          </div>
+        }
         { paymentReceived &&
           <div className="success-box">
             Your payment was received!
