@@ -154,24 +154,16 @@ const Event = ({ event, error }) => {
                   { end && duration > 24 && ` - ${ end.format(dateFormat) }` }
                   { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
                 </h2>
+                {
+                  end && end.isBefore(dayjs()) &&
+                    <h3 className="p3 mr-2 italic">
+                      Event ended
+                    </h3>
+                }
                 <h1 className="md:text-4xl mt-4 font-bold">{event.name}</h1>
                 { loadError && <div className="validation-error">{loadError}</div> }
 
                 <div className="mt-4 event-actions flex items-center">
-                  {
-                    end && end.isBefore(dayjs())?
-                      <span className="p3 mr-2 italic">
-                      Event ended
-                      </span>:
-                      start.isAfter(dayjs())?
-                        <span className="p3 mr-2 italic">
-                      Event is happening{' '}
-                          <TimeSince
-                            time={ event.start }
-                          />
-                        </span>:
-                        null
-                  }
                   { event.paid ?
                     <>
                       { myTickets && myTickets.count() > 0 ?
