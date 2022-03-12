@@ -56,11 +56,9 @@ export default {
       defaultValue: false
     },
     {
-      name: 'price',
-      label: 'Price',
-      defaultValue: 0,
-      type: 'currency',
-      placeholder: '0.00',
+      name: 'ticketOptions',
+      label: 'Ticket options',
+      type: 'ticketOptions',
       showIf: [
         {
           field: 'paid',
@@ -68,13 +66,25 @@ export default {
         }
       ]
     },
+    // {
+    //   name: 'price',
+    //   label: 'Price',
+    //   defaultValue: 0,
+    //   type: 'currency',
+    //   placeholder: '0.00',
+    //   showIf: [
+    //     {
+    //       field: 'paid',
+    //       value: true
+    //     }
+    //   ]
+    // },
     {
       name: 'ticket',
       label: 'External ticketing URL',
       defaultValue: '',
       type: 'text',
       placeholder: 'eventbrite.com/my-ticket',
-      // toggleFeature: true,
       showIf: [
         {
           field: 'paid',
@@ -118,7 +128,7 @@ export default {
         { label: 'Private (only members can apply)', value: 'private' },
       ]
     },
-    { name: 'rewards', label: 'Rewards', type: 'currencies' }
+    { name: 'rewards', label: 'Reward', type: 'currency' }
   ],
   listing: [
     { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },

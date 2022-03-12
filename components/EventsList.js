@@ -33,19 +33,20 @@ const EventsList = ({
   const events = platform.event.find(eventsFilter);
   const totalEvents = platform.event.findCount(eventsFilter);
 
+  const loadData = async () => {
+    try {
+      await Promise.all([
+        platform.event.get(eventsFilter),
+        platform.event.getCount(eventsFilter)
+      ]);
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message)
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        await Promise.all([
-          platform.event.get(eventsFilter),
-          platform.event.getCount(eventsFilter)
-        ]);
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message)
-      }
-    })();
+    loadData();
   }, [eventsFilter, platform]);
 
   return (

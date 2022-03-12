@@ -37,16 +37,18 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
     }
   }
 
+  const loadData = async () => {
+    try {
+      platform.application.getCount(filter);
+      platform.application.get(filter);
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message)
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        platform.application.getCount(filter);
-        platform.application.get(filter);
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message)
-      }
-    })();
+    loadData();
   }, [platform, filter]);
 
   return (

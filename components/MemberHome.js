@@ -65,6 +65,7 @@ const MemberHome = () => {
             { error && <div className="error-box">{ error }</div> }
             <section>
               <PostList
+                channel={ null }
                 allowCreate
               />
             </section>

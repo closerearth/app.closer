@@ -53,12 +53,14 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
 
+  const loadData = async () => {
+    const where = formatSearch({ featured: true, end: { $gt: start } });
+    const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
+    setFeaturedEvents(fromJS(events));
+  };
+
   useEffect(() => {
-    (async () => {
-      const where = formatSearch({ featured: true, end: { $gt: start } });
-      const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
-      setFeaturedEvents(fromJS(events));
-    })();
+    loadData();
   }, []);
 
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();

@@ -73,7 +73,6 @@ const MemberPage = ({ member, loadError }) => {
     }
   }
 
-
   const sendMessage = async (content) => {
     try {
       setSendErrors(null);

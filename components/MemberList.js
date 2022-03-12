@@ -37,18 +37,20 @@ const MemberList = ({
   const users = platform.user.find(params);
   const totalUsers = platform.user.findCount(params);
 
+  const loadData = async () => {
+    try {
+      await Promise.all([
+        platform.user.get(params),
+        platform.user.getCount(params)
+      ]);
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        await Promise.all([
-          platform.user.get(params),
-          platform.user.getCount(params)
-        ]);
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message);
-      }
-    })();
+    loadData();
   }, [params, platform]);
 
   return (
