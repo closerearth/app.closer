@@ -196,9 +196,8 @@ const Event = ({ event, error }) => {
                                   <a className="btn-primary mr-2">Signup to RSVP</a>
                                 </Link>:
                                 end && end.isBefore(dayjs()) ?
-                                  start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location ?
+                                  start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location &&
                                     <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                                    <span className="p3 mr-2 italic">This event has ended.</span>:
                                   attendees?.includes(user._id) ?
                                     <a
                                       href="#"
