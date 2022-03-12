@@ -66,6 +66,17 @@ export default {
         }
       ]
     },
+    {
+      name: 'discounts',
+      label: 'Discount codes',
+      type: 'discounts',
+      showIf: [
+        {
+          field: 'paid',
+          value: true
+        }
+      ]
+    },
     // {
     //   name: 'price',
     //   label: 'Price',

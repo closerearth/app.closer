@@ -2,7 +2,7 @@ import react, { useState } from 'react';
 
 import PriceEditor from './PriceEditor';
 
-const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
+const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
   const [options, setOptions] = useState(value);
   const updateOptions = (update) => {
     setOptions(update);
@@ -17,11 +17,9 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
     updateOptions(options.concat({
       id: Math.random(),
       name: '',
-      icon: null,
-      price: 0,
-      currency: 'USD',
-      disclaimer: '',
-      limit: 0
+      code: '',
+      percent: null,
+      val: null
     }));
   };
   const removeOption = (e, index) => {
@@ -30,12 +28,22 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
   }
 
   return (
-    <div className="ticket-options flex justify-start items-center flex-wrap">
+    <div className="discounts-options flex justify-start items-center flex-wrap">
       {
         options && options.map((option, index) => (
           <div key={ option._id || option.id || index } className="mr-3 mb-4 card">
             <div className="mb-3">
-              <label>Ticket name</label>
+              <label>Code</label>
+              <input
+                type="text"
+                value={ option.code }
+                placeholder="SPECIAL_PRICE_50"
+                onChange={e => { e.preventDefault(); updateOption(index, { ...option, code: e.target.value }); }}
+              />
+            </div>
+            <div className="mb-3">
+              <label>Ticket Name (optional)</label>
+              <p className="italic text-gray-500 text-xs">If set, the discount code will only apply for specific ticket</p>
               <input
                 type="text"
                 value={ option.name }
@@ -44,35 +52,31 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Number of tickets</label>
-              <p className="italic text-gray-500 text-xs">Put 0 for no limit.</p>
+              <label>Percent discount</label>
               <input
                 type="Number"
                 min="0"
-                max="10000"
+                max="100"
                 step="1"
                 className="w-32"
-                value={ option.limit }
-                placeholder="Quantity"
-                onChange={e => { e.preventDefault(); updateOption(index, { ...option, limit: e.target.value }); }}
+                value={ option.percent && option.percent * 100 }
+                placeholder="24%"
+                onChange={e => { e.preventDefault(); updateOption(index, { ...option, percent: e.target.value / 100 }); }}
               />
             </div>
             <div className="mb-3">
-              <label>Ticket details</label>
-              <textarea
-                value={ option.disclaimer }
-                placeholder="This ticket provides you with..."
-                onChange={e => updateOption(index, { ...option, disclaimer: e.target.value })}
-                className="textarea"
+              <label>Nominal discount</label>
+              <input
+                type="Number"
+                min="0"
+                max="100000"
+                step="1"
+                className="w-32"
+                value={ option.val }
+                placeholder="24$"
+                onChange={e => { e.preventDefault(); updateOption(index, { ...option, val: e.target.value }); }}
               />
             </div>
-            <PriceEditor
-              value={ { cur: option.currency, val: option.price } }
-              onChange={ price => {
-                updateOption(index, { ...option, price: price.val, currency: price.cur });
-              } }
-              required={ required }
-            />
             <div className="mt-3">
               <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>remove</a>
             </div>
@@ -80,15 +84,15 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
         ))
       }
       <div className="flex justify-center items-center">
-        <a href="#" className="btn" onClick={ e => addOption(e) }>Add ticket type</a>
+        <a href="#" className="btn" onClick={ e => addOption(e) }>Add discount code</a>
       </div>
     </div>
   );
 }
 
-TicketOptionsEditor.defaultProps = {
+DiscountsEditor.defaultProps = {
   onChange: null,
   value: []
 }
 
-export default TicketOptionsEditor;
+export default DiscountsEditor;

@@ -6,6 +6,7 @@ import Autocomplete from './Autocomplete';
 import DateTimePicker from './DateTimePicker';
 import PriceEditor from './PriceEditor';
 import TicketOptionsEditor from './TicketOptionsEditor';
+import DiscountsEditor from './DiscountsEditor';
 import { trackEvent } from './Analytics';
 import api, { formatSearch } from '../utils/api';
 import { useAuth } from '../contexts/auth.js';
@@ -41,6 +42,14 @@ const getSample = (field) => {
       currency: 'USD',
       disclaimer: '',
       limit: 0
+    }];
+  case 'discounts':
+    return [{
+      id: Math.random(),
+      name: '',
+      code: '',
+      percent: 0,
+      val: 0,
     }];
   case 'select':
     return field.options && field.options[0] && field.options[0].value;
@@ -344,6 +353,12 @@ const EditModel = ({
                 }
                 { type === 'ticketOptions' &&
                   <TicketOptionsEditor
+                    value={ data[name] }
+                    onChange={value => update(name, value)}
+                  />
+                }
+                { type === 'discounts' &&
+                  <DiscountsEditor
                     value={ data[name] }
                     onChange={value => update(name, value)}
                   />
