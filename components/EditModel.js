@@ -179,6 +179,9 @@ const EditModel = ({
 
   useEffect(() => {
     loadData();
+    if (initialData && JSON.stringify(initialData) !== JSON.stringify(data)) {
+      setData(initialData);
+    }
   }, [endpoint, id, initialData, fields]);
 
   if (!isPublic && !isAuthenticated) {
