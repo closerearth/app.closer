@@ -11,7 +11,7 @@ const EventMainImage = ({
   setPhoto,
 }) => {
   return (
-    <div className="w-full mb-4 relative bg-gray-200 h-[450px]">
+    <div className="w-full flex mb-4 relative bg-gray-200 h-[450px]">
       {photo && (
         <img
           className="object-cover h-full w-full"
@@ -29,7 +29,7 @@ const EventMainImage = ({
           />
         </div>
       )}
-      <h2 className="absolute inset-0 top-1/3 ml-auto mr-auto w-max text-background text-6xl">
+      <h2 className="absolute text-center top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 m-auto h-auto w-8/12 text-background text-6xl">
         {event.name}
       </h2>
       <Link href={'/events'}>
