@@ -19,7 +19,6 @@ import { useAuth } from '../../../contexts/auth';
 
 const maxVolunteers = 20;
 
-const stripePromise = loadStripe(config.STRIPE_PUB_KEY);
 const optionToIcon = {
   camping: faCampground,
   glamping_quattro: faBed,
@@ -44,6 +43,7 @@ const EventCheckout = ({ event, error }) => {
   const discount = router.query.discount && event.discounts && event.discounts.find(d => d.code === router.query.discount);
   const isVolunteer = !!router.query.volunteer && volunteerTicketsSold < maxVolunteers;
   const volunteerCapacityReached = !!router.query.volunteer && volunteerTicketsSold >= maxVolunteers;
+  const stripe = loadStripe(event.stripePub || config.STRIPE_PUB_KEY);
 
   let total = event.price ? event.price.val : 0;
   let currency = event.price ? event.price.cur : 'usd';
@@ -248,7 +248,7 @@ const EventCheckout = ({ event, error }) => {
           <p className="text-sm mb-3">Total: <b>{ priceFormat(total, currency) }</b></p>
           <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>
           <div className="mt-2">
-            <Elements stripe={stripePromise}>
+            <Elements stripe={ stripe }>
               <CheckoutForm
                 type="event"
                 ticketOption={ ticketOption }

@@ -18,8 +18,8 @@ const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
       id: Math.random(),
       name: '',
       code: '',
-      percent: null,
-      val: null
+      percent: '',
+      val: ''
     }));
   };
   const removeOption = (e, index) => {

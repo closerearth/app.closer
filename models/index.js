@@ -22,7 +22,9 @@ export default {
   ],
   event: [
     { name: 'name', label: 'Event title', type: 'text', placeholder: 'My event', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A gathering around...' },
+    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true },
+    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true },
     {
       name: 'virtual',
       label: 'Is this a virtual event?',
@@ -63,6 +65,10 @@ export default {
         {
           field: 'paid',
           value: true
+        },
+        {
+          field: 'ticket',
+          value: ''
         }
       ]
     },
@@ -90,21 +96,38 @@ export default {
     //     }
     //   ]
     // },
+    // {
+    //   name: 'useExternalTicketUrl',
+    //   label: 'Do you want to use a third party ticketing platform?',
+    //   type: 'switch',
+    //   defaultValue: false,
+    //   showIf: [
+    //     {
+    //       field: 'paid',
+    //       value: true
+    //     },
+    //   ]
+    // },
     {
       name: 'ticket',
-      label: 'External ticketing URL',
+      label: 'Use External Ticketing URL',
       defaultValue: '',
       type: 'text',
-      placeholder: 'eventbrite.com/my-ticket',
-      showIf: [
-        {
-          field: 'paid',
-          value: true
-        }
-      ]
+      toggleFeature: true,
+      placeholder: 'eventbrite.com/my-ticket'
     },
-    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true },
-    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true },
+    {
+      name: 'stripePub',
+      label: 'Custom Stripe Public Key',
+      type: 'text',
+      toggleFeature: true
+    },
+    {
+      name: 'stripeKey',
+      label: 'Custom Stripe Private Key',
+      type: 'text',
+      toggleFeature: true
+    },
     {
       name: 'visibility',
       label: 'Visibility',
