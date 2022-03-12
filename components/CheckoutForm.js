@@ -17,6 +17,7 @@ const CheckoutForm = ({
   email,
   name,
   message,
+  fields,
   volunteer,
   total,
   currency,
@@ -55,6 +56,7 @@ const CheckoutForm = ({
         email,
         name,
         message,
+        fields,
         volunteer
       });
       if (onSuccess) {

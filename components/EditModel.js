@@ -7,6 +7,7 @@ import DateTimePicker from './DateTimePicker';
 import PriceEditor from './PriceEditor';
 import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
+import FieldsEditor from './FieldsEditor';
 import { trackEvent } from './Analytics';
 import api, { formatSearch } from '../utils/api';
 import { useAuth } from '../contexts/auth.js';
@@ -43,6 +44,8 @@ const getSample = (field) => {
       disclaimer: '',
       limit: 0
     }];
+  case 'fields':
+    return [];
   case 'discounts':
     return [{
       id: Math.random(),
@@ -206,7 +209,7 @@ const EditModel = ({
             }
             return true;
           })
-          .map(({ label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel }) => {
+          .map(({ label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel, min, max }) => {
             return (
               <div className={`form-field w-full mb-6 form-type-${type}`} key={ name }>
                 <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label }</label>
@@ -230,6 +233,8 @@ const EditModel = ({
                     type={ type }
                     value={ data[name] }
                     placeholder={ placeholder }
+                    min={ min }
+                    max={ max }
                     onChange={e => update(name, e.target.value)}
                     required={ required }
                   /> }
@@ -379,6 +384,12 @@ const EditModel = ({
                   }
                   { type === 'discounts' &&
                     <DiscountsEditor
+                      value={ data[name] }
+                      onChange={value => update(name, value)}
+                    />
+                  }
+                  { type === 'fields' &&
+                    <FieldsEditor
                       value={ data[name] }
                       onChange={value => update(name, value)}
                     />

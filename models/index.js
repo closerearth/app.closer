@@ -83,31 +83,11 @@ export default {
         }
       ]
     },
-    // {
-    //   name: 'price',
-    //   label: 'Price',
-    //   defaultValue: 0,
-    //   type: 'currency',
-    //   placeholder: '0.00',
-    //   showIf: [
-    //     {
-    //       field: 'paid',
-    //       value: true
-    //     }
-    //   ]
-    // },
-    // {
-    //   name: 'useExternalTicketUrl',
-    //   label: 'Do you want to use a third party ticketing platform?',
-    //   type: 'switch',
-    //   defaultValue: false,
-    //   showIf: [
-    //     {
-    //       field: 'paid',
-    //       value: true
-    //     },
-    //   ]
-    // },
+    {
+      name: 'fields',
+      label: 'Custom questions',
+      type: 'fields'
+    },
     {
       name: 'ticket',
       label: 'Use External Ticketing URL',
@@ -140,12 +120,6 @@ export default {
     { name: 'password', label: 'Event password', type: 'text', placeholder: '(If set, user will need the password to see)' },
     { name: 'participationGuideUrl', label: 'Participation guide', type: 'text', placeholder: 'https://event.com/participation' },
   ],
-  listing: [
-    { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
-    { name: 'price', label: 'Price (€)', type: 'number', placeholder: '10.00', required: true },
-    { name: 'quantity', label: 'Quantity available', type: 'text', placeholder: '1', required: false },
-  ],
   task: [
     { name: 'title', label: 'Title', type: 'text', placeholder: 'Plant tomatoes in the garden', required: true },
     { name: 'description', label: 'Summary of work', type: 'longtext', placeholder: `- Establish farming beds
@@ -166,27 +140,31 @@ export default {
   ],
   listing: [
     { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A beautiful treehouse loft with hot tub.' },
     {
-      name: 'channel',
-      label: 'Channel',
-      type: 'select',
-      options: []
+      name: 'private',
+      label: 'Is this a private space?',
+      type: 'switch',
+      defaultValue: false
     },
     {
-      name: 'category',
-      label: 'Category',
-      type: 'select',
-      options: [
-        { label: 'Shared room', value: 'shared room' },
-        { label: 'Private room', value: 'private room' },
-        { label: 'Glamping tent', value: 'glamping tent' },
-        { label: 'Camping', value: 'camping' },
-        { label: 'Van (parking)', value: 'van' },
-      ]
+      name: 'kitchen',
+      label: 'Does the space have a private kitchen?',
+      type: 'switch',
+      defaultValue: false
     },
-    { name: 'price', label: 'Price (€)', type: 'number', placeholder: '10.00', required: true },
-    { name: 'quantity', label: 'Quantity available', type: 'text', placeholder: '1', required: false },
+    {
+      name: 'bathroom',
+      label: 'Does the space have a private bathroom?',
+      type: 'switch',
+      defaultValue: false
+    },
+    { name: 'rooms', label: 'Number of rooms', type: 'number', min: 1, required: false },
+    { name: 'beds', label: 'Number of beds', type: 'number', min: 1, required: false },
+    { name: 'monthlyRate', label: 'Monthly rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'weeklyRate', label: 'Weekly rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'dailyRate', label: 'Daily rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'quantity', label: 'Quantity available', type: 'number', min: 1, required: false },
   ],
   booking: [
     { name: 'start', label: 'Start date', type: 'date' },

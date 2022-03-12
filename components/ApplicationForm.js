@@ -18,7 +18,7 @@ const ApplicationForm = () => {
       return;
     }
     try {
-      await api.post('/signup', application);
+      await api.post('/application', application);
       setSubmitted(true);
     } catch (err) {
       alert('There was an error sending your application, please try again.');

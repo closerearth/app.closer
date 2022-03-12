@@ -161,7 +161,6 @@ const MemberPage = ({ member, loadError }) => {
                       id={member._id}
                       onSave={id => setPhoto(id)}
                       label={ member.photo ? 'Change photo': 'Add photo' }
-
                     /> }
                   </div>
                 </div>

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Head from 'next/head';
-import DatePicker from 'react-datepicker';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Layout from '../../components/Layout';
-import { useAuth } from '../../contexts/auth';
-import { usePlatform } from '../../contexts/platform';
-import api from '../../utils/api';
+import Layout from '../../../components/Layout';
+import DateTimePicker from '../../../components/DateTimePicker';
+import { useAuth } from '../../../contexts/auth';
+import { usePlatform } from '../../../contexts/platform';
+import api from '../../../utils/api';
 
 dayjs.extend(relativeTime);
 
@@ -106,10 +106,10 @@ const Book = ({ token }) => {
         <section className="text-center">
           <h2>Book your stay</h2>
           <form onSubmit={ e => submit(e) }>
-            <div className="columns horizontal-center">
-              <fieldset>
+            <div className="flex justify-center items-center">
+              <fieldset className="mr-3 flex flex-col justify-center items-center">
                 <label htmlFor="start">Check in</label>
-                <DatePicker
+                <DateTimePicker
                   id="start"
                   selected={ booking.start }
                   onChange={start => updateBooking({
@@ -117,23 +117,20 @@ const Book = ({ token }) => {
                     start,
                     end: dayjs(start).set('hours', 11).set('seconds', 0).set('minutes', 0).add(3, 'days').toDate()
                   })}
-                  showTimeSelect
-                  timeFormat="p"
-                  timeIntervals={30}
-                  dateFormat="Pp"
+                  showTime={ false }
                 />
               </fieldset>
-              &nbsp;&nbsp;
-              <fieldset>
+              <fieldset className="flex flex-col justify-center items-center">
                 <label htmlFor="end">Check out</label>
-                <DatePicker
+                <DateTimePicker
                   id="end"
                   selected={ booking.end }
-                  onChange={end => updateBooking({ ...booking, end })}
-                  showTimeSelect
-                  timeFormat="p"
-                  timeIntervals={30}
-                  dateFormat="Pp"
+                  onChange={end => updateBooking({
+                    ...booking,
+                    end,
+                    end: dayjs(start).set('hours', 11).set('seconds', 0).set('minutes', 0).add(3, 'days').toDate()
+                  })}
+                  showTime={ false }
                 />
               </fieldset>
             </div>
@@ -163,8 +160,7 @@ const Book = ({ token }) => {
             </fieldset>
             { listing &&
               <div className="description">
-                <p>{ `Booking at Traditional Dream Factory, with ${listing.get('name')}.` }</p>
-                <p>{listing.get('description')} ({listing.get('quantity')} units available)</p>
+                <p>Booking {listing.get('name')}</p>
                 <p>{duration} nights stay - <b>{totalPrice}€</b> ({roundPrice(totalPrice/duration)}€/night)</p>
                 { isAvailable && <p>Your stay is available!</p> }
               </div>
@@ -178,6 +174,7 @@ const Book = ({ token }) => {
                     e.preventDefault();
                     checkAvailability(booking.start, duration);
                   }}
+                  className="btn-primary"
                 >
                   Check availability
                 </button>

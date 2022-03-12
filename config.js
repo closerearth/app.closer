@@ -20,7 +20,7 @@ module.exports = {
   STRIPE_PUB_KEY: 'pk_live_YxOUUf7iOvQj104TG4JyWMAE003w80ISH6',
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,
-  REGISTRATION_MODE: 'open', // curated, paid, open
+  REGISTRATION_MODE: 'curated', // curated, paid, open
   // LOGO_FOOTER: "",
   // INSTAGRAM_URL: "https://instagram.com/closerearth",
   DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',

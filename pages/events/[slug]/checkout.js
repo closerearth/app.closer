@@ -12,6 +12,7 @@ import api, { formatSearch, cdn } from '../../../utils/api';
 import { priceFormat } from '../../../utils/helpers';
 import Layout from '../../../components/Layout';
 import Tabs from '../../../components/Tabs';
+import DateTimePicker from '../../../components/DateTimePicker';
 import CheckoutForm from '../../../components/CheckoutForm';
 import PageNotFound from '../../404';
 import config from '../../../config';
@@ -32,8 +33,9 @@ const EventCheckout = ({ event, error }) => {
   const { isAuthenticated, user } = useAuth();
   const [ticketOption, setTicketOption] = useState(null);
   const [paymentReceived, setPaymentReceived] = useState(null);
-  const [signup, updateSignup] = useState({});
-  const [isSignupValid, setSignupValid] = useState(null);
+  const [signup, updateSignup] = useState({
+    fields: event.fields && event.fields.map(f => ({ name: f.name, value: '' }))
+  });
   const [signupError, setSignupError] = useState(null);
   const [ticketOptions, setTicketOptions] = useState([]);
   const [volunteerTicketsSold, setVolunteerTicketsSold] = useState(0);
@@ -67,8 +69,11 @@ const EventCheckout = ({ event, error }) => {
   }
   total = Math.max(Math.round(total * 100) / 100, 0);
 
+  console.log('signup.fields', signup.fields)
+
   const setField = (field, value) => {
-    updateSignup(oldFields => Object.assign({}, signup, { [field]: value }));
+    console.log('setField', field, value)
+    updateSignup(oldFields => Object.assign({}, oldFields, { [field]: value }));
     if (field === 'email' && !value.match(/@/gi)) {
       setSignupError('Please enter a valid email');
     } else if (field === 'screenname' && value.length < 3) {
@@ -226,6 +231,53 @@ const EventCheckout = ({ event, error }) => {
           </section>
         }
         <section>
+          { event.fields && event.fields.map((field, index) => (
+            <div className="w-full mb-4" key={ field.name }>
+              <label htmlFor={ field.name }>
+                { field.name }
+              </label>
+              { field.fieldType === 'text' ?
+                <input
+                  id={ field.name }
+                  type="text"
+                  value={ signup.fields[field.name] }
+                  onChange={ e => setField('fields', (signup.fields || []).map((f, y) => {
+                    if (y === index) {
+                      return { name: field.name, value: e.target.value };
+                    }
+                    return f;
+                  })) }
+                  placeholder={ field.placeholder }
+                />:
+                field.fieldType === 'select' ?
+                <select
+                  value={ signup.fields[field.name] }
+                  onChange={ e => setField('fields', (signup.fields || []).map((f, y) => {
+                    if (y === index) {
+                      return { name: field.name, value: e.target.value };
+                    }
+                    return f;
+                  })) }
+                >
+                  {field.options && field.options.map(opt => (
+                    <option value={ opt } key={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>:
+                field.fieldType === 'datetime' &&
+                <DateTimePicker
+                  value={ signup.fields[field.name] }
+                  onChange={ value => setField('fields', (signup.fields || []).map((f, y) => {
+                    if (y === index) {
+                      return { name: field.name, value: value };
+                    }
+                    return f;
+                  })) }
+                />
+              }
+            </div>
+          )) }
           <h3>Notes</h3>
           <textarea
             onChange={e => setField('message', e.target.value)}
@@ -247,6 +299,7 @@ const EventCheckout = ({ event, error }) => {
           }
           <p className="text-sm mb-3">Total: <b>{ priceFormat(total, currency) }</b></p>
           <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>
+          { event.stripePub && <p className="text-sm">This event has a custom integration setup.</p> }
           <div className="mt-2">
             <Elements stripe={ stripe }>
               <CheckoutForm
@@ -261,6 +314,7 @@ const EventCheckout = ({ event, error }) => {
                 email={ isAuthenticated ? user.email : signup.email }
                 name={ isAuthenticated ? user.screenname : signup.screenname }
                 message={ signup.message }
+                fields={ signup.fields }
                 buttonText="Book"
                 buttonDisabled={ (!isAuthenticated && (!signup.email || !signup.email.match(/@/gi) || signupError)) }
               />

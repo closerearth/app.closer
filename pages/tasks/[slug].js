@@ -9,7 +9,6 @@ import api, { formatSearch, cdn } from '../../utils/api';
 import MemberNav from '../../components/MemberNav';
 import UploadPhoto from '../../components/UploadPhoto';
 import CreatePost from '../../components/CreatePost';
-import { currencies } from '../../components/EditModel';
 import PostList from '../../components/PostList';
 import ProfilePhoto from '../../components/ProfilePhoto';
 import PageNotFound from '../404';
@@ -164,15 +163,7 @@ const Task = ({ task, error }) => {
                 }
                 { task.rewards && task.rewards.length > 0 &&
                   <section className="rewards card-body">
-                    <h3>Rewards</h3>
-                    { task.rewards.map(reward => {
-                      const currency = currencies.find(c => c.value === reward.cur);
-                      return (
-                        <div className="reward" key={ JSON.stringify(reward) }>
-                          <span className="symbol">{currency?.symbol}</span> <b>{reward.val}</b>
-                        </div>
-                      );
-                    }) }
+                    <h3>Reward</h3>
                   </section>
                 }
               </div>
