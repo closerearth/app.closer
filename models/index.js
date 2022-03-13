@@ -47,6 +47,20 @@ export default {
       ]
     },
     {
+      name: 'address',
+      label: 'Event location',
+      defaultValue: '',
+      type: 'text',
+      placeholder: '23 Maple St, 10100 San Francisco',
+      tab: 'general',
+      showIf: [
+        {
+          field: 'virtual',
+          value: false
+        }
+      ]
+    },
+    {
       name: 'recording',
       label: 'Youtube recording URL',
       defaultValue: '',

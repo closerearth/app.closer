@@ -8,6 +8,15 @@ import { useAuth } from '../contexts/auth.js';
 
 import Tabs from './Tabs';
 import FormField from './FormField';
+const filterFields = (fields, data) => fields.filter((field) => {
+  if (field.showIf) {
+    if (field.showIf.every(({ field, value }) => data[field] === value)) {
+      return true;
+    }
+    return false;
+  }
+  return true;
+})
 
 // If no id is passed, we are creating a new model
 const EditModel = ({
@@ -38,10 +47,6 @@ const EditModel = ({
       fieldsByTab.general.concat(field);
     }
   });
-
-  // creates an object like { myFeature: true }
-  const toggles = fields.reduce((acc, field) => field.toggleFeature ? ({ ...acc, [field.name]: !!data[field.name] }) : acc, {});
-  const [featureToggles, setFeatureToggles] = useState(toggles);
 
   // Name: visibleBy, value: [1], option: 1, actionType: ADD
   const update = (name, value, option, actionType) => {
@@ -158,39 +163,16 @@ const EditModel = ({
               Object.keys(fieldsByTab).map(key => ({
                 title: key,
                 value: key,
-                content: fieldsByTab[key].filter((field) => {
-                  if (field.showIf) {
-                    if (field.showIf.every(({ field, value }) => data[field] === value)) {
-                      return true;
-                    }
-                    return false;
-                  }
-                  return true;
-                })
+                content: filterFields(fieldsByTab[key], data)
                 .map(field => (
-                  <FormField key={ field.name } {...field} featureToggles={ featureToggles } data={ data} update={ update } />
+                  <FormField {...field} key={ field.name } data={ data} update={ update } />
                 ))
               }))
             }
           />:
-          fields && fields
-            .filter((field) => {
-              if (field.showIf) {
-                if (field.showIf.every(({ field, value }) => data[field] === value)) {
-                  return true;
-                }
-                return false;
-              }
-              return true;
-            })
+          fields && filterFields(fieldsByTab[key], data)
             .map(field => (
-              <FormField
-                {...field}
-                key={ field.name }
-                featureToggles={ featureToggles }
-                setFeatureToggles={ setFeatureToggles }
-                data={ data}
-                update={ update }
+              <FormField {...field} key={ field.name } data={ data} update={ update }
               />
             ))
       }

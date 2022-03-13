@@ -9,26 +9,11 @@ import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
 import FieldsEditor from './FieldsEditor';
 
-const FormField = ({ data, update, label, featureToggles, setFeatureToggles, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel, min, max }) => {
+const FormField = ({ data, update, label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel, min, max }) => {
   const [addTag, setAddTag] = useState('');
   return (
     <div className={`form-field w-full mb-6 form-type-${type}`} key={ name }>
-      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label }</label>
-      {/* { toggleFeature && (
-        <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
-          <Switch
-            checked={ featureToggles[name] }
-            onChange={ () => {
-              if (featureToggles[name]) {
-                update(name, defaultValue || '')
-              }
-              setFeatureToggles({ ...featureToggles, [name]: !featureToggles[name] });
-            } }
-            label={ toggleLabel }
-          />
-        </div>
-      ) }
-    (!toggleFeature || featureToggles[name])  */}
+      <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label } { required && <span className="text-red-500">*</span> }</label>
       {
         <>
           { ['text', 'email', 'phone', 'hidden', 'number', 'date'].includes(type) && <input
