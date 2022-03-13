@@ -26,11 +26,11 @@ const EditEvent = ({ event }) => {
         <title>Edit {event.name}</title>
       </Head>
       <div className="main-content">
+        <h1>Edit event: <i>{ event.name }</i></h1>
         <EditModel
           id={ event._id }
           endpoint={ '/event' }
           fields={ models.event }
-          buttonText="Publish"
           onSave={ event => router.push(`/events/${event.slug}`) }
           onUpdate={ (name, value, option, actionType) => onUpdate(name, value, option, actionType) }
           allowDelete

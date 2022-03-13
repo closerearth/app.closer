@@ -21,15 +21,16 @@ export default {
     }
   ],
   event: [
-    { name: 'name', label: 'Event title', type: 'text', placeholder: 'My event', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A gathering around...' },
-    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true },
-    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true },
+    { name: 'name', label: 'Event title', type: 'text', placeholder: 'My event', required: true, tab: 'general' },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A gathering around...', tab: 'general' },
+    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true, tab: 'general' },
+    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true, tab: 'general' },
     {
       name: 'virtual',
       label: 'Is this a virtual event?',
       type: 'switch',
-      defaultValue: false
+      defaultValue: false,
+      tab: 'general'
     },
     {
       name: 'location',
@@ -37,6 +38,7 @@ export default {
       defaultValue: '',
       type: 'text',
       placeholder: 'https://zoom.com/wakeup',
+      tab: 'general',
       showIf: [
         {
           field: 'virtual',
@@ -49,18 +51,31 @@ export default {
       label: 'Youtube recording URL',
       defaultValue: '',
       type: 'text',
+      tab: 'general',
       placeholder: 'https://www.youtube.com/watch?v=r2-Ux4RRMKE'
+    },
+    {
+      name: 'visibility',
+      label: 'Visibility',
+      type: 'select',
+      options: [
+        { label: 'Public', value: 'public' },
+        { label: 'Private', value: 'private' },
+      ],
+      tab: 'general'
     },
     {
       name: 'paid',
       label: 'Is this a paid event?',
       type: 'switch',
+      tab: 'tickets',
       defaultValue: false
     },
     {
       name: 'ticketOptions',
       label: 'Ticket options',
       type: 'ticketOptions',
+      tab: 'tickets',
       showIf: [
         {
           field: 'paid',
@@ -76,6 +91,7 @@ export default {
       name: 'discounts',
       label: 'Discount codes',
       type: 'discounts',
+      tab: 'tickets',
       showIf: [
         {
           field: 'paid',
@@ -86,7 +102,8 @@ export default {
     {
       name: 'fields',
       label: 'Custom questions',
-      type: 'fields'
+      type: 'fields',
+      tab: 'advanced'
     },
     {
       name: 'ticket',
@@ -94,28 +111,22 @@ export default {
       defaultValue: '',
       type: 'text',
       toggleFeature: true,
-      placeholder: 'eventbrite.com/my-ticket'
+      placeholder: 'eventbrite.com/my-ticket',
+      tab: 'advanced'
     },
     {
       name: 'stripePub',
       label: 'Custom Stripe Public Key',
       type: 'text',
-      toggleFeature: true
+      toggleFeature: true,
+      tab: 'advanced'
     },
     {
       name: 'stripeKey',
       label: 'Custom Stripe Private Key',
       type: 'text',
-      toggleFeature: true
-    },
-    {
-      name: 'visibility',
-      label: 'Visibility',
-      type: 'select',
-      options: [
-        { label: 'Public', value: 'public' },
-        { label: 'Private', value: 'private' },
-      ]
+      toggleFeature: true,
+      tab: 'advanced'
     },
     { name: 'password', label: 'Event password', type: 'text', placeholder: '(If set, user will need the password to see)' },
     { name: 'participationGuideUrl', label: 'Participation guide', type: 'text', placeholder: 'https://event.com/participation' },

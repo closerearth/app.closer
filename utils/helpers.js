@@ -122,3 +122,60 @@ export const useNextQueryParams = () => {
 
   return value;
 };
+
+export const getSample = (field) => {
+  switch(field.type) {
+    case 'text':
+    case 'longtext':
+    case 'email':
+    case 'phone':
+      return '';
+    case 'number':
+      return 0;
+    case 'currency':
+      return {
+        cur: 'USD',
+        val: 0
+      };
+    case 'tags':
+      return [];
+    case 'date':
+      return new Date();
+    case 'switch':
+      return false;
+    case 'datetime':
+      return null;
+    case 'ticketOptions':
+      return [{
+        id: Math.random(),
+        name: '',
+        icon: null,
+        price: 0,
+        currency: 'USD',
+        disclaimer: '',
+        limit: 0
+      }];
+    case 'fields':
+      return [];
+    case 'discounts':
+      return [{
+        id: Math.random(),
+        name: '',
+        code: '',
+        percent: 0,
+        val: 0,
+      }];
+    case 'select':
+      return field.options && field.options[0] && field.options[0].value;
+    case 'autocomplete':
+    case 'currencies':
+      return [
+        {
+          cur: 'USD',
+          val: 0
+        }
+      ];
+    default:
+      throw new Error(`Invalid model type:${field.type}`);
+  }
+}

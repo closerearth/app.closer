@@ -1,73 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import objectPath from 'object-path';
-import Switch from './Switch';
-import Autocomplete from './Autocomplete';
-import DateTimePicker from './DateTimePicker';
-import PriceEditor from './PriceEditor';
-import TicketOptionsEditor from './TicketOptionsEditor';
-import DiscountsEditor from './DiscountsEditor';
-import FieldsEditor from './FieldsEditor';
 import { trackEvent } from './Analytics';
 import api, { formatSearch } from '../utils/api';
+import { getSample } from '../utils/helpers';
 import { useAuth } from '../contexts/auth.js';
 
-const getSample = (field) => {
-  switch(field.type) {
-  case 'text':
-  case 'longtext':
-  case 'email':
-  case 'phone':
-    return '';
-  case 'number':
-    return 0;
-  case 'currency':
-    return {
-      cur: 'USD',
-      val: 0
-    };
-  case 'tags':
-    return [];
-  case 'date':
-    return new Date();
-  case 'switch':
-    return false;
-  case 'datetime':
-    return null;
-  case 'ticketOptions':
-    return [{
-      id: Math.random(),
-      name: '',
-      icon: null,
-      price: 0,
-      currency: 'USD',
-      disclaimer: '',
-      limit: 0
-    }];
-  case 'fields':
-    return [];
-  case 'discounts':
-    return [{
-      id: Math.random(),
-      name: '',
-      code: '',
-      percent: 0,
-      val: 0,
-    }];
-  case 'select':
-    return field.options && field.options[0] && field.options[0].value;
-  case 'autocomplete':
-  case 'currencies':
-    return [
-      {
-        cur: 'USD',
-        val: 0
-      }
-    ];
-  default:
-    throw new Error(`Invalid model type:${field.type}`);
-  }
-}
+import Tabs from './Tabs';
+import FormField from './FormField';
+
 // If no id is passed, we are creating a new model
 const EditModel = ({
   fields,
@@ -87,7 +28,16 @@ const EditModel = ({
   const { isAuthenticated, user } = useAuth();
   const initialModel = initialData || fields.reduce((acc, field) => ({ ...acc, [field.name]: field.default || getSample(field) }), {});
   const [data, setData] = useState(initialModel);
-  const [addTag, setAddTag] = useState('');
+  const fieldsByTab = {
+    general: []
+  };
+  fields && fields.forEach(field => {
+    if (field.tab) {
+      fieldsByTab[field.tab] = (fieldsByTab[field.tab] || []).concat(field);
+    } else {
+      fieldsByTab.general.concat(field);
+    }
+  });
 
   // creates an object like { myFeature: true }
   const toggles = fields.reduce((acc, field) => field.toggleFeature ? ({ ...acc, [field.name]: !!data[field.name] }) : acc, {});
@@ -202,211 +152,51 @@ const EditModel = ({
         <div className="validation-error">{ error }</div>
       }
       {
-        fields && fields
-          .filter((field) => {
-            if (field.showIf) {
-              if (field.showIf.every(({ field, value }) => data[field] === value)) {
-                return true;
-              }
-              return false;
+        Object.keys(fieldsByTab).length > 1?
+          <Tabs
+            tabs={
+              Object.keys(fieldsByTab).map(key => ({
+                title: key,
+                value: key,
+                content: fieldsByTab[key].filter((field) => {
+                  if (field.showIf) {
+                    if (field.showIf.every(({ field, value }) => data[field] === value)) {
+                      return true;
+                    }
+                    return false;
+                  }
+                  return true;
+                })
+                .map(field => (
+                  <FormField key={ field.name } {...field} featureToggles={ featureToggles } data={ data} update={ update } />
+                ))
+              }))
             }
-            return true;
-          })
-          .map(({ label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel, min, max }) => {
-            return (
-              <div className={`form-field w-full mb-6 form-type-${type}`} key={ name }>
-                <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">{ label }</label>
-                { toggleFeature && (
-                  <div className={`form-field w-full mb-4 form-type-${type}`} key={ name }>
-                    <Switch
-                      checked={ featureToggles[name] }
-                      onChange={ () => {
-                        if (featureToggles[name]) {
-                          update(name, defaultValue || '')
-                        }
-                        setFeatureToggles({ ...featureToggles, [name]: !featureToggles[name] });
-                      } }
-                      label={ toggleLabel }
-                    />
-                  </div>
-                ) }
-                { (!toggleFeature || featureToggles[name]) &&
-                  <>
-                    { ['text', 'email', 'phone', 'hidden', 'number', 'date'].includes(type) && <input
-                      type={ type }
-                      value={ data[name] }
-                      placeholder={ placeholder }
-                      min={ min }
-                      max={ max }
-                      onChange={e => update(name, e.target.value)}
-                      required={ required }
-                    /> }
-                    { type === 'datetime' &&
-                    <DateTimePicker
-                      value={ data[name] }
-                      onChange={value => update(name, value)}
-                    />
-                    }
-                    { type === 'longtext' && <textarea
-                    // type={ type }
-                      value={ data[name] }
-                      placeholder={ placeholder }
-                      onChange={e => update(name, e.target.value)}
-                      required={ required }
-                      className="textarea"
-                    /> }
-                    { type === 'currency' &&
-                    <PriceEditor
-                      value={ data[name] }
-                      onChange={price => update(name, price)}
-                      placeholder={ placeholder }
-                      required={ required }
-                    />
-                    }
-                    { type === 'currencies' &&
-                    <div className="currencies-group">
-                      { (data[name] || []).map((currencyGroup, index) => (
-                        <div className="currency-group" key={ `${name}.${index}.cur` }>
-                          <select
-                            value={ data[name]?.cur }
-                            onChange={e => update(`${name}.${index}.cur`, e.target.value)}
-                          >
-                            {currencies.map(opt => (
-                              <option value={ opt.value } key={opt.value}>
-                                {opt.symbol} - {opt.label}
-                              </option>
-                            ))}
-                          </select>
-                          <input
-                            type={ type }
-                            value={ data[name][index]?.val || '' }
-                            placeholder={ placeholder }
-                            onChange={e => update(`${name}.${index}.val`, e.target.value)}
-                            required={ required }
-                          />
-                          { index > 0 &&
-                            <a href="#" onClick={ (e) => {
-                              e.preventDefault();
-                              update(name, (data[name] || []).filter((c,i) => i !== index));
-                            }}>Remove</a>
-                          }
-                        </div>
-                      )) }
-                      <a href="#" onClick={ (e) => {
-                        e.preventDefault();
-                        update(name, (data[name] || []).concat({ cur: currencies[0].value, val: 0 }));
-                      } }>Add currency</a>
-                    </div>
-                    }
-                    { type === 'select' &&
-                    <select
-                      value={ data[name] }
-                      onChange={e => update(name, e.target.value)}
-                    >
-                      {options.map(opt => (
-                        <option value={ opt.value } key={opt.value}>
-                          {opt.label}
-                        </option>
-                      ))}
-                    </select>
-                    }
-                    { type === 'switch' &&
-                    <Switch
-                      name={ name }
-                      onChange={checked => update(name, checked)}
-                      checked={!!objectPath.get(data, name)}
-                    />
-                    }
-                    { type === 'tags' &&
-                    <div className="tags">
-                      { data[name] && data[name].length > 0 && data[name].map(tag => (
-                        <div className="tag" key={ tag } >
-                          <span className="ellipsis">{ tag }</span>
-                          <a
-                            href="#"
-                            className="remove"
-                            onClick={ () => {
-                              update(name, data[name].filter(el => el !== tag), tag, 'DELETE')
-                            }}
-                          >
-                              X
-                          </a>
-                        </div>
-                      ))}
-                      <input
-                        type="text"
-                        className="inline"
-                        placeholder={ placeholder || 'Add tag' }
-                        value={ addTag }
-                        title="Press enter to add"
-                        onKeyPress={ e => {
-                          if (e.which === 13) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            update(name, data[name].concat(addTag));
-                            setAddTag('');
-                          }
-                        }}
-                        onChange={e => setAddTag(e.target.value)}
-                      />
-                    </div>
-                    }
-                    { type === 'autocomplete' &&
-                    <div className="autocomplete-container">
-                      <div className="tags">
-                        {data[name].map(item => item._id && (
-                          <span className="tag" key={ item._id }>
-                            {item.screenname || item.name}
-                            <a
-                              href="#"
-                              className="remove"
-                              onClick={ (e) => {
-                                e.preventDefault();
-                                update(name, data[name].filter(el => el._id !== item._id), item, 'DELETE')
-                              }}
-                            >
-                              X
-                            </a>
-                          </span>
-                        ))}
-                      </div>
-                      <Autocomplete
-                        multi={ multi }
-                        endpoint={endpoint}
-                        searchField={searchField}
-                        value={ data[name] }
-                        onChange={(value, option, actionType) => update(name, value, option, actionType)}
-                      />
-                    </div>
-                    }
-                    { type === 'ticketOptions' &&
-                    <TicketOptionsEditor
-                      value={ data[name] }
-                      onChange={value => update(name, value)}
-                    />
-                    }
-                    { type === 'discounts' &&
-                    <DiscountsEditor
-                      value={ data[name] }
-                      onChange={value => update(name, value)}
-                    />
-                    }
-                    { type === 'fields' &&
-                    <FieldsEditor
-                      value={ data[name] }
-                      onChange={value => update(name, value)}
-                    />
-                    }
-                  </>
+          />:
+          fields && fields
+            .filter((field) => {
+              if (field.showIf) {
+                if (field.showIf.every(({ field, value }) => data[field] === value)) {
+                  return true;
                 }
-              </div>
-            );
-          }
-          )
+                return false;
+              }
+              return true;
+            })
+            .map(field => (
+              <FormField
+                {...field}
+                key={ field.name }
+                featureToggles={ featureToggles }
+                setFeatureToggles={ setFeatureToggles }
+                data={ data}
+                update={ update }
+              />
+            ))
       }
       <div className="mt-2">
         <button type="submit" className="btn-primary">
-          { buttonText }
+          { data.visibility === 'private' ? 'Save draft' : !data._id ? 'Publish' : 'Save' }
         </button>
         { allowDelete && <a href="#" className="text-red-700 ml-2" onClick={ (e) => {
           e.preventDefault();

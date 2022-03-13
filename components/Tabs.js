@@ -38,7 +38,7 @@ const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
           ))}
         </ul>
       </div>
-      <div className="tab-content mb-8">
+      <div className="tab-content mt-4 mb-8">
         { tabs && tabs[currentTab] && tabs[currentTab].content }
       </div>
     </>

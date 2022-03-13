@@ -45,7 +45,7 @@ const FieldsEditor = ({ value, onChange }) => {
     <div className="discounts-options">
       {
         options && options.map((option, index) => (
-          <div key={ option._id || option.id || index } className="mr-3 mb-4 shadow">
+          <div key={ option._id || option.id || index } className="mr-3 mb-4 p-3 shadow">
             <div className="mb-3">
               <label>Question</label>
               <input
@@ -72,7 +72,7 @@ const FieldsEditor = ({ value, onChange }) => {
               <div className="mb-3">
                 <label>Options</label>
                 { option.options && option.options.map((opt, i) => (
-                  <div key={ i }>
+                  <div key={ i } className="flex flex-row justify-start items-center mb-3">
                     <input
                       type="text"
                       value={ opt }
