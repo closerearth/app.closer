@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import api from '../utils/api';
-import { useNextQueryParams } from '../utils/helpers';
+import { useNextQueryParams, __ } from '../utils/helpers';
 import { useAuth } from '../contexts/auth';
-import { EN, SIGNUP_FIELDS } from '../config';
+import { SIGNUP_FIELDS } from '../config';
 
 const SignupForm = () => {
   const router = useRouter();
@@ -52,7 +52,7 @@ const SignupForm = () => {
     <div>
       { error && <div className="error-box">{ error }</div>}
       { submitted?
-        <h2 className="my-4">{ EN.signup_success }</h2>:
+        <h2 className="my-4">{ __('signup_success') }</h2>:
         <form className="join mt-24 flex flex-col" onSubmit={ submit }>
           <input type="hidden" name="backurl" value={ decodeURIComponent(back || '/community') } />
           <div className="w-full mb-4">

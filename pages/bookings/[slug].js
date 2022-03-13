@@ -1,19 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
-import Layout from '../../components/Layout';
-import api, { formatSearch, cdn } from '../../utils/api';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
 import PageNotFound from '../404';
+import PageNotAllowed from '../401';
+
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
+
+import { priceFormat, __ } from '../../utils/helpers';
+import api, { formatSearch, cdn } from '../../utils/api';
+import config from '../../config';
+
+import Layout from '../../components/Layout';
+import CheckoutForm from '../../components/CheckoutForm';
 
 dayjs.extend(LocalizedFormat);
 
 const Booking = ({ booking, error }) => {
+  const [editBooking, setBooking] = useState(booking);
+  const stripe = loadStripe(config.STRIPE_TEST_KEY);
+  const { isAuthenticated, user } = useAuth();
 
   if (!booking) {
     return <PageNotFound />;
@@ -22,6 +35,10 @@ const Booking = ({ booking, error }) => {
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
 
+  if (!isAuthenticated) {
+    return <PageNotAllowed />
+  }
+
   return (
     <Layout>
       <Head>
@@ -29,42 +46,51 @@ const Booking = ({ booking, error }) => {
         <meta name="description" content={booking.description} />
         <meta property="og:type" content="booking" />
       </Head>
-      <main className="fullwidth booking-page">
-        <div className="columns">
-          <div className="col lg two-third">
-            <div className="main-content">
-              { error && <div className="validation-error">{error}</div> }
-              <section>
-                <p>
-                  <Linkify
-                    componentDecorator={(decoratedHref, decoratedText, key) => (
-                      <a
-                        target="_blank"
-                        rel="nofollow noreferrer"
-                        href={decoratedHref}
-                        key={key}
-                        onClick={e => e.stopPropagation()}
-                      >
-                        {decoratedText}
-                      </a>
-                    )}
-                  >
-                    {booking.description}
-                  </Linkify>
-                </p>
-              </section>
-              <section>
-                <h3>Check in:</h3>
-                <p><b>{start.format('LLL')}</b></p>
-                <h3>Check out:</h3>
-                <p><b>{end.format('LLL')}</b></p>
-                <p>Booking cost: {booking.price}€</p>
-                <p>Directions: <b>Find us on <a target="_blank" rel="noreferrer" href="https://www.google.com/maps/place/Traditional+Dream+Factory/@38.0030022,-8.5613082,17z/data=!3m1!4b1!4m5!3m4!1s0xd1bb5a9aebf4183:0x70f027ce7d295aae!8m2!3d38.002998!4d-8.5591195">Google Maps</a></b></p>
-                <p>Any questions? <b>Ask in the <a target="_blank" rel="noreferrer" href="https://chat.whatsapp.com/DnkSxE2x6nM5bOZiPuMpdj">WhatsApp Group</a></b></p>
-              </section>
-            </div>
+      <main className="main-content max-w-prose booking">
+        <h1 className="mb-4">
+          Booking
+        </h1>
+        { booking.status === 'open' &&
+          <div>
+            <section>
+              <h3>Notes</h3>
+              <textarea
+                onChange={e => setBooking({ ...editBooking, message: e.target.value })}
+                value={ editBooking.message }
+                placeholder="Add message for hosts"
+              />
+            </section>
           </div>
-        </div>
+        }
+        <section className="mt-3">
+          <h3>Summary</h3>
+          <p>Status: <b>{editBooking.status}</b></p>
+          <p>Check in: <b>{start.format('LLL')}</b></p>
+          <p>Check out: <b>{end.format('LLL')}</b></p>
+          <p>Total: <b>{priceFormat(booking.price)}</b></p>
+        </section>
+        { booking.status === 'open' &&
+          <div className="mt-2">
+            { user.roles.includes('member') ?
+              <p className="mb-3 text-sm"><i>{ __('booking_cancelation_policy_member') }</i></p>:
+              <p className="mb-3 text-sm"><i>{ __('booking_cancelation_policy') }</i></p>
+            }
+            <Elements stripe={ stripe }>
+              <CheckoutForm
+                type="booking"
+                total={ booking.price.val }
+                currency={ booking.price.cur }
+                _id={ booking._id }
+                onSuccess={ payment => setBooking({ ...booking, status: 'confirmed' }) }
+                email={ user.email }
+                name={ user.screenname }
+                message={ booking.message }
+                buttonText={ user.roles.includes('member') ? 'Book' : 'Request to book' }
+                buttonDisabled={ false }
+              />
+            </Elements>
+          </div>
+        }
       </main>
     </Layout>
   );

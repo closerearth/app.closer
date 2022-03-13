@@ -3,16 +3,17 @@ import Head from 'next/head'
 import Layout from '../../components/Layout'
 import SignupForm from '../../components/SignupForm'
 import ApplicationForm from '../../components/ApplicationForm'
-import { EN, REGISTRATION_MODE } from '../../config'
+import { REGISTRATION_MODE } from '../../config'
+import { __ } from '../../utils/helpers'
 
 const Signup = () => (
   <Layout>
     <Head>
-      <title>{ EN.signup_title }</title>
+      <title>{ __('signup_title') }</title>
     </Head>
     <main className="main-content mt-12 px-4 max-w-prose mx-auto">
-      <h1 className="mb-2">{ EN.signup_title }</h1>
-      <p className="mb-8">{ EN.signup_body }</p>
+      <h1 className="mb-2">{ __('signup_title') }</h1>
+      <p className="mb-8">{ __('signup_body') }</p>
       { REGISTRATION_MODE === 'curated'?
         <ApplicationForm />:
         <SignupForm />

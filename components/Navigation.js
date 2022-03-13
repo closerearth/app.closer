@@ -66,11 +66,11 @@ const Navigation = () => {
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
 
   return (
-    <div className="NavContainer pt-20 md:pt-0">
+    <div className="NavContainer pt-20 md:pt-0 relative z-50 bg-background">
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
-      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background border-b border-b-line drop-shadow-sm md:relative md:drop-shadow-none">
+      <nav className="h-20 fixed z-50 top-0 bg-background left-0 right-0 shadow-sm md:relative">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
@@ -101,12 +101,21 @@ const Navigation = () => {
                 </a>
               </Link>
             }
-            { isAuthenticated && user.roles.includes('community-curator') &&
+            { isAuthenticated && (user.roles.includes('community-curator') || user.roles.includes('admin')) &&
               <Link
                 href="/applications"
               >
                 <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
                   Applications
+                </a>
+              </Link>
+            }
+            { isAuthenticated && (user.roles.includes('space-host') || user.roles.includes('admin')) &&
+              <Link
+                href="/listings"
+              >
+                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
+                  Listings
                 </a>
               </Link>
             }
@@ -173,7 +182,7 @@ const Navigation = () => {
               >
 
                 <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
-                  <span className='h-8 border-l border-l-line mr-3' />
+                  <span className='h-8 border-l mr-3' />
                   <ProfilePhoto user={ user } />
                   <p className='ml-3'>{user.screenname}</p>
                 </a>
@@ -195,11 +204,11 @@ const Navigation = () => {
       </nav>
       { navOpen &&
         <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
-          <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg text-center">
+          <div className="main-content flex flex-col justify-center items-center space-y-2">
             <Link
               href="/events"
             >
-              <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
+              <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
                 Events
               </a>
             </Link>
@@ -207,7 +216,7 @@ const Navigation = () => {
               <Link
                 href="/members"
               >
-                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
+                <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
                   Members
                 </a>
               </Link>
@@ -216,7 +225,7 @@ const Navigation = () => {
               <Link
                 href="/applications"
               >
-                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
+                <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
                   Applications
                 </a>
               </Link>
@@ -225,7 +234,7 @@ const Navigation = () => {
               <Link
                 href="/admin"
               >
-                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
+                <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
                   Admin
                 </a>
               </Link>
@@ -233,7 +242,7 @@ const Navigation = () => {
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="flex justify-center items-center"
+                  className="py-2 block text-xl text-center w-full"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -248,7 +257,7 @@ const Navigation = () => {
             ) : (
               <Link href="/login">
                 <a
-                  className="flex justify-center items-center"
+                  className="py-2 shadow-sm block text-center w-full"
                   onClick={() => toggleNav(false)}
                 >
                   Sign in
@@ -257,7 +266,7 @@ const Navigation = () => {
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                className="btn-primary mr-3 hidden md:flex"
+                className="py-2 block text-xl text-center w-full"
               >
                 {
                   REGISTRATION_MODE === 'paid' ?

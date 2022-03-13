@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../utils/api';
-import { EN, SIGNUP_FIELDS } from '../config';
+import { SIGNUP_FIELDS } from '../config';
+import { __ } from '../utils/helpers';
 
 const ApplicationForm = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -31,7 +32,7 @@ const ApplicationForm = () => {
   return (
     <div>
       { submitted?
-        <h2 className="my-4">{ EN.apply_success }</h2>:
+        <h2 className="my-4">{ __('apply_success') }</h2>:
         <form className="join mt-24 flex flex-col" onSubmit={ submit }>
           <div className="w-full mb-4">
             <label htmlFor="screenname">

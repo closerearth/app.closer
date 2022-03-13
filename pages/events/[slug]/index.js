@@ -170,11 +170,11 @@ const Event = ({ event, error }) => {
                         <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
                           <a className="btn-primary mr-2">See ticket</a>
                         </Link>:
-                        event.ticket && start.isAfter(dayjs()) ?
+                        event.ticket && start && start.isAfter(dayjs()) ?
                           <Link href={ prependHttp(event.ticket) }>
                             <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
                           </Link>:
-                          start.isAfter(dayjs())?
+                          start && start.isAfter(dayjs())?
                             <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
                               <a className="btn-primary mr-2">Buy ticket</a>
                             </Link>:
@@ -183,7 +183,7 @@ const Event = ({ event, error }) => {
                     </>:
                     <>
                       {
-                        start.isBefore(dayjs()) && end && end.isAfter(dayjs()) && event.location?
+                        start && start.isBefore(dayjs()) && end && end.isAfter(dayjs()) && event.location?
                           <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
                           start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
                             <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
@@ -191,12 +191,12 @@ const Event = ({ event, error }) => {
                               <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                                 <a className="btn-primary mr-2">Signup to watch recording</a>
                               </Link>:
-                              !isAuthenticated && start.isAfter(dayjs()) ?
+                              !isAuthenticated && start && start.isAfter(dayjs()) ?
                                 <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                                   <a className="btn-primary mr-2">Signup to RSVP</a>
                                 </Link>:
                                 end && end.isBefore(dayjs()) ?
-                                  start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location &&
+                                  start && start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location &&
                                     <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
                                   attendees?.includes(user._id) ?
                                     <a

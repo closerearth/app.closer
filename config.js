@@ -4,15 +4,15 @@ module.exports = {
   GA_ANALYTICS: false,
   FB_DOMAIN_VERIFICATION: false,
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
-  DEFAULT_TITLE: "Closer: the operating system for land stewardship communities",
+  DEFAULT_TITLE: 'Closer: the operating system for sovereign communities',
   DEFAULT_DESCRIPTION: '',
   SEMANTIC_URL: 'https://app.closer.earth',
   TEAM_EMAIL: 'team@closer.earth',
   START_TIME: '2021-04-30T15:00:00.000Z',
   EXPOSE_STORE: true,
-  API_URL: 'https://api.oasa.co', //'http://localhost:4002'
+  API_URL: 'http://localhost:4002',
+  // API_URL: 'https://api.oasa.co',
   CDN_URL: 'https://cdn.oasa.co/photo/',
-  TELEGRAM_URL: 'https://t.me/closerdao',
   NEWSLETTER: false,
   LOG_REQUESTS: false,
   CACHE_DURATION: 6000000, // 1h
@@ -20,11 +20,12 @@ module.exports = {
   STRIPE_PUB_KEY: 'pk_live_YxOUUf7iOvQj104TG4JyWMAE003w80ISH6',
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,
-  REGISTRATION_MODE: 'curated', // curated, paid, open
+  REGISTRATION_MODE: 'open', // curated, paid, open
   // LOGO_FOOTER: "",
   // INSTAGRAM_URL: "https://instagram.com/closerearth",
   DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',
   TWITTER_URL: 'https://twitter.com/closerearth',
+  TELEGRAM_URL: 'https://t.me/closerdao',
   FEATURES: {
 
   },
@@ -35,10 +36,4 @@ module.exports = {
       placeholder: 'A DAO for regenerative coffee farmers'
     }
   ],
-  EN: {
-    signup_title: 'Signup for Closer',
-    signup_body: 'Closer is a platform for community creators',
-    apply_success: 'Thank you, our community curator will reach out for an intro call.',
-    signup_success: 'Thank you - welcome to Closer!'
-  }
 }

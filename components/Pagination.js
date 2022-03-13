@@ -13,6 +13,10 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
     Math.max(Math.floor(page - (maxPages / 2)),0):
     0;
 
+  if (totalPages === 1) {
+    return null;
+  }
+
   return (
     <div className="pagination flex flex-row items-center justify-between">
       <div className="flex flex-row items-center justify-between">

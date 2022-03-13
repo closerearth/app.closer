@@ -23,20 +23,21 @@ const UsersTable = ({ where, limit }) => {
   const totalUsers = platform.user.findCount(params);
   const loading = platform.user.areLoading(params);
 
+  const loadData = async () => {
+    try {
+      await Promise.all([
+        platform.user.get(params),
+        platform.user.getCount(params)
+      ]);
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        await Promise.all([
-          platform.user.get(params),
-          platform.user.getCount(params)
-        ]);
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message);
-      }
-    };
     loadData();
-  }, [where, page, params, platform.user]);
+  }, [where, page, params, limit]);
 
   return (
     <div className="card">

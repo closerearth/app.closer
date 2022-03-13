@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = (email, password) => {
-    Cookies.remove('token')
+    Cookies.remove('token');
     setUser(null)
     delete api.defaults.headers.Authorization
     window.location.pathname = '/'

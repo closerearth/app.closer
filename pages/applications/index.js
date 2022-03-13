@@ -33,7 +33,7 @@ const Applications = () => {
     }
   }, [user, platform]);
 
-  if (!user || !user.roles.includes('community-curator')) {
+  if (!user || (!user.roles.includes('community-curator') && !user.roles.includes('admin'))) {
     return <PageNotAllowed />;
   }
 

@@ -51,7 +51,7 @@ const MemberList = ({
 
   useEffect(() => {
     loadData();
-  }, [params, platform]);
+  }, [channel, filter, limit, page]);
 
   return (
     <section className="member-page">
@@ -64,14 +64,18 @@ const MemberList = ({
           { users && users.count() > 0 ?
             users.map(user => (
               <Link key={ user.get('_id') } passHref as={`/members/${user.get('slug')}`} href="/members/[slug]">
-                <div className="flex flex-col justify-start items-center p-5 w-12/12 max-w-md md:max-w-xl md:w-11/12 border border-zinc-400 rounded-sm">
+                <div className="flex flex-col justify-start card">
                   <div className='flex flex-row items-center justify-between w-full'>
-                    <h4 className="font-light text-2xl md:text-2xl">{ user.get('screenname') }</h4>
+                    <h4 className="font-light text-2xl md:text-2xl">
+                      { user.get('screenname') }
+                      <span className="ml-3 text-xs text-gray-500">{user.get('timezone')}</span>
+                    </h4>
                     <ProfilePhoto user={user.toJS()} width="12" height="12" />
                   </div>
-                  { user.get('about') && <p className='mb-3 w-10/12 self-start text-zinc-400 text-sm'>{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p> }
-                  <h4 className="text-xs flex self-start mb-3">{user.get('timezone')}</h4>
-                  <button className='w-full md:w-52 self-start rounded-full border border-neutral-900 h-9'>See profile</button>
+                  { user.get('about') && <p className="py-2 text-sm">{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p> }
+                  <div className="pt-2">
+                    <button className="btn">See profile</button>
+                  </div>
                 </div>
               </Link>
             )):

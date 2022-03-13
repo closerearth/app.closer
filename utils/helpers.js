@@ -1,17 +1,25 @@
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
-
+import { isMap } from 'immutable';
 
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 
+import base from '../locales/base';
+import en from '../locales/en';
+
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
+let language = Object.assign({}, base, en);
+
 const ONE_HOUR = 60 * 60 * 1000;
+
+export const __ = (key) => language[key] || `__${key}_missing__`;
+export const switchLanguage = lang => language = Object.assign(language, lang);
 
 export const getHashTags = (inputText) => {
     var regex = /(?:^|\s)(?:#)([a-zA-Z\d]+)/gm;
@@ -71,7 +79,18 @@ export const getTimeDetails = (eventTime) => {
   };
 };
 
-export const priceFormat = (price, currency = 'EUR') => parseFloat(price).toLocaleString('en-US', {style: 'currency', currency});
+export const priceFormat = (price, currency = 'EUR') => {
+  if (typeof price === 'number') {
+    return parseFloat(price).toLocaleString('en-US', {style: 'currency', currency});
+  }
+  if (typeof price === 'object' && price.get && price.get('val')) {
+    return parseFloat(price.get('val')).toLocaleString('en-US', {style: 'currency', currency: price.get('cur') });
+  }
+  if (typeof price === 'object' && price.val) {
+    return parseFloat(price.val).toLocaleString('en-US', {style: 'currency', currency: price.cur });
+  }
+  throw new Error(`Invalid format passed to priceFormat: ${ JSON.stringify(price) }`);
+}
 
 export const prependHttp = (url, {https = true} = {}) => {
 	if (typeof url !== 'string') {
