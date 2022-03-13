@@ -155,7 +155,7 @@ const MemberPage = ({ member, loadError }) => {
                       <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
                     }
                   </div>
-                  <div className='mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full' >
+                  <div className="mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full opacity-0 hover:opacity-80">
                     { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                       model="user"
                       id={member._id}

@@ -221,12 +221,6 @@ const Event = ({ event, error }) => {
                       }
                     </>
                   }
-
-                  {isAuthenticated && user._id === event.createdBy &&
-                    <Link as={`/events/edit/${event.slug}`} href="/events/edit/[slug]">
-                      <a className="btn-primary mr-2">Edit event</a>
-                    </Link>
-                  }
                   {isAuthenticated && user.roles.includes('admin') &&
                     <a
                       className={`btn-primary inline-flex items-center ${featured?'active':''}`}
@@ -247,6 +241,16 @@ const Event = ({ event, error }) => {
                     endTime: event.end,
                   }} buttonLabel="Add to calendar" /> */}
                 </div>
+                {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
+                  <div className="admin-actions mt-3 border-t pt-3">
+                    <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
+                      <a className="btn-secondary text-xs mr-2">Edit event</a>
+                    </Link>
+                    <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
+                      <a className="btn-secondary text-xs mr-2">View tickets</a>
+                    </Link>
+                  </div>
+                }
               </div>
             </div>
           </section>
@@ -361,6 +365,7 @@ const Event = ({ event, error }) => {
 Event.getInitialProps = async ({ req, query }) => {
   try {
     const { data: { results: event } } = await api.get(`/event/${query.slug}`);
+    console.log('slug', query.slug, event)
     // Test cases:
     // Event is ongoing
     // event.start = '2022-02-02T19:00:00.000Z';

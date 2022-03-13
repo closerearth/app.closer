@@ -10,6 +10,9 @@
   .btn-primary, .btn-primary[type="submit"] {
     @apply btn hover:bg-primary text-primary hover:text-white bg-transparent border-2 border-primary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
   }
+  .btn-secondary, .btn-secondary[type="submit"] {
+    @apply btn hover:bg-secondary text-secondary hover:text-white bg-transparent border-2 border-secondary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
+  }
   .btn-primary.btn-large {
     @apply border-8 py-4 px-8 focus:ring-4;
   }
