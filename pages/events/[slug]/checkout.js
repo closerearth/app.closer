@@ -250,22 +250,22 @@ const EventCheckout = ({ event, error }) => {
                   placeholder={ field.placeholder }
                 />:
                 field.fieldType === 'select' ?
-                <select
-                  value={ signup.fields[field.name] }
-                  onChange={ e => setField('fields', (signup.fields || []).map((f, y) => {
-                    if (y === index) {
-                      return { name: field.name, value: e.target.value };
-                    }
-                    return f;
-                  })) }
-                >
-                  {field.options && field.options.map(opt => (
-                    <option value={ opt } key={opt}>
-                      {opt}
-                    </option>
-                  ))}
-                </select>:
-                field.fieldType === 'datetime' &&
+                  <select
+                    value={ signup.fields[field.name] }
+                    onChange={ e => setField('fields', (signup.fields || []).map((f, y) => {
+                      if (y === index) {
+                        return { name: field.name, value: e.target.value };
+                      }
+                      return f;
+                    })) }
+                  >
+                    {field.options && field.options.map(opt => (
+                      <option value={ opt } key={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>:
+                  field.fieldType === 'datetime' &&
                 <DateTimePicker
                   value={ signup.fields[field.name] }
                   onChange={ value => setField('fields', (signup.fields || []).map((f, y) => {

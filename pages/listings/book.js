@@ -93,7 +93,7 @@ const Book = ({ token }) => {
 
   const loadInventory = async (booking) => {
     try {
-      const {data: { results: listings }} = await api.post('/booking/availability', booking);
+      const { data: { results: listings } } = await api.post('/booking/availability', booking);
       setListings(listings.map(listing => fromJS(listing)));
     } catch (err) {
       alert(err);

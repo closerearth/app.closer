@@ -232,38 +232,38 @@ const EditModel = ({
                 ) }
                 { (!toggleFeature || featureToggles[name]) &&
                   <>
-                  { ['text', 'email', 'phone', 'hidden', 'number', 'date'].includes(type) && <input
-                    type={ type }
-                    value={ data[name] }
-                    placeholder={ placeholder }
-                    min={ min }
-                    max={ max }
-                    onChange={e => update(name, e.target.value)}
-                    required={ required }
-                  /> }
-                  { type === 'datetime' &&
+                    { ['text', 'email', 'phone', 'hidden', 'number', 'date'].includes(type) && <input
+                      type={ type }
+                      value={ data[name] }
+                      placeholder={ placeholder }
+                      min={ min }
+                      max={ max }
+                      onChange={e => update(name, e.target.value)}
+                      required={ required }
+                    /> }
+                    { type === 'datetime' &&
                     <DateTimePicker
                       value={ data[name] }
                       onChange={value => update(name, value)}
                     />
-                  }
-                  { type === 'longtext' && <textarea
+                    }
+                    { type === 'longtext' && <textarea
                     // type={ type }
-                    value={ data[name] }
-                    placeholder={ placeholder }
-                    onChange={e => update(name, e.target.value)}
-                    required={ required }
-                    className="textarea"
-                  /> }
-                  { type === 'currency' &&
+                      value={ data[name] }
+                      placeholder={ placeholder }
+                      onChange={e => update(name, e.target.value)}
+                      required={ required }
+                      className="textarea"
+                    /> }
+                    { type === 'currency' &&
                     <PriceEditor
                       value={ data[name] }
                       onChange={price => update(name, price)}
                       placeholder={ placeholder }
                       required={ required }
                     />
-                  }
-                  { type === 'currencies' &&
+                    }
+                    { type === 'currencies' &&
                     <div className="currencies-group">
                       { (data[name] || []).map((currencyGroup, index) => (
                         <div className="currency-group" key={ `${name}.${index}.cur` }>
@@ -297,8 +297,8 @@ const EditModel = ({
                         update(name, (data[name] || []).concat({ cur: currencies[0].value, val: 0 }));
                       } }>Add currency</a>
                     </div>
-                  }
-                  { type === 'select' &&
+                    }
+                    { type === 'select' &&
                     <select
                       value={ data[name] }
                       onChange={e => update(name, e.target.value)}
@@ -309,15 +309,15 @@ const EditModel = ({
                         </option>
                       ))}
                     </select>
-                  }
-                  { type === 'switch' &&
+                    }
+                    { type === 'switch' &&
                     <Switch
                       name={ name }
                       onChange={checked => update(name, checked)}
                       checked={!!objectPath.get(data, name)}
                     />
-                  }
-                  { type === 'tags' &&
+                    }
+                    { type === 'tags' &&
                     <div className="tags">
                       { data[name] && data[name].length > 0 && data[name].map(tag => (
                         <div className="tag" key={ tag } >
@@ -350,8 +350,8 @@ const EditModel = ({
                         onChange={e => setAddTag(e.target.value)}
                       />
                     </div>
-                  }
-                  { type === 'autocomplete' &&
+                    }
+                    { type === 'autocomplete' &&
                     <div className="autocomplete-container">
                       <div className="tags">
                         {data[name].map(item => item._id && (
@@ -378,27 +378,27 @@ const EditModel = ({
                         onChange={(value, option, actionType) => update(name, value, option, actionType)}
                       />
                     </div>
-                  }
-                  { type === 'ticketOptions' &&
+                    }
+                    { type === 'ticketOptions' &&
                     <TicketOptionsEditor
                       value={ data[name] }
                       onChange={value => update(name, value)}
                     />
-                  }
-                  { type === 'discounts' &&
+                    }
+                    { type === 'discounts' &&
                     <DiscountsEditor
                       value={ data[name] }
                       onChange={value => update(name, value)}
                     />
-                  }
-                  { type === 'fields' &&
+                    }
+                    { type === 'fields' &&
                     <FieldsEditor
                       value={ data[name] }
                       onChange={value => update(name, value)}
                     />
-                  }
-                </>
-              }
+                    }
+                  </>
+                }
               </div>
             );
           }

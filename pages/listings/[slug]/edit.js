@@ -37,7 +37,7 @@ const EditListing = ({ listing }) => {
           deleteButton="Delete Listing"
           onDelete={ () => router.push('/') }
         />
-        </div>
+      </div>
     </Layout>
   );
 }
