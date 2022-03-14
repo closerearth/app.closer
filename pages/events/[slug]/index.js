@@ -161,6 +161,13 @@ const Event = ({ event, error }) => {
                   { end && duration > 24 && ` - ${ end.format(dateFormat) }` }
                   { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
                 </h2>
+                {event.location ? <h3 className="text-lg font-light text-gray-500">{event.location}</h3>
+                  : 
+                  <a href={event.url} target="_blank" rel="noreferrer nofollow">
+                    <h3 className="text-lg font-light text-gray-500">{event.url}
+                    </h3>
+                  </a>
+                }
                 {
                   end && end.isBefore(dayjs()) &&
                     <h3 className="p3 mr-2 italic">
