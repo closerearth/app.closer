@@ -9,6 +9,7 @@ import { usePlatform } from '../../../contexts/platform';
 import api from '../../../utils/api';
 
 import PageNotFound from '../../404';
+import PageNotAllowed from '../../401';
 import TicketListPreview from '../../../components/TicketListPreview';
 
 const EventTickets = ({ event }) => {
@@ -31,8 +32,12 @@ const EventTickets = ({ event }) => {
     }
   }, [user]);
 
-  if (!user || !user.roles.includes('admin')) {
-    return null;
+  if (!user || (
+    !user.roles.includes('admin') &&
+    !user.roles.includes('space-host') &&
+    event.createdBy !== user._id
+  )) {
+    return <PageNotAllowed error="You must be the event creator, or an admin or space-host in order to see tickets." />;
   }
   if (!event) {
     return <PageNotFound error="Event not found" />;
@@ -53,7 +58,7 @@ const EventTickets = ({ event }) => {
         <div className="tickets-list">
           { tickets && tickets.count() > 0 ?
             tickets.map(ticket => <TicketListPreview key={ ticket.get('_id') } ticket={ ticket } />):
-            <p className="p-3 text-center italic">No tickets found.</p>
+            <p className="p-3 text-2xl card text-center italic">No tickets found.</p>
           }
         </div>
       </div>

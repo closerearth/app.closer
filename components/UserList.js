@@ -20,7 +20,7 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
       await api.post(`/moderator/channel/${channel}/add`, member);
       setUsers(users.concat(member));
     } catch (err) {
-      console.log('Load error', err);
+      console.error(err);
       setErrors(err.message)
     }
   };
@@ -35,7 +35,7 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
         const { data: { results } } = await api.get('/user', { params });
         setUsers(results);
       } catch (err) {
-        console.log('Load error', err);
+        console.error(err);
         setErrors(err.message)
       }
     };

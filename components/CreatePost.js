@@ -27,7 +27,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
       const { data: { results: attachment } } = await api.get(`/url-lookup/${encodeURIComponent(url)}`);
       setNewPost({ ...newPost, attachment });
     } catch (err) {
-      console.log('Failed to fetch attached URL', err);
+      console.warn('Failed to fetch attached URL', url, err);
     }
   }
   useEffect(() => {

@@ -118,7 +118,7 @@ const reducer = (state, action) => {
               }
             });
           } else {
-            console.log('no results', action);
+            console.warn('No results platform:GET_SUCCESS', action);
           }
 
           return map;
@@ -160,7 +160,7 @@ const reducer = (state, action) => {
         })
       );
     default:
-      console.log('Unknown action type', action.type);
+      console.warn('Unknown action type', action.type);
       return null;
   }
 }

@@ -101,7 +101,8 @@ const EventCheckout = ({ event, error }) => {
         setVolunteerTicketsSold(volunteerTicketsSold);
       }
     } catch (err) {
-      console.log('Error:', err);
+      console.error(err);
+      alert('Error loading availability');
     }
   };
 

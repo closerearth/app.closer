@@ -30,7 +30,7 @@ const UsersTable = ({ where, limit }) => {
         platform.user.getCount(params)
       ]);
     } catch (err) {
-      console.log('Load error', err);
+      console.error(err);
       setErrors(err.message);
     }
   };
@@ -99,7 +99,7 @@ const UsersTable = ({ where, limit }) => {
                                 platform.user.patch(user.get('_id'), { roles: user.get('roles').concat(addRole[user.get('_id')]) });
                                 setAddRole({ ...addRole, [user.get('_id')]: '' });
                               } else {
-                                console.log('Cannot add empty role!')
+                                alert('Cannot add empty role!')
                               }
                             } }
                           >

@@ -71,7 +71,6 @@ const Book = ({ token }) => {
   const duration = Math.abs(Math.ceil(dayjs(booking.end).diff(booking.start, 'days'))) + 1;
   const listing = booking.listing && platform.listing.findOne(booking.listing);
   const createBooking = async (event, listing, booking) => {
-    console.log('createBooking', booking)
     event.preventDefault();
     try {
       if (!listing) {
@@ -87,6 +86,7 @@ const Book = ({ token }) => {
       router.push(`/bookings/${newBooking._id}`);
     } catch (err) {
       console.log(err);
+      alert('There was an error creating booking.');
     }
   }
   const getPrice = (listing, booking) => listing.get(booking.rate).get('val')/rates[booking.rate].duration * booking.duration;

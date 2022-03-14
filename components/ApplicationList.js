@@ -32,7 +32,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
     try {
       await platform.application.patch(id, { ...app, status });
     } catch (err) {
-      console.log('Failed to approve application', err);
+      console.error(err);
       setErrors(err.message)
     }
   }

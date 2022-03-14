@@ -56,7 +56,7 @@ Ticket.getInitialProps = async ({ req, query }) => {
     const { data: { results: event } } = await api.get(`/event/${ticket.event}`);
     return { ticket, event };
   } catch (err) {
-    console.log('Error', err.message);
+    console.warn('Error loading ticket', err);
 
     return {
       error: err.message
