@@ -55,7 +55,13 @@ const EventPreview = ({ event, list }) => {
             </p>
             {event.get('location') &&
               <p className="text-sm">
-                { event.get('location') }
+                { event.get('location').slice(0, 30) }
+                { event.get('location').length > 30 && '...' }
+              </p>
+            }
+            {event.get('address') &&
+              <p className="text-sm">
+                { event.get('address') }
               </p>
             }
             {event.get('description') &&
