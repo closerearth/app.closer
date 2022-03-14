@@ -17,7 +17,7 @@ const EventTickets = ({ event }) => {
   const { user } = useAuth();
   const { platform } = usePlatform();
   const ticketsFilter = { where: { event: event && event._id } };
-  const tickets = platform.ticket.find();
+  const tickets = platform.ticket.find(ticketsFilter);
 
   const loadData = async () => {
     await Promise.all([
@@ -52,7 +52,7 @@ const EventTickets = ({ event }) => {
         </div>
         <div className="tickets-list">
           { tickets && tickets.count() > 0 ?
-            tickets.map(listing => <TicketListPreview key={ ticket.get('_id') } ticket={ ticket } />):
+            tickets.map(ticket => <TicketListPreview key={ ticket.get('_id') } ticket={ ticket } />):
             <p className="p-3 text-center italic">No tickets found.</p>
           }
         </div>

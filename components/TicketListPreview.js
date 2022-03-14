@@ -10,17 +10,25 @@ const TicketListPreview = ({ ticket }) => {
 
   return (
     <div className="ticket-list-preview card">
-      <div className="card-header">
-        <Link href={`/tickets/${ticket.get('slug')}`}><a><b>{ ticket.get('name') }</b></a></Link>
-      </div>
       <div className="card-body">
-        <h4>Ticket number: {ticket._id}</h4>
+        <p>Ticket ID: <b>{ ticket.get('_id') }</b></p>
+        { ticket.get('name') &&
+          <p>Ticket holder: <b>{ ticket.get('name') }</b></p>
+        }
         { ticket.get('price') &&
-          <p>Price: <b>{ priceFormat(ticket.get('price')) }</b></p>
+          <p>Total cost: <b>{ priceFormat(ticket.get('price')) }</b></p>
+        }
+        { ticket.get('option') &&
+          <p>Ticket type: <b>{ ticket.getIn(['option', 'name']) }</b></p>
+        }
+        { ticket.get('fields') &&
+          ticket.get('fields').map((field, i) => (
+            <p key={ field._id || field.id || i }>{ field.get('name') }: <b>{ field.get('value') }</b></p>
+          ))
         }
       </div>
       <div className="card-footer">
-        <Link href={`/tickets/${ticket.get('slug')}`}><a className="btn">Open ticket</a></Link>
+        <Link href={`/tickets/${ticket.get('_id')}`}><a className="btn">View ticket</a></Link>
       </div>
     </div>
   );
