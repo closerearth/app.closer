@@ -46,6 +46,7 @@
     "react-ga": "^3.3.0",
     "react-icons": "^4.3.1",
     "react-linkify": "^1.0.0-alpha",
+    "react-qr-code": "^2.0.3",
     "react-select": "^3.1.0",
     "react-switch": "^6.0.0",
     "react-tabs": "^3.2.3",

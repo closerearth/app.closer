@@ -6,7 +6,7 @@ module.exports = {
   PLATFORM_LEGAL_ADDRESS: 'TBD, Portugal',
   DEFAULT_TITLE: 'Closer: the operating system for sovereign communities',
   DEFAULT_DESCRIPTION: '',
-  SEMANTIC_URL: 'https://app.closer.earth',
+  SEMANTIC_URL: 'https://dev.closer.earth',
   TEAM_EMAIL: 'team@closer.earth',
   START_TIME: '2021-04-30T15:00:00.000Z',
   EXPOSE_STORE: true,
