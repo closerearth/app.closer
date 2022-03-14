@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { FaArrowLeft } from "@react-icons/all-files/fa/FaArrowLeft";
+import { FaArrowLeft } from '@react-icons/all-files/fa/FaArrowLeft';
 
 import Layout from '../../../components/Layout';
 import EditModel from '../../../components/EditModel';
@@ -32,7 +32,7 @@ const EditEvent = ({ event }) => {
           Edit event: <i>{ event.name }</i></h1>
         <EditModel
           id={ event._id }
-          endpoint={ '/event' }
+          endpoint="/event"
           fields={ models.event }
           onSave={ event => router.push(`/events/${event.slug}`) }
           onUpdate={ (name, value, option, actionType) => onUpdate(name, value, option, actionType) }
