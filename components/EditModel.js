@@ -164,13 +164,13 @@ const EditModel = ({
                 title: key,
                 value: key,
                 content: filterFields(fieldsByTab[key], data)
-                .map(field => (
-                  <FormField {...field} key={ field.name } data={ data} update={ update } />
-                ))
+                  .map(field => (
+                    <FormField {...field} key={ field.name } data={ data} update={ update } />
+                  ))
               }))
             }
           />:
-          fields && filterFields(fieldsByTab[key], data)
+          fields && filterFields(fields, data)
             .map(field => (
               <FormField {...field} key={ field.name } data={ data} update={ update }
               />

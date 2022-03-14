@@ -22,8 +22,8 @@ const ListingListPreview = ({ listing }) => {
         }
       </div>
       <div className="card-footer">
-        <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn">Edit</a></Link>
-        <Link href={`/listings/${listing.get('slug')}/book`}><a className="btn">Book</a></Link>
+        <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn mr-2">Edit</a></Link>
+        <Link href={`/listings/book?listing=${listing.get('slug')}`}><a className="btn">Book</a></Link>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
 import FieldsEditor from './FieldsEditor';
 
-const FormField = ({ data, update, label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel, min, max }) => {
+const FormField = ({ data, update, className, label, placeholder, name, type, required, options, endpoint, searchField, multi, defaultValue, toggleFeature, toggleLabel, min, max }) => {
   const [addTag, setAddTag] = useState('');
   return (
     <div className={`form-field w-full mb-6 form-type-${type}`} key={ name }>
@@ -22,6 +22,7 @@ const FormField = ({ data, update, label, placeholder, name, type, required, opt
             placeholder={ placeholder }
             min={ min }
             max={ max }
+            className={ className }
             onChange={e => update(name, e.target.value)}
             required={ required }
           /> }
@@ -37,7 +38,7 @@ const FormField = ({ data, update, label, placeholder, name, type, required, opt
             placeholder={ placeholder }
             onChange={e => update(name, e.target.value)}
             required={ required }
-            className="textarea"
+            className={ `${className} textarea` }
           /> }
           { type === 'currency' &&
           <PriceEditor
@@ -86,6 +87,7 @@ const FormField = ({ data, update, label, placeholder, name, type, required, opt
           <select
             value={ data[name] }
             onChange={e => update(name, e.target.value)}
+            className={ className }
           >
             {options.map(opt => (
               <option value={ opt.value } key={opt.value}>
@@ -97,12 +99,13 @@ const FormField = ({ data, update, label, placeholder, name, type, required, opt
           { type === 'switch' &&
           <Switch
             name={ name }
+            className={ className }
             onChange={checked => update(name, checked)}
             checked={!!objectPath.get(data, name)}
           />
           }
           { type === 'tags' &&
-          <div className="tags">
+          <div className={ `${className} tags`}>
             { data[name] && data[name].length > 0 && data[name].map(tag => (
               <div className="tag" key={ tag } >
                 <span className="ellipsis">{ tag }</span>

@@ -71,7 +71,7 @@ const Listing = ({ listing, error }) => {
               </p>
             </section>
             <section className="my-4">
-              <Link href={`/listings/${listing.slug}/book`}>
+              <Link href={`/listings/book?listing=${listing.slug}`}>
                 <a className="text-lg btn-primary">Book now</a>
               </Link>
             </section>

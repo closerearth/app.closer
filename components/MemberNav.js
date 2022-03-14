@@ -65,12 +65,12 @@ const MemberNav = ({ token, user, children, toggleNav }) => {
         <a onClick={() => toggleNav(false)}>Book (early beta)</a>
       </ActiveLink>
     </li>,
-    user && user.roles.includes('tdf') && <li key="applications">
+    user && (user.roles.includes('community-curator') || user.roles.includes('admin')) && <li key="applications">
       <ActiveLink href="/applications" as="/applications">
         <a onClick={() => toggleNav(false)}>Applications</a>
       </ActiveLink>
     </li>,
-    user && user.roles.includes('tdf') && <li key="Nests">
+    user && user.roles.includes('beta') && <li key="Nests">
       <ActiveLink href="/nests" as="/nests">
         <a onClick={() => toggleNav(false)}>Nests</a>
       </ActiveLink>
