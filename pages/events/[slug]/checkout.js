@@ -45,7 +45,7 @@ const EventCheckout = ({ event, error }) => {
   const discount = router.query.discount && event.discounts && event.discounts.find(d => d.code === router.query.discount);
   const isVolunteer = !!router.query.volunteer && volunteerTicketsSold < maxVolunteers;
   const volunteerCapacityReached = !!router.query.volunteer && volunteerTicketsSold >= maxVolunteers;
-  const stripe = loadStripe(event.stripePub || config.STRIPE_TEST_KEY);
+  const stripe = loadStripe(event.stripePub || config.STRIPE_PUB_KEY);
 
   let total = event.price ? event.price.val : 0;
   let currency = event.price ? event.price.cur : 'usd';
