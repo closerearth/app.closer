@@ -205,10 +205,22 @@ const Navigation = () => {
       { navOpen &&
         <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
           <div className="main-content flex flex-col justify-center items-center space-y-2">
+            { isAuthenticated &&
+              <Link
+                href="/members/[slug]"
+                as={ `/members/${ user.slug }` }
+              >
+
+                <a title="View profile" className="py-2 shadow-sm block text-xl text-center w-full flex justify-start flex-row" onClick={() => toggleNav(false)}>
+                  <ProfilePhoto user={ user } />
+                  <p className='ml-3'>{user.screenname}</p>
+                </a>
+              </Link>
+            }
             <Link
               href="/events"
             >
-              <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
+              <a className="py-2 shadow-sm block text-xl w-full" onClick={() => toggleNav(false)}>
                 Events
               </a>
             </Link>
@@ -216,7 +228,7 @@ const Navigation = () => {
               <Link
                 href="/members"
               >
-                <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
+                <a className="py-2 shadow-sm block text-xl w-full" onClick={() => toggleNav(false)}>
                   Members
                 </a>
               </Link>
@@ -225,7 +237,7 @@ const Navigation = () => {
               <Link
                 href="/applications"
               >
-                <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
+                <a className="py-2 shadow-sm block text-xl w-full" onClick={() => toggleNav(false)}>
                   Applications
                 </a>
               </Link>
@@ -234,7 +246,7 @@ const Navigation = () => {
               <Link
                 href="/admin"
               >
-                <a className="py-2 shadow-sm block text-xl text-center w-full" onClick={() => toggleNav(false)}>
+                <a className="py-2 shadow-sm block text-xl w-full" onClick={() => toggleNav(false)}>
                   Admin
                 </a>
               </Link>
@@ -242,7 +254,7 @@ const Navigation = () => {
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="py-2 block text-xl text-center w-full"
+                  className="py-2 block text-xl w-full"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -257,7 +269,7 @@ const Navigation = () => {
             ) : (
               <Link href="/login">
                 <a
-                  className="py-2 shadow-sm block text-center w-full"
+                  className="py-2 shadow-sm block text-xl w-full"
                   onClick={() => toggleNav(false)}
                 >
                   Sign in
@@ -266,7 +278,7 @@ const Navigation = () => {
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                className="py-2 block text-xl text-center w-full"
+                className="py-2 block text-xl w-full"
               >
                 {
                   REGISTRATION_MODE === 'paid' ?

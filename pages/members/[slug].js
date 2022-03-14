@@ -144,7 +144,7 @@ const MemberPage = ({ member, loadError }) => {
             <div className='flex flex-col items-start space-y-5 md:w-full'>
               <div className='flex flex-col md:flex-row w-full'>
                 <div className='md:w-72 items-center justify-start relative'>
-                  <div className="flex justify-center items-center h-full">
+                  <div className="flex mb-4 md:mr-8 md:justify-center items-center h-full">
                     {member.photo?
                       <img
                         src={`${cdn}${member.photo}-profile-lg.jpg`}
