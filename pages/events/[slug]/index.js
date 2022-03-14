@@ -161,10 +161,10 @@ const Event = ({ event, error }) => {
                   { end && duration > 24 && ` - ${ end.format(dateFormat) }` }
                   { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
                 </h2>
-                {event.location ? <h3 className="text-lg font-light text-gray-500">{event.location}</h3>
+                {event.address ? <h3 className="text-lg font-light text-gray-500">{event.address}</h3>
                   : 
-                  <a href={event.url} target="_blank" rel="noreferrer nofollow">
-                    <h3 className="text-lg font-light text-gray-500">{event.url}
+                  <a href={event.location} target="_blank" rel="noreferrer nofollow">
+                    <h3 className="text-lg font-light text-gray-500">{event.location}
                     </h3>
                   </a>
                 }
