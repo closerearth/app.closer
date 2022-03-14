@@ -9,6 +9,9 @@ dayjs.extend(advancedFormat);
 const EventPreview = ({ event, list }) => {
   const start = event.get('start') && dayjs(event.get('start'));
   const end = event.get('end') && dayjs(event.get('end'));
+  const duration = end && end.diff(start, 'hour', true);
+  const isThisYear = dayjs().isSame(start, 'year');
+  const dateFormat = isThisYear ? 'MMMM Do HH:mm' : 'YYYY MMMM Do HH:mm';
 
   return (
     <div
@@ -46,16 +49,20 @@ const EventPreview = ({ event, list }) => {
             <h4 className={`${list?'text-sm':'font-bold text-xl'}`}>
               <Link href={`/events/${event.get('slug')}`}><a>{event.get('name')}</a></Link>
             </h4>
-            { list?
-              ( start && <p className="text-gray-400 text-xs">
-                { start.format('MMM Do') }
-                { end && ` - ${end.format('MMM Do')}` }
-              </p> ):
-              (event.get('description') &&
+            <p className="text-xs font-light">
+              { start && start.format(dateFormat) }
+              { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
+            </p>
+            {event.get('location') &&
+              <p className="text-sm">
+                { event.get('location') }
+              </p>
+            }
+            {event.get('description') &&
               <p className="text-sm mt-3">
                 { event.get('description').slice(0, 50) }
                 { event.get('description').length > 50 && '...' }
-              </p>)
+              </p>
             }
           </div>
         </div>
