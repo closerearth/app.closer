@@ -65,6 +65,7 @@ const CheckoutForm = ({
       }
     } catch (err) {
       setProcessing(false);
+      console.log(err);
       setError(err.response && err.response.data.error ? err.response.data.error : err.message);
     }
   };

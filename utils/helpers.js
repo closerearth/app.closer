@@ -162,8 +162,8 @@ export const getSample = (field) => {
         id: Math.random(),
         name: '',
         code: '',
-        percent: 0,
-        val: 0,
+        percent: '',
+        val: ''
       }];
     case 'select':
       return field.options && field.options[0] && field.options[0].value;

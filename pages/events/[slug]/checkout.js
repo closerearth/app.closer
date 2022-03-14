@@ -45,7 +45,7 @@ const EventCheckout = ({ event, error }) => {
   const discount = router.query.discount && event.discounts && event.discounts.find(d => d.code === router.query.discount);
   const isVolunteer = !!router.query.volunteer && volunteerTicketsSold < maxVolunteers;
   const volunteerCapacityReached = !!router.query.volunteer && volunteerTicketsSold >= maxVolunteers;
-  const stripe = loadStripe(event.stripePub || config.STRIPE_PUB_KEY);
+  const stripe = loadStripe(event.stripePub || config.STRIPE_TEST_KEY);
 
   let total = event.price ? event.price.val : 0;
   let currency = event.price ? event.price.cur : 'usd';
@@ -69,10 +69,7 @@ const EventCheckout = ({ event, error }) => {
   }
   total = Math.max(Math.round(total * 100) / 100, 0);
 
-  console.log('signup.fields', signup.fields)
-
   const setField = (field, value) => {
-    console.log('setField', field, value)
     updateSignup(oldFields => Object.assign({}, oldFields, { [field]: value }));
     if (field === 'email' && !value.match(/@/gi)) {
       setSignupError('Please enter a valid email');
