@@ -37,6 +37,7 @@ const EditModel = ({
   const { isAuthenticated, user } = useAuth();
   const initialModel = initialData || fields.reduce((acc, field) => ({ ...acc, [field.name]: field.default || getSample(field) }), {});
   const [data, setData] = useState(initialModel);
+  const [error, setErrors] = useState(false);
   const fieldsByTab = {
     general: []
   };
@@ -44,7 +45,7 @@ const EditModel = ({
     if (field.tab) {
       fieldsByTab[field.tab] = (fieldsByTab[field.tab] || []).concat(field);
     } else {
-      fieldsByTab.general.concat(field);
+      fieldsByTab.general = (fieldsByTab.general || []).concat(field);
     }
   });
 
@@ -58,7 +59,6 @@ const EditModel = ({
       onUpdate(name, value, option, actionType);
     }
   };
-  const [error, setErrors] = useState(false);
 
   const validate = updatedData => {
     const validationErrors = [];

@@ -112,6 +112,13 @@ const Event = ({ event, error }) => {
           <div className="w-34">
             <h1>This event is password protected</h1>
             <input onChange={ e => setPassword(e.target.value) } placeholder="password" type="password" />
+            {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
+              <div className="admin-actions mt-3 border-t pt-3">
+                <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
+                  <a className="btn-secondary text-xs mr-2">Edit event</a>
+                </Link>
+              </div>
+            }
           </div>
         </div>:
         <div>
@@ -207,7 +214,7 @@ const Event = ({ event, error }) => {
                                         attendEvent(event._id, !(attendees?.includes(user._id)));
                                       }}
                                     >
-                          Cancel RSVP
+                                      Cancel RSVP
                                     </a>:
                                     <button
                                       onClick={ e => {
@@ -216,7 +223,7 @@ const Event = ({ event, error }) => {
                                       }}
                                       className="btn-primary mr-2"
                                     >
-                          Attend
+                                      Attend
                                     </button>
                       }
                     </>
@@ -246,9 +253,9 @@ const Event = ({ event, error }) => {
                     <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
                       <a className="btn-secondary text-xs mr-2">Edit event</a>
                     </Link>
-                    <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
+                    { event.paid && <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
                       <a className="btn-secondary text-xs mr-2">View tickets</a>
-                    </Link>
+                    </Link> }
                   </div>
                 }
               </div>

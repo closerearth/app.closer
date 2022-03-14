@@ -142,8 +142,20 @@ export default {
       toggleFeature: true,
       tab: 'advanced'
     },
-    { name: 'password', label: 'Event password', type: 'text', placeholder: '(If set, user will need the password to see)' },
-    { name: 'participationGuideUrl', label: 'Participation guide', type: 'text', placeholder: 'https://event.com/participation' },
+    {
+      name: 'password',
+      label: 'Event password',
+      tab: 'advanced',
+      type: 'text',
+      placeholder: '(If set, user will need the password to see)'
+    },
+    {
+      name: 'participationGuideUrl',
+      label: 'Participation guide',
+      tab: 'advanced',
+      type: 'text',
+      placeholder: 'https://event.com/participation'
+    },
   ],
   task: [
     { name: 'title', label: 'Title', type: 'text', placeholder: 'Plant tomatoes in the garden', required: true },
