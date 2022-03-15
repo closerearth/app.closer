@@ -16,6 +16,11 @@
   "create_post_remove": "Remove",
   "create_post_title": "Create post",
   "create_post_submit_button": "Publish",
+  "discounts_code": "Code",
+  "discounts_ticket_name": "Ticket name",
+  "discounts_percent_discount": "Percent Discount",
+  "discounts_remove": "Remove",
+  "discounts_nominal_discount": "Nominal Discount",
   "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
   "signup_title": "Signup"
