@@ -257,6 +257,9 @@ const EventCheckout = ({ event, error }) => {
                       return f;
                     })) }
                   >
+                    <option value={ null }>
+                      --
+                    </option>
                     {field.options && field.options.map(opt => (
                       <option value={ opt } key={opt}>
                         {opt}
