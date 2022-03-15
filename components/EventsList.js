@@ -9,6 +9,7 @@ import { usePlatform } from '../contexts/platform';
 import { useAuth } from '../contexts/auth';
 import Pagination from './Pagination';
 import EventPreview from './EventPreview';
+import { __ } from '../utils/helpers';
 
 const now = new Date();
 dayjs.extend(advancedFormat);
@@ -58,7 +59,7 @@ const EventsList = ({
         { events && events.count() > 0?
           events.map((event) => <EventPreview key={ event.get('_id') } list={ list } event={ event } />):
           <div className="w-full py-4">
-            <p className="italic">No upcoming events.</p>
+            <p className="italic">{ __('events_list_no_events') }</p>
           </div>
         }
       </div>

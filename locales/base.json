@@ -21,6 +21,9 @@
   "discounts_percent_discount": "Percent Discount",
   "discounts_remove": "Remove",
   "discounts_nominal_discount": "Nominal Discount",
+  "edit_model_auth_required": "User not authenticated.",
+  "events_list_no_events": "No upcoming events.",
+  "edit_model_permission_denied": "You may not edit this item.",
   "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
   "signup_title": "Signup"
