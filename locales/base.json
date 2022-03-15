@@ -13,6 +13,9 @@
   "autocomplete_no_results": "No results",
   "booking_cancelation_policy_member": "Members can cancel their bookings at no cost, up to 7 days before check in. If you cancel within less than 7 days, you'll receive a 50% refund.",
   "booking_cancelation_policy": "In case the booking is declined for any reason you will receive a full refund. If you decide to cancel, you will receive a 90% refund up to 30 days prior and 50% refund up to 7 days before the booking.",
+  "create_post_remove": "Remove",
+  "create_post_title": "Create post",
+  "create_post_submit_button": "Publish",
   "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
   "signup_title": "Signup"
