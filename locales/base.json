@@ -1,9 +1,14 @@
 {
-  "apply_success": "Thank you, our community curator will reach out for an intro call.",
   "admin_dashboard_tile": "Dashboard",
+  "apply_success": "Thank you, our community curator will reach out for an intro call.",
+  "apply_phone_number": "Phone Number",
+  "apply_email": "Email",
+  "apply_submit_button": "Apply",
+  "apply_name": "Name",
   "booking_cancelation_policy_member": "Members can cancel their bookings at no cost, up to 7 days before check in. If you cancel within less than 7 days, you'll receive a 50% refund.",
   "booking_cancelation_policy": "In case the booking is declined for any reason you will receive a full refund. If you decide to cancel, you will receive a 90% refund up to 30 days prior and 50% refund up to 7 days before the booking.",
-  "signup_title": "Signup",
+  "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
-  "signup_body": "Become a member of a thriving community of creators"
+  "signup_title": "Signup"
 }
+
