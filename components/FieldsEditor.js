@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 
 import PriceEditor from './PriceEditor';
+import { __ } from '../utils/helpers';
 
 const fieldTypes = [
   {
@@ -47,7 +48,7 @@ const FieldsEditor = ({ value, onChange }) => {
         options && options.map((option, index) => (
           <div key={ option._id || option.id || index } className="mr-3 mb-4 p-3 shadow">
             <div className="mb-3">
-              <label>Question</label>
+              <label>{ __('fields_editor_questions') }</label>
               <input
                 type="text"
                 value={ option.name }
@@ -56,7 +57,7 @@ const FieldsEditor = ({ value, onChange }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Type</label>
+              <label>{ __('fields_editor_type') }</label>
               <select
                 value={ option.fieldType }
                 onChange={e => updateOption(index, { ...option, fieldType: e.target.value })}
@@ -70,7 +71,7 @@ const FieldsEditor = ({ value, onChange }) => {
             </div>
             { option.fieldType === 'select' &&
               <div className="mb-3">
-                <label>Options</label>
+                <label>{ __('fields_editor_options') }</label>
                 { option.options && option.options.map((opt, i) => (
                   <div key={ i } className="flex flex-row justify-start items-center mb-3">
                     <input
@@ -87,7 +88,7 @@ const FieldsEditor = ({ value, onChange }) => {
                     <a href="#" className="danger-link" onClick={ e => {
                       e.preventDefault();
                       updateOption(index, { ...option, options: (option.options || []).filter((v, y) => y !== i) });
-                    }}>remove</a>
+                    }}>{ __('fields_editor_remove') }</a>
                   </div>
                 )) }
                 <div>
@@ -95,19 +96,19 @@ const FieldsEditor = ({ value, onChange }) => {
                     e.preventDefault();
                     updateOption(index, { ...option, options: (option.options || []).concat('') });
                   } }>
-                    Add option
+                    { __('fields_editor_add_option') }
                   </a>
                 </div>
               </div>
             }
             <div className="mt-3">
-              <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>remove</a>
+              <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>{ __('fields_editor_remove') }</a>
             </div>
           </div>
         ))
       }
       <div className="flex justify-start items-center">
-        <a href="#" className="btn" onClick={ e => addOption(e) }>Add custom field</a>
+        <a href="#" className="btn" onClick={ e => addOption(e) }>{ __('fields_editor_add_custom_field') }</a>
       </div>
     </div>
   );
