@@ -377,7 +377,6 @@ const Event = ({ event, error }) => {
 Event.getInitialProps = async ({ req, query }) => {
   try {
     const { data: { results: event } } = await api.get(`/event/${query.slug}`);
-    console.log('slug', query.slug, event)
     // Test cases:
     // Event is ongoing
     // event.start = '2022-02-02T19:00:00.000Z';
