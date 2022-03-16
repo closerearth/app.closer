@@ -5,8 +5,9 @@ import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { faUser, faPlus, faMinus, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaUser } from '@react-icons/all-files/fa/FaUser';
+import { FaPlus } from '@react-icons/all-files/fa/FaPlus';
+import { FaMinus } from '@react-icons/all-files/fa/FaMinus';
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
@@ -152,7 +153,7 @@ const MemberPage = ({ member, loadError }) => {
                         alt={ member.screenname }
                         className="w-32 md:w-44 mt-4 md:mt-0 rounded-full"
                       />:
-                      <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
+                      <FaUser className="text-gray-200 text-6xl" />
                     }
                   </div>
                   <div className="mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full opacity-0 hover:opacity-80">
@@ -341,12 +342,10 @@ const MemberPage = ({ member, loadError }) => {
                   </ul>
                 </div>
 
-                { isAuthenticated && member._id === currentUser._id && !showForm &&
-           <FontAwesomeIcon icon={faPlus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
-                }
-
-                { isAuthenticated && member._id === currentUser._id && showForm &&
-           <FontAwesomeIcon icon={faMinus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
+                { isAuthenticated && member._id === currentUser._id &&
+                  <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
+                    { showForm ? <FaMinus /> : <FaPlus /> }
+                  </a>
                 }
 
                 { isAuthenticated && member._id === currentUser._id && showForm &&

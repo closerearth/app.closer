@@ -84,7 +84,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
       </div> }
       { newPost.photo &&
         <div className="card-body">
-          <img src={ `${cdn}${newPost.photo}-post-md.jpg` } />
+          <img src={ `${cdn}${newPost.photo}-post-md.jpg` } alt="" />
         </div>
       }
       <div className="card-body">

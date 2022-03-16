@@ -10,10 +10,6 @@ import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATIO
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
-import '@fortawesome/fontawesome-svg-core/styles.css'; // import Font Awesome CSS
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically
-
 const Application = ({ tags, query, signedIn, Component, pageProps, token, user }) => {
   const router = useRouter();
 
@@ -30,11 +26,6 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
       <Head>
         <title>{ DEFAULT_TITLE }</title>
         <meta charSet="utf-8" />
-        <noscript>
-          <link href="/reset.css" rel="stylesheet" />
-          <link href="/fonts/icons.css" rel="stylesheet" />
-          <link href="/styles.css" rel="stylesheet" />
-        </noscript>
         <meta name="description" content={ DEFAULT_DESCRIPTION } />
         <meta name="og:url" content={`${SEMANTIC_URL}${router.asPath}`} />
         <meta property="og:type" content="article" />
