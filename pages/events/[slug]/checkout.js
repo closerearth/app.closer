@@ -17,13 +17,6 @@ import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 
 const maxVolunteers = 20;
-
-const optionToIcon = {
-  camping: faCampground,
-  glamping_quattro: faBed,
-  glamping_duo: faBed,
-  cocktail: faCocktail,
-};
 const formatName = name => name && name.split('_').join(' ');
 
 const EventCheckout = ({ event, error }) => {
