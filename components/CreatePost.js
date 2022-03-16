@@ -119,7 +119,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
             </a>
             { newPost.attachment.image && newPost.attachment.image &&
               <a href={newPost.attachment.url} target="_blank" rel="noreferrer nofollow">
-                <img src={ newPost.attachment.image } />
+                <img src={ newPost.attachment.image } alt="" />
               </a>
             }
             { newPost.attachment.title &&

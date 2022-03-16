@@ -5,8 +5,6 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCampground, faBed, faCaravan, faCocktail } from '@fortawesome/free-solid-svg-icons';
 
 import api, { formatSearch, cdn } from '../../../utils/api';
 import { priceFormat } from '../../../utils/helpers';
@@ -19,13 +17,6 @@ import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 
 const maxVolunteers = 20;
-
-const optionToIcon = {
-  camping: faCampground,
-  glamping_quattro: faBed,
-  glamping_duo: faBed,
-  cocktail: faCocktail,
-};
 const formatName = name => name && name.split('_').join(' ');
 
 const EventCheckout = ({ event, error }) => {
@@ -209,7 +200,6 @@ const EventCheckout = ({ event, error }) => {
                     onClick={ () => setTicketOption(option) }
                     disabled={ option.available === 0 }
                   >
-                    { optionToIcon[option.name] && <FontAwesomeIcon size="lg" icon={ optionToIcon[option.name] } /> }
                     <h4>{formatName(option.name)}</h4>
                     <p className="price text-gray-500">{ priceFormat(option.price, option.currency) }</p>
                     <p className="availability text-xs uppercase text-primary">
