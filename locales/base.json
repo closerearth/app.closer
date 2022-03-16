@@ -67,6 +67,12 @@
   "post_replies": "replies",
   "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
-  "signup_title": "Signup"
+  "signup_title": "Signup",
+  "signup_form_name": "Name",
+  "signup_form_phone_number": "Phone number (optional)",
+  "signup_form_email": "Email",
+  "signup_form_password": "Password",
+  "signup_form_repeat_password": "Repeat Password",
+  "signup_form_create": "Create account"
 }
 
