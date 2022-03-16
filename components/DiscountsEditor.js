@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 
 import PriceEditor from './PriceEditor';
+import { __ } from '../utils/helpers';
 
 const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
   const [options, setOptions] = useState(value);
@@ -33,7 +34,7 @@ const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
         options && options.map((option, index) => (
           <div key={ option._id || option.id || index } className="mr-3 mb-4 card">
             <div className="mb-3">
-              <label>Code</label>
+              <label>{ __('discounts_code') }</label>
               <input
                 type="text"
                 value={ option.code }
@@ -42,7 +43,7 @@ const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Ticket Name (optional)</label>
+              <label>{ __('discounts_ticket_name') }</label>
               <p className="italic text-gray-500 text-xs">If set, the discount code will only apply for specific ticket</p>
               <input
                 type="text"
@@ -52,7 +53,7 @@ const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Percent discount</label>
+              <label>{ __('discounts_percent_discount') }</label>
               <input
                 type="Number"
                 min="0"
@@ -65,7 +66,7 @@ const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Nominal discount</label>
+              <label>{ __('discounts_nominal_discount') }</label>
               <input
                 type="Number"
                 min="0"
@@ -78,7 +79,7 @@ const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mt-3">
-              <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>remove</a>
+              <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>{ __('discounts_remove') }</a>
             </div>
           </div>
         ))

@@ -3,7 +3,8 @@ import api, { cdn } from '../utils/api';
 import Link from 'next/link';
 import { useAuth } from '../contexts/auth.js';
 import UploadPhoto from './UploadPhoto';
-import { getHashTags, getUrls } from '../utils/helpers'
+import { getHashTags, getUrls } from '../utils/helpers';
+import { __ } from '../utils/helpers';
 
 const filterTags = (tags) => Array.from(new Set(tags));
 
@@ -79,7 +80,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
       }}
     >
       { !isReply && <div className="card-title">
-        <h3>Create Post</h3>
+        <h3>{ __('create_post_title') }</h3>
       </div> }
       { newPost.photo &&
         <div className="card-body">
@@ -114,7 +115,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
         { newPost.attachment &&
           <div className="card-body">
             <a className="danger-link" href="#" onClick={ () => setNewPost({ ...newPost, attachment: null }) }>
-              remove
+              { __('create_post_remove') }
             </a>
             { newPost.attachment.image && newPost.attachment.image &&
               <a href={newPost.attachment.url} target="_blank" rel="noreferrer nofollow">
@@ -173,7 +174,7 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
           />
           <div>
             <button type="submit" className="btn-primary" disabled={ newPost.content.length === 0 }>
-              Publish
+              { __('create_post_submit_button') }
             </button>
           </div>
         </div>

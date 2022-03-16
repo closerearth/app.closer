@@ -36,7 +36,7 @@ const ApplicationForm = () => {
         <form className="join mt-24 flex flex-col" onSubmit={ submit }>
           <div className="w-full mb-4">
             <label htmlFor="screenname">
-              Name
+              { __('apply_name') }
             </label>
             <input id="screenname" type="text" onChange={ e => updateApplication({ name: e.target.value }) } placeholder="Jane Birkin" />
           </div>
@@ -56,18 +56,18 @@ const ApplicationForm = () => {
           )) }
           <div className="w-full mb-4">
             <label htmlFor="phone">
-              Phone number
+              { __('apply_phone_number') }
             </label>
             <input type="phone" required id="phone" value={ application.phone } onChange={ e => updateApplication({ phone: e.target.value }) } placeholder="+1 777 888 999" />
           </div>
           <div className="w-full mb-4">
             <label htmlFor="email">
-              Email
+              { __('apply_email') }
             </label>
             <input type="email" id="email" required value={ application.email } onChange={ e => updateApplication({ email: e.target.value }) } placeholder="you@project.co" />
           </div>
           <div className="w-full mb-4">
-            <button id="signupbutton" className="btn-primary" type="submit">Apply</button>
+            <button id="signupbutton" className="btn-primary" type="submit">{ __('apply_submit_button') }</button>
           </div>
         </form>
       }
