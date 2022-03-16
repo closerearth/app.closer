@@ -7,6 +7,7 @@ import TimeSince from './TimeSince';
 import ProfilePhoto from './ProfilePhoto';
 import CreatePost from './CreatePost';
 import { useAuth } from '../contexts/auth.js';
+import { __ } from '../utils/helpers';
 
 const Post = ({ _id, attachment, channel, tags, createdBy, created, content, photo, replyCount, showChannel, usersById, setUsersById, channelsById }) => {
 
@@ -68,7 +69,7 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
     return (
       <div className="post card">
         <div className="card-body">
-          <h3>Post deleted.</h3>
+          <h3>{ __('post_delete_message') }</h3>
         </div>
       </div>
     );
@@ -163,7 +164,7 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
                 setRepliesOpen(!repliesOpen);
               }}
             >
-              { localReplyCount } replies
+              { localReplyCount } { __('post_replies') }
             </a>
             { createdBy === user._id &&
               <a
@@ -174,7 +175,7 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
                   deletePost();
                 }}
               >
-                delete
+                { __('post_delete') }
               </a>
             }
           </div>

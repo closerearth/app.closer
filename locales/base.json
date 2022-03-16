@@ -59,6 +59,12 @@
   "navigation_sign_out": "Sign out",
   "navigation_sign_in": "Sign in",
   "navigation_close": "Close",
+  "newsletter_success": "Thanks, we will be in touch soon!",
+  "newsletter_body": "Keep in the loop, subscribe:",
+  "newsletter_signup": "Sign up",
+  "post_delete": "delete",
+  "post_delete_message": "Post deleted.",
+  "post_replies": "replies",
   "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
   "signup_title": "Signup"
