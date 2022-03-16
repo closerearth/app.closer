@@ -56,6 +56,9 @@
   "my_articles_title": "Your articles:",
   "my_articles_wait_message": "Loading...",
   "my_articles_other": "Other readings",
+  "navigation_sign_out": "Sign out",
+  "navigation_sign_in": "Sign in",
+  "navigation_close": "Close",
   "signup_body": "Become a member of a thriving community of creators",
   "signup_success": "Welcome! We look forward to connecting with you.",
   "signup_title": "Signup"
