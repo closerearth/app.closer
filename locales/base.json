@@ -108,6 +108,7 @@
   "bookings_slug_status": "Status:",
   "bookings_slug_checkin": "Check in:",
   "bookings_slug_checkout": "Check out:",
-  "bookings_slug_total": "Total:"
+  "bookings_slug_total": "Total:",
+  "bookings_title": "Bookings"
 }
 
