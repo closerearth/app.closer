@@ -109,6 +109,7 @@
   "bookings_slug_checkin": "Check in:",
   "bookings_slug_checkout": "Check out:",
   "bookings_slug_total": "Total:",
-  "bookings_title": "Bookings"
+  "bookings_title": "Bookings",
+  "channel_create_title": "Create Channel"
 }
 
