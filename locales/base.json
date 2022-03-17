@@ -101,6 +101,13 @@
   "applications_in_conversation": "In conversation:",
   "applications_accepted": "Accepted applications",
   "bookings_edit_slug_title": "Edit",
-  "bookings_edit_slug_not_found": "Event_not_found"
+  "bookings_edit_slug_not_found": "Event_not_found",
+  "bookings_slug_title": "Booking",
+  "bookings_slug_notes": "Notes",
+  "bookings_slug_summary": "Summary",
+  "bookings_slug_status": "Status:",
+  "bookings_slug_checkin": "Check in:",
+  "bookings_slug_checkout": "Check out:",
+  "bookings_slug_total": "Total:"
 }
 
