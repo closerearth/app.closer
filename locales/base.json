@@ -99,6 +99,8 @@
   "applications_subtitle": "Platform metrics",
   "applications_open": "Open applications:",
   "applications_in_conversation": "In conversation:",
-  "applications_accepted": "Accepted applications"
+  "applications_accepted": "Accepted applications",
+  "bookings_edit_slug_title": "Edit",
+  "bookings_edit_slug_not_found": "Event_not_found"
 }
 
