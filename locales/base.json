@@ -85,7 +85,8 @@
   "ticket_options_promt_message": "Put 0 for no limits.",
   "ticket_options_ticket_details": "Ticket details",
   "ticket_options_remove": "Remove",
-  "ticket_options_add_type": "Add ticket type"
-
+  "ticket_options_add_type": "Add ticket type",
+  "upload_photo_loading_message": "Uploading...",
+  "upload_photo_promt_message": "Drop files here"
 }
 
