@@ -87,6 +87,12 @@
   "ticket_options_remove": "Remove",
   "ticket_options_add_type": "Add ticket type",
   "upload_photo_loading_message": "Uploading...",
-  "upload_photo_promt_message": "Drop files here"
+  "upload_photo_prompt_message": "Drop files here",
+  "user_list_empty": "No members.",
+  "user_list_all": "See all",
+  "users_table_name": "Name",
+  "users_table_created": "Created",
+  "users_table_roles": "Roles",
+  "users_table_empty": "No users found"
 }
 
