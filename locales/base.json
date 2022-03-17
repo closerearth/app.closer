@@ -112,6 +112,26 @@
   "bookings_title": "Bookings",
   "channel_create_title": "Create Channel",
   "community_title": "Community",
-  "edit_channel_title": "Edit"
+  "edit_channel_title": "Edit",
+  "events_slug_checkout_title": "Booking",
+  "events_slug_checkout_welcome_message": "Hello",
+  "events_slug_checkout_volunteer_message": "Thank you for being a volunteer!",
+  "events_slug_checkout_volunteer_capacity_reached": "Thank you for applying to be a volunteer, unforturnately volunteer tickets are now sold out.",
+  "events_slug_checkout_form_full_name": "Full name",
+  "events_slug_checkout_form_email": "Email",
+  "events_slug_checkout_tickets_title": "Ticket options",
+  "events_slug_checkout_notes": "Notes",
+  "events_slug_checkout_payment_title": "Payment",
+  "events_slug_checkout_volunteer_discount": "Volunteer discount:",
+  "events_slug_checkout_discount_error": "Discount code not found.",
+  "events_slug_checkout_discount_success": "Discount code applied",
+  "events_slug_checkout_discount_percentage": "% off",
+  "events_slug_checkout_discount_val": "off",
+  "events_slug_checkout_payment_total": "Total:",
+  "events_slug_checkout_ticket_warning": "The ticket is non-refundable, except in case of cancelation.",
+  "events_slug_checkout_custom_setup": "This event has a custom integration setup.",
+  "events_slug_checkout_free_event": "This is a free event.",
+  "events_slug_checkout_go_back": "Go back",
+  "events_slug_checkout_payment_success": "Your payment was received!"
 }
 
