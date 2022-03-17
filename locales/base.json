@@ -93,6 +93,12 @@
   "users_table_name": "Name",
   "users_table_created": "Created",
   "users_table_roles": "Roles",
-  "users_table_empty": "No users found"
+  "users_table_empty": "No users found",
+  "admin_title": "Admin",
+  "applications_title": "Community applications",
+  "applications_subtitle": "Platform metrics",
+  "applications_open": "Open applications:",
+  "applications_in_conversation": "In conversation:",
+  "applications_accepted": "Accepted applications"
 }
 
