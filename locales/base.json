@@ -161,6 +161,19 @@
   "login_set_password_registration_email": "Your login email is",
   "login_set_password_registration_name": "Your name",
   "login_set_password_registration_password": "Password",
-  "login_set_password_registrarion_error": "No token provided."
+  "login_set_password_registrarion_error": "No token provided.",
+  "members_slug_error": "Error :",
+  "members_slug_contact": "Contact",
+  "members_slug_send": "Send",
+  "members_slug_cancel": "Cancel",
+  "members_slug_get_introduced": "Get introduced",
+  "members_slug_tagline_prompt": "Please write a tagline.",
+  "members_slug_tagline_empty": "has not yet set a tagline",
+  "members_slug_about_prompt": "Tell us more about you.",
+  "members_slug_about_empty": "has not yet set a description",
+  "members_slug_stay_social": "Stay Social",
+  "members_slug_links_name": "Name",
+  "members_slug_links_url": "Url",
+  "members_slug_links_submit": "Add"
 }
 

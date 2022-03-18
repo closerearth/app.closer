@@ -17,6 +17,7 @@ import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
 import { usePlatform } from '../../contexts/platform';
+import { __ } from '../../utils/helpers';
 
 const MemberPage = ({ member, loadError }) => {
   const [photo, setPhoto] = useState(null);
@@ -106,14 +107,14 @@ const MemberPage = ({ member, loadError }) => {
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
             <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-                { sendError && <p className="validation-error">Error: { sendError }</p> }
+                { sendError && <p className="validation-error">{ __('members_slug_error') } { sendError }</p> }
                 <form
                   onSubmit={ (e) => {
                     e.preventDefault();
                     sendMessage(introMessage);
                   }}
                 >
-                  <label>Contact {member.screenname}</label>
+                  <label>{ __('members_slug_contact') } {member.screenname}</label>
                   <textarea
                     placeholder="Type your message"
                     onChange={ e => {
@@ -122,7 +123,7 @@ const MemberPage = ({ member, loadError }) => {
                     value={ introMessage }
                     className='w-full h-32'
                   />
-                  <button type="submit" className='btn-primary mt-8 mr-2'>Send</button>{' '}
+                  <button type="submit" className='btn-primary mt-8 mr-2'>{ __('members_slug_send') }</button>{' '}
                   <a
                     href="#"
                     onClick={ (e) => {
@@ -130,7 +131,7 @@ const MemberPage = ({ member, loadError }) => {
                       setOpenIntro(false);
                     }}
                   >
-                    Cancel
+                    { __('members_slug_cancel') }
                   </a>
                 </form>
               </div>
@@ -181,7 +182,7 @@ const MemberPage = ({ member, loadError }) => {
                     }}
                     className="btn-primary"
                   >
-                    Get introduced
+                    { __('members_slug_get_introduced') }
                   </a>
                 </div>
                   }
@@ -214,7 +215,7 @@ const MemberPage = ({ member, loadError }) => {
                           >
                             { tagline }
                             { !tagline &&
-                        <span className="placeholder">Please write a tagline.</span>
+                        <span className="placeholder">{ __('members_slug_tagline_prompt') }</span>
                             }
                           </Linkify>
                         </p>:
@@ -234,7 +235,7 @@ const MemberPage = ({ member, loadError }) => {
                           >
                             { tagline }
                             { !tagline &&
-                        <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
+                        <span className="placeholder">{ member.screenname } { __('members_slug_tagline_empty') }</span>
                             }
                           </Linkify>
                         </p>
@@ -274,7 +275,7 @@ const MemberPage = ({ member, loadError }) => {
                     >
                       { about }
                       { !about &&
-                      <span className="placeholder">Tell us more about you.</span>
+                      <span className="placeholder">{ __('members_slug_about_prompt') }</span>
                       }
                     </Linkify>
                   </p>:
@@ -294,7 +295,7 @@ const MemberPage = ({ member, loadError }) => {
                     >
                       { about }
                       { !about &&
-                      <span className="placeholder">{ member.screenname } has not yet set a description</span>
+                      <span className="placeholder">{ member.screenname } { __('members_slug_about_empty') }</span>
                       }
                     </Linkify>
                   </p>
@@ -327,7 +328,7 @@ const MemberPage = ({ member, loadError }) => {
 
               <div className="flex flex-col">
                 <div className="flex flex-col items-start mb-10">
-                  <p className='font-semibold text-md mt-8'>Stay Social</p>
+                  <p className='font-semibold text-md mt-8'>{ __('members_slug_stay_social') }</p>
                   <ul className='space-y-1 mt-4'>
                     {links ? links.map((link) => (
                       <li key={link._id} className="mb-1">
@@ -352,14 +353,14 @@ const MemberPage = ({ member, loadError }) => {
           <div className="flex items-start mb-10 border border-line p-4 w-fit mt-10">
             <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
               <div>
-                <label>Name</label>
+                <label>{ __('members_slug_links_name') }</label>
                 <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
               </div>
               <div>
-                <label>Url</label>
+                <label>{ __('members_slug_links_url') }</label>
                 <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
               </div>
-              <button type='submit' className='btn-primary w-24 self-center'>Add</button>
+              <button type='submit' className='btn-primary w-24 self-center'>{ __('members_slug_links_submit') }</button>
             </form>
           </div>
                 }
