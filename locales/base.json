@@ -152,6 +152,15 @@
   "login_email": "Email",
   "login_password": "Password",
   "login_submit": "Sign in",
-  "login_link_forgot_password": "Forgot password?"
+  "login_link_forgot_password": "Forgot password?",
+  "login_set_password_title": "Set password",
+  "login_set_password_signout": "Please sign out before taking this action",
+  "login_set_password_success": "Your new password was succesfully set, you can now proceed to sign in.",
+  "login_set_password_link": "Sign in",
+  "login_set_password_registration": "Complete registration",
+  "login_set_password_registration_email": "Your login email is",
+  "login_set_password_registration_name": "Your name",
+  "login_set_password_registration_password": "Password",
+  "login_set_password_registrarion_error": "No token provided."
 }
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api from '../../utils/api';
 import { useAuth } from '../../contexts/auth';
+import { __ } from '../../utils/helpers';
 
 const SetPasswordScreen = () => {
   const router = useRouter();
@@ -24,20 +25,20 @@ const SetPasswordScreen = () => {
   return (
     <Layout>
       <Head>
-        <title>Set password</title>
+        <title>{ __('login_set_password_title') }</title>
       </Head>
       <div className="mural">
         <main className="main-content center intro">
           { isAuthenticated && router.query.signup_token ?
             <div className="card">
-              Please sign out before taking this action.
+              { __('login_set_password_signout') }
             </div>:
             actionCompleted?
               <div className="card">
-                <p>Your new password was succesfully set, you can now proceed to sign in.</p>
+                <p>{ __('login_set_password_success') }</p>
                 <div className="action-row">
                   <Link href="/login">
-                    <a className="button">Sign in</a>
+                    <a className="button">{ __('login_set_password_link') }</a>
                   </Link>
                 </div>
               </div>:
@@ -57,15 +58,15 @@ const SetPasswordScreen = () => {
                   className="card"
                 >
                   <div className="card-title">
-                    <h1>Complete registration</h1>
+                    <h1>{ __('login_set_password_registration') }</h1>
                   </div>
                   <div className="card-body">
                     { tokenContent && tokenContent.email &&
-                    <p className="mb-4"><i>Your login email is <b>{tokenContent.email}</b>.</i></p>
+                    <p className="mb-4"><i>{ __('login_set_password_registration_email') } <b>{tokenContent.email}</b>.</i></p>
                     }
                     { tokenContent && !tokenContent.screenname &&
                     <div className="form-field">
-                      <label htmlFor="screenname">Your name</label>
+                      <label htmlFor="screenname">{ __('login_set_password_registration_name') }</label>
                       <input
                         type="text"
                         name="screenname"
@@ -78,7 +79,7 @@ const SetPasswordScreen = () => {
                     </div>
                     }
                     <div className="form-field">
-                      <label htmlFor="password">Password</label>
+                      <label htmlFor="password">{ __('login_set_password_registration_password') }</label>
                       <input
                         type="password"
                         name="password"
@@ -93,13 +94,13 @@ const SetPasswordScreen = () => {
                   <div className="card-footer">
                     <div className="action-row">
                       <button type="submit" className="btn-primary">
-                      Complete registration
+                        { __('login_set_password_registration') }
                       </button>
                     </div>
                   </div>
                 </form>
               ) :
-                <div className="card">No token provided.</div> }
+                <div className="card">{ __('login_set_password_registration_error') }</div> }
         </main>
       </div>
     </Layout>
