@@ -181,6 +181,18 @@
   "search_keyword_articles": "See all articles",
   "search_title": "Search",
   "search_loading": "Loading...",
-  "search_related_content": "Related content"
+  "search_related_content": "Related content",
+  "settings_title": "Settings",
+  "tasks_edit_title": "Edit",
+  "tasks_edit_error": "Task not found",
+  "tasks_slug_edit_task": "Edit task",
+  "tasls_slug_open": "Open",
+  "tasks_slug_completed": "Completed",
+  "tasks_slug_closed": "Closed",
+  "tasks_slug_draft": "Draft",
+  "tasks_slug_cancel_application": "Cancel application",
+  "tasks_slug_apply": "Apply for task",
+  "tasks_slug_applicants": "Applicants",
+  "tasks_slug_reward": "Reward"
 }
 
