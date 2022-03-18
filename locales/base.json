@@ -193,6 +193,9 @@
   "tasks_slug_cancel_application": "Cancel application",
   "tasks_slug_apply": "Apply for task",
   "tasks_slug_applicants": "Applicants",
-  "tasks_slug_reward": "Reward"
+  "tasks_slug_reward": "Reward",
+  "tasks_create_title": "Create Task",
+  "tasks_title": "Open Tasks",
+  "tasks_link_create": "Create"
 }
 
