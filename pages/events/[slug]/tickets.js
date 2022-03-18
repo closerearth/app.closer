@@ -11,6 +11,7 @@ import api from '../../../utils/api';
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
 import TicketListPreview from '../../../components/TicketListPreview';
+import { __ } from '../../../utils/helpers';
 
 const EventTickets = ({ event }) => {
   const router = useRouter();
@@ -46,19 +47,19 @@ const EventTickets = ({ event }) => {
   return (
     <Layout>
       <Head>
-        <title>{ event.name } - Tickets</title>
+        <title>{ event.name } { __('events_slug_tickets_title') }</title>
       </Head>
       { tickets && tickets.get('error') &&
         <div className="validation-error">{ tickets.get('error') }</div>
       }
       <div className="main-content intro fullwidth">
         <div className="page-header mb-3 flex justify-between">
-          <h1><i>{ event.name }</i> - Tickets</h1>
+          <h1><i>{ event.name }</i> { __('events_slug_tickets_title') }</h1>
         </div>
         <div className="tickets-list">
           { tickets && tickets.count() > 0 ?
             tickets.map(ticket => <TicketListPreview key={ ticket.get('_id') } ticket={ ticket } />):
-            <p className="p-3 text-2xl card text-center italic">No tickets found.</p>
+            <p className="p-3 text-2xl card text-center italic">{ __('events_slug_tickets_error') }</p>
           }
         </div>
       </div>
