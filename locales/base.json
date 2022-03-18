@@ -137,6 +137,7 @@
   "events_slug_edit_title": "Edit",
   "events_slug_edit_link": "Edit event:",
   "events_slug_tickets_title": "- Tickets",
-  "events_slug_tickets_error": "No tickets found."
+  "events_slug_tickets_error": "No tickets found.",
+  "events_create_title": "Create Event"
 }
 
