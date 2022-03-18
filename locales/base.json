@@ -142,7 +142,11 @@
   "events_title": "Events",
   "events_upcoming": "Upcoming events",
   "events_past": "Past events",
-  "events_link": "Create event"
-
+  "events_link": "Create event",
+  "login_forgot_password_title": "Set password",
+  "login_forgot_password_subtitle": "Password reset",
+  "login_forgot_password_warning": "Please check your email",
+  "login_forgot_password_email": "Email",
+  "login_forgot_password_submit": "Reset password"
 }
 
