@@ -204,7 +204,11 @@
   "tickets_slug_warning": "Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to {config.TEAM_EMAIL} for support.",
   "tickets_invoice_title": "Invoice",
   "tickets_invoice_id": "Invoice #",
-  "tickets_invoice_date": "Date:"
+  "tickets_invoice_date": "Date:",
+  "401_title": "No access",
+  "401_signin": "Sign In",
+  "404_title": "Page not found",
+  "404_go_back": "Take me home"
 }
 
 

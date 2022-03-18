@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Layout from '../components/Layout';
 import { useAuth } from '../contexts/auth';
+import { __ } from '../utils/helpers';
 
 const PageNotAllowed = ({ error }) => {
   const router = useRouter();
@@ -12,12 +13,12 @@ const PageNotAllowed = ({ error }) => {
   return (
     <Layout>
       <Head>
-        <title>No access</title>
+        <title>{ __('401_title') }</title>
       </Head>
       <main  className="main-content about intro page-not-found max-w-prose">
-        <h1>No access</h1>
+        <h1>{ __('401_title') }</h1>
         { error && <h2 className="font-light italic my-4">{ error }</h2> }
-        { !isAuthenticated && <p><Link href={`/login?back=${encodeURIComponent(router.asPath)}`}><a className="btn">Sign In</a></Link>.</p> }
+        { !isAuthenticated && <p><Link href={`/login?back=${encodeURIComponent(router.asPath)}`}><a className="btn">{ __('401_signin') }</a></Link>.</p> }
       </main>
     </Layout>
   );
