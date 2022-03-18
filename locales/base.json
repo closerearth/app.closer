@@ -178,6 +178,9 @@
   "members_title": "Members",
   "search_keyword_loading": "Loading...",
   "search_keyword_related": "Related content",
-  "search_keyword_articles": "See all articles"
+  "search_keyword_articles": "See all articles",
+  "search_title": "Search",
+  "search_loading": "Loading...",
+  "search_related_content": "Related content"
 }
 
