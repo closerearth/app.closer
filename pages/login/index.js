@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api from '../../utils/api';
 import { useAuth } from '../../contexts/auth';
+import { __ } from '../../utils/helpers';
 
 const Login = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const Login = () => {
   return (
     <Layout>
       <Head>
-        <title>Sign in</title>
+        <title>{ __('login_title') }</title>
       </Head>
       <div className="mural">
         <main className="main-content max-w-prose center intro">
@@ -33,7 +34,7 @@ const Login = () => {
           >
             <div className="w-full mb-4">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="email">
-                Email
+                { __('login_email') }
               </label>
               <input
                 className="w-full"
@@ -48,7 +49,7 @@ const Login = () => {
             </div>
             <div className="w-full mb-4">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="password">
-                Password
+                { __('login_password') }
               </label>
               <input
                 className="w-full"
@@ -64,11 +65,11 @@ const Login = () => {
             <div className="card-footer">
               <div className="action-row">
                 <button type="submit" className="btn-primary">
-                  Sign in
+                  { __('login_submit') }
                 </button>
                 <hr className="my-4"/>
                 <p>
-                  <Link href="/login/forgot-password" as="/login/forgot-password"><a>Forgot password?</a></Link>
+                  <Link href="/login/forgot-password" as="/login/forgot-password"><a>{ __('login_link_forgot_password') }</a></Link>
                 </p>
               </div>
             </div>

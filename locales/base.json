@@ -147,6 +147,11 @@
   "login_forgot_password_subtitle": "Password reset",
   "login_forgot_password_warning": "Please check your email",
   "login_forgot_password_email": "Email",
-  "login_forgot_password_submit": "Reset password"
+  "login_forgot_password_submit": "Reset password",
+  "login_title": "Sign in",
+  "login_email": "Email",
+  "login_password": "Password",
+  "login_submit": "Sign in",
+  "login_link_forgot_password": "Forgot password?"
 }
 
