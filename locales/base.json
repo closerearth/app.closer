@@ -196,6 +196,15 @@
   "tasks_slug_reward": "Reward",
   "tasks_create_title": "Create Task",
   "tasks_title": "Open Tasks",
-  "tasks_link_create": "Create"
+  "tasks_link_create": "Create",
+  "tickets_slug_title": "Your ticket for",
+  "tickets_slug_subtitle": "You are going to:",
+  "tickets_slug_holder": "Tciekt holder:",
+  "tickets_slug_number": "Ticket number:",
+  "tickets_slug_warning": "Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to {config.TEAM_EMAIL} for support.",
+  "tickets_invoice_title": "Invoice",
+  "tickets_invoice_id": "Invoice #",
+  "tickets_invoice_date": "Date:"
 }
+
 
