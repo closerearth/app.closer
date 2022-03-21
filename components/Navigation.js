@@ -255,7 +255,7 @@ const Navigation = () => {
               setError(null);
             }}
           >
-            { __('navigation_sign_close') }
+            { __('navigation_close') }
           </a>
         </div>
       )}
