@@ -41,7 +41,7 @@ const Ticket = ({ ticket, event, error }) => {
           </div>
         </div>
         <br />
-        <p>{ __('tickets_slug_warning') }</p>
+        <p>Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to {config.TEAM_EMAIL} for support.</p>
       </main>
     </Layout>
   );
