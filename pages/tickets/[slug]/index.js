@@ -12,6 +12,7 @@ import PageNotAllowed from '../../401';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
+import polyglot from '../../../locales/base';
 
 const Ticket = ({ ticket, event, error }) => {
   const { platform } = usePlatform();
@@ -40,7 +41,7 @@ const Ticket = ({ ticket, event, error }) => {
           </div>
         </div>
         <br />
-        <p>Make sure to check your email address. If you didn&apos;t receive the ticket in your email, add no-reply@mg.oasa.co to your contacts and send us an email to {config.TEAM_EMAIL} for support.</p>
+        <p>{ polyglot.t('tickets_slug_support_message', { team_email: config.TEAM_EMAIL }) }</p>
       </main>
     </Layout>
   );

@@ -5,6 +5,7 @@ import api, { formatSearch, cdn } from '../utils/api';
 import UploadPhoto from './UploadPhoto';
 
 import { useAuth } from '../contexts/auth.js';
+import polyglot from '../locales/base';
 
 const Prompts = () => {
 
@@ -25,7 +26,7 @@ const Prompts = () => {
         <div className="main-content p-3 justify-between flex flex-col relative text-center shadow-sm">
           <div className="p-2">
             { image ?
-              <p>Looking good {user.screenname} ♥️</p>:
+              <p>{ polyglot.t('prompts_header', { name: user.screenname }) }</p>:
               <p>It&apos;s nice to have you here {user.screenname}. Now let&apos;s add a photo to your profile ♥️</p>
             }
           </div>

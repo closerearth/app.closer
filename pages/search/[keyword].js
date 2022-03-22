@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
+import polyglot from '../../locales/base';
 
 const Search = ({ articles, error, keyword, tags }) => console.log(error, articles) || (
   <Layout>
@@ -17,7 +18,7 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
             <h1>{ decodeURIComponent(keyword) || 'Search' }</h1>
             { error ?
               <div className="validation-error">{ error }</div> :
-              <p>Found {articles.length} article{articles.length !== 1 && 's'} about <i>{keyword}</i>.</p>
+              <p>{ polyglot.t('search_slug_articles', { articles: articles.length }) } <i>{keyword}</i>.</p>
             }
             <div className="article-previews two-col">
               { articles ?
