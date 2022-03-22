@@ -26,8 +26,8 @@ const Prompts = () => {
         <div className="main-content p-3 justify-between flex flex-col relative text-center shadow-sm">
           <div className="p-2">
             { image ?
-              <p>{ polyglot.t('prompts_header', { name: user.screenname }) }</p>:
-              <p>It&apos;s nice to have you here {user.screenname}. Now let&apos;s add a photo to your profile ♥️</p>
+              <p>{ polyglot.t('image_true', { name: user.screenname }) }</p>:
+              <p>{ polyglot.t('image_false', { name: user.screename })  }</p>
             }
           </div>
           <div className="flex flex-row justify-center items-center">
