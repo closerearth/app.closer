@@ -75,14 +75,14 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
                   <a href="#" onClick={ (e) => {
                     e.preventDefault();
                     update(name, (data[name] || []).filter((c,i) => i !== index));
-                  }}>{ __('form_field_add_currency') }</a>
+                  }}>{ __('form_field_remove_currency') }</a>
                 }
               </div>
             )) }
             <a href="#" onClick={ (e) => {
               e.preventDefault();
               update(name, (data[name] || []).concat({ cur: currencies[0].value, val: 0 }));
-            } }>{ __('form_field_remove') }</a>
+            } }>{ __('form_field_add_currency') }</a>
           </div>
           }
           { type === 'select' &&
