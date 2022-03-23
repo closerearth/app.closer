@@ -161,6 +161,7 @@ const Event = ({ event, error }) => {
                   { end && duration > 24 && ` - ${ end.format(dateFormat) }` }
                   { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
                 </h2>
+                { event.address && <h3 className="text-lg font-light text-gray-500">{event.address}</h3> }
                 {
                   end && end.isBefore(dayjs()) &&
                     <h3 className="p3 mr-2 italic">
@@ -190,7 +191,7 @@ const Event = ({ event, error }) => {
                     </>:
                     <>
                       {
-                        start && start.isBefore(dayjs()) && end && end.isAfter(dayjs()) && event.location?
+                        start && start.isBefore(dayjs().subtract(15, 'minutes')) && end && end.isAfter(dayjs()) && event.location?
                           <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
                           start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
                             <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
@@ -248,14 +249,18 @@ const Event = ({ event, error }) => {
                     endTime: event.end,
                   }} buttonLabel="Add to calendar" /> */}
                 </div>
-                {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
+                {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
                   <div className="admin-actions mt-3 border-t pt-3">
-                    <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
-                      <a className="btn-secondary text-xs mr-2">Edit event</a>
-                    </Link>
-                    { event.paid && <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
-                      <a className="btn-secondary text-xs mr-2">View tickets</a>
-                    </Link> }
+                    { user._id === event.createdBy || user.roles.includes('admin') &&
+                      <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
+                        <a className="btn-secondary text-xs mr-2">Edit event</a>
+                      </Link>
+                    }
+                    { event.paid && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
+                      <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
+                        <a className="btn-secondary text-xs mr-2">View tickets</a>
+                      </Link>
+                    }
                   </div>
                 }
               </div>
@@ -372,7 +377,6 @@ const Event = ({ event, error }) => {
 Event.getInitialProps = async ({ req, query }) => {
   try {
     const { data: { results: event } } = await api.get(`/event/${query.slug}`);
-    console.log('slug', query.slug, event)
     // Test cases:
     // Event is ongoing
     // event.start = '2022-02-02T19:00:00.000Z';

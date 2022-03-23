@@ -6,6 +6,7 @@ import api, { formatSearch } from '../utils/api';
 import TimeSince from './TimeSince';
 
 import { useAuth } from '../contexts/auth.js';
+import { __ } from '../utils/helpers';
 
 const TaskList = ({ channel, limit }) => {
 
@@ -51,7 +52,7 @@ const TaskList = ({ channel, limit }) => {
                 </a>
               </Link>
             )):
-            <p>No tasks yet.</p>
+            <p>{ __('task_list_empty_message') }</p>
           }
         </div>
       </div>

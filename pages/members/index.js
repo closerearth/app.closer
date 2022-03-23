@@ -7,6 +7,7 @@ import MemberList from '../../components/MemberList';
 import api, { formatSearch } from '../../utils/api';
 import { useAuth } from '../../contexts/auth.js'
 import PageNotAllowed from '../401'
+import { __ } from '../../utils/helpers';
 
 const Settings = ({ token }) => {
 
@@ -19,7 +20,7 @@ const Settings = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Members</title>
+        <title>{ __('members_title') }</title>
       </Head>
       <div className="main-content fullheight">
         <MemberList />

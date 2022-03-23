@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { priceFormat } from '../utils/helpers';
+import { __ } from '../utils/helpers';
 
 const ListingListPreview = ({ listing }) => {
   if (!listing) {
@@ -18,12 +19,12 @@ const ListingListPreview = ({ listing }) => {
           <i>{ listing.get('description').slice(0, 120) }{ listing.get('description').length > 120 && '...' }</i>
         }
         { listing.get('dailyRate') &&
-          <p><b>{ priceFormat(listing.getIn(['dailyRate', 'val']), listing.getIn(['dailyRate', 'cur'])) } per night</b>, { priceFormat(listing.getIn(['weeklyRate', 'val']), listing.getIn(['weeklyRate', 'cur'])) } per month</p>
+          <p><b>{ priceFormat(listing.getIn(['dailyRate', 'val']), listing.getIn(['dailyRate', 'cur'])) } { __('listing_preview_per_night') }</b>, { priceFormat(listing.getIn(['weeklyRate', 'val']), listing.getIn(['weeklyRate', 'cur'])) } { __('listing_preview_per_month') }</p>
         }
       </div>
       <div className="card-footer">
-        <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn mr-2">Edit</a></Link>
-        <Link href={`/listings/book?listing=${listing.get('slug')}`}><a className="btn">Book</a></Link>
+        <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn mr-2">{ __('listing_preview_edit') }</a></Link>
+        <Link href={`/listings/book?listing=${listing.get('slug')}`}><a className="btn">{ __('listing_preview_book') }</a></Link>
       </div>
     </div>
   );

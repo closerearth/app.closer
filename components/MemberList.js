@@ -9,9 +9,7 @@ import ProfilePhoto from './ProfilePhoto';
 import Pagination from './Pagination';
 import Loading from './Loading';
 import { useAuth } from '../contexts/auth.js';
-import { faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { __ } from '../utils/helpers';
 
 const MemberList = ({
   list,
@@ -74,12 +72,12 @@ const MemberList = ({
                   </div>
                   { user.get('about') && <p className="py-2 text-sm">{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p> }
                   <div className="pt-2">
-                    <button className="btn">See profile</button>
+                    <button className="btn">{ __('member_list_see_profile') }</button>
                   </div>
                 </div>
               </Link>
             )):
-            <p>No members.</p>
+            <p>{ __('member_list_error_message') }</p>
           }
         </div>
       }

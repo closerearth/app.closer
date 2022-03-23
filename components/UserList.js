@@ -7,6 +7,7 @@ import ProfilePhoto from './ProfilePhoto';
 import Autocomplete from './Autocomplete';
 
 import { useAuth } from '../contexts/auth.js';
+import { __ } from '../utils/helpers';
 
 const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink }) => {
 
@@ -62,12 +63,12 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
                 </a>
               </Link>
             )):
-            <p>No members.</p>
+            <p>{ __('user_list_empty') }</p>
           }
         </div>
         { seeAllLink &&
           <div className="see-all">
-            <Link href={seeAllLink}><a>See all</a></Link>
+            <Link href={seeAllLink}><a>{ __('user_list_all') }</a></Link>
           </div>
         }
       </div>

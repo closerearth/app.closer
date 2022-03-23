@@ -5,8 +5,9 @@ import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import { faUser, faPlus, faMinus, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaUser } from '@react-icons/all-files/fa/FaUser';
+import { FaPlus } from '@react-icons/all-files/fa/FaPlus';
+import { FaMinus } from '@react-icons/all-files/fa/FaMinus';
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
@@ -16,6 +17,7 @@ import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
 import { usePlatform } from '../../contexts/platform';
+import { __ } from '../../utils/helpers';
 
 const MemberPage = ({ member, loadError }) => {
   const [photo, setPhoto] = useState(null);
@@ -105,14 +107,14 @@ const MemberPage = ({ member, loadError }) => {
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
             <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-                { sendError && <p className="validation-error">Error: { sendError }</p> }
+                { sendError && <p className="validation-error">{ __('members_slug_error') } { sendError }</p> }
                 <form
                   onSubmit={ (e) => {
                     e.preventDefault();
                     sendMessage(introMessage);
                   }}
                 >
-                  <label>Contact {member.screenname}</label>
+                  <label>{ __('members_slug_contact') } {member.screenname}</label>
                   <textarea
                     placeholder="Type your message"
                     onChange={ e => {
@@ -121,7 +123,7 @@ const MemberPage = ({ member, loadError }) => {
                     value={ introMessage }
                     className='w-full h-32'
                   />
-                  <button type="submit" className='btn-primary mt-8 mr-2'>Send</button>{' '}
+                  <button type="submit" className='btn-primary mt-8 mr-2'>{ __('members_slug_send') }</button>{' '}
                   <a
                     href="#"
                     onClick={ (e) => {
@@ -129,7 +131,7 @@ const MemberPage = ({ member, loadError }) => {
                       setOpenIntro(false);
                     }}
                   >
-                    Cancel
+                    { __('members_slug_cancel') }
                   </a>
                 </form>
               </div>
@@ -152,7 +154,7 @@ const MemberPage = ({ member, loadError }) => {
                         alt={ member.screenname }
                         className="w-32 md:w-44 mt-4 md:mt-0 rounded-full"
                       />:
-                      <FontAwesomeIcon icon={ faUser } size="4x" color={ '#eee' }/>
+                      <FaUser className="text-gray-200 text-6xl" />
                     }
                   </div>
                   <div className="mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full opacity-0 hover:opacity-80">
@@ -180,7 +182,7 @@ const MemberPage = ({ member, loadError }) => {
                     }}
                     className="btn-primary"
                   >
-                    Get introduced
+                    { __('members_slug_get_introduced') }
                   </a>
                 </div>
                   }
@@ -213,7 +215,7 @@ const MemberPage = ({ member, loadError }) => {
                           >
                             { tagline }
                             { !tagline &&
-                        <span className="placeholder">Please write a tagline.</span>
+                        <span className="placeholder">{ __('members_slug_tagline_prompt') }</span>
                             }
                           </Linkify>
                         </p>:
@@ -233,7 +235,7 @@ const MemberPage = ({ member, loadError }) => {
                           >
                             { tagline }
                             { !tagline &&
-                        <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
+                        <span className="placeholder">{ member.screenname } { __('members_slug_tagline_empty') }</span>
                             }
                           </Linkify>
                         </p>
@@ -273,7 +275,7 @@ const MemberPage = ({ member, loadError }) => {
                     >
                       { about }
                       { !about &&
-                      <span className="placeholder">Tell us more about you.</span>
+                      <span className="placeholder">{ __('members_slug_about_prompt') }</span>
                       }
                     </Linkify>
                   </p>:
@@ -293,7 +295,7 @@ const MemberPage = ({ member, loadError }) => {
                     >
                       { about }
                       { !about &&
-                      <span className="placeholder">{ member.screenname } has not yet set a description</span>
+                      <span className="placeholder">{ member.screenname } { __('members_slug_about_empty') }</span>
                       }
                     </Linkify>
                   </p>
@@ -326,7 +328,7 @@ const MemberPage = ({ member, loadError }) => {
 
               <div className="flex flex-col">
                 <div className="flex flex-col items-start mb-10">
-                  <p className='font-semibold text-md mt-8'>Stay Social</p>
+                  <p className='font-semibold text-md mt-8'>{ __('members_slug_stay_social') }</p>
                   <ul className='space-y-1 mt-4'>
                     {links ? links.map((link) => (
                       <li key={link._id} className="mb-1">
@@ -341,26 +343,24 @@ const MemberPage = ({ member, loadError }) => {
                   </ul>
                 </div>
 
-                { isAuthenticated && member._id === currentUser._id && !showForm &&
-           <FontAwesomeIcon icon={faPlus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
-                }
-
-                { isAuthenticated && member._id === currentUser._id && showForm &&
-           <FontAwesomeIcon icon={faMinus} onClick={() => toggleShowForm(!showForm)} className='hover:cursor-pointer'/>
+                { isAuthenticated && member._id === currentUser._id &&
+                  <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
+                    { showForm ? <FaMinus /> : <FaPlus /> }
+                  </a>
                 }
 
                 { isAuthenticated && member._id === currentUser._id && showForm &&
           <div className="flex items-start mb-10 border border-line p-4 w-fit mt-10">
             <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
               <div>
-                <label>Name</label>
+                <label>{ __('members_slug_links_name') }</label>
                 <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
               </div>
               <div>
-                <label>Url</label>
+                <label>{ __('members_slug_links_url') }</label>
                 <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
               </div>
-              <button type='submit' className='btn-primary w-24 self-center'>Add</button>
+              <button type='submit' className='btn-primary w-24 self-center'>{ __('members_slug_links_submit') }</button>
             </form>
           </div>
                 }

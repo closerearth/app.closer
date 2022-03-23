@@ -5,6 +5,7 @@ import { trackEvent } from './Analytics';
 import api, { formatSearch } from '../utils/api';
 import { getSample } from '../utils/helpers';
 import { useAuth } from '../contexts/auth.js';
+import { __ } from '../utils/helpers';
 
 import Tabs from './Tabs';
 import FormField from './FormField';
@@ -140,9 +141,9 @@ const EditModel = ({
   }, [endpoint, id, initialData, fields]);
 
   if (!isPublic && !isAuthenticated) {
-    return <div className="validation-error card">User not authenticated.</div>;
+    return <div className="validation-error card">{ __('edit_model_auth_required') }</div>;
   } else if (!isPublic && data.createdBy && user && (data.createdBy !== user._id && !user.roles.includes('admin'))) {
-    return <div className="validation-error card">You may not edit this item.</div>;
+    return <div className="validation-error card">{ __('edit_model_permission_denied') }</div>;
   }
 
   return (

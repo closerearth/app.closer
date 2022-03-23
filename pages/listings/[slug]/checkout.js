@@ -5,8 +5,6 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCampground, faBed, faCaravan, faCocktail } from '@fortawesome/free-solid-svg-icons';
 
 import api, { formatSearch, cdn } from '../../../utils/api';
 import { priceFormat } from '../../../utils/helpers';
@@ -17,15 +15,9 @@ import CheckoutForm from '../../../components/CheckoutForm';
 import PageNotFound from '../../404';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
+import { __ } from '../../../utils/helpers';
 
 const maxVolunteers = 20;
-
-const optionToIcon = {
-  camping: faCampground,
-  glamping_quattro: faBed,
-  glamping_duo: faBed,
-  cocktail: faCocktail,
-};
 const formatName = name => name && name.split('_').join(' ');
 
 const EventCheckout = ({ event, error }) => {
@@ -120,7 +112,7 @@ const EventCheckout = ({ event, error }) => {
   return (
     <Layout>
       <Head>
-        <title>booking</title>
+        <title>{ __('listings_slug_checkout_title') }</title>
       </Head>
       <div className="main-content max-w-prose booking">
         <h1 className="mb-4">
@@ -135,10 +127,10 @@ const EventCheckout = ({ event, error }) => {
           <section>
             <h3>Hello {user.screenname}</h3>
             { isVolunteer &&
-              <p className="text-sm">Thank you for being a volunteer!</p>
+              <p className="text-sm">{ __('listings_slug_checkout_volunteer_true') }</p>
             }
             { volunteerCapacityReached &&
-              <p className="text-sm">Thank you for applying to be a volunteer, unforturnately volunteer tickets are now sold out.</p>
+              <p className="text-sm">{ __('listings_slug_checkout_volunteer_capacity_reached') }</p>
             }
             <hr className="divide-y divide-gray-400 my-4" />
           </section>:
@@ -156,7 +148,7 @@ const EventCheckout = ({ event, error }) => {
                     <form onSubmit={ e => submitSignupForm(e) } className="card">
                       <fieldset className="w-full mb-4">
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="name">
-                          Full name
+                          { __('listings_slug_checkout_form_full_name') }
                         </label>
                         <input
                           className="w-full"
@@ -171,7 +163,7 @@ const EventCheckout = ({ event, error }) => {
                       </fieldset>
                       <fieldset className="w-full mb-4">
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="email">
-                          Email
+                          { __('listings_slug_checkout_form_email') }
                         </label>
                         <input
                           className="w-full"
@@ -198,7 +190,7 @@ const EventCheckout = ({ event, error }) => {
         }
         { event.paid && ticketOptions && ticketOptions.length > 0 ?
           <section>
-            <h3>Ticket options</h3>
+            <h3>{ __('listings_slug_checkout_tickets_title') }</h3>
             <div className="ticket-options my-4 flex flex-row flex-wrap">
               {
                 ticketOptions.map(option => (
@@ -208,7 +200,6 @@ const EventCheckout = ({ event, error }) => {
                     onClick={ () => setTicketOption(option) }
                     disabled={ option.available === 0 }
                   >
-                    { optionToIcon[option.name] && <FontAwesomeIcon size="lg" icon={ optionToIcon[option.name] } /> }
                     <h4>{formatName(option.name)}</h4>
                     <p className="price text-gray-500">{ priceFormat(option.price, option.currency) }</p>
                     <p className="availability text-xs uppercase text-primary">
@@ -275,7 +266,7 @@ const EventCheckout = ({ event, error }) => {
               }
             </div>
           )) }
-          <h3>Notes</h3>
+          <h3>{ __('listings_slug_checkout_notes') }</h3>
           <textarea
             onChange={e => setField('message', e.target.value)}
             value={ signup.message }
@@ -284,19 +275,19 @@ const EventCheckout = ({ event, error }) => {
           <hr className="divide-y divide-gray-400 my-4" />
         </section>
         { event.paid && !paymentReceived && <section>
-          <h3 className="mb-2">Payment</h3>
-          { isVolunteer && <p className="text-sm">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
-          { router.query.discount && !discount && <p className="validation-error">Discount code not found.</p> }
+          <h3 className="mb-2">{ __('listings_slug_checkout_payment_title') }</h3>
+          { isVolunteer && <p className="text-sm">{ __('listings_slug_checkout_volunteer_discount') } <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
+          { router.query.discount && !discount && <p className="validation-error">{ __('listings_slug_checkout_discount_error') }</p> }
           { discount &&
             <p className="text-sm">
-              Discount code applied ({ router.query.discount }) { discount.percent?
-                <b>{ Math.round(discount.percent * 10000) / 100 }% off</b>:
-                <b>{ priceFormat(discount.val, currency) } off</b>
+              { __('listings_slug_checkout_discount_success') } ({ router.query.discount }) { discount.percent?
+                <b>{ Math.round(discount.percent * 10000) / 100 }{ __('listings_slug_checkout_discount_percentage') }</b>:
+                <b>{ priceFormat(discount.val, currency) } { __('listings_slug_checkout_discount_value') }</b>
               }</p>
           }
-          <p className="text-sm mb-3">Total: <b>{ priceFormat(total, currency) }</b></p>
-          <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>
-          { event.stripePub && <p className="text-sm">This event has a custom integration setup.</p> }
+          <p className="text-sm mb-3">{ __('listings_slug_checkout_payment_total') } <b>{ priceFormat(total, currency) }</b></p>
+          <p className="text-sm">{ __('listings_slug_checkout_ticket_warning') }</p>
+          { event.stripePub && <p className="text-sm">{ __('listings_slug_checkout_custom_setup') }</p> }
           <div className="mt-2">
             <Elements stripe={ stripe }>
               <CheckoutForm
@@ -320,15 +311,15 @@ const EventCheckout = ({ event, error }) => {
         </section> }
         { !event.paid &&
           <div className="validation-error">
-            This is a free event.
+            { __('listings_slug_checkout_free_event') }
             <div className="mt-4">
-              <Link href={ `/events/${event.slug}` }><a className="btn-primary">Go back</a></Link>
+              <Link href={ `/events/${event.slug}` }><a className="btn-primary">{ __('listings_slug_checkout_go_back') }</a></Link>
             </div>
           </div>
         }
         { paymentReceived &&
           <div className="success-box">
-            Your payment was received!
+            { __('listings_slug_checkout_payment_success') }
           </div>
         }
       </div>

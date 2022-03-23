@@ -1,6 +1,8 @@
 import react, { useState } from 'react';
 
 import PriceEditor from './PriceEditor';
+import { __ } from '../utils/helpers';
+
 
 const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
   const [options, setOptions] = useState(value);
@@ -35,7 +37,7 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
         options && options.map((option, index) => (
           <div key={ option._id || option.id || index } className="mr-3 mb-4 card">
             <div className="mb-3">
-              <label>Ticket name</label>
+              <label>{ __('ticket_options_ticket_name') }</label>
               <input
                 type="text"
                 value={ option.name }
@@ -44,8 +46,8 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Number of tickets</label>
-              <p className="italic text-gray-500 text-xs">Put 0 for no limit.</p>
+              <label>{ __('ticket_options_number_of_tickets') }</label>
+              <p className="italic text-gray-500 text-xs">{ __('ticket_options_promt_message')  }</p>
               <input
                 type="Number"
                 min="0"
@@ -58,7 +60,7 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
               />
             </div>
             <div className="mb-3">
-              <label>Ticket details</label>
+              <label>{ __('ticket_options_ticket_details') }</label>
               <textarea
                 value={ option.disclaimer }
                 placeholder="This ticket provides you with..."
@@ -74,13 +76,13 @@ const TicketOptionsEditor = ({ value, onChange, placeholder, required }) => {
               required={ required }
             />
             <div className="mt-3">
-              <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>remove</a>
+              <a href="#" className="danger-link" onClick={ e => removeOption(e, index) }>{ __('ticket_options_remove') }</a>
             </div>
           </div>
         ))
       }
       <div className="flex justify-center items-center">
-        <a href="#" className="btn" onClick={ e => addOption(e) }>Add ticket type</a>
+        <a href="#" className="btn" onClick={ e => addOption(e) }>{ __('ticket_options_add_type') }</a>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import api, { formatSearch } from '../utils/api';
 import { useAuth } from '../contexts/auth.js';
+import { __ } from '../utils/helpers';
 
 const UploadPhoto = ({ model, id, onSave, label, minimal }) => {
 
@@ -47,9 +48,9 @@ const UploadPhoto = ({ model, id, onSave, label, minimal }) => {
       <input {...getInputProps()} />
       {
         loading?
-          <p>Uploading...</p>:
+          <p>{ __('upload_photo_loading_message') }</p>:
           isDragActive ?
-            <p>Drop files here</p> :
+            <p>{ __('upload_photo_prompt_message') }</p> :
             <p className="btn-primary">{ label }</p>
       }
     </div>

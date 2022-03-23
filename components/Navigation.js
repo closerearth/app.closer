@@ -6,8 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { trackEvent } from './Analytics';
-import { faTelegram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaTelegramPlane } from '@react-icons/all-files/fa/FaTelegramPlane';
 import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
@@ -15,6 +14,7 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
+import { __ } from '../utils/helpers';
 import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 dayjs.extend(relativeTime);
@@ -60,7 +60,6 @@ const Navigation = () => {
       user.roles.some(role => link.roles.includes(role))
     )
   ));
-  console.log('links', links)
 
   const loadData = async () => {
     const where = formatSearch({ featured: true, end: { $gt: start } });
@@ -116,7 +115,7 @@ const Navigation = () => {
                   }}
                   title={user.screenname}
                 >
-                  Sign out
+                  { __('navigation_sign_out') }
                 </a>
               </Link>
             ) : (
@@ -125,7 +124,7 @@ const Navigation = () => {
                   className="mr-3 text-sm hidden md:flex"
                   onClick={() => toggleNav(false)}
                 >
-                  Sign in
+                  { __('navigation_sign_in') }
                 </a>
               </Link>
             )}
@@ -147,9 +146,9 @@ const Navigation = () => {
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center mr-3"
+              className="text-2xl flex justify-center items-center mr-3 bg-primary text-white hover:scale-110 p-2 rounded-full duration-300"
             >
-              <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
+              <FaTelegramPlane />
             </a> }
             { isAuthenticated &&
               <Link
@@ -217,7 +216,7 @@ const Navigation = () => {
                   }}
                   title={user.screenname}
                 >
-                  Sign out
+                  { __('navigation_sign_out') }
                 </a>
               </Link>
             ) : (
@@ -226,7 +225,7 @@ const Navigation = () => {
                   className="p-4 border-b block text-xl w-full"
                   onClick={() => toggleNav(false)}
                 >
-                  Sign in
+                  { __('navigation_sign_in') }
                 </a>
               </Link>
             )}
@@ -256,7 +255,7 @@ const Navigation = () => {
               setError(null);
             }}
           >
-            Close
+            { __('navigation_close') }
           </a>
         </div>
       )}
