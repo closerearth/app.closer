@@ -6,6 +6,7 @@ import { SiTwitter } from '@react-icons/all-files/si/SiTwitter';
 import { SiInstagram } from '@react-icons/all-files/si/SiInstagram';
 import { RiFacebookFill } from '@react-icons/all-files/ri/RiFacebookFill';
 import Link from 'next/link';
+import { __ } from '../utils/helpers';
 
 import { theme } from '../tailwind.config';
 import api from '../utils/api';
@@ -65,7 +66,7 @@ const footer = () => (
             </a> }
           </div>
           <div className='flex flex-col items-start mt-8'>
-            <p className="text-xs">Made with ❤️ by <a href="https://closer.earth">Closer</a></p>
+            <p className="text-xs">{ __('footer_phrase') } <a href="https://closer.earth">{ __('footer_platform') }</a></p>
           </div>
         </div>
 

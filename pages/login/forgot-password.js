@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Layout from '../../components/Layout'
 import api from '../../utils/api'
+import { __ } from '../../utils/helpers';
 
 const ForgotPasswordScreen = () => {
   const router = useRouter();
@@ -22,14 +23,14 @@ const ForgotPasswordScreen = () => {
   return (
     <Layout>
       <Head>
-        <title>Set password</title>
+        <title>{ __('login_forgot_password_title') }</title>
       </Head>
       <div className="mural">
         <main className="main-content center intro">
           { resetCompleted ?
             <div className="success card">
-              <h1>Password reset</h1>
-              <p>Please check your email.</p>
+              <h1>{ __('login_forgot_password_subtitle') }</h1>
+              <p>{ __('login_forgot_password_warning') }</p>
             </div>:
             <form
               onSubmit={(e) => {
@@ -40,7 +41,7 @@ const ForgotPasswordScreen = () => {
             >
               { error && <div className="validation-error">{ error }</div> }
               <div className="form-field">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{ __('login_forgot_password_email') }</label>
                 <input
                   type="email"
                   name="email"
@@ -54,7 +55,7 @@ const ForgotPasswordScreen = () => {
               <div className="card-footer">
                 <div className="action-row">
                   <button type="submit" className="button">
-                    Reset password
+                    { __('login_forgot_password_submit') }
                   </button>
                 </div>
               </div>

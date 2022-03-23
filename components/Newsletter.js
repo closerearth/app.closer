@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import api from '../utils/api'
 import Router, { useRouter } from 'next/router';
 import { trackEvent } from './Analytics'
+import { __ } from '../utils/helpers';
 
 const attemptSignup = async (event, request) => {
   event.preventDefault();
@@ -27,7 +28,7 @@ const Newsletter = ({ tags, placement }) => {
           <div className="error-box">{ signupError }</div>
       }
       { signupCompleted ?
-        <h3>Thanks, we will be in touch soon!</h3> :
+        <h3>{ __('newsletter_success') }</h3> :
         <form
           action="#"
           onSubmit={
@@ -45,7 +46,7 @@ const Newsletter = ({ tags, placement }) => {
           className="flex flex-row items-center justify-center"
         >
           <div className="flex flex-col items-center justify-start px-2 mt-12 md:mt-0">
-            <p className='mb-2 self-start'>Keep in the loop, subscribe:</p>
+            <p className='mb-2 self-start'>{ __('newsletter_body') }</p>
 
             <div className='flex flex-row justify-end w-96'>
               {/* <div className='flex flex-row mt-2'>
@@ -53,7 +54,7 @@ const Newsletter = ({ tags, placement }) => {
               <label className='ml-4'> I agree to the T&C. Read.</label>
               </div> */}
               <input type="email" className="mr-2" value={email} placeholder="Your email" onChange={e => setEmail(e.target.value)} required />
-              <button type="submit" name="subscribe" className='btn-primary w-36'>Sign up</button>
+              <button type="submit" name="subscribe" className='btn-primary w-36'>{ __('newsletter_signup') }</button>
             </div>
           </div>
         </form>

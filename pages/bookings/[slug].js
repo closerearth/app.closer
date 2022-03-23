@@ -18,6 +18,7 @@ import { priceFormat, __ } from '../../utils/helpers';
 import api, { formatSearch, cdn } from '../../utils/api';
 import config from '../../config';
 
+
 import Layout from '../../components/Layout';
 import CheckoutForm from '../../components/CheckoutForm';
 
@@ -48,12 +49,12 @@ const Booking = ({ booking, error }) => {
       </Head>
       <main className="main-content max-w-prose booking">
         <h1 className="mb-4">
-          Booking
+          { __('bookings_slug_title') }
         </h1>
         { booking.status === 'open' &&
           <div>
             <section>
-              <h3>Notes</h3>
+              <h3>{ __('bookings_slug_notes') }</h3>
               <textarea
                 onChange={e => setBooking({ ...editBooking, message: e.target.value })}
                 value={ editBooking.message }
@@ -63,11 +64,11 @@ const Booking = ({ booking, error }) => {
           </div>
         }
         <section className="mt-3">
-          <h3>Summary</h3>
-          <p>Status: <b>{editBooking.status}</b></p>
-          <p>Check in: <b>{start.format('LLL')}</b></p>
-          <p>Check out: <b>{end.format('LLL')}</b></p>
-          <p>Total: <b>{priceFormat(booking.price)}</b></p>
+          <h3>{ __('bookings_slug_summary') }</h3>
+          <p>{ __('bookings_slug_status') } <b>{editBooking.status}</b></p>
+          <p>{ __('bookings_slug_checkin') } <b>{start.format('LLL')}</b></p>
+          <p>{ __('bookings_slug_checkout') } <b>{end.format('LLL')}</b></p>
+          <p>{ __('bookings_slug_total') } <b>{priceFormat(booking.price)}</b></p>
         </section>
         { booking.status === 'open' &&
           <div className="mt-2">

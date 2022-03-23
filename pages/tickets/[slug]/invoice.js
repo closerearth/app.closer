@@ -10,6 +10,7 @@ import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 import { PLATFORM_NAME, PLATFORM_LEGAL_ADDRESS } from '../../../config';
+import { __ } from '../../../utils/helpers';
 
 const Ticket = ({ ticket, event, error }) => {
   const { platform } = usePlatform();
@@ -22,13 +23,13 @@ const Ticket = ({ ticket, event, error }) => {
   return (
     <Layout>
       <Head>
-        <title>Invoice {ticket._id}</title>
+        <title>{ __('tickets_invoice_title') } {ticket._id}</title>
         <meta property="og:type" content="ticket" />
       </Head>
       <main className="main-content invoice-page">
         <div className="card">
-          <h3 className="mb-2">Invoice #{ticket._id}</h3>
-          <h3>Date: {dayjs(ticket.created).format('LLL')}</h3>
+          <h3 className="mb-2">{ __('tickets_invoice_id') } {ticket._id}</h3>
+          <h3>{ __('tickets_invoice_date') } {dayjs(ticket.created).format('LLL')}</h3>
           <div className="flex flex-row mt-4">
             <div className="from col">
               <b>{ PLATFORM_NAME }</b><br/>

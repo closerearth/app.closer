@@ -7,6 +7,7 @@ import UpcomingEvents from '../../components/UpcomingEvents';
 import EventsList from '../../components/EventsList';
 import { PLATFORM_NAME } from '../../config';
 import { useAuth } from '../../contexts/auth.js';
+import { __ } from '../../utils/helpers';
 
 const now = new Date();
 
@@ -17,15 +18,15 @@ const Events = () => {
   return (
     <Layout>
       <Head>
-        <title>{PLATFORM_NAME} Events</title>
+        <title>{PLATFORM_NAME} { __('events_title') }</title>
       </Head>
       <div className="main-content intro">
         <div className="page-title flex justify-between">
-          <h1 className="mb-4">Upcoming events</h1>
+          <h1 className="mb-4">{ __('events_upcoming') }</h1>
           <div className="action">
             { user && user.roles.includes('event-creator') &&
               <Link href="/events/create">
-                <a className="btn-primary">Create event</a>
+                <a className="btn-primary">{ __('events_link') }</a>
               </Link>
             }
           </div>
@@ -42,7 +43,7 @@ const Events = () => {
       </div>
       <div className="main-content intro">
         <div className="page-title flex justify-between">
-          <h1 className="mb-4">Past events</h1>
+          <h1 className="mb-4">{ __('events_past') }</h1>
         </div>
         <EventsList
           limit={ 30 }

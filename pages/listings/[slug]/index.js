@@ -11,6 +11,7 @@ import PostList from '../../../components/PostList';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
+import { __ } from '../../../utils/helpers';
 
 const Listing = ({ listing, error }) => {
   const [photo, setPhoto] = useState(listing.photos && listing.photos[0]);
@@ -72,7 +73,7 @@ const Listing = ({ listing, error }) => {
             </section>
             <section className="my-4">
               <Link href={`/listings/book?listing=${listing.slug}`}>
-                <a className="text-lg btn-primary">Book now</a>
+                <a className="text-lg btn-primary">{ __('listings_slug_link') }</a>
               </Link>
             </section>
             <section>

@@ -11,6 +11,7 @@ import PostList from './PostList';
 
 import api, { formatSearch, cdn } from '../utils/api';
 import { useAuth } from '../contexts/auth.js'
+import { __ } from '../utils/helpers';
 
 const MemberHome = () => {
   const { user, isLoading } = useAuth();
@@ -44,7 +45,7 @@ const MemberHome = () => {
 
   if (isLoading || !user) {
     // Wait for user to be loaded in order to allow getting private data
-    return <div className="loading">Loading...</div>
+    return <div className="loading">{ __('member_home_wait_message') } </div>
   }
 
   return (
@@ -53,12 +54,12 @@ const MemberHome = () => {
         <div className="md:w-2/3 md:mr-8">
           <div className="channel">
             <div className="channel-header mb-4">
-              <h3>Aloha {user?.screenname || 'you'}!</h3>
+              <h3>{ __('member_home_title') } {user?.screenname || 'you'}!</h3>
             </div>
             <div className="channel-sub-header">
               { user.roles.includes('admin') &&
                 <Link href="/channel/create" as="/channel/create">
-                  <a>+add-channel</a>
+                  <a> { __('member_home_add_channel') } </a>
                 </Link>
               }
             </div>

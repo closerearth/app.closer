@@ -45,7 +45,7 @@ const Admin = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Admin</title>
+        <title>{ __('admin_title') }</title>
       </Head>
       <main className="main-content center intro">
         <Tabs
