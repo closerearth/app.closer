@@ -162,6 +162,8 @@
   "listings_slug_checkout_free_event": "This is a free event.",
   "listings_slug_checkout_go_back": "Go back",
   "listings_slug_checkout_payment_success": "Your payment was received!",
+  "listings_slug_edit_error": "Listing not found",
+  "listings_slug_edit_title": "Edit",
   "login_forgot_password_title": "Set password",
   "login_forgot_password_subtitle": "Password reset",
   "login_forgot_password_warning": "Please check your email",

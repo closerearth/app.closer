@@ -8,6 +8,7 @@ import EditModel from '../../../components/EditModel';
 import models from '../../../models';
 
 import api from '../../../utils/api';
+import { __ } from '../../../utils/helpers';
 
 const EditListing = ({ listing }) => {
   const router = useRouter();
@@ -17,13 +18,13 @@ const EditListing = ({ listing }) => {
     }
   }
   if (!listing) {
-    return <h1>Listing not found</h1>;
+    return <h1>{ __('listings_slug_edit_error') }</h1>;
   }
 
   return (
     <Layout protect>
       <Head>
-        <title>Edit {listing.name}</title>
+        <title>{ __('listings_slug_edit_title') } {listing.name}</title>
       </Head>
       <div className="main-content">
         <EditModel
