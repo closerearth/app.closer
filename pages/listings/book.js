@@ -11,7 +11,7 @@ import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 import api from '../../utils/api';
 import { priceFormat } from '../../utils/helpers';
-import { __ } from '../../../utils/helpers';
+import { __ } from '../../utils/helpers';
 
 dayjs.extend(relativeTime);
 
