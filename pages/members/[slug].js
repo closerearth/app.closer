@@ -174,7 +174,7 @@ const MemberPage = ({ member, loadError }) => {
                 </div>
 
                 <div className="flex flex-col items-start w-full">
-                  <h3 className='font-medium text-4xl md:text-5xl md:w-6/12 flex flex-wrap'>
+                  <h3 className='font-medium text-5xl md:text-6xl md:w-6/12 flex flex-wrap'>
                     {member.screenname}
                   </h3>
 
