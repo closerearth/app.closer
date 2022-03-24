@@ -141,12 +141,18 @@ const MemberPage = ({ member, loadError }) => {
         </>
           }
 
+          <Link  href={'/members'}>
+            <p className="text-lg cursor-pointer my-4">
+              {'< All Profiles'}
+            </p>
+          </Link>
+
           <div className='flex flex-col md:flex-row items-start'>
 
             <div className='flex flex-col items-start space-y-5 md:w-full md:mt-3'>
               <div className='flex flex-col md:flex-row w-full'>
-                <div className='md:w-72 items-center justify-start relative'>
-                  <div className="flex mb-4 md:mr-8 md:justify-center items-center h-full">
+                <div className='md:w-72 items-center justify-start relative top-0 right-0'>
+                  <div className="flex mb-4 md:mr-8 md:justify-center items-center">
                     {member.photo?
                       <img
                         src={`${cdn}${member.photo}-profile-lg.jpg`}
@@ -157,7 +163,7 @@ const MemberPage = ({ member, loadError }) => {
                       <FaUser className="text-gray-200 text-6xl" />
                     }
                   </div>
-                  <div className="mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full opacity-0 hover:opacity-80">
+                  <div className="absolute top-0 bottom-0 right-6 left-0 items-center h-full opacity-0 hover:opacity-80">
                     { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                       model="user"
                       id={member._id}
@@ -168,7 +174,7 @@ const MemberPage = ({ member, loadError }) => {
                 </div>
 
                 <div className="flex flex-col items-start w-full">
-                  <h3 className='font-medium text-4xl md:text-5xl md:w-8/12 '>
+                  <h3 className='font-medium text-4xl md:text-5xl md:w-6/12 flex flex-wrap'>
                     {member.screenname}
                   </h3>
 
@@ -259,7 +265,7 @@ const MemberPage = ({ member, loadError }) => {
                   } }
                 />:
                 (isAuthenticated && member._id === currentUser._id) ?
-                  <p className="mt-6 w-10/12" >
+                  <p className="mt-6 w-full md:w-8/12" >
                     <Linkify
                       componentDecorator={(decoratedHref, decoratedText, key) => (
                         <a
@@ -309,7 +315,7 @@ const MemberPage = ({ member, loadError }) => {
 
             </div>
 
-            <div className="flex flex-col items-start md:w-2/3">
+            <div className="flex flex-col items-start md:w-6/12">
               <div>
                 <div className="page-title flex justify-between">
                   <h3 className="mt-16 md:mt-3 mb-4">Meet {member.screenname} at:</h3>
