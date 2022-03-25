@@ -11,7 +11,7 @@ const ProfilePhoto = ({ user, size, stack }) => {
       title={ user.screenname }
     >
       { user.photo ? <img
-        className={`relative z-30 object-cover w-full h-full`}
+        className="relative z-30 object-cover w-full h-full"
         src={ url }
         alt={ user.screenname }
         title={ user.screenname }

@@ -21,13 +21,16 @@ export default {
     }
   ],
   event: [
-    { name: 'name', label: 'Event title', type: 'text', placeholder: 'My event', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
+    { name: 'name', className: 'text-4xl font-bold', label: 'Event title', type: 'text', placeholder: 'My event', required: true, tab: 'general' },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A gathering around...', tab: 'general' },
+    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true, tab: 'general' },
+    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true, tab: 'general' },
     {
       name: 'virtual',
       label: 'Is this a virtual event?',
       type: 'switch',
-      defaultValue: false
+      defaultValue: false,
+      tab: 'general'
     },
     {
       name: 'location',
@@ -35,6 +38,7 @@ export default {
       defaultValue: '',
       type: 'text',
       placeholder: 'https://zoom.com/wakeup',
+      tab: 'general',
       showIf: [
         {
           field: 'virtual',
@@ -43,47 +47,27 @@ export default {
       ]
     },
     {
+      name: 'address',
+      label: 'Event location',
+      defaultValue: '',
+      type: 'text',
+      placeholder: '23 Maple St, 10100 San Francisco',
+      tab: 'general',
+      showIf: [
+        {
+          field: 'virtual',
+          value: false
+        }
+      ]
+    },
+    {
       name: 'recording',
       label: 'Youtube recording URL',
       defaultValue: '',
       type: 'text',
+      tab: 'general',
       placeholder: 'https://www.youtube.com/watch?v=r2-Ux4RRMKE'
     },
-    {
-      name: 'paid',
-      label: 'Is this a paid event?',
-      type: 'switch',
-      defaultValue: false
-    },
-    {
-      name: 'price',
-      label: 'Price',
-      defaultValue: 0,
-      type: 'currency',
-      placeholder: '0.00',
-      showIf: [
-        {
-          field: 'paid',
-          value: true
-        }
-      ]
-    },
-    {
-      name: 'ticket',
-      label: 'External ticketing URL',
-      defaultValue: '',
-      type: 'text',
-      placeholder: 'eventbrite.com/my-ticket',
-      // toggleFeature: true,
-      showIf: [
-        {
-          field: 'paid',
-          value: true
-        }
-      ]
-    },
-    { name: 'start', label: 'When does the event start?', type: 'datetime', required: true },
-    { name: 'end', label: 'When does the event end?', type: 'datetime', required: true },
     {
       name: 'visibility',
       label: 'Visibility',
@@ -91,16 +75,87 @@ export default {
       options: [
         { label: 'Public', value: 'public' },
         { label: 'Private', value: 'private' },
+      ],
+      tab: 'general'
+    },
+    {
+      name: 'paid',
+      label: 'Is this a paid event?',
+      type: 'switch',
+      tab: 'tickets',
+      defaultValue: false
+    },
+    {
+      name: 'ticketOptions',
+      label: 'Ticket options',
+      type: 'ticketOptions',
+      tab: 'tickets',
+      showIf: [
+        {
+          field: 'paid',
+          value: true
+        },
+        {
+          field: 'ticket',
+          value: ''
+        }
       ]
     },
-    { name: 'password', label: 'Event password', type: 'text', placeholder: '(If set, user will need the password to see)' },
-    { name: 'participationGuideUrl', label: 'Participation guide', type: 'text', placeholder: 'https://event.com/participation' },
-  ],
-  listing: [
-    { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
-    { name: 'price', label: 'Price (€)', type: 'number', placeholder: '10.00', required: true },
-    { name: 'quantity', label: 'Quantity available', type: 'text', placeholder: '1', required: false },
+    {
+      name: 'discounts',
+      label: 'Discount codes',
+      type: 'discounts',
+      tab: 'tickets',
+      showIf: [
+        {
+          field: 'paid',
+          value: true
+        }
+      ]
+    },
+    {
+      name: 'fields',
+      label: 'Custom questions',
+      type: 'fields',
+      tab: 'advanced'
+    },
+    {
+      name: 'ticket',
+      label: 'Use External Ticketing URL',
+      defaultValue: '',
+      type: 'text',
+      toggleFeature: true,
+      placeholder: 'eventbrite.com/my-ticket',
+      tab: 'advanced'
+    },
+    {
+      name: 'stripePub',
+      label: 'Custom Stripe Public Key',
+      type: 'text',
+      toggleFeature: true,
+      tab: 'advanced'
+    },
+    {
+      name: 'stripeKey',
+      label: 'Custom Stripe Private Key',
+      type: 'text',
+      toggleFeature: true,
+      tab: 'advanced'
+    },
+    {
+      name: 'password',
+      label: 'Event password',
+      tab: 'advanced',
+      type: 'text',
+      placeholder: '(If set, user will need the password to see)'
+    },
+    {
+      name: 'participationGuideUrl',
+      label: 'Participation guide',
+      tab: 'advanced',
+      type: 'text',
+      placeholder: 'https://event.com/participation'
+    },
   ],
   task: [
     { name: 'title', label: 'Title', type: 'text', placeholder: 'Plant tomatoes in the garden', required: true },
@@ -118,31 +173,35 @@ export default {
         { label: 'Private (only members can apply)', value: 'private' },
       ]
     },
-    { name: 'rewards', label: 'Rewards', type: 'currencies' }
+    { name: 'rewards', label: 'Reward', type: 'currency' }
   ],
   listing: [
     { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: '' },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A beautiful treehouse loft with hot tub.' },
     {
-      name: 'channel',
-      label: 'Channel',
-      type: 'select',
-      options: []
+      name: 'private',
+      label: 'Is this a private space?',
+      type: 'switch',
+      defaultValue: false
     },
     {
-      name: 'category',
-      label: 'Category',
-      type: 'select',
-      options: [
-        { label: 'Shared room', value: 'shared room' },
-        { label: 'Private room', value: 'private room' },
-        { label: 'Glamping tent', value: 'glamping tent' },
-        { label: 'Camping', value: 'camping' },
-        { label: 'Van (parking)', value: 'van' },
-      ]
+      name: 'kitchen',
+      label: 'Does the space have a private kitchen?',
+      type: 'switch',
+      defaultValue: false
     },
-    { name: 'price', label: 'Price (€)', type: 'number', placeholder: '10.00', required: true },
-    { name: 'quantity', label: 'Quantity available', type: 'text', placeholder: '1', required: false },
+    {
+      name: 'bathroom',
+      label: 'Does the space have a private bathroom?',
+      type: 'switch',
+      defaultValue: false
+    },
+    { name: 'rooms', label: 'Number of rooms', type: 'number', min: 1, required: false },
+    { name: 'beds', label: 'Number of beds', type: 'number', min: 1, required: false },
+    { name: 'monthlyRate', label: 'Monthly rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'weeklyRate', label: 'Weekly rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'dailyRate', label: 'Daily rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'quantity', label: 'Quantity available', type: 'number', min: 1, required: false },
   ],
   booking: [
     { name: 'start', label: 'Start date', type: 'date' },

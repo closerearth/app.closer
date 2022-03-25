@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { FaArrowLeft } from '@react-icons/all-files/fa/FaArrowLeft';
 
 import Layout from '../../../components/Layout';
 import EditModel from '../../../components/EditModel';
 import models from '../../../models';
 
 import api from '../../../utils/api';
+import { __ } from '../../../utils/helpers';
 
 const EditEvent = ({ event }) => {
   const router = useRouter();
@@ -17,20 +19,22 @@ const EditEvent = ({ event }) => {
     }
   }
   if (!event) {
-    return <h1>Event not found</h1>;
+    return <h1>{ __('events_slug_edit_error') }</h1>;
   }
 
   return (
     <Layout protect>
       <Head>
-        <title>Edit {event.name}</title>
+        <title>{ __('events_slug_edit_title') } {event.name}</title>
       </Head>
       <div className="main-content">
+        <h1 className="flex justify-start items-center">
+          <Link as={`/events/${event.slug}`} href="/events/[slug]"><a className="mr-2"><FaArrowLeft /></a></Link>
+          { __('events_slug_edit_link') } <i>{ event.name }</i></h1>
         <EditModel
           id={ event._id }
-          endpoint={ '/event' }
+          endpoint="/event"
           fields={ models.event }
-          buttonText="Publish"
           onSave={ event => router.push(`/events/${event.slug}`) }
           onUpdate={ (name, value, option, actionType) => onUpdate(name, value, option, actionType) }
           allowDelete

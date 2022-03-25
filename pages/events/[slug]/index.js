@@ -60,7 +60,7 @@ const Event = ({ event, error }) => {
 
   const attendEvent = async (_id, attend) => {
     try {
-      const {data: { results: event }} = await api.post(`/attend/event/${_id}`, { attend });
+      const { data: { results: event } } = await api.post(`/attend/event/${_id}`, { attend });
       setAttendees(attend ? event.attendees.concat(user._id) : event.attendees.filter(a => a !== user._id));
     } catch (err) {
       alert(`Could not RSVP: ${err.message}`)
@@ -112,6 +112,13 @@ const Event = ({ event, error }) => {
           <div className="w-34">
             <h1>This event is password protected</h1>
             <input onChange={ e => setPassword(e.target.value) } placeholder="password" type="password" />
+            {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
+              <div className="admin-actions mt-3 border-t pt-3">
+                <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
+                  <a className="btn-secondary text-xs mr-2">Edit event</a>
+                </Link>
+              </div>
+            }
           </div>
         </div>:
         <div>
@@ -154,35 +161,28 @@ const Event = ({ event, error }) => {
                   { end && duration > 24 && ` - ${ end.format(dateFormat) }` }
                   { end && duration <= 24 && ` - ${ end.format('HH:mm') }` }
                 </h2>
+                { event.address && <h3 className="text-lg font-light text-gray-500">{event.address}</h3> }
+                {
+                  end && end.isBefore(dayjs()) &&
+                    <h3 className="p3 mr-2 italic">
+                      Event ended
+                    </h3>
+                }
                 <h1 className="md:text-4xl mt-4 font-bold">{event.name}</h1>
                 { loadError && <div className="validation-error">{loadError}</div> }
 
                 <div className="mt-4 event-actions flex items-center">
-                  {
-                    end && end.isBefore(dayjs())?
-                      <span className="p3 mr-2 italic">
-                      Event ended
-                      </span>:
-                      start.isAfter(dayjs())?
-                        <span className="p3 mr-2 italic">
-                      Event is happening{' '}
-                          <TimeSince
-                            time={ event.start }
-                          />
-                        </span>:
-                        null
-                  }
                   { event.paid ?
                     <>
                       { myTickets && myTickets.count() > 0 ?
                         <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
                           <a className="btn-primary mr-2">See ticket</a>
                         </Link>:
-                        event.ticket && start.isAfter(dayjs()) ?
+                        event.ticket && start && start.isAfter(dayjs()) ?
                           <Link href={ prependHttp(event.ticket) }>
                             <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
                           </Link>:
-                          start.isAfter(dayjs())?
+                          start && start.isAfter(dayjs())?
                             <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
                               <a className="btn-primary mr-2">Buy ticket</a>
                             </Link>:
@@ -191,7 +191,7 @@ const Event = ({ event, error }) => {
                     </>:
                     <>
                       {
-                        start.isBefore(dayjs()) && end && end.isAfter(dayjs()) && event.location?
+                        start && start.isBefore(dayjs().subtract(15, 'minutes')) && end && end.isAfter(dayjs()) && event.location?
                           <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
                           start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
                             <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
@@ -199,14 +199,13 @@ const Event = ({ event, error }) => {
                               <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                                 <a className="btn-primary mr-2">Signup to watch recording</a>
                               </Link>:
-                              !isAuthenticated && start.isAfter(dayjs()) ?
+                              !isAuthenticated && start && start.isAfter(dayjs()) ?
                                 <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                                   <a className="btn-primary mr-2">Signup to RSVP</a>
                                 </Link>:
                                 end && end.isBefore(dayjs()) ?
-                                  start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location ?
+                                  start && start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location &&
                                     <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                                    <span className="p3 mr-2 italic">This event has ended.</span>:
                                   attendees?.includes(user._id) ?
                                     <a
                                       href="#"
@@ -216,7 +215,7 @@ const Event = ({ event, error }) => {
                                         attendEvent(event._id, !(attendees?.includes(user._id)));
                                       }}
                                     >
-                          Cancel RSVP
+                                      Cancel RSVP
                                     </a>:
                                     <button
                                       onClick={ e => {
@@ -225,16 +224,10 @@ const Event = ({ event, error }) => {
                                       }}
                                       className="btn-primary mr-2"
                                     >
-                          Attend
+                                      Attend
                                     </button>
                       }
                     </>
-                  }
-
-                  {isAuthenticated && user._id === event.createdBy &&
-                    <Link as={`/events/edit/${event.slug}`} href="/events/edit/[slug]">
-                      <a className="btn-primary mr-2">Edit event</a>
-                    </Link>
                   }
                   {isAuthenticated && user.roles.includes('admin') &&
                     <a
@@ -256,6 +249,20 @@ const Event = ({ event, error }) => {
                     endTime: event.end,
                   }} buttonLabel="Add to calendar" /> */}
                 </div>
+                {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
+                  <div className="admin-actions mt-3 border-t pt-3">
+                    { user._id === event.createdBy || user.roles.includes('admin') &&
+                      <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
+                        <a className="btn-secondary text-xs mr-2">Edit event</a>
+                      </Link>
+                    }
+                    { event.paid && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
+                      <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
+                        <a className="btn-secondary text-xs mr-2">View tickets</a>
+                      </Link>
+                    }
+                  </div>
+                }
               </div>
             </div>
           </section>
@@ -298,7 +305,7 @@ const Event = ({ event, error }) => {
             }
 
             { attendees && attendees.length > 0 && <section className="attendees card-body mb-6">
-              <h3 className="text-2xl font-bold">{start && start.isAfter(dayjs()) ? 'Who&apos;s coming?' : 'Who attended?'}</h3>
+              <h3 className="text-2xl font-bold">{start && start.isAfter(dayjs()) ? 'Who\'s coming?' : 'Who attended?'}</h3>
               { event.price || event.ticketOptions?
                 <div className="-space-x-3 flex flex-row flex-wrap">
                   { Array.from(new Set(attendees)).map((_id) => {

@@ -6,6 +6,7 @@ import Layout from '../../components/Layout';
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 import BookingListPreview from '../../components/BookingListPreview';
+import { __ } from '../../utils/helpers';
 
 const Bookings = () => {
   const router = useRouter();
@@ -15,7 +16,7 @@ const Bookings = () => {
 
   const loadData = async () => {
     await Promise.all([
-      platform.booking.get({ where: { createdBy: user._id }})
+      platform.booking.get({ where: { createdBy: user._id } })
     ]);
   }
 
@@ -34,7 +35,7 @@ const Bookings = () => {
   return (
     <Layout>
       <Head>
-        <title>Bookings</title>
+        <title>{ __('bookings_title') }</title>
       </Head>
       { bookings && bookings.get('error') &&
         <div className="validation-error">{ bookings.get('error') }</div>
@@ -43,7 +44,7 @@ const Bookings = () => {
         <div className="columns">
           <div className="col lg two-third">
             <div className="page-header">
-              <h1>Bookings</h1>
+              <h1>{ __('bookings_title') }</h1>
             </div>
             <div className="bookings-list">
               { bookings && bookings.count() > 0 ?

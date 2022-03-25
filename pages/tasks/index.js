@@ -8,6 +8,7 @@ import api, { formatSearch } from '../../utils/api';
 import PageNotAllowed from '../401';
 import models from '../../models';
 import { useAuth } from '../../contexts/auth.js'
+import { __ } from '../../utils/helpers';
 
 const Settings = ({ token }) => {
   const { user } = useAuth();
@@ -15,15 +16,15 @@ const Settings = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Open Tasks</title>
+        <title>{ __('tasks_title') }</title>
       </Head>
       <main className="main-content intro">
         <div className="page-header">
           <h1>
-            Open Tasks
+            { __('tasks_title') }
           </h1>
           <div className="user-actions">
-            <Link as="/tasks/create" href="/tasks/create"><a className="button">Create</a></Link>
+            <Link as="/tasks/create" href="/tasks/create"><a className="button">{ __('tasks_link_create') }</a></Link>
           </div>
 
         </div>

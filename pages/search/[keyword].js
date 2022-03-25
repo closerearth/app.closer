@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
+import { __ } from '../../utils/helpers';
 
 const Search = ({ articles, error, keyword, tags }) => console.log(error, articles) || (
   <Layout>
@@ -35,22 +36,22 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
                     </Link>
                   </div>
                 )):
-                <div className="Loading">Loading...</div>
+                <div className="Loading">{ __('search_keyword_loading') }</div>
               }
             </div>
           </section>
         </main>
         <section className="col">
-          <h2>Related content</h2>
+          <h2>{ __('search_keyword_related') }</h2>
           <p className="tags">
             { tags ?
               tags.map(tag => (
                 <Link as={ `/search/${encodeURIComponent(tag)}` } href="/search/[keyword]" key={ tag }><a className="tag">{tag}</a></Link>
               )):
-              <span className="Loading">Loading...</span>
+              <span className="Loading">{ __('search_keyword_loading') }</span>
             }
           </p>
-          <h3><Link href="/search"><a>See all articles</a></Link></h3>
+          <h3><Link href="/search"><a>{ __('search_keyword_articles') }</a></Link></h3>
         </section>
       </div>
     </div>
@@ -61,7 +62,7 @@ Search.getInitialProps = async ({ req, query }) => {
   try {
     const rawKeyword = (req && req.url.replace('/search/', '')) || (query && query.keyword);
     const keyword = typeof decodeURIComponent !== 'undefined' ? decodeURIComponent(rawKeyword) : rawKeyword;
-    const search = formatSearch({ tags: { $elemMatch: { $eq: keyword  }}});
+    const search = formatSearch({ tags: { $elemMatch: { $eq: keyword  } } });
     const [tags, articles] = await Promise.all([
       api.get(`/distinct/article/tags?where=${search}`),
       api.get(`/article?where=${search}&limit=50`)

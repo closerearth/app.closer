@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 
 const defaultTime = dayjs().add(7, 'days').set('hour', 12).set('minute', 0);
 
-const DateTimePicker = ({ value, onChange }) => {
+const DateTimePicker = ({ value, onChange, showTime }) => {
   const [datetime, updateTime] = useState(value ? dayjs(value) : defaultTime);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ const DateTimePicker = ({ value, onChange }) => {
   }, [value]);
 
   return (
-    <div className="columns-2">
+    <div className={`${showTime?'columns-2':''}`}>
       <input
         type="date"
         value={ datetime.format('YYYY-MM-DD') }
@@ -22,7 +22,7 @@ const DateTimePicker = ({ value, onChange }) => {
           onChange(newDate);
         }}
       />
-      <input
+      { showTime && <input
         type="time"
         value={ datetime.format('HH:mm') }
         placeholder="14:20"
@@ -33,9 +33,13 @@ const DateTimePicker = ({ value, onChange }) => {
           updateTime(newDate);
           onChange(newDate);
         }}
-      />
+      /> }
     </div>
   );
+}
+
+DateTimePicker.defaultProps = {
+  showTime: true
 }
 
 export default DateTimePicker;

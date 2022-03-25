@@ -9,6 +9,7 @@ import PageNotAllowed from '../401';
 import models from '../../models';
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
+import { __ } from '../../utils/helpers';
 
 const openApplications = { where: { status: 'open' } };
 const approvedApplications = { where: { status: 'approved' } };
@@ -33,29 +34,29 @@ const Applications = () => {
     }
   }, [user, platform]);
 
-  if (!user || !user.roles.includes('community-curator')) {
+  if (!user || (!user.roles.includes('community-curator') && !user.roles.includes('admin'))) {
     return <PageNotAllowed />;
   }
 
   return (
     <Layout protect>
       <Head>
-        <title>Community applications</title>
+        <title>{ __('applications_title') }</title>
       </Head>
       <main className="main-content">
         <div className="page-header mb-4">
           <div>
-            <h1>Community applications</h1>
+            <h1>{ __('applications_title') }</h1>
           </div>
         </div>
         <div className="md:flex md:flex-row-reverse">
           <div className="md:w-1/3 md:ml-4">
             <div className="card">
-              <h3 className="card-title">Platform metrics</h3>
+              <h3 className="card-title">{ __('applications_subtitle') }</h3>
               <div className="card-body">
-                <p>Open applications: <b>{platform.application.findCount(openApplications)}</b></p>
-                <p>In conversation: <b>{platform.application.findCount(inConversationApplications)}</b></p>
-                <p>Accepted applications: <b>{platform.application.findCount(approvedApplications)}</b></p>
+                <p>{ __('applications_open') } <b>{platform.application.findCount(openApplications)}</b></p>
+                <p>{ __('applications_in_conversation') } <b>{platform.application.findCount(inConversationApplications)}</b></p>
+                <p>{ __('applications_accepted') } <b>{platform.application.findCount(approvedApplications)}</b></p>
               </div>
             </div>
           </div>

@@ -17,6 +17,7 @@ const CheckoutForm = ({
   email,
   name,
   message,
+  fields,
   volunteer,
   total,
   currency,
@@ -33,7 +34,7 @@ const CheckoutForm = ({
     setProcessing(true);
 
     try {
-      const {error, token} = await stripe.createToken(elements.getElement(CardElement));
+      const { error, token } = await stripe.createToken(elements.getElement(CardElement));
       if (error) {
         setProcessing(false);
         setError(error.message);
@@ -55,6 +56,7 @@ const CheckoutForm = ({
         email,
         name,
         message,
+        fields,
         volunteer
       });
       if (onSuccess) {
@@ -63,6 +65,7 @@ const CheckoutForm = ({
       }
     } catch (err) {
       setProcessing(false);
+      console.log(err);
       setError(err.response && err.response.data.error ? err.response.data.error : err.message);
     }
   };

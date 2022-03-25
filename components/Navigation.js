@@ -6,8 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { trackEvent } from './Analytics';
-import { faTelegram } from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FaTelegramPlane } from '@react-icons/all-files/fa/FaTelegramPlane';
 import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
@@ -15,36 +14,37 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
+import { __ } from '../utils/helpers';
 import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 dayjs.extend(relativeTime);
 
-/*
-DEMOP
-
-
-  <nav>
-    <div className="flex justify-between items-center p-4 bg-white">
-      <div className="flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
-        </svg>
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-        </svg>
-      </div>
-      <div className="flex items-center space-x-2">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-        <div className="w-10">
-          <img className="rounded-full" src="https://forbesthailand.com/wp-content/uploads/2021/08/https-specials-images.forbesimg.com-imageserve-5f47d4de7637290765bce495-0x0.jpgbackground000000cropX11699cropX23845cropY1559cropY22704.jpg" alt="" />
-        </div>
-      </div>
-    </div>
-  </nav>
-*/
-
+const platformLinks = [
+  {
+    label: 'Events',
+    url: '/events'
+  },
+  {
+    label: 'Members',
+    url: '/members',
+    roles: ['member']
+  },
+  {
+    label: 'Applications',
+    url: '/applications',
+    roles: ['community-curator', 'admin']
+  },
+  {
+    label: 'Listings',
+    url: '/listings',
+    roles: ['space-host', 'admin']
+  },
+  {
+    label: 'Admin',
+    url: '/admin',
+    roles: ['admin']
+  }
+];
 const start = new Date();
 
 const Navigation = () => {
@@ -52,23 +52,31 @@ const Navigation = () => {
   const [featuredEvents, setFeaturedEvents] = useState(null);
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
+  const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
+  const links = platformLinks.filter(link => (
+    !link.roles ||
+    (
+      isAuthenticated &&
+      user.roles.some(role => link.roles.includes(role))
+    )
+  ));
+
+  const loadData = async () => {
+    const where = formatSearch({ featured: true, end: { $gt: start } });
+    const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
+    setFeaturedEvents(fromJS(events));
+  };
 
   useEffect(() => {
-    (async () => {
-      const where = formatSearch({ featured: true, end: { $gt: start } });
-      const { data: { results: events } } = await api.get('/event', { params: { where, limit: 1 } });
-      setFeaturedEvents(fromJS(events));
-    })();
+    loadData();
   }, []);
 
-  const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-
   return (
-    <div className="NavContainer pt-20 md:pt-0">
+    <div className="NavContainer pt-20 md:pt-0 relative z-50 bg-background">
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
-      <nav className="h-20 fixed z-20 top-0 left-0 right-0 bg-background border-b border-b-line drop-shadow-sm md:relative md:drop-shadow-none">
+      <nav className="h-20 fixed z-50 top-0 bg-background left-0 right-0 shadow-sm md:relative">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
@@ -83,44 +91,22 @@ const Navigation = () => {
           </h3>
 
           <div className="menu-right no-print flex text-md flex-row justify-end items-center">
-            <Link
-              href="/events"
-            >
-              <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
-                Events
-              </a>
-            </Link>
-            { isAuthenticated &&
-              <Link
-                href="/members"
-              >
-                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
-                  Members
-                </a>
-              </Link>
-            }
-            { isAuthenticated && user.roles.includes('community-curator') &&
-              <Link
-                href="/applications"
-              >
-                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
-                  Applications
-                </a>
-              </Link>
-            }
-            { isAuthenticated && user.roles.includes('admin') &&
-              <Link
-                href="/admin"
-              >
-                <a className="mr-3 hidden md:flex" onClick={() => toggleNav(false)}>
-                  Admin
-                </a>
-              </Link>
+            {
+              links.map(link => (
+                <Link
+                  key={ link.url }
+                  href={ link.url }
+                >
+                  <a className="mr-3 text-sm hidden md:flex" onClick={() => toggleNav(false)}>
+                    { link.label }
+                  </a>
+                </Link>
+              ))
             }
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="mr-3 hidden md:flex"
+                  className="mr-3 text-sm hidden md:flex"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -129,22 +115,22 @@ const Navigation = () => {
                   }}
                   title={user.screenname}
                 >
-                  Sign out
+                  { __('navigation_sign_out') }
                 </a>
               </Link>
             ) : (
               <Link href="/login">
                 <a
-                  className="mr-3 hidden md:flex"
+                  className="mr-3 text-sm hidden md:flex"
                   onClick={() => toggleNav(false)}
                 >
-                  Sign in
+                  { __('navigation_sign_in') }
                 </a>
               </Link>
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                className="btn-primary mr-3 hidden md:flex"
+                className="btn-primary text-sm mr-3 hidden md:flex"
               >
                 {
                   REGISTRATION_MODE === 'paid' ?
@@ -160,9 +146,9 @@ const Navigation = () => {
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-4xl flex justify-center items-center mr-3"
+              className="text-2xl flex justify-center items-center mr-3 bg-primary text-white hover:scale-110 p-2 rounded-full duration-300"
             >
-              <FontAwesomeIcon icon={faTelegram} color={ theme.extend.colors.primary } />
+              <FaTelegramPlane />
             </a> }
             { isAuthenticated &&
               <Link
@@ -171,7 +157,7 @@ const Navigation = () => {
               >
 
                 <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
-                  <span className='h-8 border-l border-l-line mr-3' />
+                  <span className='h-8 border-l mr-3' />
                   <ProfilePhoto user={ user } />
                   <p className='ml-3'>{user.screenname}</p>
                 </a>
@@ -192,46 +178,36 @@ const Navigation = () => {
         </div>
       </nav>
       { navOpen &&
-        <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print">
-          <div className="main-content flex flex-col justify-start items-start space-y-2 text-lg text-center">
-            <Link
-              href="/events"
-            >
-              <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
-                Events
-              </a>
-            </Link>
+        <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print block md:hidden">
+          <div className="flex flex-col justify-center items-center">
             { isAuthenticated &&
               <Link
-                href="/members"
+                href="/members/[slug]"
+                as={ `/members/${ user.slug }` }
               >
-                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
-                  Members
+
+                <a title="View profile" className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row" onClick={() => toggleNav(false)}>
+                  <ProfilePhoto user={ user } />
+                  <p className='ml-3'>{user.screenname}</p>
                 </a>
               </Link>
             }
-            { isAuthenticated && user.roles.includes('community-curator') &&
-              <Link
-                href="/applications"
-              >
-                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
-                  Applications
-                </a>
-              </Link>
-            }
-            { isAuthenticated && user.roles.includes('admin') &&
-              <Link
-                href="/admin"
-              >
-                <a className="flex justify-center items-center" onClick={() => toggleNav(false)}>
-                  Admin
-                </a>
-              </Link>
+            {
+              links.map(link => (
+                <Link
+                  key={ link.url }
+                  href={ link.url }
+                >
+                  <a className="p-4 block text-xl w-full border-b" onClick={() => toggleNav(false)}>
+                    { link.label }
+                  </a>
+                </Link>
+              ))
             }
             { isAuthenticated ? (
               <Link href="/">
                 <a
-                  className="flex justify-center items-center"
+                  className="p-4 block text-xl w-full"
                   onClick={(e) => {
                     e.preventDefault();
                     toggleNav(false);
@@ -240,22 +216,22 @@ const Navigation = () => {
                   }}
                   title={user.screenname}
                 >
-                  Sign out
+                  { __('navigation_sign_out') }
                 </a>
               </Link>
             ) : (
               <Link href="/login">
                 <a
-                  className="flex justify-center items-center"
+                  className="p-4 border-b block text-xl w-full"
                   onClick={() => toggleNav(false)}
                 >
-                  Sign in
+                  { __('navigation_sign_in') }
                 </a>
               </Link>
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                className="btn-primary mr-3 hidden md:flex"
+                className="p-4 block text-xl w-full"
               >
                 {
                   REGISTRATION_MODE === 'paid' ?
@@ -279,7 +255,7 @@ const Navigation = () => {
               setError(null);
             }}
           >
-            Close
+            { __('navigation_close') }
           </a>
         </div>
       )}

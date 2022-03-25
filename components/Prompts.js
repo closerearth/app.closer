@@ -22,7 +22,7 @@ const Prompts = () => {
   if (!user?.photo && !isClosed) {
     return (
       <div>
-        <div className="main-content p-2 justify-between flex flex-col relative text-center">
+        <div className="main-content p-3 justify-between flex flex-col relative text-center shadow-sm">
           <div className="p-2">
             { image ?
               <p>Looking good {user.screenname} ♥️</p>:
@@ -34,7 +34,7 @@ const Prompts = () => {
               { image && <img
                 src={`${cdn}${image}-max-lg.jpg`}
                 alt={ user.screenname }
-                className={`w-16 h-16 rounded-full`}
+                className="w-16 h-16 rounded-full"
               /> }
             </div>
             <div className="ml-4">

@@ -13,11 +13,15 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
     Math.max(Math.floor(page - (maxPages / 2)),0):
     0;
 
+  if (totalPages === 1) {
+    return null;
+  }
+
   return (
     <div className="pagination flex flex-row items-center justify-between">
       <div className="flex flex-row items-center justify-between">
         { page > 1 &&
-          <Link href={{query: { [queryParam]: page - 1 }}}>
+          <Link href={{ query: { [queryParam]: page - 1 } }}>
             <a
               className="p-1"
               onClick={ (e) => {
@@ -39,7 +43,7 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
               return;
             }
             return (
-              <Link href={{query: { [queryParam]: toPage  }}} key={ `page-${toPage}` }>
+              <Link href={{ query: { [queryParam]: toPage  } }} key={ `page-${toPage}` }>
                 <a
                   className={`p-1 mr-2 ${page === toPage?'bg-primary text-white':'bg-gray-100'}`}
                   onClick={ (e) => {
@@ -57,7 +61,7 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
       </div>
       <div className="flex flex-row items-center justify-between">
         { page < totalPages &&
-          <Link href={{query: { [queryParam]: page + 1 }}}>
+          <Link href={{ query: { [queryParam]: page + 1 } }}>
             <a
               className="p-1"
               onClick={ (e) => {

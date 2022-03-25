@@ -9,11 +9,11 @@ import api, { formatSearch, cdn } from '../../utils/api';
 import MemberNav from '../../components/MemberNav';
 import UploadPhoto from '../../components/UploadPhoto';
 import CreatePost from '../../components/CreatePost';
-import { currencies } from '../../components/EditModel';
 import PostList from '../../components/PostList';
 import ProfilePhoto from '../../components/ProfilePhoto';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js';
+import { __ } from '../../utils/helpers';
 
 const Task = ({ task, error }) => {
   const [loadError, setErrors] = useState(null);
@@ -27,7 +27,7 @@ const Task = ({ task, error }) => {
 
   const apply = async (_id, application) => {
     try {
-      const {data: { results: task }} = await api.post(`/apply/task/${_id}`, { application });
+      const { data: { results: task } } = await api.post(`/apply/task/${_id}`, { application });
       setApplicants(task.applicants);
     } catch (err) {
       alert(`Could not apply: ${err.message}`)
@@ -36,7 +36,7 @@ const Task = ({ task, error }) => {
 
   const updateStatus = async (_id, status) => {
     try {
-      const {data: { results: task }} = await api.patch(`/task/${_id}`, { status });
+      const { data: { results: task } } = await api.patch(`/task/${_id}`, { status });
       setStatus(task.status);
     } catch (err) {
       alert(`Could not update status: ${err.message}`)
@@ -89,22 +89,22 @@ const Task = ({ task, error }) => {
                     <div className="action-row">
                       { user._id === task.createdBy ?
                         <div>
-                          <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]"><a>Edit task</a></Link>
+                          <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]"><a>{ __('tasks_slug_edit_task') }</a></Link>
                           <select
                             value={ status }
                             onChange={e => updateStatus(task._id, e.target.value)}
                           >
                             <option value="opening">
-                                Open
+                              { __('tasks_slug_open') }
                             </option>
                             <option value="completed">
-                                Completed
+                              { __('tasks_slug_completed') }
                             </option>
                             <option value="closed">
-                                Closed
+                              { __('tasks_slug_closed') }
                             </option>
                             <option value="draft">
-                                Draft
+                              { __('tasks_slug_draft') }
                             </option>
                           </select>
                         </div>:
@@ -117,7 +117,7 @@ const Task = ({ task, error }) => {
                                 apply(task._id, !(applicants?.includes(user._id)));
                               }}
                             >
-                            Cancel application
+                              { __('tasks_slug_cancel_application') }
                             </a>
                           </p>:
                           <button
@@ -126,7 +126,7 @@ const Task = ({ task, error }) => {
                               apply(task._id, !(applicants?.includes(user._id)));
                             }}
                           >
-                          Apply for task
+                            { __('tasks_slug_apply') }
                           </button>
                       }
                     </div>
@@ -145,7 +145,7 @@ const Task = ({ task, error }) => {
                 }
                 { user && (user._id === task.createdBy || (task.team && user._id === task.team[0])) &&
                   <section className="applicants card-body">
-                    <h3>Applicants</h3>
+                    <h3>{ __('tasks_slug_applicants') }</h3>
                     <div className="user-list">
                       { applicants.length > 0 ?
                         applicants.map(uid => (
@@ -164,15 +164,7 @@ const Task = ({ task, error }) => {
                 }
                 { task.rewards && task.rewards.length > 0 &&
                   <section className="rewards card-body">
-                    <h3>Rewards</h3>
-                    { task.rewards.map(reward => {
-                      const currency = currencies.find(c => c.value === reward.cur);
-                      return (
-                        <div className="reward" key={ JSON.stringify(reward) }>
-                          <span className="symbol">{currency?.symbol}</span> <b>{reward.val}</b>
-                        </div>
-                      );
-                    }) }
+                    <h3>{ __('tasks_slug_reward') }</h3>
                   </section>
                 }
               </div>

@@ -18,38 +18,39 @@ const PostList = ({ allowCreate, channel, parentType, parentId, visibility }) =>
     setUsersById({ ...usersById, [user._id]: user });
   }
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const usersMap = { ...usersById };
+  const loadData = async () => {
+    try {
+      const usersMap = { ...usersById };
 
-        const where = {
-          channel,
-          parentType,
-          parentId
-        };
-        const params = where && { params: { where: formatSearch(where), sort_by: '-created', limit: 100 } };
-        const { data: { results: posts } } = await api.get('/post', params);
-        setPosts(posts);
+      const where = {
+        channel,
+        parentType,
+        parentId
+      };
+      const params = where && { params: { where: formatSearch(where), sort_by: '-created', limit: 100 } };
+      const { data: { results: posts } } = await api.get('/post', params);
+      setPosts(posts);
 
-        if (posts && posts.length > 0) {
-          const usersToLoad = posts.map(post => post.createdBy);
-          const params = { where: formatSearch({ _id: { $in: usersToLoad } }) };
-          const { data: { results }} = await api.get('/user', { params });
-          if (results) {
-            results.forEach(u => {
-              usersMap[u._id] = u;
-            });
-            setUsersById(usersMap);
-          }
+      if (posts && posts.length > 0) {
+        const usersToLoad = posts.map(post => post.createdBy);
+        const params = { where: formatSearch({ _id: { $in: usersToLoad } }) };
+        const { data: { results } } = await api.get('/user', { params });
+        if (results) {
+          results.forEach(u => {
+            usersMap[u._id] = u;
+          });
+          setUsersById(usersMap);
         }
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message)
       }
-    };
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message)
+    }
+  };
+
+  useEffect(() => {
     loadData();
-  }, [channel, parentType, parentId, usersById]);
+  }, [channel, parentType, parentId]);
 
   return (
     <div>

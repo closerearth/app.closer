@@ -5,27 +5,19 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCampground, faBed, faCaravan, faCocktail } from '@fortawesome/free-solid-svg-icons';
 
 import api, { formatSearch, cdn } from '../../../utils/api';
 import { priceFormat } from '../../../utils/helpers';
 import Layout from '../../../components/Layout';
 import Tabs from '../../../components/Tabs';
+import DateTimePicker from '../../../components/DateTimePicker';
 import CheckoutForm from '../../../components/CheckoutForm';
 import PageNotFound from '../../404';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
+import { __ } from '../../../utils/helpers';
 
 const maxVolunteers = 20;
-
-const stripePromise = loadStripe(config.STRIPE_PUB_KEY);
-const optionToIcon = {
-  camping: faCampground,
-  glamping_quattro: faBed,
-  glamping_duo: faBed,
-  cocktail: faCocktail,
-};
 const formatName = name => name && name.split('_').join(' ');
 
 const EventCheckout = ({ event, error }) => {
@@ -33,8 +25,9 @@ const EventCheckout = ({ event, error }) => {
   const { isAuthenticated, user } = useAuth();
   const [ticketOption, setTicketOption] = useState(null);
   const [paymentReceived, setPaymentReceived] = useState(null);
-  const [signup, updateSignup] = useState({});
-  const [isSignupValid, setSignupValid] = useState(null);
+  const [signup, updateSignup] = useState({
+    fields: event.fields && event.fields.map(f => ({ name: f.name, value: '' }))
+  });
   const [signupError, setSignupError] = useState(null);
   const [ticketOptions, setTicketOptions] = useState([]);
   const [volunteerTicketsSold, setVolunteerTicketsSold] = useState(0);
@@ -44,6 +37,7 @@ const EventCheckout = ({ event, error }) => {
   const discount = router.query.discount && event.discounts && event.discounts.find(d => d.code === router.query.discount);
   const isVolunteer = !!router.query.volunteer && volunteerTicketsSold < maxVolunteers;
   const volunteerCapacityReached = !!router.query.volunteer && volunteerTicketsSold >= maxVolunteers;
+  const stripe = loadStripe(event.stripePub || config.STRIPE_PUB_KEY);
 
   let total = event.price ? event.price.val : 0;
   let currency = event.price ? event.price.cur : 'usd';
@@ -68,7 +62,7 @@ const EventCheckout = ({ event, error }) => {
   total = Math.max(Math.round(total * 100) / 100, 0);
 
   const setField = (field, value) => {
-    updateSignup(oldFields => Object.assign({}, signup, { [field]: value }));
+    updateSignup(oldFields => Object.assign({}, oldFields, { [field]: value }));
     if (field === 'email' && !value.match(/@/gi)) {
       setSignupError('Please enter a valid email');
     } else if (field === 'screenname' && value.length < 3) {
@@ -89,21 +83,24 @@ const EventCheckout = ({ event, error }) => {
     }
   };
 
+  const loadData = async () => {
+    try {
+      const {
+        data: { ticketOptions: availability, volunteerTicketsSold },
+      } = await api.get(`/bookings/event/${event._id}/availability`);
+      if (JSON.stringify(availability) !== JSON.stringify(ticketOptions)) {
+        setTicketOptions(availability);
+        setVolunteerTicketsSold(volunteerTicketsSold);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error loading availability');
+    }
+  };
+
   useEffect(() => {
     if (event && event._id) {
-      (async () => {
-        try {
-          const {
-            data: { ticketOptions: availability, volunteerTicketsSold },
-          } = await api.get(`/bookings/event/${event._id}/availability`);
-          if (JSON.stringify(availability) !== JSON.stringify(ticketOptions)) {
-            setTicketOptions(availability);
-            setVolunteerTicketsSold(volunteerTicketsSold);
-          }
-        } catch (err) {
-          console.log('Error:', err);
-        }
-      })();
+      loadData();
     }
     const refreshAvailability = setInterval(loadData, 30000);
     return () => clearInterval(refreshAvailability);
@@ -116,7 +113,7 @@ const EventCheckout = ({ event, error }) => {
   return (
     <Layout>
       <Head>
-        <title>booking</title>
+        <title>{ __('events_slug_checkout_title') }</title>
       </Head>
       <div className="main-content max-w-prose booking">
         <h1 className="mb-4">
@@ -129,12 +126,12 @@ const EventCheckout = ({ event, error }) => {
         }
         { isAuthenticated ?
           <section>
-            <h3>Hello {user.screenname}</h3>
+            <h3>{ __('events_slug_welcome_message') } {user.screenname}</h3>
             { isVolunteer &&
-              <p className="text-sm">Thank you for being a volunteer!</p>
+              <p className="text-sm">{ __('events_slug_checkout_volunteer_message') }</p>
             }
             { volunteerCapacityReached &&
-              <p className="text-sm">Thank you for applying to be a volunteer, unforturnately volunteer tickets are now sold out.</p>
+              <p className="text-sm">{ __('events_slug_checkout_volunteer_capacity_reached') }</p>
             }
             <hr className="divide-y divide-gray-400 my-4" />
           </section>:
@@ -152,7 +149,7 @@ const EventCheckout = ({ event, error }) => {
                     <form onSubmit={ e => submitSignupForm(e) } className="card">
                       <fieldset className="w-full mb-4">
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="name">
-                          Full name
+                          { __('events_slug_checkout_form_full_name') }
                         </label>
                         <input
                           className="w-full"
@@ -167,7 +164,7 @@ const EventCheckout = ({ event, error }) => {
                       </fieldset>
                       <fieldset className="w-full mb-4">
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="email">
-                          Email
+                          { __('events_slug_checkout_form_email') }
                         </label>
                         <input
                           className="w-full"
@@ -192,9 +189,9 @@ const EventCheckout = ({ event, error }) => {
             />
           </section>
         }
-        { ticketOptions && ticketOptions.length > 0 ?
+        { event.paid && ticketOptions && ticketOptions.length > 0 ?
           <section>
-            <h3>Ticket options</h3>
+            <h3>{ __('events_slug_checkout_tickets_title') }</h3>
             <div className="ticket-options my-4 flex flex-row flex-wrap">
               {
                 ticketOptions.map(option => (
@@ -204,7 +201,6 @@ const EventCheckout = ({ event, error }) => {
                     onClick={ () => setTicketOption(option) }
                     disabled={ option.available === 0 }
                   >
-                    { optionToIcon[option.name] && <FontAwesomeIcon size="lg" icon={ optionToIcon[option.name] } /> }
                     <h4>{formatName(option.name)}</h4>
                     <p className="price text-gray-500">{ priceFormat(option.price, option.currency) }</p>
                     <p className="availability text-xs uppercase text-primary">
@@ -224,7 +220,57 @@ const EventCheckout = ({ event, error }) => {
           </section>
         }
         <section>
-          <h3>Notes</h3>
+          { event.fields && event.fields.map((field, index) => (
+            <div className="w-full mb-4" key={ field.name }>
+              <label htmlFor={ field.name }>
+                { field.name }
+              </label>
+              { field.fieldType === 'text' ?
+                <input
+                  id={ field.name }
+                  type="text"
+                  value={ signup.fields[field.name] }
+                  onChange={ e => setField('fields', (signup.fields || []).map((f, y) => {
+                    if (y === index) {
+                      return { name: field.name, value: e.target.value };
+                    }
+                    return f;
+                  })) }
+                  placeholder={ field.placeholder }
+                />:
+                field.fieldType === 'select' ?
+                  <select
+                    value={ signup.fields[field.name] }
+                    onChange={ e => setField('fields', (signup.fields || []).map((f, y) => {
+                      if (y === index) {
+                        return { name: field.name, value: e.target.value };
+                      }
+                      return f;
+                    })) }
+                  >
+                    <option value={ null }>
+                      --
+                    </option>
+                    {field.options && field.options.map(opt => (
+                      <option value={ opt } key={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>:
+                  field.fieldType === 'datetime' &&
+                <DateTimePicker
+                  value={ signup.fields[field.name] }
+                  onChange={ value => setField('fields', (signup.fields || []).map((f, y) => {
+                    if (y === index) {
+                      return { name: field.name, value: value };
+                    }
+                    return f;
+                  })) }
+                />
+              }
+            </div>
+          )) }
+          <h3>{ __('events_slug_checkout_notes') }</h3>
           <textarea
             onChange={e => setField('message', e.target.value)}
             value={ signup.message }
@@ -232,21 +278,22 @@ const EventCheckout = ({ event, error }) => {
           />
           <hr className="divide-y divide-gray-400 my-4" />
         </section>
-        { !paymentReceived && <section>
-          <h3 className="mb-2">Payment</h3>
-          { isVolunteer && <p className="text-sm">Volunteer discount: <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
-          { router.query.discount && !discount && <p className="validation-error">Discount code not found.</p> }
+        { event.paid && !paymentReceived && <section>
+          <h3 className="mb-2">{ __('events_slug_checkout_payment_title') }</h3>
+          { isVolunteer && <p className="text-sm">{ __('events_slug_checkout_volunteer_discount') } <b>{ priceFormat(event.volunteerDiscount) }</b></p> }
+          { router.query.discount && !discount && <p className="validation-error">{ __('events_slug_checkout_discount_error') }</p> }
           { discount &&
             <p className="text-sm">
-              Discount code applied ({ router.query.discount }) { discount.percent?
-                <b>{ Math.round(discount.percent * 10000) / 100 }% off</b>:
-                <b>{ priceFormat(discount.val, currency) } off</b>
+              { __('events_slug_checkout_discount_success') } ({ router.query.discount }) { discount.percent?
+                <b>{ Math.round(discount.percent * 10000) / 100 }{ __('events_slug_checkout_discount_percentage') }</b>:
+                <b>{ priceFormat(discount.val, currency) } { __('events_slug_checkout_discount_val') }</b>
               }</p>
           }
-          <p className="text-sm mb-3">Total: <b>{ priceFormat(total, currency) }</b></p>
-          <p className="text-sm">The ticket is non-refundable, except in case of cancelation.</p>
+          <p className="text-sm mb-3">{ __('events_slug_checkout_payment_total') } <b>{ priceFormat(total, currency) }</b></p>
+          <p className="text-sm">{ __('events_slug_checkout_ticket_warning') }</p>
+          { event.stripePub && <p className="text-sm">{ __('events_slug_checkout_custom_setup') }</p> }
           <div className="mt-2">
-            <Elements stripe={stripePromise}>
+            <Elements stripe={ stripe }>
               <CheckoutForm
                 type="event"
                 ticketOption={ ticketOption }
@@ -259,15 +306,24 @@ const EventCheckout = ({ event, error }) => {
                 email={ isAuthenticated ? user.email : signup.email }
                 name={ isAuthenticated ? user.screenname : signup.screenname }
                 message={ signup.message }
+                fields={ signup.fields }
                 buttonText="Book"
                 buttonDisabled={ (!isAuthenticated && (!signup.email || !signup.email.match(/@/gi) || signupError)) }
               />
             </Elements>
           </div>
         </section> }
+        { !event.paid &&
+          <div className="validation-error">
+            { __('events_slug_checkout_free_event') }
+            <div className="mt-4">
+              <Link href={ `/events/${event.slug}` }><a className="btn-primary">{ __('events_slug_checkout_go_back') }</a></Link>
+            </div>
+          </div>
+        }
         { paymentReceived &&
           <div className="success-box">
-            Your payment was received!
+            { __('events_slug_checkout_payment_success') }
           </div>
         }
       </div>

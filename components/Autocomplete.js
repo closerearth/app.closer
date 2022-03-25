@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import api, { formatSearch } from '../utils/api';
+import { __ } from '../utils/helpers';
 
 const Autocomplete = ({ endpoint, where, placeholder, value, onChange, multi }) => {
 
@@ -54,7 +55,7 @@ const Autocomplete = ({ endpoint, where, placeholder, value, onChange, multi }) 
               setActive(false);
             } }
           >
-            Close
+            { __('autocomplete_close') }
           </a>
           { loading && <div className="loading">loading...</div> }
           { options && options.length > 0 ?
@@ -97,7 +98,7 @@ const Autocomplete = ({ endpoint, where, placeholder, value, onChange, multi }) 
                 }
               }) }
             </div>:
-            <p>No results.</p>
+            <p>{ __('autocomplete_no_results') }</p>
           }
         </div>
       }

@@ -6,10 +6,12 @@ import Loading from '../../components/Loading';
 import Tabs from '../../components/Tabs';
 import UsersTable from '../../components/UsersTable';
 import Dashboard from '../../components/admin/Dashboard';
-import api, { formatSearch } from '../../utils/api';
 import models from '../../models';
 import { useAuth } from '../../contexts/auth';
 import PageNotAllowed from '../401';
+
+import api, { formatSearch } from '../../utils/api';
+import { __ } from '../../utils/helpers'
 
 const Admin = ({ token }) => {
   const { user, isLoading } = useAuth();
@@ -43,13 +45,13 @@ const Admin = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Admin</title>
+        <title>{ __('admin_title') }</title>
       </Head>
       <main className="main-content center intro">
         <Tabs
           tabs={ [
             {
-              title: 'Dashboard',
+              title: __('admin_dashboard_tile'),
               value: 'dashboard',
               content: <Dashboard />
             },

@@ -2,6 +2,9 @@
   "extends": ["next", "next/core-web-vitals", "prettier"],
   "rules": {
     "@next/next/no-img-element": "off",
-    "indent": ["error", 2]
+    "react-hooks/exhaustive-deps": "off",
+    "indent": ["error", 2],
+    "quotes": ["error", "single"],
+    "object-curly-spacing": ["error", "always"]
   }
 }

@@ -5,18 +5,19 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
 import { PLATFORM_NAME } from '../../config'
+import { __ } from '../../utils/helpers';
 
 const Search = ({ tags, error, keyword, articles }) => (
   <Layout>
     <Head>
-      <title>Search { PLATFORM_NAME }</title>
+      <title>{ __('search_title') } { PLATFORM_NAME }</title>
     </Head>
     <div className="main-content fullwidth intro">
       <div className="columns">
         <main className="col lg">
           <section className="article limit-width">
             <h1 className="long">
-              Search
+              { __('search_title') }
             </h1>
             <div className="article-previews two-col">
               { error ?
@@ -38,19 +39,19 @@ const Search = ({ tags, error, keyword, articles }) => (
                       </div>
                     );
                   }):
-                  <div className="Loading">Loading...</div>
+                  <div className="Loading">{ __('search_loading') }</div>
               }
             </div>
           </section>
         </main>
         <section className="col">
-          <h2>Related content</h2>
+          <h2>{ __('search_related_content') }</h2>
           <p className="tags">
             { tags ?
               tags.map(tag => (
                 <Link as={ `/search/${encodeURIComponent(tag)}` } href="/search/[keyword]" key={ tag }><a className="tag">{tag}</a></Link>
               )):
-              !error && <span className="Loading">Loading...</span>
+              !error && <span className="Loading">{ __('search_loading') }</span>
             }
           </p>
         </section>

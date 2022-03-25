@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/auth';
 import api from '../utils/api';
 import TimeSince from './TimeSince';
 import Pagination from './Pagination';
+import { __ } from '../utils/helpers';
 
 
 const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
@@ -32,21 +33,23 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
     try {
       await platform.application.patch(id, { ...app, status });
     } catch (err) {
-      console.log('Failed to approve application', err);
+      console.error(err);
       setErrors(err.message)
     }
   }
 
+  const loadData = async () => {
+    try {
+      platform.application.getCount(filter);
+      platform.application.get(filter);
+    } catch (err) {
+      console.log('Load error', err);
+      setErrors(err.message)
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        platform.application.getCount(filter);
-        platform.application.get(filter);
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message)
-      }
-    })();
+    loadData();
   }, [platform, filter]);
 
   return (
@@ -85,7 +88,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
               </div>
               { application.get('status') === 'conversation' &&
                 <div className="card-footer">
-                  <i>Do you wouch for <b>{application.get('name')}</b>?</i>
+                  <i>{ __('application_list_conversation') } <b>{application.get('name')}</b>?</i>
                 </div>
               }
               <div className="card-footer flex flex-row justify-between items-center">
@@ -97,7 +100,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     }}
                     className="btn-primary mr-4"
                   >
-                    Start conversation
+                    { __('appication_list_start_conversation') }
                   </button> :
                   application.get('status') === 'conversation'?
                     <button
@@ -107,7 +110,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                       }}
                       className="btn-primary mr-4"
                     >
-                    Approve member
+                      { __('application_list_approve') }
                     </button>:
                     <span />
                 }
@@ -119,7 +122,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     updateApplication(application.get('_id'), 'rejected');
                   }}
                 >
-                  Reject application
+                  { __('application_list_reject') }
                 </a>
               </div>
             </div>

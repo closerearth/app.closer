@@ -42,126 +42,126 @@ const initialState = init(Map());
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case constants.GET_ONE_INIT:
-      return state.setIn([action.model, 'byId', action.id, 'loading'], true);
-    case constants.GET_ONE_ERROR:
-      return state
-        .mergeIn([action.model, 'byId', action.id], Map({
-          error: action.error,
-          loading: false
-        }));
-    case constants.GET_ONE_SUCCESS:
-      return state
-        .mergeIn([action.model, 'byId', action.id], Map({
-          data: action.results,
-          loading: false,
-          error: null,
-          receivedAt: Date.now()
-        }));
-    case constants.POST_INIT:
-      return state
-        .set([action.model, 'isPosting'], true);
-    case constants.PATCH_INIT:
-      return state
-        map.setIn([action.model, 'byId', action._id, 'loading'], true);
-    case constants.PATCH_ERROR:
-      return state
-        map.mergeIn([action.model, 'byId', action._id], Map({
-          loading: false,
-          error: action.error
-        }));
-    case constants.POST_ERROR:
-      return state
-        .set([action.model, 'isPosting'], false)
-        .set([action.model, 'postError'], action.error);
-    case constants.POST_SUCCESS:
-      return state
-        .set([action.model, 'isPosting'], false)
-        .mergeIn([action.model, 'byId', action.id], Map({
-          data: action.results,
-          loading: false,
-          error: null,
-          receivedAt: Date.now()
-        }));
-    case constants.PATCH_SUCCESS:
-      return state.setIn([action.model, 'byId', action._id], Map({
-          data: action.results,
-          loading: false,
-          error: null,
-          receivedAt: Date.now()
+  case constants.GET_ONE_INIT:
+    return state.setIn([action.model, 'byId', action.id, 'loading'], true);
+  case constants.GET_ONE_ERROR:
+    return state
+      .mergeIn([action.model, 'byId', action.id], Map({
+        error: action.error,
+        loading: false
       }));
-    case constants.GET_INIT:
-      return state.setIn([action.model, 'byFilter', action.filterKey, 'loading'], true);
-    case constants.GET_ERROR:
-      return state
-        .mergeIn([action.model, 'byFilter', action.filterKey], Map({
-          error: action.error,
-          loading: false
-        }));
-    case constants.GET_SUCCESS:
-      return state.withMutations(map => {
-          map.setIn([action.model, 'byFilter', action.filterKey], Map({
-            data: action.results,
-            loading: false,
-            error: null,
-            receivedAt: action.receivedAt
-          }));
-          if (action.results) {
-            action.results.forEach((item) => {
-              if (item.get('_id')) {
-                map.setIn([action.model, 'byId', item.get('_id')], Map({
-                  data: item,
-                  loading: false,
-                  error: null,
-                  receivedAt: action.receivedAt
-                }))
-              }
-            });
-          } else {
-            console.log('no results', action);
+  case constants.GET_ONE_SUCCESS:
+    return state
+      .mergeIn([action.model, 'byId', action.id], Map({
+        data: action.results,
+        loading: false,
+        error: null,
+        receivedAt: Date.now()
+      }));
+  case constants.POST_INIT:
+    return state
+      .set([action.model, 'isPosting'], true);
+  case constants.PATCH_INIT:
+    return state
+    map.setIn([action.model, 'byId', action._id, 'loading'], true);
+  case constants.PATCH_ERROR:
+    return state
+    map.mergeIn([action.model, 'byId', action._id], Map({
+      loading: false,
+      error: action.error
+    }));
+  case constants.POST_ERROR:
+    return state
+      .set([action.model, 'isPosting'], false)
+      .set([action.model, 'postError'], action.error);
+  case constants.POST_SUCCESS:
+    return state
+      .set([action.model, 'isPosting'], false)
+      .mergeIn([action.model, 'byId', action.id], Map({
+        data: action.results,
+        loading: false,
+        error: null,
+        receivedAt: Date.now()
+      }));
+  case constants.PATCH_SUCCESS:
+    return state.setIn([action.model, 'byId', action._id], Map({
+      data: action.results,
+      loading: false,
+      error: null,
+      receivedAt: Date.now()
+    }));
+  case constants.GET_INIT:
+    return state.setIn([action.model, 'byFilter', action.filterKey, 'loading'], true);
+  case constants.GET_ERROR:
+    return state
+      .mergeIn([action.model, 'byFilter', action.filterKey], Map({
+        error: action.error,
+        loading: false
+      }));
+  case constants.GET_SUCCESS:
+    return state.withMutations(map => {
+      map.setIn([action.model, 'byFilter', action.filterKey], Map({
+        data: action.results,
+        loading: false,
+        error: null,
+        receivedAt: action.receivedAt
+      }));
+      if (action.results) {
+        action.results.forEach((item) => {
+          if (item.get('_id')) {
+            map.setIn([action.model, 'byId', item.get('_id')], Map({
+              data: item,
+              loading: false,
+              error: null,
+              receivedAt: action.receivedAt
+            }))
           }
-
-          return map;
         });
-    case constants.GET_COUNT_INIT:
-      return state.setIn([action.model, 'count', action.filterKey, 'loading'], true);
-    case constants.GET_COUNT_ERROR:
-      return state
-        .mergeIn([action.model, 'count', action.filterKey], Map({
-          error: action.error,
-          loading: false
-        }));
-    case constants.GET_COUNT_SUCCESS:
-      return state.setIn(
-        [action.model, 'count', action.filterKey],
-        Map({
-          data: action.results,
-          loading: false,
-          error: null,
-          receivedAt: Date.now()
-        })
-      );
-    case constants.GET_GRAPH_INIT:
-      return state.setIn([action.model, 'graph', action.filterKey, 'loading'], true);
-    case constants.GET_GRAPH_ERROR:
-      return state
-        .mergeIn([action.model, 'graph', action.filterKey], Map({
-          error: action.error,
-          loading: false
-        }));
-    case constants.GET_GRAPH_SUCCESS:
-      return state.setIn(
-        [action.model, 'graph', action.filterKey],
-        Map({
-          data: action.results,
-          loading: false,
-          error: null,
-          receivedAt: Date.now()
-        })
-      );
-    default:
-      console.log('Unknown action type', action.type);
-      return null;
+      } else {
+        console.warn('No results platform:GET_SUCCESS', action);
+      }
+
+      return map;
+    });
+  case constants.GET_COUNT_INIT:
+    return state.setIn([action.model, 'count', action.filterKey, 'loading'], true);
+  case constants.GET_COUNT_ERROR:
+    return state
+      .mergeIn([action.model, 'count', action.filterKey], Map({
+        error: action.error,
+        loading: false
+      }));
+  case constants.GET_COUNT_SUCCESS:
+    return state.setIn(
+      [action.model, 'count', action.filterKey],
+      Map({
+        data: action.results,
+        loading: false,
+        error: null,
+        receivedAt: Date.now()
+      })
+    );
+  case constants.GET_GRAPH_INIT:
+    return state.setIn([action.model, 'graph', action.filterKey, 'loading'], true);
+  case constants.GET_GRAPH_ERROR:
+    return state
+      .mergeIn([action.model, 'graph', action.filterKey], Map({
+        error: action.error,
+        loading: false
+      }));
+  case constants.GET_GRAPH_SUCCESS:
+    return state.setIn(
+      [action.model, 'graph', action.filterKey],
+      Map({
+        data: action.results,
+        loading: false,
+        error: null,
+        receivedAt: Date.now()
+      })
+    );
+  default:
+    console.warn('Unknown action type', action.type);
+    return null;
   }
 }
 export const PlatformProvider = ({ children }) => {
@@ -244,7 +244,7 @@ export const PlatformProvider = ({ children }) => {
           api.get(`/${model}`, { params: {
             ...options,
             where: options.where && formatSearch(options.where)
-          }})
+          } })
             .then(res => {
               const action = {
                 results: fromJS(res.data.results),

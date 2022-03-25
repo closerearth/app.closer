@@ -10,6 +10,7 @@ import Pagination from './Pagination';
 import Tag from './Tag';
 import Loading from './Loading';
 import { useAuth } from '../contexts/auth.js';
+import { __ } from '../utils/helpers';
 
 const UsersTable = ({ where, limit }) => {
 
@@ -23,20 +24,21 @@ const UsersTable = ({ where, limit }) => {
   const totalUsers = platform.user.findCount(params);
   const loading = platform.user.areLoading(params);
 
+  const loadData = async () => {
+    try {
+      await Promise.all([
+        platform.user.get(params),
+        platform.user.getCount(params)
+      ]);
+    } catch (err) {
+      console.error(err);
+      setErrors(err.message);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        await Promise.all([
-          platform.user.get(params),
-          platform.user.getCount(params)
-        ]);
-      } catch (err) {
-        console.log('Load error', err);
-        setErrors(err.message);
-      }
-    };
     loadData();
-  }, [where, page, params, platform.user]);
+  }, [where, page, params, limit]);
 
   return (
     <div className="card">
@@ -48,13 +50,13 @@ const UsersTable = ({ where, limit }) => {
               <thead className="card-header text-xs font-semibold uppercase text-gray-400 bg-gray-50">
                 <tr>
                   <th className="p-2 whitespace-nowrap">
-                    <div className="font-semibold text-left">Name</div>
+                    <div className="font-semibold text-left">{ __('users_table_name') }</div>
                   </th>
                   <th className="p-2 whitespace-nowrap">
-                    <div className="font-semibold text-left">Created</div>
+                    <div className="font-semibold text-left">{ __('users_table_created') }</div>
                   </th>
                   <th className="p-2 whitespace-nowrap">
-                    <div className="font-semibold text-left">Roles</div>
+                    <div className="font-semibold text-left">{ __('users_table_roles') }</div>
                   </th>
                 </tr>
               </thead>
@@ -98,7 +100,7 @@ const UsersTable = ({ where, limit }) => {
                                 platform.user.patch(user.get('_id'), { roles: user.get('roles').concat(addRole[user.get('_id')]) });
                                 setAddRole({ ...addRole, [user.get('_id')]: '' });
                               } else {
-                                console.log('Cannot add empty role!')
+                                alert('Cannot add empty role!')
                               }
                             } }
                           >
@@ -132,7 +134,7 @@ const UsersTable = ({ where, limit }) => {
             </div>
           </div>:
           <div className="p-8 text-center">
-            <i>No users found</i>
+            <i>{ __('users_table_empty') }</i>
           </div>
       }
     </div>

@@ -11,6 +11,7 @@ import PostList from './PostList';
 
 import api, { formatSearch, cdn } from '../utils/api';
 import { useAuth } from '../contexts/auth.js'
+import { __ } from '../utils/helpers';
 
 const MemberHome = () => {
   const { user, isLoading } = useAuth();
@@ -22,16 +23,16 @@ const MemberHome = () => {
   const loadData = async () => {
     try {
       const params = { sort_by: '-created', where: formatSearch({ parentType: 'channel' }) };
-      const { data: { results: posts }} = await api.get('/post', { params });
+      const { data: { results: posts } } = await api.get('/post', { params });
       const usersToLoad = posts && posts.map(post => post.createdBy);
       const userParams = { params: { where: formatSearch({ _id: { $in: usersToLoad } }) } };
-      const { data: { results: users }} = usersToLoad && await api.get('/user', userParams);
+      const { data: { results: users } } = usersToLoad && await api.get('/user', userParams);
       const channelsToLoad = posts && posts.map(post => post.channel);
       const channelsParams = { params: { where: formatSearch({ _id: { $in: channelsToLoad } }) } };
-      const { data: { results: channels }} = channelsParams && await api.get('/channel', channelsParams);
-      users && setUsersById(users.reduce((acc, val) => ({...acc, [val._id]: val}), {}));
+      const { data: { results: channels } } = channelsParams && await api.get('/channel', channelsParams);
+      users && setUsersById(users.reduce((acc, val) => ({ ...acc, [val._id]: val }), {}));
       posts && setPosts(posts);
-      channels && setChannelsById(channels.reduce((acc, val) => ({...acc, [val._id]: val}), {}));
+      channels && setChannelsById(channels.reduce((acc, val) => ({ ...acc, [val._id]: val }), {}));
     } catch (err) {
       console.log('Load error', err);
       setErrors(err.response?.data?.error || err.message)
@@ -44,7 +45,7 @@ const MemberHome = () => {
 
   if (isLoading || !user) {
     // Wait for user to be loaded in order to allow getting private data
-    return <div className="loading">Loading...</div>
+    return <div className="loading">{ __('member_home_wait_message') } </div>
   }
 
   return (
@@ -53,18 +54,19 @@ const MemberHome = () => {
         <div className="md:w-2/3 md:mr-8">
           <div className="channel">
             <div className="channel-header mb-4">
-              <h3>Aloha {user?.screenname || 'you'}!</h3>
+              <h3>{ __('member_home_title') } {user?.screenname || 'you'}!</h3>
             </div>
             <div className="channel-sub-header">
               { user.roles.includes('admin') &&
                 <Link href="/channel/create" as="/channel/create">
-                  <a>+add-channel</a>
+                  <a> { __('member_home_add_channel') } </a>
                 </Link>
               }
             </div>
             { error && <div className="error-box">{ error }</div> }
             <section>
               <PostList
+                channel={ null }
                 allowCreate
               />
             </section>

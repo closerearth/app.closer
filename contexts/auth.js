@@ -23,10 +23,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function loadUserFromCookies() {
       try {
-        const token = Cookies.get('token')
+        const token = Cookies.get('token');
         if (token) {
-          api.defaults.headers.Authorization = `Bearer ${token}`
-          const { data: { results: user } } = await api.get('/mine/user')
+          api.defaults.headers.Authorization = `Bearer ${token}`;
+          const { data: { results: user } } = await api.get('/mine/user');
           if (user) {
             setUser(user);
           }
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = (email, password) => {
-    Cookies.remove('token')
+    Cookies.remove('token');
     setUser(null)
     delete api.defaults.headers.Authorization
     window.location.pathname = '/'
