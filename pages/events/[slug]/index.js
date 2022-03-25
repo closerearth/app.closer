@@ -17,7 +17,7 @@ import PostList from '../../../components/PostList';
 import ProfilePhoto from '../../../components/ProfilePhoto';
 import Photo from '../../../components/Photo';
 import TimeSince from '../../../components/TimeSince';
-import EventsInformation from '../../../components/EventsInformation';
+import EventInformation from '../../../components/EventInformation';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
@@ -156,7 +156,7 @@ const Event = ({ event, error }) => {
                   }
                 </div>
               }
-              <EventsInformation event={event} start={start} dateFormat={dateFormat} end={end} duration={duration} dayjs={dayjs} loadError={loadError} myTickets={myTickets} prependHttp={prependHttp} isAuthenticated={isAuthenticated} encodeURIComponent={encodeURIComponent} attendees={attendees} includes={includes} e={e} attendEvent={attendEvent} featured={featured} featureEvent={featureEvent}  />
+              <EventInformation event={event} user={user} start={start} dateFormat={dateFormat} end={end} duration={duration} loadError={loadError} myTickets={myTickets} isAuthenticated={isAuthenticated} attendees={attendees} attendEvent={attendEvent} featured={featured} featureEvent={featureEvent}  />
             </div>
           </section>
           <main className="main-content max-w-prose event-page py-10">

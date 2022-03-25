@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
+import dayjs from 'dayjs';
+import { prependHttp } from '../utils/helpers';
 
-const EventsInformation = ({ event, start, dateFormat, end, duration, dayjs, loadError, myTickets, prependHttp, isAuthenticated, encodeURIComponent, attendees, attendEvent, featured, featureEvent }) => {
+
+const EventInformation = ({ event, user, start, dateFormat, end, duration, loadError, myTickets, isAuthenticated, attendees, attendEvent, featured, featureEvent }) => {
   return (<div className="md:w-1/2 p-2">
     <h2 className="text-xl font-light">
       {start && start.format(dateFormat)}
@@ -10,7 +13,7 @@ const EventsInformation = ({ event, start, dateFormat, end, duration, dayjs, loa
     </h2>
     {event.address && <h3 className="text-lg font-light text-gray-500">{event.address}</h3>}
     {end && end.isBefore(dayjs()) && <h3 className="p3 mr-2 italic">
-                      Event ended
+      Event ended
     </h3>}
     <h1 className="md:text-4xl mt-4 font-bold">{event.name}</h1>
     {loadError && <div className="validation-error">{loadError}</div>}
@@ -67,6 +70,6 @@ const EventsInformation = ({ event, start, dateFormat, end, duration, dayjs, loa
   </div>);
 }
 
-export default EventsInformation;
+export default EventInformation;
   
   
