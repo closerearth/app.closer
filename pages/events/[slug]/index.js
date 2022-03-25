@@ -156,7 +156,7 @@ const Event = ({ event, error }) => {
                   }
                 </div>
               }
-              <EventsInformation   start={start} dateFormat={dateFormat} end={end} duration={duration} dayjs={dayjs} loadError={loadError} myTickets={myTickets} prependHttp={prependHttp} isAuthenticated={isAuthenticated} encodeURIComponent={encodeURIComponent} attendees={attendees} includes={includes} e={e} attendEvent={attendEvent} featured={featured} featureEvent={featureEvent}  />
+              <EventsInformation event={event} start={start} dateFormat={dateFormat} end={end} duration={duration} dayjs={dayjs} loadError={loadError} myTickets={myTickets} prependHttp={prependHttp} isAuthenticated={isAuthenticated} encodeURIComponent={encodeURIComponent} attendees={attendees} includes={includes} e={e} attendEvent={attendEvent} featured={featured} featureEvent={featureEvent}  />
             </div>
           </section>
           <main className="main-content max-w-prose event-page py-10">

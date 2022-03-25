@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-const EventsInformation = ({ start, dateFormat, end, duration, dayjs, loadError, myTickets, prependHttp, isAuthenticated, encodeURIComponent, attendees, includes, e, attendEvent, featured, featureEvent }) => {
+const EventsInformation = ({ event, start, dateFormat, end, duration, dayjs, loadError, myTickets, prependHttp, isAuthenticated, encodeURIComponent, attendees, attendEvent, featured, featureEvent }) => {
   return (<div className="md:w-1/2 p-2">
     <h2 className="text-xl font-light">
       {start && start.format(dateFormat)}
