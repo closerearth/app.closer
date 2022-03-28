@@ -57,7 +57,7 @@ const SignupForm = () => {
           <input type="hidden" name="backurl" value={ decodeURIComponent(back || '/community') } />
           <div className="w-full mb-4">
             <label htmlFor="screenname">
-              Name
+              { __('signup_form_name') }
             </label>
             <input id="screenname" type="text" onChange={ e => updateApplication({ screenname: e.target.value }) } placeholder="Jane Birkin" />
           </div>
@@ -77,30 +77,30 @@ const SignupForm = () => {
           )) }
           <div className="w-full mb-4">
             <label htmlFor="phone">
-              Phone number (optional)
+              { __('signup_form_phone_number') }
             </label>
             <input type="phone" id="phone" value={ application.phone } onChange={ e => updateApplication({ phone: e.target.value }) } placeholder="+1 777 888 999" />
           </div>
           <div className="w-full mb-4">
             <label htmlFor="email">
-              Email
+              { __('signup_form_email') }
             </label>
             <input type="email" id="email" required value={ application.email } onChange={ e => updateApplication({ email: e.target.value }) } placeholder="you@project.co" />
           </div>
           <div className="w-full mb-4">
             <label htmlFor="password">
-              Password
+              { __('signup_form_password') }
             </label>
             <input type="password" id="password" required value={ application.password } onChange={ e => updateApplication({ password: e.target.value }) } placeholder="****" />
           </div>
           <div className="w-full mb-4">
             <label htmlFor="repeatpassword">
-              Repeat Password
+              { __('signup_form_repeat_password') }
             </label>
             <input type="password" id="repeatpassword" required value={ application.repeatpassword } onChange={ e => updateApplication({ repeatpassword: e.target.value }) } placeholder="****" />
           </div>
           <div className="w-full mb-4">
-            <button id="signupbutton" className="btn-primary" type="submit">Create account</button>
+            <button id="signupbutton" className="btn-primary" type="submit">{ __('signup_form_create') }</button>
           </div>
         </form>
       }

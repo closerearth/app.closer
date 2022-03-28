@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import EditModel from '../../components/EditModel';
 import models from '../../models';
+import { __ } from '../../utils/helpers';
 
 import api from '../../utils/api';
 
@@ -23,7 +24,7 @@ const EditChannel = ({ channel }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Edit {channel.name}</title>
+        <title>{__('edit_channel_title')} {channel.name}</title>
       </Head>
       <div className="main-content">
         <EditModel

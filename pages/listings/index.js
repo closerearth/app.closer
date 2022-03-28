@@ -6,6 +6,7 @@ import Layout from '../../components/Layout';
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 import ListingListPreview from '../../components/ListingListPreview';
+import { __ } from '../../utils/helpers';
 
 const Listings = () => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const Listings = () => {
   return (
     <Layout>
       <Head>
-        <title>Listings</title>
+        <title>{ __('listings_title') }</title>
       </Head>
       { listings && listings.get('error') &&
         <div className="validation-error">{ listings.get('error') }</div>
@@ -43,9 +44,9 @@ const Listings = () => {
         <div className="flex flex-row">
           <div className="w-3/4 mr-4">
             <div className="page-header mb-3 flex justify-between">
-              <h1>Listings</h1>
+              <h1>{ __('listings_title') }</h1>
               <div className="user-actions">
-                <Link as="/listings/create" href="/listings/create"><a className="btn-primary">Create</a></Link>
+                <Link as="/listings/create" href="/listings/create"><a className="btn-primary">{ __('listings_create') }</a></Link>
               </div>
             </div>
             <div className="listings-list">
@@ -56,7 +57,7 @@ const Listings = () => {
             </div>
           </div>
           <div className="w-1/4">
-            <h2>Book</h2>
+            <h2>{ __('listings_book') }</h2>
 
           </div>
         </div>

@@ -8,6 +8,7 @@ import EditModel from '../../../components/EditModel';
 import models from '../../../models';
 
 import api from '../../../utils/api';
+import { __ } from '../../../utils/helpers';
 
 const EditEvent = ({ event }) => {
   const router = useRouter();
@@ -17,13 +18,13 @@ const EditEvent = ({ event }) => {
     }
   }
   if (!event) {
-    return <h1>Event not found</h1>;
+    return <h1>{ __('bookings_edit_slug_not_found') }</h1>;
   }
 
   return (
     <Layout protect>
       <Head>
-        <title>Edit {event.name}</title>
+        <title>{ __('bookings_edit_slug_title') } {event.name}</title>
       </Head>
       <div className="main-content">
         <EditModel

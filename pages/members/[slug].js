@@ -6,8 +6,8 @@ import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
-import { FaPlus } from '@react-icons/all-files/fa/FaPlus';
-import { FaMinus } from '@react-icons/all-files/fa/FaMinus';
+import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
+
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
@@ -17,6 +17,7 @@ import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
 import { usePlatform } from '../../contexts/platform';
+import { __ } from '../../utils/helpers';
 
 const MemberPage = ({ member, loadError }) => {
   const [photo, setPhoto] = useState(null);
@@ -106,14 +107,14 @@ const MemberPage = ({ member, loadError }) => {
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
             <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-                { sendError && <p className="validation-error">Error: { sendError }</p> }
+                { sendError && <p className="validation-error">{ __('members_slug_error') } { sendError }</p> }
                 <form
                   onSubmit={ (e) => {
                     e.preventDefault();
                     sendMessage(introMessage);
                   }}
                 >
-                  <label>Contact {member.screenname}</label>
+                  <label>{ __('members_slug_contact') } {member.screenname}</label>
                   <textarea
                     placeholder="Type your message"
                     onChange={ e => {
@@ -122,7 +123,7 @@ const MemberPage = ({ member, loadError }) => {
                     value={ introMessage }
                     className='w-full h-32'
                   />
-                  <button type="submit" className='btn-primary mt-8 mr-2'>Send</button>{' '}
+                  <button type="submit" className='btn-primary mt-8 mr-2'>{ __('members_slug_send') }</button>{' '}
                   <a
                     href="#"
                     onClick={ (e) => {
@@ -130,7 +131,7 @@ const MemberPage = ({ member, loadError }) => {
                       setOpenIntro(false);
                     }}
                   >
-                    Cancel
+                    { __('members_slug_cancel') }
                   </a>
                 </form>
               </div>
@@ -140,12 +141,18 @@ const MemberPage = ({ member, loadError }) => {
         </>
           }
 
+          <Link  href={'/members'}>
+            <p className="text-lg cursor-pointer my-4">
+              {'< All Profiles'}
+            </p>
+          </Link>
+
           <div className='flex flex-col md:flex-row items-start'>
 
-            <div className='flex flex-col items-start space-y-5 md:w-full'>
+            <div className='flex flex-col items-start space-y-5 md:w-full md:mt-3'>
               <div className='flex flex-col md:flex-row w-full'>
-                <div className='md:w-72 items-center justify-start relative'>
-                  <div className="flex mb-4 md:mr-8 md:justify-center items-center h-full">
+                <div className='md:w-72 items-center justify-start relative top-0 right-0'>
+                  <div className="flex mb-4 md:mr-8 md:justify-center items-center">
                     {member.photo?
                       <img
                         src={`${cdn}${member.photo}-profile-lg.jpg`}
@@ -156,7 +163,7 @@ const MemberPage = ({ member, loadError }) => {
                       <FaUser className="text-gray-200 text-6xl" />
                     }
                   </div>
-                  <div className="mt-1 mb-3 justify-self-center absolute top-0 left-0 right-0 flex justify-center items-cetner h-full opacity-0 hover:opacity-80">
+                  <div className="absolute top-0 bottom-0 right-6 left-0 items-center h-full opacity-0 hover:opacity-80">
                     { isAuthenticated && member._id === currentUser._id && <UploadPhoto
                       model="user"
                       id={member._id}
@@ -167,7 +174,7 @@ const MemberPage = ({ member, loadError }) => {
                 </div>
 
                 <div className="flex flex-col items-start w-full">
-                  <h3 className='font-medium text-4xl md:text-5xl md:w-8/12 '>
+                  <h3 className='font-medium text-5xl md:text-6xl md:w-6/12 flex flex-wrap'>
                     {member.screenname}
                   </h3>
 
@@ -181,7 +188,7 @@ const MemberPage = ({ member, loadError }) => {
                     }}
                     className="btn-primary"
                   >
-                    Get introduced
+                    { __('members_slug_get_introduced') }
                   </a>
                 </div>
                   }
@@ -214,7 +221,7 @@ const MemberPage = ({ member, loadError }) => {
                           >
                             { tagline }
                             { !tagline &&
-                        <span className="placeholder">Please write a tagline.</span>
+                        <span className="placeholder">{ __('members_slug_tagline_prompt') }</span>
                             }
                           </Linkify>
                         </p>:
@@ -234,7 +241,7 @@ const MemberPage = ({ member, loadError }) => {
                           >
                             { tagline }
                             { !tagline &&
-                        <span className="placeholder">{ member.screenname } has not yet set a tagline</span>
+                        <span className="placeholder">{ member.screenname } { __('members_slug_tagline_empty') }</span>
                             }
                           </Linkify>
                         </p>
@@ -258,7 +265,7 @@ const MemberPage = ({ member, loadError }) => {
                   } }
                 />:
                 (isAuthenticated && member._id === currentUser._id) ?
-                  <p className="mt-6 w-10/12" >
+                  <p className="mt-6 w-full md:w-8/12" >
                     <Linkify
                       componentDecorator={(decoratedHref, decoratedText, key) => (
                         <a
@@ -274,7 +281,7 @@ const MemberPage = ({ member, loadError }) => {
                     >
                       { about }
                       { !about &&
-                      <span className="placeholder">Tell us more about you.</span>
+                      <span className="placeholder">{ __('members_slug_about_prompt') }</span>
                       }
                     </Linkify>
                   </p>:
@@ -294,7 +301,7 @@ const MemberPage = ({ member, loadError }) => {
                     >
                       { about }
                       { !about &&
-                      <span className="placeholder">{ member.screenname } has not yet set a description</span>
+                      <span className="placeholder">{ member.screenname } { __('members_slug_about_empty') }</span>
                       }
                     </Linkify>
                   </p>
@@ -308,10 +315,10 @@ const MemberPage = ({ member, loadError }) => {
 
             </div>
 
-            <div className="flex flex-col items-start md:w-2/3">
+            <div className="flex flex-col items-start md:w-6/12">
               <div>
                 <div className="page-title flex justify-between">
-                  <h3 className="mt-16 md:mt-10 mb-4">Meet {member.screenname} at:</h3>
+                  <h3 className="mt-16 md:mt-3 mb-4">Meet {member.screenname} at:</h3>
                 </div>
 
                 <EventsList
@@ -327,7 +334,14 @@ const MemberPage = ({ member, loadError }) => {
 
               <div className="flex flex-col">
                 <div className="flex flex-col items-start mb-10">
-                  <p className='font-semibold text-md mt-8'>Stay Social</p>
+                  <div className='flex flex-row items-center justify-between mt-8'>
+                    <p className='font-semibold text-md mr-5'>{ __('members_slug_stay_social') }</p>
+                    { isAuthenticated && member._id === currentUser._id &&
+                      <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
+                        <FaRegEdit />
+                      </a>
+                    }
+                  </div>
                   <ul className='space-y-1 mt-4'>
                     {links ? links.map((link) => (
                       <li key={link._id} className="mb-1">
@@ -342,26 +356,39 @@ const MemberPage = ({ member, loadError }) => {
                   </ul>
                 </div>
 
-                { isAuthenticated && member._id === currentUser._id &&
-                  <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
-                    { showForm ? <FaMinus /> : <FaPlus /> }
-                  </a>
-                }
 
                 { isAuthenticated && member._id === currentUser._id && showForm &&
-          <div className="flex items-start mb-10 border border-line p-4 w-fit mt-10">
-            <form className='flex flex-col space-y-7 w-96' onSubmit={handleSubmit}>
-              <div>
-                <label>Name</label>
-                <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
+          <>
+            <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+              <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
+                  <form className='flex flex-col space-y-7 w-full' onSubmit={handleSubmit}>
+                    <div>
+                      <label>{ __('members_slug_links_name') }</label>
+                      <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
+                    </div>
+                    <div>
+                      <label>{ __('members_slug_links_url') }</label>
+                      <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
+                    </div>
+                    <div className='flex flex-row items-center justify-start'>
+                      <button type='submit' className='btn-primary w-24 mr-6'>{ __('members_slug_links_submit') }</button>
+                      <a
+                        href="#"
+                        onClick={ (e) => {
+                          e.preventDefault();
+                          toggleShowForm(!showForm);
+                        }}
+                      >
+                  Cancel
+                      </a>
+                    </div>
+                  </form>
+                </div>
               </div>
-              <div>
-                <label>Url</label>
-                <input id='url'  type='text' placeholder='Url...' value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} required />
-              </div>
-              <button type='submit' className='btn-primary w-24 self-center'>Add</button>
-            </form>
-          </div>
+            </div>
+            <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          </>
                 }
 
               </div>

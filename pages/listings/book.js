@@ -11,6 +11,7 @@ import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 import api from '../../utils/api';
 import { priceFormat } from '../../utils/helpers';
+import { __ } from '../../utils/helpers';
 
 dayjs.extend(relativeTime);
 
@@ -109,15 +110,15 @@ const Book = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Book</title>
+        <title>{ __('listings_book_title') }</title>
       </Head>
       <div className="main-content">
         <section className="text-center">
-          <h2>Book your stay</h2>
+          <h2>{ __('listings_book_subtitle') }</h2>
           <form onSubmit={ e => e.preventDefault() }>
             <div className="flex justify-center items-center">
               <fieldset className="mr-3 flex flex-col justify-center items-center">
-                <label htmlFor="start">Check in</label>
+                <label htmlFor="start">{ __('listings_book_check_in') }</label>
                 <DateTimePicker
                   id="start"
                   value={ booking.start }
@@ -130,7 +131,7 @@ const Book = ({ token }) => {
                 />
               </fieldset>
               <fieldset className="flex flex-col justify-center items-center">
-                <label htmlFor="end">Check out</label>
+                <label htmlFor="end">{ __('listings_book_check_out') }</label>
                 <DateTimePicker
                   id="end"
                   value={ booking.end }
@@ -143,7 +144,7 @@ const Book = ({ token }) => {
               </fieldset>
             </div>
             <fieldset className="center-content">
-              <label htmlFor="listing">Accomodation type</label>
+              <label htmlFor="listing">{ __('listings_book_accomodation_type') }</label>
               <div className="grid grid-cols-3">
                 {listings && listings.map(listing => (
                   <div className="card" key={ listing.get('_id') }>
@@ -155,7 +156,7 @@ const Book = ({ token }) => {
                     </div>
                     <div className="card-footer">
                       <button className="btn" onClick={ e => createBooking(e, listing, booking) }>
-                        Book
+                        { __('listings_book_button') }
                       </button>
                     </div>
                   </div>

@@ -7,6 +7,7 @@ import EditModel from '../../components/EditModel';
 import api, { formatSearch } from '../../utils/api';
 import models from '../../models';
 import { useAuth } from '../../contexts/auth'
+import { __ } from '../../utils/helpers';
 
 const Settings = ({ token }) => {
 
@@ -15,7 +16,7 @@ const Settings = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Settings</title>
+        <title>{ __('settings_title') }</title>
       </Head>
       <div className="main-content">
         { user && <EditModel

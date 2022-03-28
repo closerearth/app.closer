@@ -8,6 +8,8 @@ import EditModel from '../../../components/EditModel';
 import models from '../../../models';
 
 import api from '../../../utils/api';
+import { __ } from '../../../utils/helpers';
+
 
 const EditTask = ({ task }) => {
   const router = useRouter();
@@ -17,13 +19,13 @@ const EditTask = ({ task }) => {
     }
   }
   if (!task) {
-    return <h1>Task not found</h1>;
+    return <h1>{ __('tasks_edit_error') }</h1>;
   }
 
   return (
     <Layout protect>
       <Head>
-        <title>Edit {task.name}</title>
+        <title>{ __('tasks_edit_title') } {task.name}</title>
       </Head>
       <div className="main-content">
         <EditModel

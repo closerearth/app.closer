@@ -7,6 +7,7 @@ import Layout from '../../components/Layout';
 import EditModel from '../../components/EditModel';
 import api from '../../utils/api';
 import models from '../../models';
+import { __ } from '../../utils/helpers';
 
 const AddChannel = ({ token }) => {
   const router = useRouter();
@@ -14,7 +15,7 @@ const AddChannel = ({ token }) => {
   return (
     <Layout protect>
       <Head>
-        <title>Create Channel</title>
+        <title>{ __('channel_create_title') }</title>
       </Head>
       <div className="main-content intro">
         <EditModel

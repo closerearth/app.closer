@@ -13,6 +13,7 @@ import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 import polyglot from '../../../locales/base';
+import { __ } from '../../../utils/helpers';
 
 const Ticket = ({ ticket, event, error }) => {
   const { platform } = usePlatform();
@@ -25,7 +26,7 @@ const Ticket = ({ ticket, event, error }) => {
   return (
     <Layout>
       <Head>
-        <title>Your ticket for {event.name}</title>
+        <title>{ __('tickets_slug_title') } {event.name}</title>
         <meta property="og:type" content="ticket" />
       </Head>
       <main className="main-content ticket-page flex flex-col justify-center items-center">
@@ -34,10 +35,10 @@ const Ticket = ({ ticket, event, error }) => {
             <QRCode value={ `${config.SEMANTIC_URL}/tickets/${ticket._id}` } />
           </div>
           <div className="md:ml-6">
-            <i>You are going to:</i>
+            <i>{ __('tickets_slug_subtitle') }</i>
             <h2 className="my-3">{ event.name }</h2>
-            <p>Ticket holder: <b>{ticket.name}</b></p>
-            <p>Ticket number: <b>{ticket._id}</b></p>
+            <p>{ __('tickets_slug_holder') } <b>{ticket.name}</b></p>
+            <p>{ __('tickets_slug_number') } <b>{ticket._id}</b></p>
           </div>
         </div>
         <br />

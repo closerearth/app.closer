@@ -14,6 +14,7 @@ import FeaturedEvent from './FeaturedEvent';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
+import { __ } from '../utils/helpers';
 import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
 
 dayjs.extend(relativeTime);
@@ -114,7 +115,7 @@ const Navigation = () => {
                   }}
                   title={user.screenname}
                 >
-                  Sign out
+                  { __('navigation_sign_out') }
                 </a>
               </Link>
             ) : (
@@ -123,7 +124,7 @@ const Navigation = () => {
                   className="mr-3 text-sm hidden md:flex"
                   onClick={() => toggleNav(false)}
                 >
-                  Sign in
+                  { __('navigation_sign_in') }
                 </a>
               </Link>
             )}
@@ -215,7 +216,7 @@ const Navigation = () => {
                   }}
                   title={user.screenname}
                 >
-                  Sign out
+                  { __('navigation_sign_out') }
                 </a>
               </Link>
             ) : (
@@ -224,7 +225,7 @@ const Navigation = () => {
                   className="p-4 border-b block text-xl w-full"
                   onClick={() => toggleNav(false)}
                 >
-                  Sign in
+                  { __('navigation_sign_in') }
                 </a>
               </Link>
             )}
@@ -254,7 +255,7 @@ const Navigation = () => {
               setError(null);
             }}
           >
-            Close
+            { __('navigation_close') }
           </a>
         </div>
       )}
