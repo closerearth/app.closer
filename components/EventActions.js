@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { prependHttp } from '../utils/helpers';
 
 
-const EventInformation = ({ event, user, start, dateFormat, end, duration, loadError, myTickets, isAuthenticated, attendees, attendEvent, featured, featureEvent }) => {
+const EventActions = ({ event, user, start, dateFormat, end, duration, loadError, myTickets, isAuthenticated, attendees, attendEvent, featured, featureEvent }) => {
   return (<div className="md:w-1/2 p-2">
     <h2 className="text-xl font-light">
       {start && start.format(dateFormat)}
@@ -70,6 +70,6 @@ const EventInformation = ({ event, user, start, dateFormat, end, duration, loadE
   </div>);
 }
 
-export default EventInformation;
+export default EventActions;
   
   
