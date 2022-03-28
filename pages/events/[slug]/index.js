@@ -17,6 +17,7 @@ import PostList from '../../../components/PostList';
 import ProfilePhoto from '../../../components/ProfilePhoto';
 import Photo from '../../../components/Photo';
 import TimeSince from '../../../components/TimeSince';
+import EventDescription from '../../../components/EventDescription';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
@@ -348,26 +349,7 @@ const Event = ({ event, error }) => {
               }
             </section> }
 
-            { event.description && <section className="mb-6">
-              <h3 className="font-bold text-2xl">Event description</h3>
-              <p className="whitespace-pre-line">
-                <Linkify
-                  componentDecorator={(decoratedHref, decoratedText, key) => (
-                    <a
-                      target="_blank"
-                      rel="nofollow noreferrer"
-                      href={decoratedHref}
-                      key={key}
-                      onClick={e => e.stopPropagation()}
-                    >
-                      {decoratedText}
-                    </a>
-                  )}
-                >
-                  {event.description}
-                </Linkify>
-              </p>
-            </section> }
+            { event.description && <EventDescription event={event}  /> }
           </main>
         </div>
       }
