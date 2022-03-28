@@ -5,10 +5,12 @@ import api, { formatSearch, cdn } from '../utils/api';
 import UploadPhoto from './UploadPhoto';
 
 import { useAuth } from '../contexts/auth.js';
-import polyglot from '../locales/base';
+import Polyglot from 'node-polyglot';
+import { __ } from '../utils/helpers';
 
 const Prompts = () => {
 
+  var polyglot = new Polyglot();
   const { user, isAuthenticated, setUser } = useAuth();
   const [error, setErrors] = useState(false);
   const [isClosed, setIsClosed] = useState(false);
@@ -26,8 +28,8 @@ const Prompts = () => {
         <div className="main-content p-3 justify-between flex flex-col relative text-center shadow-sm">
           <div className="p-2">
             { image ?
-              <p>{ polyglot.t('image_true', { name: user.screenname }) }</p>:
-              <p>{ polyglot.t('image_false', { name: user.screename })  }</p>
+              <p>{ __(polyglot.t('image_true', { name: user.screenname })) }</p>:
+              <p>{ __(polyglot.t('image_false', { name: user.screename })) }</p>
             }
           </div>
           <div className="flex flex-row justify-center items-center">

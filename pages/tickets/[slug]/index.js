@@ -12,10 +12,11 @@ import PageNotAllowed from '../../401';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import polyglot from '../../../locales/base';
+import Polyglot from 'node-polyglot';
 import { __ } from '../../../utils/helpers';
 
 const Ticket = ({ ticket, event, error }) => {
+  var polyglot = new Polyglot();
   const { platform } = usePlatform();
   const { user, isAuthenticated } = useAuth();
 
@@ -42,7 +43,7 @@ const Ticket = ({ ticket, event, error }) => {
           </div>
         </div>
         <br />
-        <p>{ polyglot.t('tickets_slug_support_message', { team_email: config.TEAM_EMAIL }) }</p>
+        <p>{ __(polyglot.t('tickets_slug_support_message', { team_email: config.TEAM_EMAIL })) }</p>
       </main>
     </Layout>
   );
