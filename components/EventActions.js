@@ -1,10 +1,32 @@
-import React from 'react';
+import { React, useState } from 'react';
 import Link from 'next/link';
 import dayjs from 'dayjs';
 import { prependHttp } from '../utils/helpers';
 
 
-const EventActions = ({ event, user, start, dateFormat, end, duration, loadError, myTickets, isAuthenticated, attendees, attendEvent, featured, featureEvent }) => {
+const EventActions = ({ event, user, start, dateFormat, end, duration, myTickets, isAuthenticated, attendees }) => {
+
+  const [featured, setFeatured] = useState(event && !!event.featured);
+  const [loadError, setErrors] = useState(null);
+
+  const attendEvent = async (_id, attend) => {
+    try {
+      const { data: { results: event } } = await api.post(`/attend/event/${_id}`, { attend });
+      setAttendees(attend ? event.attendees.concat(user._id) : event.attendees.filter(a => a !== user._id));
+    } catch (err) {
+      alert(`Could not RSVP: ${err.message}`)
+    }
+  }
+  const featureEvent = async (e, _id, featured) => {
+    e.preventDefault();
+    try {
+      await platform.event.patch(_id, { featured });
+      setFeatured(featured);
+    } catch (err) {
+      alert(`Could feature event: ${err.message}`)
+    }
+  }
+
   return (<div className="md:w-1/2 p-2">
     <h2 className="text-xl font-light">
       {start && start.format(dateFormat)}

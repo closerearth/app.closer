@@ -32,9 +32,7 @@ const Event = ({ event, error }) => {
     name: '',
     photo: null
   });
-  const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
-  const [featured, setFeatured] = useState(event && !!event.featured);
   const { platform } = usePlatform();
   const { user, isAuthenticated } = useAuth();
   const [attendees, setAttendees] = useState(event && (event.attendees || []));
@@ -60,14 +58,7 @@ const Event = ({ event, error }) => {
     }
   }
 
-  const attendEvent = async (_id, attend) => {
-    try {
-      const { data: { results: event } } = await api.post(`/attend/event/${_id}`, { attend });
-      setAttendees(attend ? event.attendees.concat(user._id) : event.attendees.filter(a => a !== user._id));
-    } catch (err) {
-      alert(`Could not RSVP: ${err.message}`)
-    }
-  }
+  
 
   const addPartner = async (e, partner) => {
     e.preventDefault();
@@ -80,15 +71,6 @@ const Event = ({ event, error }) => {
     }
   }
 
-  const featureEvent = async (e, _id, featured) => {
-    e.preventDefault();
-    try {
-      await platform.event.patch(_id, { featured });
-      setFeatured(featured);
-    } catch (err) {
-      alert(`Could feature event: ${err.message}`)
-    }
-  }
 
   useEffect(() => {
     if (event) {
@@ -157,7 +139,7 @@ const Event = ({ event, error }) => {
                   }
                 </div>
               }
-              <EventActions event={event} user={user} start={start} dateFormat={dateFormat} end={end} duration={duration} loadError={loadError} myTickets={myTickets} isAuthenticated={isAuthenticated} attendees={attendees} attendEvent={attendEvent} featured={featured} featureEvent={featureEvent}  />
+              <EventActions event={event} user={user} start={start} dateFormat={dateFormat} end={end} duration={duration} myTickets={myTickets} isAuthenticated={isAuthenticated} attendees={attendees} />
             </div>
           </section>
           <main className="main-content max-w-prose event-page py-10">
