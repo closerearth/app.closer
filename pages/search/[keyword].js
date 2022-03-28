@@ -4,11 +4,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
-<<<<<<< HEAD
 import polyglot from '../../locales/base';
-=======
 import { __ } from '../../utils/helpers';
->>>>>>> 5dccaac3f49821e88994b7e7ac70874860411807
 
 const Search = ({ articles, error, keyword, tags }) => console.log(error, articles) || (
   <Layout>
