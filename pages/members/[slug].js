@@ -7,6 +7,8 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
 import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
+import { FaRegTrashAlt } from '@react-icons/all-files/fa/FaRegTrashAlt';
+import { FaRegTimesCircle } from '@react-icons/all-files/fa/FaRegTimesCircle';
 
 
 import Layout from '../../components/Layout';
@@ -32,6 +34,7 @@ const MemberPage = ({ member, loadError }) => {
   const [tagline, setTagline] = useState(member && member.tagline);
   const [showForm, toggleShowForm] = useState(false)
   const [editProfile, toggleEditProfile] = useState(false);
+  const [deleteLinks, toggleDeleteLinks] = useState(false)
   const image = (photo || member.photo);
   const { platform } = usePlatform();
   const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
@@ -45,6 +48,15 @@ const MemberPage = ({ member, loadError }) => {
       console.log(err)
     }
   }
+
+  const deleteLink = async (link) => {
+    try {
+      await api.delete(`/user/${member._id}`, { links: { link } });
+    } catch (err) {
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
+    }
+  };
 
   const handleClick = (event) => {
     event.preventDefault()
@@ -337,9 +349,14 @@ const MemberPage = ({ member, loadError }) => {
                   <div className='flex flex-row items-center justify-between mt-8'>
                     <p className='font-semibold text-md mr-5'>{ __('members_slug_stay_social') }</p>
                     { isAuthenticated && member._id === currentUser._id &&
+                    <div>
                       <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
                         <FaRegEdit />
                       </a>
+                      <a href="#" onClick={(e) => {e.preventDefault(); toggleDeleteLinks(!deleteLinks) }}>
+                        <FaRegTrashAlt />
+                      </a>
+                    </div>
                     }
                   </div>
                   <ul className='space-y-1 mt-4'>
@@ -348,6 +365,10 @@ const MemberPage = ({ member, loadError }) => {
                         <a href={link.url}>
                           {link.name}
                         </a>
+                        {deleteLinks ? <a href='#' onClick={(e) => {e.preventDefault(); deleteLink(link)}} >
+                          <FaRegTimesCircle />
+                        </a>
+                          : ''}
                       </li>
                     )):
                       'No links yet'
