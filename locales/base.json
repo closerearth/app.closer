@@ -34,6 +34,7 @@
   "footer_platform": "Closer",
   "form_field_add_currency": "Add currency",
   "form_field_remove_currency": "Remove",
+  "listings_book": "Book",
   "listing_preview_per_night": "per night",
   "listing_preview_per_month": "per month",
   "listing_preview_book": "Book",
@@ -240,5 +241,3 @@
   "404_title": "Page not found",
   "404_go_back": "Take me home"
 }
-
-
