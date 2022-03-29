@@ -51,7 +51,7 @@ const EventPreview = ({ event, list }) => {
             <h4 className={`${list?'text-sm':'font-bold text-xl'}`}>
               <Link href={`/events/${event.get('slug')}`}><a>{event.get('name')}</a></Link>
             </h4>
-            <div className='flex flex-row items-center space-x-1 mt-2'>
+            <div className='flex flex-row items-center space-x-1 mt-2 text-gray-500'>
               <FaCalendarAlt />
               <p className="text-xs font-light">
                 { start && start.format(dateFormat) }
@@ -59,7 +59,7 @@ const EventPreview = ({ event, list }) => {
               </p>
             </div>
             {event.get('location') &&
-            <div className='flex flex-row items-center space-x-1 mt-2'>
+            <div className='flex flex-row items-center space-x-1 mt-2 text-gray-500'>
               <MdLocationOn/>
               <p className="text-sm">
                 Online
@@ -67,7 +67,7 @@ const EventPreview = ({ event, list }) => {
             </div>
             }
             {event.get('address') &&
-            <div className='flex flex-row items-center space-x-1 mt-2'>
+            <div className='flex flex-row items-center space-x-1 mt-2 text-gray-500'>
               <MdLocationOn/>
               <p className="text-sm">
                 { event.get('address') }
