@@ -361,8 +361,9 @@ const MemberPage = ({ member, loadError }) => {
           <>
             <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
               <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-                  <form className='flex flex-col space-y-7 w-full' onSubmit={handleSubmit}>
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-background outline-none focus:outline-none p-10">
+                  <h2 className="self-center text-lg font-normal mb-3">Add social link</h2>
+                  <form className='flex flex-col space-y-7 w-full p-2' onSubmit={handleSubmit}>
                     <div>
                       <label>{ __('members_slug_links_name') }</label>
                       <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
