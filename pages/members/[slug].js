@@ -45,13 +45,14 @@ const MemberPage = ({ member, loadError }) => {
     try {
       await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
     } catch (err) {
-      console.log(err)
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
     }
   }
 
   const deleteLink = async (link) => {
     try {
-      await api.delete(`/user/${member._id}`, { links: { link } });
+      await platform.user.patch(currentUser._id,  { links: currentUser.links.filter((item) => item.name !== link.name ) })
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
@@ -349,8 +350,8 @@ const MemberPage = ({ member, loadError }) => {
                   <div className='flex flex-row items-center justify-between mt-8'>
                     <p className='font-semibold text-md mr-5'>{ __('members_slug_stay_social') }</p>
                     { isAuthenticated && member._id === currentUser._id &&
-                    <div>
-                      <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
+                    <div className='flex flex-row items-center justify-start space-x-3 w-20'>
+                      <a href="#" name='Add links' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
                         <FaRegEdit />
                       </a>
                       <a href="#" onClick={(e) => {e.preventDefault(); toggleDeleteLinks(!deleteLinks) }}>
@@ -359,9 +360,9 @@ const MemberPage = ({ member, loadError }) => {
                     </div>
                     }
                   </div>
-                  <ul className='space-y-1 mt-4'>
+                  <ul className='flex flex-col w-full space-y-1 mt-4'>
                     {links ? links.map((link) => (
-                      <li key={link._id} className="mb-1">
+                      <li key={link._id} className="flex flex-row items-center justify-start space-x-4 mb-1">
                         <a href={link.url}>
                           {link.name}
                         </a>
