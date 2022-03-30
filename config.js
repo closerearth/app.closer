@@ -28,7 +28,8 @@ module.exports = {
   TWITTER_URL: 'https://twitter.com/closerearth',
   TELEGRAM_URL: 'https://t.me/closerdao',
   FEATURES: {
-
+    events: true,
+    booking: false
   },
   SIGNUP_FIELDS: [
     {
