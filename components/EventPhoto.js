@@ -15,8 +15,8 @@ const EventPhoto = ({
     { event && event.recording && isAuthenticated ?
       <Youtube id={ event.recording } /> :
       photo ?
-      <img className="object-cover md:h-full md:w-full" src={`${cdn}${photo}-max-lg.jpg`} alt={event.name} />:
-      event.visual &&
+        <img className="object-cover md:h-full md:w-full" src={`${cdn}${photo}-max-lg.jpg`} alt={event.name} />:
+        event.visual &&
       <img className="object-cover md:h-full md:w-full" src={event.visual} alt={event.name} />
     }
     {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&

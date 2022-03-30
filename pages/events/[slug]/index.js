@@ -155,43 +155,43 @@ const Event = ({ event, error }) => {
                       <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
                     </Link>:
                     event.paid ?
-                    <>
-                      { myTickets && myTickets.count() > 0 ?
-                        <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
-                          <a className="btn-primary mr-2">See ticket</a>
-                        </Link>:
-                        start && start.isAfter(dayjs()) &&
+                      <>
+                        { myTickets && myTickets.count() > 0 ?
+                          <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
+                            <a className="btn-primary mr-2">See ticket</a>
+                          </Link>:
+                          start && start.isAfter(dayjs()) &&
                           <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
                             <a className="btn-primary mr-2">Buy ticket</a>
                           </Link>
-                      }
-                    </>:
-                    <>
-                      {
-                        start && start.isBefore(dayjs().subtract(15, 'minutes')) && end && end.isAfter(dayjs()) && event.location?
-                          <a className="btn-primary mr-2" href={ event.location }>Join call</a>:
-                          start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
-                            <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
-                            !isAuthenticated && event.recording ?
-                              <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                                <a className="btn-primary mr-2">Signup to watch recording</a>
-                              </Link>:
-                              !isAuthenticated && start && start.isAfter(dayjs()) ?
+                        }
+                      </>:
+                      <>
+                        {
+                          start && start.isBefore(dayjs().subtract(15, 'minutes')) && end && end.isAfter(dayjs()) && event.location?
+                            <a className="btn-primary mr-2" href={ event.location }>Join call</a>:
+                            start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
+                              <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
+                              !isAuthenticated && event.recording ?
                                 <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                                  <a className="btn-primary mr-2">Signup to RSVP</a>
+                                  <a className="btn-primary mr-2">Signup to watch recording</a>
                                 </Link>:
-                                end && end.isBefore(dayjs()) && attendees?.includes(user._id) ?
-                                  <a
-                                    href="#"
-                                    className="btn-primary mr-2"
-                                    onClick={ e => {
-                                      e.preventDefault();
-                                      attendEvent(event._id, !(attendees?.includes(user._id)));
-                                    }}
-                                  >
+                                !isAuthenticated && start && start.isAfter(dayjs()) ?
+                                  <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                                    <a className="btn-primary mr-2">Signup to RSVP</a>
+                                  </Link>:
+                                  end && end.isBefore(dayjs()) && attendees?.includes(user._id) ?
+                                    <a
+                                      href="#"
+                                      className="btn-primary mr-2"
+                                      onClick={ e => {
+                                        e.preventDefault();
+                                        attendEvent(event._id, !(attendees?.includes(user._id)));
+                                      }}
+                                    >
                                     Cancel RSVP
-                                  </a>:
-                                  end && end.isBefore(dayjs()) &&
+                                    </a>:
+                                    end && end.isBefore(dayjs()) &&
                                   <button
                                     onClick={ e => {
                                       e.preventDefault();
@@ -201,8 +201,8 @@ const Event = ({ event, error }) => {
                                   >
                                     Attend
                                   </button>
-                      }
-                    </>
+                        }
+                      </>
                   }
                   {isAuthenticated && user.roles.includes('admin') &&
                     <a
