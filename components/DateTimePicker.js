@@ -14,7 +14,7 @@ const DateTimePicker = ({ value, onChange, showTime }) => {
     <div className={`${showTime?'columns-2':''}`}>
       <input
         type="date"
-        value={ datetime.format('YYYY-MM-DD') }
+        value={ datetime.format('DD-MM-YYYY') }
         placeholder="01/01/1975"
         onChange={(e) => {
           const newDate = dayjs(e.target.value).set('hour', datetime.get('hour')).set('minute', datetime.get('minute'));
