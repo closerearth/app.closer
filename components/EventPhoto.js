@@ -1,5 +1,6 @@
 import React from 'react';
 import UploadPhoto from './UploadPhoto';
+import Youtube from 'react-youtube-embed';
 
 const EventPhoto = ({
   event,
@@ -11,14 +12,21 @@ const EventPhoto = ({
   setPhoto
 }) => (
   <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-50 md:h-80">
-    {photo ?
+    { event && event.recording && isAuthenticated ?
+      <Youtube id={ event.recording } /> :
+      photo ?
       <img className="object-cover md:h-full md:w-full" src={`${cdn}${photo}-max-lg.jpg`} alt={event.name} />:
       event.visual &&
       <img className="object-cover md:h-full md:w-full" src={event.visual} alt={event.name} />
     }
-    {isAuthenticated && user._id === event.createdBy &&
-      <div className="absolute left-0 top-0 bottom-0 right-0 flex items-center justify-center opacity-0 hover:opacity-80">
-        <UploadPhoto model="event" id={event._id} onSave={id => setPhoto(id)} label={photo ? 'Change photo' : 'Add photo'} />
+    {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
+      <div className="mt-2">
+        <UploadPhoto
+          model="event"
+          minimal
+          id={event._id}
+          onSave={id => setPhoto(id)} label={photo ? 'Change photo' : 'Add photo'}
+        />
       </div>
     }
   </div>

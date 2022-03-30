@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
-import Youtube from 'react-youtube-embed';
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { useRouter } from 'next/router';
@@ -126,12 +125,14 @@ const Event = ({ event, error }) => {
         <div>
           <section className="py-5">
             <div className="main-content md:flex flex-row justify-center items-center">
-              {event.recording && isAuthenticated?
-                <div className="md:w-1/2 md:mr-4 mb-4 relative bg-gray-200 md:h-100">
-                  <Youtube id={ event.recording } />
-                </div>:
-                <EventPhoto event={event} user={user} photo={photo} cdn={cdn} isAuthenticated={isAuthenticated} setPhoto={setPhoto}  />
-              }
+              <EventPhoto
+                event={event}
+                user={user}
+                photo={photo}
+                cdn={cdn}
+                isAuthenticated={isAuthenticated}
+                setPhoto={setPhoto}
+              />
               <div className="md:w-1/2 p-2">
                 <h2 className="text-xl font-light">
                   { start && start.format(dateFormat) }
@@ -228,7 +229,7 @@ const Event = ({ event, error }) => {
                 </div>
                 {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
                   <div className="admin-actions mt-3 border-t pt-3">
-                    { user._id === event.createdBy || user.roles.includes('admin') &&
+                    { (user._id === event.createdBy || user.roles.includes('admin')) &&
                       <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
                         <a className="btn-secondary text-xs mr-2">Edit event</a>
                       </Link>
