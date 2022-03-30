@@ -38,10 +38,9 @@ const MemberPage = ({ member, loadError }) => {
   const image = (photo || member.photo);
   const { platform } = usePlatform();
   const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
+ 
 
-
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  const handleSubmit = async () => {
     try {
       await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
     } catch (err) {
