@@ -194,7 +194,7 @@ const MemberPage = ({ member, loadError }) => {
                   }
 
                   <div className='mt-1 w-full'>
-                    { editProfile?
+                    {/* { editProfile?
                       <textarea
                         autoFocus
                         value={tagline}
@@ -245,7 +245,7 @@ const MemberPage = ({ member, loadError }) => {
                             }
                           </Linkify>
                         </p>
-                    }
+                    } */}
                     <div className="font-semibold text-sm mt-1">
                       {member.timezone}
                     </div>
