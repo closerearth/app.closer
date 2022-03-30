@@ -150,41 +150,37 @@ const Event = ({ event, error }) => {
                 { loadError && <div className="validation-error">{loadError}</div> }
 
                 <div className="mt-4 event-actions flex items-center">
-                  { event.paid ?
-                    <>
-                      { myTickets && myTickets.count() > 0 ?
-                        <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
-                          <a className="btn-primary mr-2">See ticket</a>
-                        </Link>:
-                        event.ticket && start && start.isAfter(dayjs()) ?
-                          <Link href={ prependHttp(event.ticket) }>
-                            <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
+                  { event.ticket && start && start.isAfter(dayjs())?
+                    <Link href={ prependHttp(event.ticket) }>
+                      <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
+                    </Link>:
+                    event.paid ?
+                      <>
+                        { myTickets && myTickets.count() > 0 ?
+                          <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
+                            <a className="btn-primary mr-2">See ticket</a>
                           </Link>:
-                          start && start.isAfter(dayjs())?
-                            <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
-                              <a className="btn-primary mr-2">Buy ticket</a>
-                            </Link>:
-                            null
-                      }
-                    </>:
-                    <>
-                      {
-                        start && start.isBefore(dayjs().subtract(15, 'minutes')) && end && end.isAfter(dayjs()) && event.location?
-                          <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                          start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
-                            <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
-                            !isAuthenticated && event.recording ?
-                              <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                                <a className="btn-primary mr-2">Signup to watch recording</a>
-                              </Link>:
-                              !isAuthenticated && start && start.isAfter(dayjs()) ?
+                          start && start.isAfter(dayjs()) &&
+                          <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
+                            <a className="btn-primary mr-2">Buy ticket</a>
+                          </Link>
+                        }
+                      </>:
+                      <>
+                        {
+                          start && start.isBefore(dayjs().subtract(15, 'minutes')) && end && end.isAfter(dayjs()) && event.location?
+                            <a className="btn-primary mr-2" href={ event.location }>Join call</a>:
+                            start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
+                              <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
+                              !isAuthenticated && event.recording ?
                                 <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                                  <a className="btn-primary mr-2">Signup to RSVP</a>
+                                  <a className="btn-primary mr-2">Signup to watch recording</a>
                                 </Link>:
-                                end && end.isBefore(dayjs()) ?
-                                  start && start.isAfter(dayjs()) && end && end.isBefore(dayjs()) && event.location &&
-                                    <a className="btn-primary mr-2" href={ event.location }>Hop on!</a>:
-                                  attendees?.includes(user._id) ?
+                                !isAuthenticated && start && start.isAfter(dayjs()) ?
+                                  <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
+                                    <a className="btn-primary mr-2">Signup to RSVP</a>
+                                  </Link>:
+                                  end && end.isBefore(dayjs()) && attendees?.includes(user._id) ?
                                     <a
                                       href="#"
                                       className="btn-primary mr-2"
@@ -193,19 +189,20 @@ const Event = ({ event, error }) => {
                                         attendEvent(event._id, !(attendees?.includes(user._id)));
                                       }}
                                     >
-                                      Cancel RSVP
+                                    Cancel RSVP
                                     </a>:
-                                    <button
-                                      onClick={ e => {
-                                        e.preventDefault();
-                                        attendEvent(event._id, !(attendees?.includes(user._id)));
-                                      }}
-                                      className="btn-primary mr-2"
-                                    >
-                                      Attend
-                                    </button>
-                      }
-                    </>
+                                    end && end.isBefore(dayjs()) &&
+                                  <button
+                                    onClick={ e => {
+                                      e.preventDefault();
+                                      attendEvent(event._id, !(attendees?.includes(user._id)));
+                                    }}
+                                    className="btn-primary mr-2"
+                                  >
+                                    Attend
+                                  </button>
+                        }
+                      </>
                   }
                   {isAuthenticated && user.roles.includes('admin') &&
                     <a
@@ -282,7 +279,9 @@ const Event = ({ event, error }) => {
               </section>
             }
 
-            { attendees && attendees.length > 0 && <EventAttendees event={event} user={user} start={start} attendees={attendees} platform={platform} /> }
+            { attendees && attendees.length > 0 &&
+              <EventAttendees event={event} user={user} start={start} attendees={attendees} platform={platform} />
+            }
 
             { event.description && <section className="mb-6">
               <h3 className="font-bold text-2xl">Event description</h3>
