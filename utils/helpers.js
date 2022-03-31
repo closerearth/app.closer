@@ -130,6 +130,8 @@ export const getSample = (field) => {
   case 'email':
   case 'phone':
     return '';
+  case 'richText':
+    return JSON.stringify();
   case 'number':
     return 0;
   case 'currency':

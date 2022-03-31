@@ -8,6 +8,7 @@ import PriceEditor from './PriceEditor';
 import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
 import FieldsEditor from './FieldsEditor';
+import RichText from './RichText';
 
 import { __ } from '../utils/helpers';
 
@@ -185,6 +186,10 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
             value={ data[name] }
             onChange={value => update(name, value)}
           />
+          }
+          {
+            type === 'richText' && 
+            <RichText />
           }
         </>
       }

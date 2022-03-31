@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   channel: [
     { name: 'name', label: 'Channel Name', type: 'text', placeholder: 'Mauritius co-housing', required: true },
@@ -23,6 +24,7 @@ export default {
   event: [
     { name: 'name', className: 'text-4xl font-bold', label: 'Event title', type: 'text', placeholder: 'My event', required: true, tab: 'general' },
     { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A gathering around...', tab: 'general' },
+    { name: 'richText', label: 'Text editor', type: 'richText', tab: 'general' },
     { name: 'start', label: 'When does the event start?', type: 'datetime', required: true, tab: 'general' },
     { name: 'end', label: 'When does the event end?', type: 'datetime', required: true, tab: 'general' },
     {
