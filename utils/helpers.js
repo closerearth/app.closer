@@ -131,7 +131,7 @@ export const getSample = (field) => {
   case 'phone':
     return '';
   case 'richText':
-    return JSON.stringify();
+    return '';
   case 'number':
     return 0;
   case 'currency':
