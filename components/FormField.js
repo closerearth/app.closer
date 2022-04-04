@@ -8,7 +8,7 @@ import PriceEditor from './PriceEditor';
 import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
 import FieldsEditor from './FieldsEditor';
-import RichText from './RichText';
+import RichText from './RichText'
 
 import { __ } from '../utils/helpers';
 

@@ -15,6 +15,10 @@ const AddChannel = ({ token }) => {
     <Layout protect>
       <Head>
         <title>{ __('events_create_title') }</title>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
       </Head>
       <div className="main-content intro">
         <EditModel
