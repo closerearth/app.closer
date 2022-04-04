@@ -7,8 +7,6 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
 import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
-import { FaRegTrashAlt } from '@react-icons/all-files/fa/FaRegTrashAlt';
-import { FaRegTimesCircle } from '@react-icons/all-files/fa/FaRegTimesCircle';
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 
 
@@ -35,7 +33,6 @@ const MemberPage = ({ member, loadError }) => {
   const [tagline, setTagline] = useState(member && member.tagline);
   const [showForm, toggleShowForm] = useState(false)
   const [editProfile, toggleEditProfile] = useState(false);
-  const [deleteLinks, toggleDeleteLinks] = useState(false)
   const image = (photo || member.photo);
   const { platform } = usePlatform();
   const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
@@ -354,9 +351,6 @@ const MemberPage = ({ member, loadError }) => {
                       <a href="#" name='Add links' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
                         <FaRegEdit />
                       </a>
-                      <a href="#" onClick={(e) => {e.preventDefault(); toggleDeleteLinks(!deleteLinks) }}>
-                        <FaRegTrashAlt />
-                      </a>
                     </div>
                     }
                   </div>
@@ -366,10 +360,9 @@ const MemberPage = ({ member, loadError }) => {
                         <a href={link.url}>
                           {link.name}
                         </a>
-                        {deleteLinks ? <a href='#' onClick={(e) => {e.preventDefault(); deleteLink(link)}} >
+                        <a href='#' onClick={(e) => {e.preventDefault(); deleteLink(link)}} >
                           <TiDelete className='text-gray-500 text-lg hover:text-black' />
                         </a>
-                          : ''}
                       </li>
                     )):
                       'No links yet'
