@@ -9,6 +9,7 @@ import { FaUser } from '@react-icons/all-files/fa/FaUser';
 import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
 import { FaRegTrashAlt } from '@react-icons/all-files/fa/FaRegTrashAlt';
 import { FaRegTimesCircle } from '@react-icons/all-files/fa/FaRegTimesCircle';
+import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 
 
 import Layout from '../../components/Layout';
@@ -361,12 +362,12 @@ const MemberPage = ({ member, loadError }) => {
                   </div>
                   <ul className='flex flex-col w-full space-y-1 mt-4'>
                     {links ? links.map((link) => (
-                      <li key={link._id} className="flex flex-row items-center justify-start space-x-4 mb-1">
+                      <li key={link._id} className="flex flex-row items-center justify-start space-x-5 mb-1">
                         <a href={link.url}>
                           {link.name}
                         </a>
                         {deleteLinks ? <a href='#' onClick={(e) => {e.preventDefault(); deleteLink(link)}} >
-                          <FaRegTimesCircle />
+                          <TiDelete className='text-gray-500 text-lg hover:text-black' />
                         </a>
                           : ''}
                       </li>
