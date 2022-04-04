@@ -65,8 +65,8 @@ const footer = () => (
               <FaTelegramPlane />
             </a> }
           </div>
-          <div className='flex flex-col items-start mt-8'>
-            <p className="text-xs">{ __('footer_phrase') } <a href="https://closer.earth">{ __('footer_platform') }</a></p>
+          <div className='flex flex-col items-start mt-8 text-gray-500'>
+            <p className="text-xs">{ __('footer_phrase') } <a href="https://closer.earth" className="underline">{ __('footer_platform') }</a></p>
           </div>
         </div>
 

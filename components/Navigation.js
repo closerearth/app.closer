@@ -15,13 +15,14 @@ import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE } from '../config';
+import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES } from '../config';
 
 dayjs.extend(relativeTime);
 
 const platformLinks = [
   {
     label: 'Events',
+    enabled: () => FEATURES.events,
     url: '/events'
   },
   {
@@ -32,11 +33,13 @@ const platformLinks = [
   {
     label: 'Applications',
     url: '/applications',
+    enabled: () => REGISTRATION_MODE === 'curated',
     roles: ['community-curator', 'admin']
   },
   {
     label: 'Listings',
     url: '/listings',
+    enabled: () => FEATURES.booking,
     roles: ['space-host', 'admin']
   },
   {
@@ -53,7 +56,7 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-  const links = platformLinks.filter(link => (
+  const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
     (
       isAuthenticated &&
