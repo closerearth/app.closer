@@ -6,7 +6,6 @@ import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
-import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 
 
@@ -28,18 +27,7 @@ const MemberPage = ({ member, loadError }) => {
   const [sendError, setSendErrors] = useState(false);
   const [linkName, setLinkName] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
-  const [links, setLinks] = useState(() => {
-    const getLinks = async () => {
-      try {
-        const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
-        setLinks(savedData.links)
-      } catch (err) {
-        const error = err?.response?.data?.error || err.message;
-        setErrors(error);
-      }
-    }
-    return getLinks()
-  });
+  const [links, setLinks] = useState(member && member.links);
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const [tagline, setTagline] = useState(member && member.tagline);
@@ -47,22 +35,25 @@ const MemberPage = ({ member, loadError }) => {
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform();
-  // const  allLinks = platform.user.findOne(currentUser?._id)?.get('links') || member.links;
 
 
-  // const getLinks = async () => {
-  //   try {
-  //     const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
-  //     setLinks(savedData.links)
-  //   } catch (err) {
-  //     const error = err?.response?.data?.error || err.message;
-  //     setErrors(error);
-  //   }
-  // }
-
-  const handleSubmit = async () => {
+  const getLinks = async () => {
     try {
-      await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
+      const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
+      setLinks(savedData.links)
+      setErrors(null);
+    } catch (err) {
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
+    }
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      const { data: { results: savedData } } = await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
+      setLinks(savedData.links)
+      setErrors(null);
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
@@ -73,6 +64,7 @@ const MemberPage = ({ member, loadError }) => {
     try {
       const { data: { results: savedData } } = await platform.user.patch(currentUser._id,  { links: currentUser.links.filter((item) => item.name !== link.name ) })
       setLinks(savedData.links)
+      setErrors(null);
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
@@ -123,7 +115,10 @@ const MemberPage = ({ member, loadError }) => {
     setAbout(member.about);
     setTagline(member.tagline)
     setLinks(member.links)
+    getLinks()
   }, [member]);
+
+
 
   if (!member) {
     return <PageNotFound error={ error } />;
@@ -350,7 +345,7 @@ const MemberPage = ({ member, loadError }) => {
             </div>
 
             <div className="flex flex-col items-start md:w-6/12">
-              <div>
+              <div className='w-full'>
                 <div className="page-title flex justify-between">
                   <h3 className="mt-16 md:mt-3 mb-4">Meet {member.screenname} at:</h3>
                 </div>
@@ -366,14 +361,14 @@ const MemberPage = ({ member, loadError }) => {
                 />
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full">
                 <div className="flex flex-col items-start mb-10">
-                  <div className='flex flex-row items-center justify-between mt-8'>
+                  <div className='flex flex-row items-center justify-between mt-8 w-full'>
                     <p className='font-semibold text-md mr-5'>{ __('members_slug_stay_social') }</p>
                     { isAuthenticated && member._id === currentUser._id &&
                     <div className='flex flex-row items-center justify-start space-x-3 w-20'>
                       <a href="#" name='Add links' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
-                        <FaRegEdit />
+                        <button className='btn-small'>Add</button>
                       </a>
                     </div>
                     }
@@ -401,7 +396,7 @@ const MemberPage = ({ member, loadError }) => {
             <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
               <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-background outline-none focus:outline-none p-10">
-                  <h2 className="self-center text-lg font-normal mb-3">Add social link</h2>
+                  <h2 className="self-center text-lg font-normal mb-3">{ __('members_slug_links_title') }</h2>
                   <form className='flex flex-col space-y-7 w-full p-2' onSubmit={handleSubmit}>
                     <div>
                       <label>{ __('members_slug_links_name') }</label>
@@ -420,7 +415,7 @@ const MemberPage = ({ member, loadError }) => {
                           toggleShowForm(!showForm);
                         }}
                       >
-                  Cancel
+                        { __('generic_cancel') }
                       </a>
                     </div>
                   </form>
@@ -430,10 +425,7 @@ const MemberPage = ({ member, loadError }) => {
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
                 }
-
               </div>
-
-
             </div>
           </div>
         </main>
