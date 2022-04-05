@@ -1,15 +1,15 @@
 import React from 'react';
 import Photo from './Photo';
+import UploadPhoto from './UploadPhoto';
 
-const EventPartners = ({ event }) => {
+const EventPartners = ({ event, user, isAuthenticated, partnerToAdd }) => {
   return (<section className="mb-6">
     <div className="flex flex-row flex-wrap justify-center items-center">
       {event.partners && event.partners.map(partner => partner.photoUrl && <a href={partner.url || '#'} target="_blank" rel="noreferrer" key={partner.name} className="mr-3">
         <Photo id={partner.photo} photoUrl={partner.photoUrl} className="w-32 h-16" title={partner.name} />
       </a>)}
     </div>
-    {
-    /* { (isAuthenticated && user._id === event.createdBy) &&
+    { (isAuthenticated && user._id === event.createdBy) &&
      <div className="m-4">
        <h3>Add partner</h3>
        <form className="flex flex-row p-2" onSubmit={ e => addPartner(e, partnerToAdd) }>
@@ -33,8 +33,8 @@ const EventPartners = ({ event }) => {
          </div>
        </form>
      </div>
-    } */
-    }
+    } 
+    
   </section>);
 }
   
