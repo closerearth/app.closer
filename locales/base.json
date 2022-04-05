@@ -23,6 +23,7 @@
   "discounts_nominal_discount": "Nominal Discount",
   "edit_model_auth_required": "User not authenticated.",
   "edit_model_permission_denied": "You may not edit this item.",
+  "events_slug_welcome_message": "Hi",
   "events_list_no_events": "No upcoming events.",
   "fields_editor_question": "Question",
   "fields_editor_type": "Type",
@@ -34,6 +35,7 @@
   "footer_platform": "Closer",
   "form_field_add_currency": "Add currency",
   "form_field_remove_currency": "Remove",
+  "listings_book": "Book",
   "listing_preview_per_night": "per night",
   "listing_preview_per_month": "per month",
   "listing_preview_book": "Book",
@@ -174,6 +176,7 @@
   "listings_create_title": "Create Listing",
   "listings_title": "Listings",
   "listings_create": "Create",
+  "listings_book": "Book",
   "login_forgot_password_title": "Set password",
   "login_forgot_password_subtitle": "Password reset",
   "login_forgot_password_warning": "Please check your email",
@@ -240,5 +243,3 @@
   "404_title": "Page not found",
   "404_go_back": "Take me home"
 }
-
-
