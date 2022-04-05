@@ -270,7 +270,7 @@ const Event = ({ event, error }) => {
           </section>
           <main className="main-content max-w-prose event-page py-10">
             { ((event.partners && event.partners.length > 0) || (isAuthenticated && user._id === event.createdBy)) &&
-              <EventPartners event={event} user={user} isAuthenticated={isAuthenticated} partnerToAdd={partnerToAdd}/>
+              <EventPartners event={event} user={user} isAuthenticated={isAuthenticated} partnerToAdd={partnerToAdd} addPartner={addPartner} setPartnerToAdd={setPartnerToAdd}/>
             }
 
             { attendees && attendees.length > 0 && <EventAttendees event={event} user={user} start={start} attendees={attendees} platform={platform} /> }
