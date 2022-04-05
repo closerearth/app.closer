@@ -28,6 +28,18 @@ const MemberPage = ({ member, loadError }) => {
   const [sendError, setSendErrors] = useState(false);
   const [linkName, setLinkName] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
+  const [links, setLinks] = useState(() => {
+    const getLinks = async () => {
+      try {
+        const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
+        setLinks(savedData.links)
+      } catch (err) {
+        const error = err?.response?.data?.error || err.message;
+        setErrors(error);
+      }
+    }
+    return getLinks()
+  });
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const [tagline, setTagline] = useState(member && member.tagline);
@@ -35,8 +47,18 @@ const MemberPage = ({ member, loadError }) => {
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform();
-  const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
- 
+  // const  allLinks = platform.user.findOne(currentUser?._id)?.get('links') || member.links;
+
+
+  const getLinks = async () => {
+    try {
+      const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
+      setLinks(savedData.links)
+    } catch (err) {
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
+    }
+  }
 
   const handleSubmit = async () => {
     try {
@@ -49,7 +71,8 @@ const MemberPage = ({ member, loadError }) => {
 
   const deleteLink = async (link) => {
     try {
-      await platform.user.patch(currentUser._id,  { links: currentUser.links.filter((item) => item.name !== link.name ) })
+      const { data: { results: savedData } } = await platform.user.patch(currentUser._id,  { links: currentUser.links.filter((item) => item.name !== link.name ) })
+      setLinks(savedData.links)
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
@@ -99,6 +122,7 @@ const MemberPage = ({ member, loadError }) => {
   useEffect(() => {
     setAbout(member.about);
     setTagline(member.tagline)
+    getLinks()
   }, [member]);
 
   if (!member) {
