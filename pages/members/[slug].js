@@ -50,15 +50,15 @@ const MemberPage = ({ member, loadError }) => {
   // const  allLinks = platform.user.findOne(currentUser?._id)?.get('links') || member.links;
 
 
-  const getLinks = async () => {
-    try {
-      const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
-      setLinks(savedData.links)
-    } catch (err) {
-      const error = err?.response?.data?.error || err.message;
-      setErrors(error);
-    }
-  }
+  // const getLinks = async () => {
+  //   try {
+  //     const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
+  //     setLinks(savedData.links)
+  //   } catch (err) {
+  //     const error = err?.response?.data?.error || err.message;
+  //     setErrors(error);
+  //   }
+  // }
 
   const handleSubmit = async () => {
     try {
@@ -122,7 +122,7 @@ const MemberPage = ({ member, loadError }) => {
   useEffect(() => {
     setAbout(member.about);
     setTagline(member.tagline)
-    getLinks()
+    setLinks(member.links)
   }, [member]);
 
   if (!member) {
