@@ -24,6 +24,7 @@
     "@web3-onboard/walletconnect": "^2.0.1",
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
+    "bnc-notify": "^1.9.4",
     "chart.js": "^3.7.1",
     "datejs": "^1.0.0-rc3",
     "dayjs": "^1.10.4",
