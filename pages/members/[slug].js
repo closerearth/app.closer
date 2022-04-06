@@ -64,7 +64,7 @@ const MemberPage = ({ member, loadError }) => {
     try {
       const { data: { results: savedData } } = await platform.user.patch(currentUser._id,  { links: currentUser.links.filter((item) => item.name !== link.name ) })
       setLinks(savedData.links)
-      setErrors(null);
+      setErrors(null);  
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
@@ -115,8 +115,11 @@ const MemberPage = ({ member, loadError }) => {
     setAbout(member.about);
     setTagline(member.tagline)
     setLinks(member.links)
-    getLinks()
   }, [member]);
+
+  useEffect(() => {
+    getLinks()
+  }, [])
 
 
 
