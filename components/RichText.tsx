@@ -1,6 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import isHotkey from 'is-hotkey'
-import { Editable, withReact, useSlate, Slate } from 'slate-react'
+import imageExtensions from 'image-extensions'
+import isUrl from 'is-url'
+import { Editable, withReact, useSlate, Slate, useSlateStatic,
+  useSelected,
+  useFocused, ReactEditor } from 'slate-react'
 import {
   Editor,
   Transforms,
@@ -9,8 +13,10 @@ import {
   Element as SlateElement,
 } from 'slate'
 import { withHistory } from 'slate-history'
+import { css } from '@emotion/css'
 
 import { Button, Icon, Toolbar } from './RichTextComponents'
+import { ImageElement } from './custom-types'
 
 
 const HOTKEYS = {
@@ -27,11 +33,12 @@ const RichText = () => {
   const [ value, setValue] = useState<Descendant[]>(initialValue)
   const renderElement = useCallback(props => <Element {...props} />, [])
   const renderLeaf = useCallback(props => <Leaf {...props} />, [])
-  const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+  const editor = useMemo(() => withImages(withHistory(withReact(createEditor()))), [])
 
   return (
     <Slate editor={editor} value={initialValue} onChange={(v) => setValue(v)}>
       <Toolbar>
+        <InsertImageButton />
         <MarkButton format="bold" icon="format_bold" />
         <MarkButton format="italic" icon="format_italic" />
         <MarkButton format="underline" icon="format_underlined" />
@@ -132,9 +139,14 @@ const isMarkActive = (editor, format) => {
   return marks ? marks[format] === true : false
 }
 
-const Element = ({ attributes, children, element }) => {
+const Element = ( props ) => {
+  const { attributes, children, element } = props
   const style = { textAlign: element.align }
   switch (element.type) {
+  case 'image':
+    // eslint-disable-next-line jsx-a11y/alt-text
+    return (<Image {...props} />
+    )
   case 'block-quote':
     return (
       <blockquote style={style} {...attributes}>
@@ -234,42 +246,122 @@ const MarkButton = ({ format, icon }) => {
   )
 }
 
+const withImages = editor => {
+  const { insertData, isVoid } = editor
+
+  editor.isVoid = element => {
+    return element.type === 'image' ? true : isVoid(element)
+  }
+
+  editor.insertData = data => {
+    const text = data.getData('text/plain')
+    const { files } = data
+
+    if (files && files.length > 0) {
+      for (const file of files) {
+        const reader = new FileReader()
+        const [mime] = file.type.split('/')
+
+        if (mime === 'image') {
+          reader.addEventListener('load', () => {
+            const url = reader.result
+            insertImage(editor, url)
+          })
+
+          reader.readAsDataURL(file)
+        }
+      }
+    } else if (isImageUrl(text)) {
+      insertImage(editor, text)
+    } else {
+      insertData(data)
+    }
+  }
+
+  return editor
+}
+
+const insertImage = (editor, url) => {
+  const text = { text: '' }
+  const image: ImageElement = { type: 'image', url, children: [text] }
+  Transforms.insertNodes(editor, image)
+}
+
+const Image = ({ attributes, children, element }) => {
+  const editor = useSlateStatic()
+  const path = ReactEditor.findPath(editor, element)
+
+  const selected = useSelected()
+  const focused = useFocused()
+  return (
+    <div {...attributes}>
+      {children}
+      <div
+        contentEditable={false}
+        className={css`
+          position: relative;
+        `}
+      >
+        <img
+          src={element.url}
+          className={css`
+            display: block;
+            max-width: 100%;
+            max-height: 20em;
+            box-shadow: ${selected && focused ? '0 0 0 3px #B4D5FF' : 'none'};
+          `}
+        />
+        <Button
+          active
+          onClick={() => Transforms.removeNodes(editor, { at: path })}
+          className={css`
+            display: ${selected && focused ? 'inline' : 'none'};
+            position: absolute;
+            top: 0.5em;
+            left: 0.5em;
+            background-color: white;
+          `}
+        >
+          <Icon>delete</Icon>
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const InsertImageButton = () => {
+  const editor = useSlateStatic()
+  return (
+    <Button
+      onMouseDown={event => {
+        event.preventDefault()
+        const url = window.prompt('Enter the URL of the image:')
+        if (url && !isImageUrl(url)) {
+          alert('URL is not an image')
+          return
+        }
+        insertImage(editor, url)
+      }}
+    >
+      <Icon>image</Icon>
+    </Button>
+  )
+}
+
+const isImageUrl = url => {
+  if (!url) return false
+  if (!isUrl(url)) return false
+  const ext = new URL(url).pathname.split('.').pop()
+  return imageExtensions.includes(ext)
+}
+
 const initialValue: Descendant[] = [
   {
     type: 'paragraph',
     children: [
-      { text: 'This is editable ' },
-      { text: 'rich', bold: true },
-      { text: ' text, ' },
-      { text: 'much', italic: true },
-      { text: ' better than a ' },
-      { text: '<textarea>', code: true },
-      { text: '!' },
+      { text: 'Insert text and images for your event description ' },
     ],
-  },
-  {
-    type: 'paragraph',
-    children: [
-      {
-        text:
-          'Since it\'s rich text, you can do things like turn a selection of text ',
-      },
-      { text: 'bold', bold: true },
-      {
-        text:
-          ', or add a semantically rendered block quote in the middle of the page, like this:',
-      },
-    ],
-  },
-  {
-    type: 'block-quote',
-    children: [{ text: 'A wise quote.' }],
-  },
-  {
-    type: 'paragraph',
-    align: 'center',
-    children: [{ text: 'Try it out for yourself!' }],
-  },
+  }
 ]
 
 export default RichText;
