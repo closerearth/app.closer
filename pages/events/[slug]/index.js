@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
@@ -24,19 +24,22 @@ import { usePlatform } from '../../../contexts/platform';
 
 dayjs.extend(advancedFormat)
 
-const Event = ({ event, error }) => {
+const Event = ({ event, error, filter, channel }) => {
 
   const [photo, setPhoto] = useState(event && event.photo);
   const [partnerToAdd, setPartnerToAdd] = useState({
     name: '',
     photo: null
   });
+  const [creatorToAdd, setCreatorToAdd] = useState(event && event.createdBy)
+  console.log(creatorToAdd)
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
   const { platform } = usePlatform();
   const { user, isAuthenticated } = useAuth();
   const [attendees, setAttendees] = useState(event && (event.attendees || []));
+  const [addCreator, toggleAddCreator] = useState(false)
   const [ticketsSold, setTicketsSold] = useState([]);
   const ticketsFilter = event && { where: { event: event._id, status: 'approved' } };
   const myTicketFilter = event && { where: { event: event._id, status: 'approved', email: user && user.email } };
@@ -47,17 +50,26 @@ const Event = ({ event, error }) => {
   const isThisYear = dayjs().isSame(start, 'year');
   const dateFormat = isThisYear ? 'MMMM Do HH:mm' : 'YYYY MMMM Do HH:mm';
   const myTickets = platform.ticket.find(myTicketFilter);
-  const users = platform.user.find();
+  const where = Object.assign({}, filter, (channel && {
+    category: channel
+  }));
+  const params = useMemo(() => ({ where, sort_by: 'created' }), [where]);
+  const users = platform.user.find(params);
+
 
   const loadData = async () => {
     if (event.attendees && event.attendees.length > 0) {
-      const params = { where: { _id: { $in: event.attendees } } };
+      const paramsAttendees = { where: { _id: { $in: event.attendees } } };
       await Promise.all([
         // Load attendees list
-        platform.user.get(params),
-        platform.ticket.get(myTicketFilter)
+        platform.user.get(paramsAttendees),
+        platform.ticket.get(myTicketFilter),
       ]);
     }
+    await Promise.all([
+      // Load users list
+      platform.user.get(params)
+    ])
   }
 
   const attendEvent = async (_id, attend) => {
@@ -80,6 +92,17 @@ const Event = ({ event, error }) => {
     }
   }
 
+  const handleCreatorSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await platform.user.patch(creatorToAdd._id, {
+        roles: (creatorToAdd.roles || []).concat('space-host')
+      });
+    } catch (err) {
+      alert(`Could not add creator: ${err.message}`)
+    }
+  }
+
   const featureEvent = async (e, _id, featured) => {
     e.preventDefault();
     try {
@@ -94,7 +117,7 @@ const Event = ({ event, error }) => {
     if (event) {
       loadData();
     }
-  }, [event, ticketsSold, user]);
+  }, [event, channel, filter, ticketsSold, user]);
 
   if (!event) {
     return <PageNotFound error={ error } />;
@@ -238,7 +261,50 @@ const Event = ({ event, error }) => {
                       </Link>
                     }
                     { (user._id === event.createdBy || user.roles.includes('admin')) &&
-                        <a className="btn-secondary text-xs mr-2">Add co-creator</a>
+                        <a className="btn-secondary text-xs mr-2" onClick={() => toggleAddCreator(!addCreator)} >Add co-creator</a>
+                    }
+                    { addCreator && 
+
+<>
+  <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+    <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+      <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-y-1 w-full bg-background outline-none focus:outline-none p-10">
+        <div className="flex items-center justify-center w-full">
+          <h3 className="text-xl font-normal mb-3">Add creator</h3>
+        </div>  
+        <form className="flex flex-col" onSubmit={(e) => handleCreatorSubmit(e)} >
+          <div className="flex flex-col w-full mt-5">
+            <label>Creator</label>
+            <select value={creatorToAdd} onChange={(e) => setCreatorToAdd(e.target.value)}>
+              {  users && users.count() > 0 ? (
+                users.map((user) => 
+                  <option value={ platform.user.findOne(user._id) } key={ user.get('_id') } > { user.get('screenname') }</option>
+                )
+              ) : 'No users'
+              }
+            </select>
+          </div>
+          <div className="flex flex-col mt-5 w-full">
+            <div className='flex flex-row items-center justify-start'>
+              <button type='submit' className='btn-primary w-24 mr-6'>Add</button>
+              <a
+                href="#"
+                onClick={ (e) => {
+                  e.preventDefault();
+                  toggleAddCreator(!addCreator);
+                }}
+              >
+              Cancel
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+</>
+
                     }
                   </div>
                 }
