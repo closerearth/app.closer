@@ -47,6 +47,7 @@ const Event = ({ event, error }) => {
   const isThisYear = dayjs().isSame(start, 'year');
   const dateFormat = isThisYear ? 'MMMM Do HH:mm' : 'YYYY MMMM Do HH:mm';
   const myTickets = platform.ticket.find(myTicketFilter);
+  const users = platform.user.find();
 
   const loadData = async () => {
     if (event.attendees && event.attendees.length > 0) {
@@ -235,6 +236,9 @@ const Event = ({ event, error }) => {
                       <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
                         <a className="btn-secondary text-xs mr-2">View tickets</a>
                       </Link>
+                    }
+                    { (user._id === event.createdBy || user.roles.includes('admin')) &&
+                        <a className="btn-secondary text-xs mr-2">Add co-creator</a>
                     }
                   </div>
                 }
