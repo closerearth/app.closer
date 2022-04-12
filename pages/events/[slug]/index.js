@@ -32,7 +32,6 @@ const Event = ({ event, error, filter, channel }) => {
     photo: null
   });
   const [creatorToAdd, setCreatorToAdd] = useState(event && event.createdBy)
-  console.log(creatorToAdd)
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
@@ -95,8 +94,8 @@ const Event = ({ event, error, filter, channel }) => {
   const handleCreatorSubmit = async (e) => {
     e.preventDefault();
     try {
-      await platform.user.patch(creatorToAdd._id, {
-        roles: (creatorToAdd.roles || []).concat('space-host')
+      await platform.user.patch(creatorToAdd, {
+        roles: (platform.user.findOne(creatorToAdd).roles || []).concat('space-host')
       });
     } catch (err) {
       alert(`Could not add creator: ${err.message}`)
@@ -278,7 +277,7 @@ const Event = ({ event, error, filter, channel }) => {
             <select value={creatorToAdd} onChange={(e) => setCreatorToAdd(e.target.value)}>
               {  users && users.count() > 0 ? (
                 users.map((user) => 
-                  <option value={ platform.user.findOne(user._id) } key={ user.get('_id') } > { user.get('screenname') }</option>
+                  <option value={ user.get('_id') } key={ user.get('_id') } > { user.get('screenname') }</option>
                 )
               ) : 'No users'
               }
