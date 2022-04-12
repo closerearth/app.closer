@@ -7,6 +7,7 @@ import EditModel from '../../components/EditModel';
 import api from '../../utils/api';
 import models from '../../models';
 import { __ } from '../../utils/helpers';
+import Script from 'next/script';
 
 const AddChannel = ({ token }) => {
   const router = useRouter();
@@ -28,6 +29,7 @@ const AddChannel = ({ token }) => {
           onSave={ event => router.push(`/events/${event.slug}`) }
         />
       </div>
+      <Script src="js/medium-editor.js" />
     </Layout>
   );
 }
