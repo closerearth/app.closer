@@ -8,7 +8,7 @@ import PriceEditor from './PriceEditor';
 import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
 import FieldsEditor from './FieldsEditor';
-import TextEditor from './TextEditor'
+import TextEditorDynamic from './TextEditorDynamic'
 
 import { __ } from '../utils/helpers';
 
@@ -189,7 +189,7 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
           }
           {
             type === 'richText' && 
-            <TextEditor />
+            <TextEditorDynamic />
           }
         </>
       }
