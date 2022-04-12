@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useRef, useMemo, useState, useEffect } from 'react'
 import isHotkey from 'is-hotkey'
 import imageExtensions from 'image-extensions'
 import isUrl from 'is-url'
@@ -8,64 +8,38 @@ import { Editable, withReact, useSlate, Slate, useSlateStatic,
 import {
   Editor,
   Transforms,
+  Text,
   createEditor,
   Descendant,
-  Element as SlateElement,
+  Range,
 } from 'slate'
 import { withHistory } from 'slate-history'
 import { css } from '@emotion/css'
 
-import { Button, Icon, Toolbar } from './RichTextComponents'
+import { Button, Icon, Menu, Portal } from './RichTextComponents'
 import { ImageElement } from './custom-types'
 
 
-const HOTKEYS = {
-  'mod+b': 'bold',
-  'mod+i': 'italic',
-  'mod+u': 'underline',
-  'mod+`': 'code',
-}
-
-const LIST_TYPES = ['numbered-list', 'bulleted-list']
-const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']
 
 const RichText = () => {
   const [ value, setValue] = useState<Descendant[]>(initialValue)
-  const renderElement = useCallback(props => <Element {...props} />, [])
-  const renderLeaf = useCallback(props => <Leaf {...props} />, [])
   const editor = useMemo(() => withImages(withHistory(withReact(createEditor()))), [])
 
   return (
     <Slate editor={editor} value={initialValue} onChange={(v) => setValue(v)}>
-      <Toolbar>
-        <InsertImageButton />
-        <MarkButton format="bold" icon="format_bold" />
-        <MarkButton format="italic" icon="format_italic" />
-        <MarkButton format="underline" icon="format_underlined" />
-        <MarkButton format="code" icon="code" />
-        <BlockButton format="heading-one" icon="looks_one" />
-        <BlockButton format="heading-two" icon="looks_two" />
-        <BlockButton format="block-quote" icon="format_quote" />
-        <BlockButton format="numbered-list" icon="format_list_numbered" />
-        <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-        <BlockButton format="left" icon="format_align_left" />
-        <BlockButton format="center" icon="format_align_center" />
-        <BlockButton format="right" icon="format_align_right" />
-        <BlockButton format="justify" icon="format_align_justify" />
-      </Toolbar>
+      <HoveringToolbar /> 
       <Editable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        placeholder="Enter some rich text…"
-        spellCheck
-        autoFocus
-        onKeyDown={event => {
-          for (const hotkey in HOTKEYS) {
-            if (isHotkey(hotkey, event as any)) {
-              event.preventDefault()
-              const mark = HOTKEYS[hotkey]
-              toggleMark(editor, mark)
-            }
+        renderLeaf={props => <Leaf {...props} />}
+        placeholder="Enter some text..."
+        onDOMBeforeInput={(event: InputEvent) => {
+          event.preventDefault()
+          switch (event.inputType) {
+          case 'formatBold':
+            return toggleFormat(editor, 'bold')
+          case 'formatItalic':
+            return toggleFormat(editor, 'italic')
+          case 'formatUnderline':
+            return toggleFormat(editor, 'underlined')
           }
         }}
       />
@@ -73,123 +47,21 @@ const RichText = () => {
   )
 }
 
-const toggleBlock = (editor, format) => {
-  const isActive = isBlockActive(
+const toggleFormat = (editor, format) => {
+  const isActive = isFormatActive(editor, format)
+  Transforms.setNodes(
     editor,
-    format,
-    TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
+    { [format]: isActive ? null : true },
+    { match: Text.isText, split: true }
   )
-  const isList = LIST_TYPES.includes(format)
+}
 
-  Transforms.unwrapNodes(editor, {
-    match: n =>
-      !Editor.isEditor(n) &&
-      SlateElement.isElement(n) &&
-      LIST_TYPES.includes(n.type) &&
-      !TEXT_ALIGN_TYPES.includes(format),
-    split: true,
+const isFormatActive = (editor, format) => {
+  const [match] = Editor.nodes(editor, {
+    match: n => n[format] === true,
+    mode: 'all',
   })
-  let newProperties: Partial<SlateElement>
-  if (TEXT_ALIGN_TYPES.includes(format)) {
-    newProperties = {
-      align: isActive ? undefined : format,
-    }
-  } else {
-    newProperties = {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : format,
-    }
-  }
-  Transforms.setNodes<SlateElement>(editor, newProperties)
-
-  if (!isActive && isList) {
-    const block = { type: format, children: [] }
-    Transforms.wrapNodes(editor, block)
-  }
-}
-
-const toggleMark = (editor, format) => {
-  const isActive = isMarkActive(editor, format)
-
-  if (isActive) {
-    Editor.removeMark(editor, format)
-  } else {
-    Editor.addMark(editor, format, true)
-  }
-}
-
-const isBlockActive = (editor, format, blockType = 'type') => {
-  const { selection } = editor
-  if (!selection) return false
-
-  const [match] = Array.from(
-    Editor.nodes(editor, {
-      at: Editor.unhangRange(editor, selection),
-      match: n =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        n[blockType] === format,
-    })
-  )
-
   return !!match
-}
-
-const isMarkActive = (editor, format) => {
-  const marks = Editor.marks(editor)
-  return marks ? marks[format] === true : false
-}
-
-const Element = ( props ) => {
-  const { attributes, children, element } = props
-  const style = { textAlign: element.align }
-  switch (element.type) {
-  case 'image':
-    // eslint-disable-next-line jsx-a11y/alt-text
-    return (<Image {...props} />
-    )
-  case 'block-quote':
-    return (
-      <blockquote style={style} {...attributes}>
-        {children}
-      </blockquote>
-    )
-  case 'bulleted-list':
-    return (
-      <ul style={style} {...attributes}>
-        {children}
-      </ul>
-    )
-  case 'heading-one':
-    return (
-      <h1 style={style} {...attributes}>
-        {children}
-      </h1>
-    )
-  case 'heading-two':
-    return (
-      <h2 style={style} {...attributes}>
-        {children}
-      </h2>
-    )
-  case 'list-item':
-    return (
-      <li style={style} {...attributes}>
-        {children}
-      </li>
-    )
-  case 'numbered-list':
-    return (
-      <ol style={style} {...attributes}>
-        {children}
-      </ol>
-    )
-  default:
-    return (
-      <p style={style} {...attributes}>
-        {children}
-      </p>
-    )
-  }
 }
 
 const Leaf = ({ attributes, children, leaf }) => {
@@ -197,49 +69,87 @@ const Leaf = ({ attributes, children, leaf }) => {
     children = <strong>{children}</strong>
   }
 
-  if (leaf.code) {
-    children = <code>{children}</code>
-  }
-
   if (leaf.italic) {
     children = <em>{children}</em>
   }
 
-  if (leaf.underline) {
+  if (leaf.underlined) {
     children = <u>{children}</u>
   }
 
   return <span {...attributes}>{children}</span>
 }
 
-const BlockButton = ({ format, icon }) => {
+const HoveringToolbar = () => {
+  const ref = useRef<HTMLDivElement | null>()
   const editor = useSlate()
+  const inFocus = useFocused()
+
+  useEffect(() => {
+    const el = ref.current
+    const { selection } = editor
+
+    if (!el) {
+      return
+    }
+
+    if (
+      !selection ||
+      !inFocus ||
+      Range.isCollapsed(selection) ||
+      Editor.string(editor, selection) === ''
+    ) {
+      el.removeAttribute('style')
+      return
+    }
+
+    const domSelection = window.getSelection()
+    const domRange = domSelection.getRangeAt(0)
+    const rect = domRange.getBoundingClientRect()
+    el.style.opacity = '1'
+    el.style.top = `${rect.top + window.pageYOffset - el.offsetHeight}px`
+    el.style.left = `${rect.left +
+      window.pageXOffset -
+      el.offsetWidth / 2 +
+      rect.width / 2}px`
+  })
+
   return (
-    <Button
-      active={isBlockActive(
-        editor,
-        format,
-        TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type'
-      )}
-      onMouseDown={event => {
-        event.preventDefault()
-        toggleBlock(editor, format)
-      }}
-    >
-      <Icon>{icon}</Icon>
-    </Button>
+    <Portal>
+      <Menu
+        ref={ref}
+        className={css`
+          padding: 8px 7px 6px;
+          position: absolute;
+          z-index: 1;
+          top: -10000px;
+          left: -10000px;
+          margin-top: -6px;
+          opacity: 0;
+          background-color: #222;
+          border-radius: 4px;
+          transition: opacity 0.75s;
+        `}
+        onMouseDown={e => {
+          // prevent toolbar from taking focus away from editor
+          e.preventDefault()
+        }}
+      >
+        <FormatButton format="bold" icon="format_bold" />
+        <FormatButton format="italic" icon="format_italic" />
+        <FormatButton format="underlined" icon="format_underlined" />
+      </Menu>
+    </Portal>
   )
 }
 
-const MarkButton = ({ format, icon }) => {
+const FormatButton = ({ format, icon }) => {
   const editor = useSlate()
   return (
     <Button
-      active={isMarkActive(editor, format)}
-      onMouseDown={event => {
-        event.preventDefault()
-        toggleMark(editor, format)
-      }}
+      reversed
+      active={isFormatActive(editor, format)}
+      onClick={() => toggleFormat(editor, format)}
     >
       <Icon>{icon}</Icon>
     </Button>
@@ -303,6 +213,7 @@ const Image = ({ attributes, children, element }) => {
         `}
       >
         <img
+          alt='image'
           src={element.url}
           className={css`
             display: block;
@@ -359,9 +270,24 @@ const initialValue: Descendant[] = [
   {
     type: 'paragraph',
     children: [
-      { text: 'Insert text and images for your event description ' },
+      {
+        text:
+          'This example shows how you can make a hovering menu appear above your content, which you can use to make text ',
+      },
+      { text: 'bold', bold: true },
+      { text: ', ' },
+      { text: 'italic', italic: true },
+      { text: ', or anything else you might want to do!' },
     ],
-  }
+  },
+  {
+    type: 'paragraph',
+    children: [
+      { text: 'Try it out yourself! Just ' },
+      { text: 'select any piece of text and the menu will appear', bold: true },
+      { text: '.' },
+    ],
+  },
 ]
 
 export default RichText;
