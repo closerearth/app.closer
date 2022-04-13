@@ -10,6 +10,7 @@ import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATIO
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
+
 const Application = ({ tags, query, signedIn, Component, pageProps, token, user }) => {
   const router = useRouter();
 

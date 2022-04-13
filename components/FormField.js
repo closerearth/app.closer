@@ -189,7 +189,7 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
           }
           {
             type === 'richText' && 
-            <TextEditorDynamic />
+              <TextEditorDynamic />
           }
         </>
       }

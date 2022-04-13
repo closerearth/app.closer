@@ -32,4 +32,4 @@ const TextEditor = () => {
     </div>
   );
 };
-export default TextEditor;
+export default TextEditor; 

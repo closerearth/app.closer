@@ -1,0 +1,82 @@
+[33mad7c110[m[33m ([m[1;36mHEAD -> [m[1;32mtext-editor[m[33m, [m[1;31morigin/text-editor[m[33m)[m correct typo
+[33m5325468[m add script again
+[33me8b6cdf[m revert additional actions on constructor
+[33m928265b[m add unique id to relative div
+[33mf3b99ea[m change MediumEditor constructor (branc failing to deploy)
+[33m9093548[m move Script to FormField.js
+[33m2b28502[m delete next script reference to medium-editor
+[33me52ba0e[m delete eslint disable rule
+[33m0bfadb6[m add complete toolbar with many buttons
+[33m91bd1ef[m disable SSR for text editor so it works
+[33m290b54d[m switched library to a ligther one
+[33m2abfdba[m change editor to a hovering toolbar like the one in Medium
+[33md8f277c[m save changes
+[33ma89278c[m add image uploader with url address
+[33m01bfb2f[m comment 'description' input in models
+[33m83b36bd[m add a complete toolbar to text editor like the one in Medium website
+[33ma187601[m Merge branch 'develop' of https://github.com/closerearth/app.closer into text-editor
+[33m9feb63a[m create hovering toolbar in text editor
+[33ma21095c[m changed return value of 'richText' case in getSample function
+[33ma4b6ec4[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m Update deps
+[33md93a3ff[m add rich text editor to create event form
+[33mdcb15d7[m Update footer
+[33m3ec15a5[m Fix lint
+[33m2abfe7a[m Fix show buy button for external tickets
+[33m9733a27[m Fix list previews
+[33mbc3cf6f[m Add feature toggle
+[33m06ce33a[m Keep upload button present, fix missinng edit for admin
+[33m08e85e2[m Fix formatting
+[33m50f7c4a[m Make location gray
+[33m9270e32[m Fix missing events_slug_welcome_message
+[33m564af55[m Merge remote-tracking branch 'origin/develop' into develop
+[33mbd9fec1[m Remove global pricing
+[33m41ff5fc[m Merge pull request #31 from closerearth/event-photo
+[33m4f41e45[m Merge pull request #32 from closerearth/listings-bug
+[33m62a7dcb[m[33m ([m[1;31morigin/listings-bug[m[33m)[m fixed bug assigned on Trello
+[33m5002e68[m[33m ([m[1;31morigin/event-photo[m[33m)[m create EventPhoto component
+[33m5dccaac[m Merge pull request #29 from closerearth/revert-26-events-partners
+[33m293da13[m[33m ([m[1;31morigin/revert-26-events-partners[m[33m)[m Revert "Events Partners"
+[33m614b128[m Merge pull request #24 from closerearth/members-profile
+[33m37771aa[m Merge pull request #26 from closerearth/events-partners
+[33m111fa11[m Merge branch 'develop' into events-partners
+[33m52c1f06[m Merge pull request #27 from closerearth/events-attendees
+[33m9fec6d4[m Merge pull request #18 from closerearth/events-preview
+[33m98341f2[m[33m ([m[1;31morigin/events-attendees[m[33m)[m moved event attendees section to a single component
+[33m473ae33[m extract partners section into a single component
+[33me8e8374[m[33m ([m[1;31morigin/members-profile[m[33m)[m commit changes
+[33med13003[m add 'all profiles' button
+[33m107be2f[m add edit link icon, styled 'add links' as a modal dialog and fixed margins
+[33mab851f7[m[33m ([m[1;31morigin/events-preview[m[33m)[m add styled to events preview
+[33me6e56cc[m Merge branch 'develop' of https://github.com/closerearth/app.closer into events-preview
+[33mc54899d[m Merge pull request #21 from closerearth/global-string-follow-up
+[33m18d9313[m[33m ([m[1;31morigin/global-string-follow-up[m[33m)[m fixed import on listings --> book
+[33m38d9e6e[m listings book.js, create.js and index.js
+[33mc7dc1e1[m listings --> [slug] --> edit
+[33meb4f415[m listings --> [slug] --> checkout
+[33me2b2873[m fixed FormField add and remove currency strings
+[33m38ae826[m fixed string in base.json
+[33m78e1bce[m fixed typo error
+[33maedf9c3[m 401 and 404
+[33md09009f[m tickets
+[33mebeaa10[m tasks
+[33med7fb59[m tasks --> [slug]
+[33md6f6c08[m search
+[33m3f5ae30[m search --> [keyword]
+[33m08a339c[m members
+[33md0b0a48[m members --> [slug]
+[33m8f8441e[m login --> set-password
+[33m56a8b92[m login
+[33m481c3c8[m login --> forgot-password
+[33mbdd9645[m events
+[33mbcbf2d8[m events --> create
+[33mfaa8d8f[m events --> [slug] --> tickets
+[33mafa5ef4[m events --> [slug] --> edit
+[33m6de5e58[m events --> [slug] --> checkout
+[33m472af07[m edit-channel
+[33m5d41cc7[m community
+[33m425f230[m channel --> create
+[33m159992c[m bookings
+[33m6e595f5[m bookings --> [slug]
+[33me2d2ab7[m bookings --> edit
+[33m569d364[m admin and applications pages
+[33mf29781d[m UsersTable
