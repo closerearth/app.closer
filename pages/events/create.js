@@ -29,7 +29,6 @@ const AddChannel = ({ token }) => {
           onSave={ event => router.push(`/events/${event.slug}`) }
         />
       </div>
-      <Script src="js/medium-editor.js" />
     </Layout>
   );
 }
