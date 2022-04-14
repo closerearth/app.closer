@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css'
+import 'react-quill/dist/quill.bubble.css'
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 
@@ -47,7 +48,7 @@ const formats = [
 const TextEditor = () => {
   const [value, setValue] = useState('')
   return(
-    <ReactQuill placeholder='Compose here and let magic happen!' value={value} onChange={setValue} modules={modules} formats={formats} />
+    <ReactQuill placeholder='Compose here and let magic happen!' value={value} onChange={setValue} modules={modules} formats={formats} theme='bubble' />
   )
 }
 
