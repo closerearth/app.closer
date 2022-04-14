@@ -7,7 +7,6 @@ import EditModel from '../../components/EditModel';
 import api from '../../utils/api';
 import models from '../../models';
 import { __ } from '../../utils/helpers';
-import Script from 'next/Script'
 
 const AddChannel = ({ token }) => {
   const router = useRouter();
