@@ -48,7 +48,7 @@ const formats = [
 const TextEditor = () => {
   const [value, setValue] = useState('')
   return(
-    <ReactQuill placeholder='Compose here and let magic happen!' value={value} onChange={setValue} modules={modules} formats={formats} theme='bubble' />
+    <ReactQuill className='border-2 rounded-lg h-52 overflow-ellipsis' placeholder='Compose here and let magic happen!' value={value} onChange={setValue} modules={modules} formats={formats} theme='bubble' />
   )
 }
 

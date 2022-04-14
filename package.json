@@ -31,6 +31,7 @@
     "emotion": "^11.0.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "fs-extra": "^10.0.0",
+    "html-react-parser": "^1.4.10",
     "image-extensions": "^1.1.0",
     "immutable": "^4.0.0-rc.12",
     "is-hotkey": "^0.2.0",
