@@ -33,9 +33,7 @@ body {
 }
 input, textarea, button {
 	border: none;
-	padding: 10px;
 	outline: none;
-	font-family: 'Lyon Text Web', Arial, Sans-Serif;
 	font-size: inherit;
 }
 ol, ul {

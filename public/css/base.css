@@ -2,7 +2,8 @@
 
 @layer base {
   body {
-    @apply bg-background;
+    /*  dark:bg-background-dark  dark:text-foreground-dark min-h-screen  text-foreground */
+    @apply bg-background min-h-screen text-foreground;
   }
   .App {
     min-height: 100vh;

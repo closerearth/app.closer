@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import PageNotAllowed from '../401';
-import api from '../../utils/api';
 import { useAuth } from '../../contexts/auth';
 import { __ } from '../../utils/helpers';
 
