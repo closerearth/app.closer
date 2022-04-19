@@ -31,7 +31,7 @@ const Event = ({ event, error, filter, channel }) => {
     name: '',
     photo: null
   });
-  const [creatorToAdd, setCreatorToAdd] = useState(event && event.createdBy)
+  const [creatorToAdd, setCreatorToAdd] = useState(event && event.managedBy)
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
@@ -95,7 +95,7 @@ const Event = ({ event, error, filter, channel }) => {
     e.preventDefault();
     try {
       await platform.event.patch(event._id, {
-        createdBy : (event.createdBy || '').concat(creatorToAdd)
+        managedBy : (event.managedBy || []).concat(creatorToAdd)
       });
     } catch (err) {
       alert(`Could not add creator: ${err.message}`)
@@ -136,7 +136,7 @@ const Event = ({ event, error, filter, channel }) => {
           <div className="w-34">
             <h1>This event is password protected</h1>
             <input onChange={ e => setPassword(e.target.value) } placeholder="password" type="password" />
-            {isAuthenticated && (event.createdBy.includes(user._id) || user.roles.includes('admin')) &&
+            {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
               <div className="admin-actions mt-3 border-t pt-3">
                 <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
                   <a className="btn-secondary text-xs mr-2">Edit event</a>
@@ -247,19 +247,19 @@ const Event = ({ event, error, filter, channel }) => {
                     endTime: event.end,
                   }} buttonLabel="Add to calendar" /> */}
                 </div>
-                {isAuthenticated && (event.createdBy.includes(user._id) || user.roles.includes('admin') || user.roles.includes('space-host')) &&
+                {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
                   <div className="admin-actions mt-3 border-t pt-3">
-                    { (event.createdBy.includes(user._id) || user.roles.includes('admin')) &&
+                    { (user._id === event.createdBy || user.roles.includes('admin')) &&
                       <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
                         <a className="btn-secondary text-xs mr-2">Edit event</a>
                       </Link>
                     }
-                    { event.paid && (event.createdBy.includes(user._id) || user.roles.includes('admin') || user.roles.includes('space-host')) &&
+                    { event.paid && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
                       <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
                         <a className="btn-secondary text-xs mr-2">View tickets</a>
                       </Link>
                     }
-                    { (event.createdBy.includes(user._id) || user.roles.includes('admin')) &&
+                    { (user._id === event.createdBy || user.roles.includes('admin')) &&
                         <a className="btn-secondary text-xs mr-2" onClick={() => toggleAddCreator(!addCreator)} >Add co-creator</a>
                     }
                     { addCreator && 
@@ -311,7 +311,7 @@ const Event = ({ event, error, filter, channel }) => {
             </div>
           </section>
           <main className="main-content max-w-prose event-page py-10">
-            { ((event.partners && event.partners.length > 0) || (isAuthenticated && event.createdBy.includes(user._id))) &&
+            { ((event.partners && event.partners.length > 0) || (isAuthenticated && user._id === event.createdBy)) &&
               <section className="mb-6">
                 <div className="flex flex-row flex-wrap justify-center items-center">
                   { event.partners && event.partners.map(partner => partner.photoUrl && (
