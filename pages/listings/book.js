@@ -84,7 +84,7 @@ const Book = ({ token }) => {
         price: getPrice(listing, booking)
       });
 
-      router.push(`/bookings/${newBooking._id}`);
+      router.push(`/bookings/${newBooking._id}/contribution`);
     } catch (err) {
       console.log(err);
       alert('There was an error creating booking.');
