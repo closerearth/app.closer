@@ -89,7 +89,6 @@ const Booking = ({ booking, error }) => {
                   type="booking"
                   total={ booking.price.val }
                   currency={ booking.price.cur }
-                  currency={ booking.price.cur }
                   _id={ booking._id }
                   onSuccess={ payment => setBooking({ ...booking, status: 'confirmed' }) }
                   email={ user.email }
