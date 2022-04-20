@@ -31,7 +31,7 @@ const Event = ({ event, error, filter, channel }) => {
     name: '',
     photo: null
   });
-  const [creatorToAdd, setCreatorToAdd] = useState(event && event.managedBy)
+  const [creatorToAdd, setCreatorToAdd] = useState('')
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
@@ -274,7 +274,7 @@ const Event = ({ event, error, filter, channel }) => {
         <form className="flex flex-col" onSubmit={(e) => handleCreatorSubmit(e)} >
           <div className="flex flex-col w-full mt-5">
             <label>Creator</label>
-            <select value={creatorToAdd} onChange={(e) => setCreatorToAdd(e.target.value)}>
+            <select value={creatorToAdd} multiple={false} onChange={(e) => setCreatorToAdd(e.target.value)}>
               {  users && users.count() > 0 ? (
                 users.map((user) => 
                   <option value={ user.get('_id') } key={ user.get('_id') } > { user.get('screenname') }</option>
