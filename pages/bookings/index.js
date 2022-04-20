@@ -7,16 +7,18 @@ import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
 import BookingListPreview from '../../components/BookingListPreview';
 import { __ } from '../../utils/helpers';
+import PageNotFound from '../404';
 
 const Bookings = () => {
   const router = useRouter();
 
   const { user } = useAuth();
   const { platform } = usePlatform();
+  const bookingFilter = user && { where: { createdBy: user._id } };
 
   const loadData = async () => {
     await Promise.all([
-      platform.booking.get({ where: { createdBy: user._id } })
+      platform.booking.get(bookingFilter)
     ]);
   }
 
@@ -26,11 +28,12 @@ const Bookings = () => {
     }
   }, [user]);
 
-  if (!user || !user.roles.includes('member')) {
-    return null;
+  if (!user) {
+    return <PageNotFound error="User not logged in." />;
   }
 
-  const bookings = platform.booking.find();
+  const bookings = platform.booking.find(bookingFilter);
+  console.log('bookings', bookings);
 
   return (
     <Layout>

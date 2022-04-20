@@ -90,7 +90,7 @@ const Book = ({ token }) => {
       alert('There was an error creating booking.');
     }
   }
-  const getPrice = (listing, booking) => listing.get(booking.rate).get('val')/rates[booking.rate].duration * booking.duration;
+  const getPrice = (listing, booking) => listing.get(booking.rate) && listing.get(booking.rate).get('val')/rates[booking.rate].duration * booking.duration;
 
   const loadInventory = async (booking) => {
     try {
@@ -113,11 +113,14 @@ const Book = ({ token }) => {
         <title>{ __('listings_book_title') }</title>
       </Head>
       <div className="main-content">
-        <section className="text-center">
+        <section>
           <h2>{ __('listings_book_subtitle') }</h2>
+          <p>{ __('listings_book_copy') }</p>
+        </section>
+        <section className="mt-6">
           <form onSubmit={ e => e.preventDefault() }>
-            <div className="flex justify-center items-center">
-              <fieldset className="mr-3 flex flex-col justify-center items-center">
+            <div className="flex justify-start items-start">
+              <fieldset className="mr-3 flex flex-col justify-start items-center">
                 <label htmlFor="start">{ __('listings_book_check_in') }</label>
                 <DateTimePicker
                   id="start"
@@ -143,16 +146,15 @@ const Book = ({ token }) => {
                 />
               </fieldset>
             </div>
-            <fieldset className="center-content">
-              <label htmlFor="listing">{ __('listings_book_accomodation_type') }</label>
-              <div className="grid grid-cols-3">
+            <fieldset className="center-content mt-8">
+              <div className="grid grid-cols-3 gap-6">
                 {listings && listings.map(listing => (
                   <div className="card" key={ listing.get('_id') }>
                     <div className="card-header">
                       <h4>{ listing.get('name') }</h4>
                     </div>
                     <div className="card-body">
-                      { priceFormat(getPrice(listing, booking), listing.get(booking.rate).get('cur')) }
+                      { listing.get(booking.rate) && priceFormat(getPrice(listing, booking), listing.get(booking.rate)?.get('cur')) }
                     </div>
                     <div className="card-footer">
                       <button className="btn" onClick={ e => createBooking(e, listing, booking) }>
