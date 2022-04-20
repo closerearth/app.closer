@@ -1,4 +1,5 @@
-import React, { useMemo, useRef, useEffect, useState } from 'react'
+import React, { useMemo, useRef, useEffect, useState, Ref, PropsWithChildren } from 'react'
+import ReactDOM from 'react-dom'
 import { Slate, Editable, withReact, useSlate, useFocused } from 'slate-react'
 import {
   Editor,
@@ -9,9 +10,9 @@ import {
   Range,
 } from 'slate'
 import { css } from '@emotion/css'
+import { cx } from '@emotion/css'
 import { withHistory } from 'slate-history'
 
-import { Button, Icon, Menu, Portal } from './TextEditorComponents'
 
 const TextEditor = () => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), [])
@@ -148,30 +149,213 @@ const FormatButton = ({ format, icon }) => {
   )
 }
 
+interface BaseProps {
+  className: string
+  [key: string]: unknown
+}
+type OrNull<T> = T | null
+
+const Button = React.forwardRef(
+  (
+    {
+      className,
+      active,
+      reversed,
+      ...props
+    }: PropsWithChildren<
+      {
+        active: boolean
+        reversed: boolean
+      } & BaseProps
+    >,
+    ref: Ref<OrNull<HTMLSpanElement>>
+  ) => (
+    <span
+      {...props}
+      ref={ref}
+      className={cx(
+        className,
+        css`
+          cursor: pointer;
+          color: ${reversed
+      ? active
+        ? 'white'
+        : '#aaa'
+      : active
+        ? 'black'
+        : '#ccc'};
+        `
+      )}
+    />
+  )
+)
+Button.displayName = 'Button'
+
+const EditorValue = React.forwardRef(
+  (
+    {
+      className,
+      value,
+      ...props
+    }: PropsWithChildren<
+      {
+        value: any
+      } & BaseProps
+    >,
+    ref: Ref<OrNull<null>>
+  ) => {
+    const textLines = value.document.nodes
+      .map(node => node.text)
+      .toArray()
+      .join('\n')
+    return (
+      <div
+        ref={ref}
+        {...props}
+        className={cx(
+          className,
+          css`
+            margin: 30px -20px 0;
+          `
+        )}
+      >
+        <div
+          className={css`
+            font-size: 14px;
+            padding: 5px 20px;
+            color: #404040;
+            border-top: 2px solid #eeeeee;
+            background: #f8f8f8;
+          `}
+        >
+          Slate value as text
+        </div>
+        <div
+          className={css`
+            color: #404040;
+            font: 12px monospace;
+            white-space: pre-wrap;
+            padding: 10px 20px;
+            div {
+              margin: 0 0 0.5em;
+            }
+          `}
+        >
+          {textLines}
+        </div>
+      </div>
+    )
+  }
+)
+EditorValue.displayName = 'EditorValue'
+
+const Icon = React.forwardRef(
+  (
+    { className, ...props }: PropsWithChildren<BaseProps>,
+    ref: Ref<OrNull<HTMLSpanElement>>
+  ) => (
+    <span
+      {...props}
+      ref={ref}
+      className={cx(
+        'material-icons',
+        className,
+        css`
+          font-size: 18px;
+          vertical-align: text-bottom;
+        `
+      )}
+    />
+  )
+)
+Icon.displayName = 'Icon'
+
+const Instruction = React.forwardRef(
+  (
+    { className, ...props }: PropsWithChildren<BaseProps>,
+    ref: Ref<OrNull<HTMLDivElement>>
+  ) => (
+    <div
+      {...props}
+      ref={ref}
+      className={cx(
+        className,
+        css`
+          white-space: pre-wrap;
+          margin: 0 -20px 10px;
+          padding: 10px 20px;
+          font-size: 14px;
+          background: #f8f8e8;
+        `
+      )}
+    />
+  )
+)
+Instruction.displayName = 'Instruction'
+
+const Menu = React.forwardRef(
+  (
+    { className, ...props }: PropsWithChildren<BaseProps>,
+    ref: Ref<OrNull<HTMLDivElement>>
+  ) => (
+    <div
+      {...props}
+      ref={ref}
+      className={cx(
+        className,
+        css`
+          & > * {
+            display: inline-block;
+          }
+          & > * + * {
+            margin-left: 15px;
+          }
+        `
+      )}
+    />
+  )
+)
+Menu.displayName = 'Menu'
+
+const Portal = ({ children }) => {
+  return typeof document === 'object'
+    ? ReactDOM.createPortal(children, document.body)
+    : null
+}
+
+const Toolbar = React.forwardRef(
+  (
+    { className, ...props }: PropsWithChildren<BaseProps>,
+    ref: Ref<OrNull<HTMLDivElement>>
+  ) => (
+    <Menu
+      {...props}
+      ref={ref}
+      className={cx(
+        className,
+        css`
+          position: relative;
+          padding: 1px 18px 17px;
+          margin: 0 -20px;
+          border-bottom: 2px solid #eee;
+          margin-bottom: 20px;
+        `
+      )}
+    />
+  )
+)
+Toolbar.displayName = 'Toolbar'
+
 
 
 const initialValue: Descendant[] = [
   {
     type: 'paragraph',
     children: [
-      {
-        text:
-          'This example shows how you can make a hovering menu appear above your content, which you can use to make text ',
-      },
-      { text: 'bold', bold: true },
-      { text: ', ' },
-      { text: 'italic', italic: true },
-      { text: ', or anything else you might want to do!' },
-    ],
-  },
-  {
-    type: 'paragraph',
-    children: [
-      { text: 'Try it out yourself! Just ' },
-      { text: 'select any piece of text and the menu will appear', bold: true },
+      { text: 'Select any piece of text and the menu will appear' },
       { text: '.' },
     ],
   },
 ]
 
-export default TextEditor;
+export default TextEditor; 
