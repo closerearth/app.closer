@@ -31,7 +31,7 @@ const Event = ({ event, error, filter, channel }) => {
     name: '',
     photo: null
   });
-  const [creatorToAdd, setCreatorToAdd] = useState([])
+  const [creatorToAdd, setCreatorToAdd] = useState('')
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
