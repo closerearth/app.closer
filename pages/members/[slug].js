@@ -226,7 +226,7 @@ const MemberPage = ({ member, loadError }) => {
                   }
 
                   <div className='mt-1 w-full'>
-                    { editProfile?
+                    {/* { editProfile?
                       <textarea
                         autoFocus
                         value={tagline}
@@ -277,67 +277,68 @@ const MemberPage = ({ member, loadError }) => {
                             }
                           </Linkify>
                         </p>
-                    }
+                    } */}
                     <div className="font-semibold text-sm mt-1">
                       {member.timezone}
                     </div>
+                    { editProfile?
+                      <textarea
+                        autoFocus
+                        value={about}
+                        className="w-full md:w-11/12 h-36"
+                        onChange={ (e) => setAbout(e.target.value) }
+                        onBlur={ () => {
+                          saveAbout(about);
+                        } }
+                      />:
+                      (isAuthenticated && member._id === currentUser._id) ?
+                        <p className="mt-6 w-full md:w-11/12" >
+                          <Linkify
+                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                              <a
+                                target="_blank"
+                                rel="nofollow noreferrer"
+                                href={decoratedHref}
+                                key={key}
+                                onClick={e => e.stopPropagation()}
+                              >
+                                {decoratedText}
+                              </a>
+                            )}
+                          >
+                            { about }
+                            { !about &&
+                      <span className="placeholder">{ __('members_slug_about_prompt') }</span>
+                            }
+                          </Linkify>
+                        </p>:
+                        <p className="" >
+                          <Linkify
+                            componentDecorator={(decoratedHref, decoratedText, key) => (
+                              <a
+                                target="_blank"
+                                rel="nofollow noreferrer"
+                                href={decoratedHref}
+                                key={key}
+                                onClick={e => e.stopPropagation()}
+                              >
+                                {decoratedText}
+                              </a>
+                            )}
+                          >
+                            { about }
+                            { !about &&
+                      <span className="placeholder">{ member.screenname } { __('members_slug_about_empty') }</span>
+                            }
+                          </Linkify>
+                        </p>
+                    }
                   </div>
                 </div>
               </div>
 
               { error && <p className="validation-error">Error: { error }</p> }
-              { editProfile?
-                <textarea
-                  autoFocus
-                  value={about}
-                  className="w-10/12 h-36"
-                  onChange={ (e) => setAbout(e.target.value) }
-                  onBlur={ () => {
-                    saveAbout(about);
-                  } }
-                />:
-                (isAuthenticated && member._id === currentUser._id) ?
-                  <p className="mt-6 w-full md:w-8/12" >
-                    <Linkify
-                      componentDecorator={(decoratedHref, decoratedText, key) => (
-                        <a
-                          target="_blank"
-                          rel="nofollow noreferrer"
-                          href={decoratedHref}
-                          key={key}
-                          onClick={e => e.stopPropagation()}
-                        >
-                          {decoratedText}
-                        </a>
-                      )}
-                    >
-                      { about }
-                      { !about &&
-                      <span className="placeholder">{ __('members_slug_about_prompt') }</span>
-                      }
-                    </Linkify>
-                  </p>:
-                  <p className="" >
-                    <Linkify
-                      componentDecorator={(decoratedHref, decoratedText, key) => (
-                        <a
-                          target="_blank"
-                          rel="nofollow noreferrer"
-                          href={decoratedHref}
-                          key={key}
-                          onClick={e => e.stopPropagation()}
-                        >
-                          {decoratedText}
-                        </a>
-                      )}
-                    >
-                      { about }
-                      { !about &&
-                      <span className="placeholder">{ member.screenname } { __('members_slug_about_empty') }</span>
-                      }
-                    </Linkify>
-                  </p>
-              }
+              
 
               { isAuthenticated && member._id === currentUser._id &&
                 <button type="button" className="btn-primary w-24" onClick={handleClick}>
