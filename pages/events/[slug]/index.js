@@ -203,7 +203,7 @@ const Event = ({ event, error, filter, channel }) => {
                                   <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
                                     <a className="btn-primary mr-2">Signup to RSVP</a>
                                   </Link>:
-                                  end && end.isBefore(dayjs()) && attendees?.includes(user._id) ?
+                                  end && end.isBefore(dayjs()) && user && attendees?.includes(user._id) ?
                                     <a
                                       href="#"
                                       className="btn-primary mr-2"
@@ -214,16 +214,16 @@ const Event = ({ event, error, filter, channel }) => {
                                     >
                                     Cancel RSVP
                                     </a>:
-                                    end && end.isBefore(dayjs()) &&
-                                  <button
-                                    onClick={ e => {
-                                      e.preventDefault();
-                                      attendEvent(event._id, !(attendees?.includes(user._id)));
-                                    }}
-                                    className="btn-primary mr-2"
-                                  >
-                                    Attend
-                                  </button>
+                                    end && user && end.isBefore(dayjs()) &&
+                                      <button
+                                        onClick={ e => {
+                                          e.preventDefault();
+                                          attendEvent(event._id, !(attendees?.includes(user._id)));
+                                        }}
+                                        className="btn-primary mr-2"
+                                      >
+                                        Attend
+                                      </button>
                         }
                       </>
                   }
