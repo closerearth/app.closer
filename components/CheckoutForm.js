@@ -10,6 +10,7 @@ import config from '../config';
 
 const CheckoutForm = ({
   type,
+  backUrl,
   ticketOption,
   _id,
   buttonText,
@@ -98,6 +99,9 @@ const CheckoutForm = ({
         }}
         className="payment-card shadow-lg p-2 bg-white"
       />
+      { backUrl && <a href={ backUrl } className="btn-primary mt-4 mr-2">
+        Back
+      </a> }
       <button type="submit" className="btn-primary mt-4" disabled={!stripe || buttonDisabled || processing}>
         { processing? 'Processing payment...' : buttonText || 'Pay' }
       </button>
