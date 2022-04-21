@@ -76,8 +76,7 @@ const Book = ({ token }) => {
   // The +1 is taking into account that checkout time must be before checkin time.
   const duration = Math.abs(Math.ceil(dayjs(booking.end).diff(booking.start, 'days'))) + 1;
   const listing = booking.listing && platform.listing.findOne(booking.listing);
-  const createBooking = async (event, listing, booking) => {
-    event.preventDefault();
+  const createBooking = async (listing, booking) => {
     try {
       if (!listing) {
         throw new Error('Please select a listing first.');
@@ -161,6 +160,7 @@ const Book = ({ token }) => {
                     key={ listing.get('_id') }
                     listing={ listing }
                     rate={ booking.rate }
+                    book={ () => createBooking(listing, booking) }
                   />
                 ))
               }

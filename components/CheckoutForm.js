@@ -6,11 +6,12 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 import api from '../utils/api';
+import { __ } from '../utils/helpers';
 import config from '../config';
 
 const CheckoutForm = ({
   type,
-  backUrl,
+  cancelUrl,
   ticketOption,
   _id,
   buttonText,
@@ -98,12 +99,12 @@ const CheckoutForm = ({
         }}
         className="payment-card shadow-lg p-3"
       />
-      { backUrl && <a href={ backUrl } className="btn-primary mt-4 mr-2">
-        Back
-      </a> }
       <button type="submit" className="btn-primary mt-4" disabled={!stripe || buttonDisabled || processing}>
-        { processing? 'Processing payment...' : buttonText || 'Pay' }
+        { processing? __('checkout_processing_payment') : buttonText || __('checkout_pay') }
       </button>
+      { cancelUrl && <a href={ cancelUrl } className="mt-4 ml-2">
+        {__('generic_cancel')}
+      </a> }
     </form>
   );
 };

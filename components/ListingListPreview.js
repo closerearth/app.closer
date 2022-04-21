@@ -8,7 +8,7 @@ import { cdn } from '../utils/api';
 
 import Slider from './Slider';
 
-const ListingListPreview = ({ listing, rate }) => {
+const ListingListPreview = ({ listing, rate, book }) => {
   if (!listing) {
     return null;
   }
@@ -38,7 +38,9 @@ const ListingListPreview = ({ listing, rate }) => {
       </div>
       <div className="card-footer">
         <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn mr-2">{ __('listing_preview_edit') }</a></Link>
-        <Link href={`/listings/book?listing=${listing.get('slug')}`}><a className="btn">{ __('listing_preview_book') }</a></Link>
+        { book && <a className="btn" href="#" onClick={ (e) => { e.preventDefault();book();} }>
+          { __('listing_preview_book') }</a>
+        }
       </div>
     </div>
   );

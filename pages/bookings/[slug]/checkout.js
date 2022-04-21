@@ -94,7 +94,7 @@ const Booking = ({ booking, error }) => {
                   email={ user.email }
                   name={ user.screenname }
                   message={ booking.message }
-                  backUrl={ `/bookings/${booking._id}/contribution` }
+                  cancelUrl={ `/bookings/${booking._id}/contribution` }
                   buttonText={ user.roles.includes('member') ? 'Book' : 'Request to book' }
                   buttonDisabled={ false }
                 />
