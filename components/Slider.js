@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { GrNext } from '@react-icons/all-files/gr/GrNext';
+import { GrPrevious } from '@react-icons/all-files/gr/GrPrevious';
 
 const Slider = ({
   slides,
@@ -9,7 +11,7 @@ const Slider = ({
 
   return (
     <div className={ `slider ${reverse ? 'reverse' : ''}` }>
-      <div className="slide">
+      <div className="slide drop-shadow-md">
         <img src={ slide.image } alt="interiors" />
       </div>
       <div className="text-area">
@@ -17,13 +19,13 @@ const Slider = ({
           <label>{ slide.label }</label>
           <p>{ slide.text }</p>
         </div>
-        <div className="slider-controls">
-          <button className="transparent" onClick={ () => setCurrentSlide(currentSlide === 0 ? slides.length - 1 : currentSlide - 1) }>
-            <img width="15" height="10" src="/images/icons/arrow-left.svg" alt="Prev" />
+        <div className="slider-controls flex flex-row justify-start items-center">
+          <button className="p-2 pr-4" onClick={ () => setCurrentSlide(currentSlide === 0 ? slides.length - 1 : currentSlide - 1) }>
+            <GrPrevious />
           </button>
           <figure>{ currentSlide + 1 } / { slides.length }</figure>
-          <button className="transparent" onClick={ () => setCurrentSlide(currentSlide >= slides.length - 1 ? 0 : currentSlide + 1) }>
-            <img width="15" height="10" src="/images/icons/arrow-right.svg" alt="Next" />
+          <button className="p-2 pl-4" onClick={ () => setCurrentSlide(currentSlide >= slides.length - 1 ? 0 : currentSlide + 1) }>
+            <GrNext />
           </button>
         </div>
       </div>

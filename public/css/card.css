@@ -5,7 +5,6 @@
   @apply mt-0 -ml-4 -mr-4 p-4 pt-0 flex flex-row justify-between items-center;
 }
 .card .card-body {
-  @apply py-4;
 }
 .card .card-footer {
   @apply mt-4 -ml-4 -mr-4 mb-0 p-4 pb-0;

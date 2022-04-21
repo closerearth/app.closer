@@ -176,13 +176,15 @@ export default {
     { name: 'rewards', label: 'Reward', type: 'currency' }
   ],
   listing: [
-    { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true },
-    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A beautiful treehouse loft with hot tub.' },
+    { name: 'name', label: 'Listing name', type: 'text', placeholder: 'Spacious loft', required: true, tab: 'general' },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A beautiful treehouse loft with hot tub.', tab: 'general' },
+    { name: 'photos', label: 'Photos', type: 'photos', tab: 'photos' },
     {
       name: 'private',
       label: 'Is this a private space?',
       type: 'switch',
-      defaultValue: false
+      defaultValue: false,
+      tab: 'general'
     },
     {
       name: 'kitchen',
@@ -198,9 +200,9 @@ export default {
     },
     { name: 'rooms', label: 'Number of rooms', type: 'number', min: 1, required: false },
     { name: 'beds', label: 'Number of beds', type: 'number', min: 1, required: false },
-    { name: 'monthlyRate', label: 'Monthly rate', type: 'currency', placeholder: '10.00', required: true },
-    { name: 'weeklyRate', label: 'Weekly rate', type: 'currency', placeholder: '10.00', required: true },
-    { name: 'dailyRate', label: 'Daily rate', type: 'currency', placeholder: '10.00', required: true },
+    { name: 'monthlyRate', label: 'Monthly rate', type: 'currency', placeholder: '10.00', required: true, tab: 'prices' },
+    { name: 'weeklyRate', label: 'Weekly rate', type: 'currency', placeholder: '10.00', required: true, tab: 'prices' },
+    { name: 'dailyRate', label: 'Daily rate', type: 'currency', placeholder: '10.00', required: true, tab: 'prices' },
     { name: 'quantity', label: 'Quantity available', type: 'number', min: 1, required: false },
   ],
   booking: [

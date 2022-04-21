@@ -230,6 +230,8 @@
   "members_slug_links_url": "Url",
   "members_slug_links_submit": "Add",
   "members_title": "Members",
+  "photos_editor_no_photos": "No photos",
+  "photos_editor_confirm_delete": "Are you sure you want delete this photo?",
   "search_keyword_loading": "Loading...",
   "search_keyword_related": "Related content",
   "search_keyword_articles": "See all articles",

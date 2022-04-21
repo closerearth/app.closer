@@ -1,6 +1,16 @@
 import React from 'react';
 import { cdn } from '../utils/api';
 
+/*
+  Photo sizes:
+    profile-sm
+    profile-lg
+    post-md
+    place-lg
+    max-lg
+    max-xl
+*/
+
 const Photo = ({ id, className, size, title, cover, rounded, width, height, photoUrl }) => {
   const placeholder = '/images/profile-placeholder.png';
   const url = photoUrl ? photoUrl : id ? `${cdn}${id}-profile-${size}.jpg` : placeholder;
