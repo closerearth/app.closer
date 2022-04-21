@@ -5,11 +5,13 @@ import { useRouter } from 'next/router';
 import { priceFormat } from '../utils/helpers';
 import { __ } from '../utils/helpers';
 import { cdn } from '../utils/api';
+import { useAuth } from '../contexts/auth';
 
 import Slider from './Slider';
 
 const ListingListPreview = ({ listing, rate, book }) => {
-  if (!listing) {
+  const { isAuthenticated, user } = useAuth();
+  if (!listing || !isAuthenticated) {
     return null;
   }
 
@@ -37,7 +39,9 @@ const ListingListPreview = ({ listing, rate, book }) => {
         }
       </div>
       <div className="card-footer">
-        <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn mr-2">{ __('listing_preview_edit') }</a></Link>
+        { (user.roles.includes('admin') || user.roles.includes('space-host')) &&
+          <Link href={`/listings/${listing.get('slug')}/edit`}><a className="btn mr-2">{ __('listing_preview_edit') }</a></Link>
+        }
         { book && <a className="btn" href="#" onClick={ (e) => { e.preventDefault();book();} }>
           { __('listing_preview_book') }</a>
         }
