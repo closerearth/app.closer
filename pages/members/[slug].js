@@ -377,7 +377,7 @@ const MemberPage = ({ member, loadError }) => {
                   </div>
                   <ul className='flex flex-col w-full space-y-1 mt-4'>
                     {links ? links.map((link) => (
-                      <li key={link._id} className="flex flex-row items-center justify-start space-x-5 mb-1">
+                      <li key={link.name} className="flex flex-row items-center justify-start space-x-5 mb-1">
                         <a href={link.url}>
                           {link.name}
                         </a>
