@@ -37,16 +37,16 @@ const MemberPage = ({ member, loadError }) => {
   const { platform } = usePlatform();
 
 
-  const getLinks = async () => {
-    try {
-      const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
-      setLinks(savedData.links)
-      setErrors(null);
-    } catch (err) {
-      const error = err?.response?.data?.error || err.message;
-      setErrors(error);
-    }
-  }
+  // const getLinks = async () => {
+  //   try {
+  //     const { data: { results: savedData } } = await platform.user.findOne(currentUser?._id)?.get('links') || member.links
+  //     setLinks(savedData.links)
+  //     setErrors(null);
+  //   } catch (err) {
+  //     const error = err?.response?.data?.error || err.message;
+  //     setErrors(error);
+  //   }
+  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -116,10 +116,6 @@ const MemberPage = ({ member, loadError }) => {
     setTagline(member.tagline)
     setLinks(member.links)
   }, [member]);
-
-  useEffect(() => {
-    getLinks()
-  }, [])
 
 
 
