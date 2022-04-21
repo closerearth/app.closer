@@ -59,7 +59,7 @@ const Autocomplete = ({ endpoint, where, placeholder, value, onChange, multi }) 
           </a>
           { loading && <div className="loading">loading...</div> }
           { options && options.length > 0 ?
-            <div className="results">
+            <div className='flex flex-col items-center justify-start h-fit w-full'>
               { options.filter(o => !value.map(v => v._id).includes(o._id)).map((option) => {
                 switch (endpoint) {
                 case '/user':
@@ -72,7 +72,7 @@ const Autocomplete = ({ endpoint, where, placeholder, value, onChange, multi }) 
                         setSearch('');
                         onChange(value.concat(option), option, 'ADD');
                       } }
-                      className="user-preview"
+                      className="flex flex-col items-center justify-start h-fit w-full"
                     >
                       <figure className="profile-photo"></figure>
                       <span>{ option.screenname }</span>

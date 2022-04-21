@@ -18,6 +18,7 @@ import Photo from '../../../components/Photo';
 import TimeSince from '../../../components/TimeSince';
 import EventAttendees from '../../../components/EventAttendees';
 import EventPhoto from '../../../components/EventPhoto';
+import UserList from '../../../components/UserList';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
@@ -95,7 +96,7 @@ const Event = ({ event, error, filter, channel }) => {
     e.preventDefault();
     try {
       await platform.event.patch(event._id, {
-        managedBy : (event.managedBy || []).concat(creatorToAdd)
+        managedBy : ([event.createdBy] || []).concat(creatorToAdd)
       });
     } catch (err) {
       alert(`Could not add creator: ${err.message}`)
@@ -260,49 +261,47 @@ const Event = ({ event, error, filter, channel }) => {
                       </Link>
                     }
                     { (user._id === event.createdBy || user.roles.includes('admin')) &&
-                        <a className="btn-secondary text-xs mr-2" onClick={() => toggleAddCreator(!addCreator)} >Add co-creator</a>
+                        <a className="btn-secondary text-xs mr-2 hover:cursor-pointer" onClick={() => toggleAddCreator(!addCreator)} >Edit co-creator</a>
                     }
                     { addCreator && 
 
-<>
-  <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
-    <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
-      <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-y-1 w-full bg-background outline-none focus:outline-none p-10">
-        <div className="flex items-center justify-center w-full">
-          <h3 className="text-xl font-normal mb-3">Add creator</h3>
-        </div>  
-        <form className="flex flex-col" onSubmit={(e) => handleCreatorSubmit(e)} >
-          <div className="flex flex-col w-full mt-5">
-            <label>Creator</label>
-            <select value={creatorToAdd} multiple={false} onChange={(e) => setCreatorToAdd(e.target.value)}>
-              {  users && users.count() > 0 ? (
-                users.map((user) => 
-                  <option value={ user.get('_id') } key={ user.get('_id') } > { user.get('screenname') }</option>
-                )
-              ) : 'No users'
-              }
-            </select>
-          </div>
-          <div className="flex flex-col mt-5 w-full">
-            <div className='flex flex-row items-center justify-start'>
-              <button type='submit' className='btn-primary w-24 mr-6'>Add</button>
-              <a
-                href="#"
-                onClick={ (e) => {
-                  e.preventDefault();
-                  toggleAddCreator(!addCreator);
-                }}
-              >
-              Cancel
-              </a>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-</>
+                    <>
+                      <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+                        <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+                          <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-y-1 w-full bg-background outline-none focus:outline-none p-10">
+                            <div className="flex items-center justify-center w-full">
+                              <h3 className="text-xl font-normal mb-3">Add creator</h3>
+                            </div>  
+                            <form className="flex flex-col" onSubmit={(e) => handleCreatorSubmit(e)} >
+                              <div className="flex flex-col w-full mt-5">
+                                <label>Creator</label>
+                                <UserList
+                                  title="Closer members"
+                                  canInviteUsers={ isAuthenticated && user._id === event.createdBy }
+                                  limit={50}
+                                  channel='626132f105335a0ce2883bc1'
+                                />
+                              </div>
+                              <div className="flex flex-col mt-5 w-full">
+                                <div className='flex flex-row items-center justify-start'>
+                                  <button type='submit' className='btn-primary w-24 mr-6'>Add</button>
+                                  <a
+                                    href="#"
+                                    onClick={ (e) => {
+                                      e.preventDefault();
+                                      toggleAddCreator(!addCreator);
+                                    }}
+                                  >
+                                  Cancel
+                                  </a>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                    </>
 
                     }
                   </div>

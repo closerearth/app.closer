@@ -53,13 +53,12 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
         }
       </h3>
       <div className="card-body">
-        <div className="user-list">
+        <div className="-space-x-3 flex flex-row flex-wrap">
           { users && users.length > 0?
             users.map(user => (
               <Link key={ user._id } as={`/members/${user.slug}`} href="/members/[slug]">
-                <a className="user-preview">
+                <a className="from user-preview z-10">
                   <ProfilePhoto user={user} size="sm" />
-                  <span className="ellipsis name">{ user.screenname }</span>
                 </a>
               </Link>
             )):
