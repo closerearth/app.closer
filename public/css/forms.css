@@ -37,13 +37,13 @@
     @apply bg-transparent mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black resize-none;
   }
   .input, input[type="email"], input[type="password"], input[type="text"], input[type="phone"], input[type="number"], input[type="date"], input[type="time"] {
-    @apply bg-transparent mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black;
+    @apply bg-transparent text-foreground mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black max-w-full;
   }
   select {
-    @apply h-10 pl-3 pr-6 text-base placeholder-gray-600 border-b-2 border-gray-200 rounded-lg appearance-none focus:border-black outline-none;
+    @apply h-10 pl-3 pr-6 text-base text-black placeholder-gray-600 border-b-2 border-gray-200 rounded-lg appearance-none focus:border-black outline-none max-w-full;
   }
   label, .label {
-    @apply block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2;
+    @apply block uppercase tracking-wide text-gray-500 text-xs font-bold mb-2;
   }
   .switch .label {
     @apply mb-0 ml-2;

@@ -84,6 +84,7 @@ const CheckoutForm = ({
               fontSize: '20px',
               lineHeight: '1.6',
               color: 'black',
+              padding: '0.2rem',
               fontWeight: 'regular',
               fontFamily: 'Roobert, sans-serif',
               '::placeholder': {
@@ -95,7 +96,7 @@ const CheckoutForm = ({
             }
           }
         }}
-        className="payment-card shadow-lg p-3"
+        className="payment-card shadow-lg p-2 bg-white"
       />
       <button type="submit" className="btn-primary mt-4" disabled={!stripe || buttonDisabled || processing}>
         { processing? 'Processing payment...' : buttonText || 'Pay' }
