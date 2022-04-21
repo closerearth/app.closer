@@ -12,6 +12,7 @@ import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
 import EventsList from '../../components/EventsList';
+import BlockchainWallet from '../../components/BlockchainWallet';
 
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
@@ -101,6 +102,7 @@ const MemberPage = ({ member, loadError }) => {
         <title>{ member.screenname }</title>
       </Head>
       <div className='main-content'>
+        <BlockchainWallet />
         <main className="flex flex-col justify-between">
           { openIntro &&
         <>
