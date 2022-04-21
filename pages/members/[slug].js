@@ -51,8 +51,10 @@ const MemberPage = ({ member, loadError }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const { data: { results: savedData } } = await platform.user.patch(currentUser._id,  { links: (currentUser?.links || []).concat({ name: linkName, url: linkUrl }) })
-      setLinks(savedData.links)
+      const { data } = await platform.user.patch(currentUser?._id,  { links: currentUser?.links.concat({ name: linkName, url: linkUrl }) })
+      setLinks(data.links)
+      setLinkName('')
+      setLinkUrl('')
       setErrors(null);
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
@@ -62,8 +64,8 @@ const MemberPage = ({ member, loadError }) => {
 
   const deleteLink = async (link) => {
     try {
-      const { data: { results: savedData } } = await platform.user.patch(currentUser._id,  { links: currentUser?.links.filter((item) => item.name !== link.name ) })
-      setLinks(savedData.links)
+      const { data } = await platform.user.patch(currentUser?._id,  { links: currentUser?.links.filter((item) => item.name !== link.name ) })
+      setLinks(data.links)
       setErrors(null);  
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
