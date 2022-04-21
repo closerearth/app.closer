@@ -27,13 +27,22 @@ dayjs.extend(LocalizedFormat);
 const Booking = ({ booking, error }) => {
   const router = useRouter();
   const [editBooking, setBooking] = useState(booking);
-  const stripe = loadStripe(config.STRIPE_TEST_KEY);
+  const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
 
-  const saveBooking = async (update) => {
+  const processConfirmation = async (update) => {
     try {
-      await platform.booking.patch(booking._id, update);
+      const { data: { results: payment } } = await api.post('/payment', {
+        type: 'booking',
+        _id: booking._id,
+        total: booking.price && booking.price.val,
+        currency: booking.price && booking.price.cur,
+        email: user.email,
+        name: user.screenname,
+        message: booking.message,
+        volunteer: booking.volunteer
+      });
       router.push(`/bookings/${booking._id}`);
     } catch (err) {
       alert('An error occured.')
@@ -81,7 +90,9 @@ const Booking = ({ booking, error }) => {
               <div>
                 <p>{ __('booking_volunteering_details') }</p>
                 <p className="mt-3">
-                  <a href="#" onClick={ e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
+                  <a href="#" onClick={ e => { e.preventDefault(); processConfirmation(); } } className="btn-primary">
+                    Confirm booking
+                  </a>
                 </p>
               </div>:
               <Elements stripe={ stripe }>
@@ -90,7 +101,7 @@ const Booking = ({ booking, error }) => {
                   total={ booking.price.val }
                   currency={ booking.price.cur }
                   _id={ booking._id }
-                  onSuccess={ payment => setBooking({ ...booking, status: 'confirmed' }) }
+                  onSuccess={ payment => { setBooking({ ...booking, status: 'confirmed' }); router.push(`/bookings/${booking._id}`); } }
                   email={ user.email }
                   name={ user.screenname }
                   message={ booking.message }

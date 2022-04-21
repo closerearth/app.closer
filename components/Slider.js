@@ -12,7 +12,7 @@ const Slider = ({
   return (
     <div className={ `slider ${reverse ? 'reverse' : ''}` }>
       <div className="slide drop-shadow-md">
-        <img src={ slide.image } alt="interiors" />
+        <img src={ slide.image } alt="" />
       </div>
       <div className="text-area">
         <div className="text-slide">

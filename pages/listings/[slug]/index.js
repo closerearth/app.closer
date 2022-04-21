@@ -36,11 +36,11 @@ const Listing = ({ listing, error }) => {
       </Head>
       <main className="main-content">
         <div>
-          <Slider
+          { listing.photos && listing.photos.length > 0 && <Slider
             slides={listing.photos.map(id => ({
               image: `${cdn}${id}-max-lg.jpg`
             }))}
-          />
+          /> }
           {/* <div className="relative bg-gray-200 md:h-80 mb-4">
             <div className="justify-self-center absolute top-0 left-0 right-0 flex justify-center items-center h-full">
               { photo && <img
