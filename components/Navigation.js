@@ -144,6 +144,17 @@ const Navigation = () => {
                 }
               </a>
             </Link> }
+            { isAuthenticated && FEATURES.booking && <Link href="/listings/book">
+              <a
+                className="btn mr-3 hidden md:flex"
+              >
+                {
+                  user.roles.includes('member') ?
+                    __('navigation_book') :
+                    __('navigation_book_trial')
+                }
+              </a>
+            </Link> }
             {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
               target="_blank"
@@ -182,7 +193,7 @@ const Navigation = () => {
       </nav>
       { navOpen &&
         <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print block md:hidden">
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-start">
             { isAuthenticated &&
               <Link
                 href="/members/[slug]"
@@ -207,6 +218,17 @@ const Navigation = () => {
                 </Link>
               ))
             }
+            { isAuthenticated && FEATURES.booking && <Link href="/listings/book">
+              <a
+                className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row"
+              >
+                {
+                  user.roles.includes('member') ?
+                    __('navigation_book') :
+                    __('navigation_book_trial')
+                }
+              </a>
+            </Link> }
             { isAuthenticated ? (
               <Link href="/">
                 <a
@@ -234,7 +256,7 @@ const Navigation = () => {
             )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
-                className="p-4 block text-xl w-full"
+                className="p-4 block text-xl"
               >
                 {
                   REGISTRATION_MODE === 'paid' ?
