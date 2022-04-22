@@ -6,6 +6,7 @@ const colors = {
   orange: 'bg-orange-200 text-orange-700',
   red: 'bg-red-200 text-red-700',
   white: 'bg-white-200 text-gray-700',
+  primary: 'bg-primary text-gray-100',
 }
 
 const Tag = ({ color, children, remove }) => {

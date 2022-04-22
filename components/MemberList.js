@@ -58,7 +58,7 @@ const MemberList = ({
       </h3>
       { loading ?
         <Loading />:
-        <div className={`grid gap-10 ${list ? 'md:grid-cols-1' : 'md:grid-cols-2'}  justify-start items-center mb-8`}>
+        <div className={`grid gap-6 ${list ? 'md:grid-cols-1' : 'md:grid-cols-2'}  justify-start items-start mb-4`}>
           { users && users.count() > 0 ?
             users.map(user => (
               <Link key={ user.get('_id') } passHref as={`/members/${user.get('slug')}`} href="/members/[slug]">

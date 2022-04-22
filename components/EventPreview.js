@@ -21,7 +21,7 @@ const EventPreview = ({ event, list }) => {
       className={`event-preview relative ${list?'mb-2':'md:pr-4 w-full md:w-1/3 mb-8'}`}
     >
       <div
-        className={`${list?'flex flex-row':'card rounded bg-white overflow-hidden'}`}
+        className={`${list?'flex flex-row':'card rounded bg-card overflow-hidden'}`}
       >
         <div className={`${list?'w-24 mt-3 mr-3 h-24':'-mx-4 -mt-4 h-44 md:h-80 '} bg-gray-50 overflow-hidden`}>
           <Link href={`/events/${event.get('slug')}`}><a>

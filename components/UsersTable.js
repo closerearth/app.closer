@@ -47,7 +47,7 @@ const UsersTable = ({ where, limit }) => {
         users && users.count() > 0 ?
           <div className="users-table -mt-4 -ml-4 -mr-4">
             <table className="table-auto w-full">
-              <thead className="card-header text-xs font-semibold uppercase text-gray-400 bg-gray-50">
+              <thead className="card-header text-xs font-semibold uppercase text-gray-600 bg-gray-100 dark:bg-gray-900 dark:text-gray-300">
                 <tr>
                   <th className="p-2 whitespace-nowrap">
                     <div className="font-semibold text-left">{ __('users_table_name') }</div>
@@ -60,7 +60,7 @@ const UsersTable = ({ where, limit }) => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="text-sm divide-y divide-gray-100">
+              <tbody className="text-sm divide-y bg-gray-200 dark:bg-gray-700 divide-gray-50 dark:divide-gray-800">
                 { users.map((row) => {
                   // Fetch the itemized object which can have been patched
                   const user = platform.user.findOne(row.get('_id'));
@@ -72,12 +72,12 @@ const UsersTable = ({ where, limit }) => {
                           <span className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
                             <ProfilePhoto user={ user.toJS() } size="sm" />
                           </span>
-                          <span className="font-medium text-gray-800">{ user.get('screenname') }</span>
+                          <span className="font-medium text-gray-800 dark:text-gray-200">{ user.get('screenname') }</span>
                         </span>
                       </td>
                       <td className="p-2 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="font-medium text-gray-800">
+                          <div className="font-medium text-gray-800 dark:text-gray-200">
                             <TimeSince time={ user.get('created') } />
                           </div>
                         </div>
@@ -87,7 +87,7 @@ const UsersTable = ({ where, limit }) => {
                           { user.get('roles') && user.get('roles').map(role => (
                             <Tag
                               key={ role }
-                              color="green"
+                              color="primary"
                               remove={ () => platform.user.patch(user.get('_id'), { roles: user.get('roles').filter(r => r !== role) }) }
                             >
                               { role }
