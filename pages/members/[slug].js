@@ -51,7 +51,7 @@ const MemberPage = ({ member, loadError }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const { data } = await platform.user.patch(currentUser?._id,  { links: currentUser?.links.concat({ name: linkName, url: linkUrl }) })
+      const { data } = await platform.user.patch(currentUser?._id,  { links: (links || []).concat({ name: linkName, url: linkUrl }) })
       setLinks(data.links)
       setLinkName('')
       setLinkUrl('')
@@ -64,7 +64,7 @@ const MemberPage = ({ member, loadError }) => {
 
   const deleteLink = async (link) => {
     try {
-      const { data } = await platform.user.patch(currentUser?._id,  { links: currentUser?.links.filter((item) => item.name !== link.name ) })
+      const { data } = await platform.user.patch(currentUser?._id,  { links: links.filter((item) => item.name !== link.name ) })
       setLinks(data.links)
       setErrors(null);  
     } catch (err) {
@@ -377,7 +377,7 @@ const MemberPage = ({ member, loadError }) => {
                   </div>
                   <ul className='flex flex-col w-full space-y-1 mt-4'>
                     {links ? links.map((link) => (
-                      <li key={link.name} className="flex flex-row items-center justify-start space-x-5 mb-1">
+                      <li key={link._id} className="flex flex-row items-center justify-start space-x-5 mb-1">
                         <a href={link.url}>
                           {link.name}
                         </a>
