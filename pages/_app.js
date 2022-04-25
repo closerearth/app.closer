@@ -1,6 +1,6 @@
 import api, { formatSearch } from '../utils/api'
-import Head from 'next/head'
-import App from 'next/app'
+import Head from 'next/head';
+import App from 'next/app';
 import Router, { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'
@@ -23,7 +23,7 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
   }
 
   return (
-    <div className="App">
+    <div className="dark">
       <Head>
         <title>{ DEFAULT_TITLE }</title>
         <meta charSet="utf-8" />

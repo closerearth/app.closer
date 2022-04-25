@@ -29,6 +29,7 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
     }
   };
 
+  // Load replies
   useEffect(() => {
     const loadData = async () => {
       try {
