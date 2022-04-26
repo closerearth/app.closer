@@ -133,7 +133,7 @@ const TextEditor = () => {
         id={id}
         editableProps={CONFIG.editableProps}
         initialValue={editorValue}
-        onChange={(newValue) => setEditorValue(newValue)}
+        onChange={setEditorValue}
         plugins={plugins}
       >
         <HeadingToolbar>
