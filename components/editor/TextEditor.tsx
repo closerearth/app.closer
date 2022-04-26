@@ -1,6 +1,6 @@
 import 'tippy.js/dist/tippy.css'
 import ReactDOM from 'react-dom'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   createPlateUI,
   HeadingToolbar,
@@ -47,6 +47,8 @@ import {
   createPlugins,
   createDeserializeDocxPlugin,
   createJuicePlugin,
+  usePlateEditorState,
+  setPlateState
 } from '@udecode/plate'
 import {
   createExcalidrawPlugin,
@@ -73,6 +75,9 @@ components = withStyledPlaceHolders(components)
 components = withStyledDraggables(components)
 
 const TextEditor = () => {
+
+  const [editorValue, setEditorValue] = useState(VALUES.align)
+
   const plugins = createPlugins(
     [
       createParagraphPlugin(),
@@ -127,7 +132,8 @@ const TextEditor = () => {
       <Plate
         id={id}
         editableProps={CONFIG.editableProps}
-        initialValue={VALUES.align}
+        initialValue={editorValue}
+        onChange={(newValue) => setEditorValue(newValue)}
         plugins={plugins}
       >
         <HeadingToolbar>
