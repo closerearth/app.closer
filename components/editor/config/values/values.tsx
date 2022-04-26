@@ -9,8 +9,8 @@ jsx
 
 const align: any = (
   <fragment>
-    <hp align="left">
-      This block text is aligned to the left.
+    <hp>
+      Write a description.
     </hp>
   </fragment>
 )

@@ -192,7 +192,7 @@ export const CONFIG: {
   mentionItems: MENTIONABLES,
   forceLayout: {
     options: {
-      rules: [{ path: [0], strictType: ELEMENT_H1 }],
+      rules: [{ path: [0] }],
     },
   },
 }

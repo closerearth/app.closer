@@ -8,8 +8,8 @@ export const withStyledPlaceHolders = (components: any) =>
       hideOnBlur: true,
     },
     {
-      key: ELEMENT_H1,
-      placeholder: 'Untitled',
+      key: ELEMENT_PARAGRAPH,
+      placeholder: 'Type a paragraph',
       hideOnBlur: true,
     },
   ])
