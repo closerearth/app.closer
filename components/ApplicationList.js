@@ -100,7 +100,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     }}
                     className="btn-primary mr-4"
                   >
-                    { __('appication_list_start_conversation') }
+                    { __('application_list_start_conversation') }
                   </button> :
                   application.get('status') === 'conversation'?
                     <button
