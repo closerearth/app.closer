@@ -298,7 +298,7 @@ const Event = ({ event, error }) => {
                     </a>
                   )}
                 >
-                  {event.description}
+                  <div dangerouslySetInnerHTML={{ __html: event.description }}></div>
                 </Linkify>
               </p>
             </section> }

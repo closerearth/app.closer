@@ -47,8 +47,11 @@ import {
   createPlugins,
   createDeserializeDocxPlugin,
   createJuicePlugin,
+  serializeHtml,
+  createPlateEditor,
   usePlateEditorState,
-  setPlateState
+  setPlateState,
+  pluginDeserializeHtml
 } from '@udecode/plate'
 import {
   createExcalidrawPlugin,
@@ -132,6 +135,18 @@ const TextEditor = ( { value, onChange } ) => {
     }
   )
 
+  // serialize input below
+
+  // const editor = createPlateEditor({
+  //   plugins: plugins,
+  //   id: id
+  // });
+
+  // const html = serializeHtml(editor, {
+  //   nodes: JSON.parse(editorValue),
+  // });
+
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Plate
@@ -148,10 +163,11 @@ const TextEditor = ( { value, onChange } ) => {
         <MarkBallonToolbar />
 
         <MentionCombobox />
-        value: {editorValue}
+
       </Plate>
     </DndProvider>
   )
 }
+
 
 export default TextEditor;
