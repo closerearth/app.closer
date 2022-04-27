@@ -21,6 +21,7 @@ import EventPhoto from '../../../components/EventPhoto';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
+import { serializeHtml } from '@udecode/plate'
 
 dayjs.extend(advancedFormat)
 

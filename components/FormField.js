@@ -189,7 +189,10 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
           }
           {
             type === 'richText' && 
-              <TextEditor />
+              <TextEditor
+                value={ data[name] }
+                onChange={value => update(name, value)}
+              />
           }
         </>
       }

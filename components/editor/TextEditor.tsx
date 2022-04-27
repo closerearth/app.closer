@@ -74,9 +74,14 @@ let components = createPlateUI({
 components = withStyledPlaceHolders(components)
 components = withStyledDraggables(components)
 
-const TextEditor = () => {
+const TextEditor = ( { value, onChange } ) => {
 
-  const [editorValue, setEditorValue] = useState(VALUES.align)
+  const [editorValue, setEditorValue] = useState(value)
+
+  const updateValue = (update) => {
+    setEditorValue(update);
+    onChange && onChange(update);
+  }
 
   const plugins = createPlugins(
     [
@@ -132,8 +137,8 @@ const TextEditor = () => {
       <Plate
         id={id}
         editableProps={CONFIG.editableProps}
-        initialValue={editorValue}
-        onChange={setEditorValue}
+        initialValue={VALUES.align}
+        onChange={(newValue) => updateValue(JSON.stringify(newValue))}
         plugins={plugins}
       >
         <HeadingToolbar>
@@ -143,6 +148,7 @@ const TextEditor = () => {
         <MarkBallonToolbar />
 
         <MentionCombobox />
+        value: {editorValue}
       </Plate>
     </DndProvider>
   )
