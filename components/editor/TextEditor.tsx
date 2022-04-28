@@ -153,7 +153,8 @@ const TextEditor = ( { value, onChange } ) => {
         id={id}
         editableProps={CONFIG.editableProps}
         initialValue={VALUES.align}
-        onChange={(newValue) => updateValue(JSON.stringify(newValue))}
+        onChange={
+          (newValue) => updateValue(JSON.stringify(newValue))}
         plugins={plugins}
       >
         <HeadingToolbar>
