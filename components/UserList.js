@@ -6,7 +6,7 @@ import api, { formatSearch } from '../utils/api';
 import ProfilePhoto from './ProfilePhoto';
 import Autocomplete from './Autocomplete';
 
-import { useAuth } from '../contexts/auth.js';
+import { useAuth } from '../contexts/auth';
 import { __ } from '../utils/helpers';
 
 const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink }) => {

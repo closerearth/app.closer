@@ -11,7 +11,7 @@ import Pagination from './Pagination';
 import { __ } from '../utils/helpers';
 
 
-const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
+const ApplicationList = ({ children, channel, status, managedBy, limit, hideRejectButton }) => {
 
   const { user } = useAuth();
   const { platform } = usePlatform();
@@ -53,7 +53,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
   }, [platform, filter]);
 
   return (
-    <div className="application-list">
+    <div className="application-list grid gap-4">
       { applications && applications.count() > 0 ?
         applications.map(app => {
           const application = platform.application.findOne(app.get('_id'));
@@ -100,7 +100,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     }}
                     className="btn-primary mr-4"
                   >
-                    { __('appication_list_start_conversation') }
+                    { __('application_list_start_conversation') }
                   </button> :
                   application.get('status') === 'conversation'?
                     <button
@@ -114,7 +114,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     </button>:
                     <span />
                 }
-                <a
+                { !hideRejectButton && <a
                   className="text-red-400"
                   href="#"
                   onClick={ (e) => {
@@ -123,7 +123,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                   }}
                 >
                   { __('application_list_reject') }
-                </a>
+                </a> }
               </div>
             </div>
           )
@@ -146,7 +146,8 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
 };
 ApplicationList.defaultProps = {
   status: 'open',
-  limit: 10
+  limit: 10,
+  hideRejectButton: false
 };
 
 export default ApplicationList;

@@ -6,7 +6,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { trackEvent } from './Analytics';
-import { FaTelegramPlane } from '@react-icons/all-files/fa/FaTelegramPlane';
+import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
 import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
@@ -75,11 +75,11 @@ const Navigation = () => {
   }, []);
 
   return (
-    <div className="NavContainer pt-20 md:pt-0 relative z-50 bg-background">
+    <div className="NavContainer pt-20 md:pt-0 relative">
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
-      <nav className="h-20 fixed z-50 top-0 bg-background left-0 right-0 shadow-sm md:relative">
+      <nav className="h-20 fixed z-50 top-0 left-0 right-0 shadow-sm md:relative">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
             <Link href="/">
@@ -162,7 +162,7 @@ const Navigation = () => {
               title="Join Telegram Group"
               className="text-2xl flex justify-center items-center mr-3 bg-primary text-white hover:scale-110 p-2 rounded-full duration-300"
             >
-              <FaTelegramPlane />
+              <FaTelegram />
             </a> }
             { isAuthenticated &&
               <Link

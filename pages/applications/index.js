@@ -64,17 +64,29 @@ const Applications = () => {
             <Tabs
               tabs={[
                 {
-                  title: 'Open applications',
-                  value: 'open'
+                  title: 'Open',
+                  value: 'open',
+                  content: (
+                    <ApplicationList status="open" />
+                  )
                 },
                 {
-                  title: 'In conversation',
-                  value: 'conversation'
+                  title: 'Chatting',
+                  value: 'conversation',
+                  content: (
+                    <ApplicationList status="conversation" managedBy={ user._id } />
+                  )
+                },
+                {
+                  title: 'Rejected',
+                  value: 'rejected',
+                  content: (
+                    <ApplicationList status="rejected" hideRejectButton />
+                  )
                 },
               ]}
               onChange={ tab => setStatus(tab.value) }
             />
-            <ApplicationList status={ status } managedBy={ status === 'conversation' && user._id } />
           </div>
         </div>
       </main>
