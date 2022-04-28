@@ -1,6 +1,6 @@
 import 'tippy.js/dist/tippy.css'
 import ReactDOM from 'react-dom'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   createPlateUI,
   HeadingToolbar,
@@ -10,7 +10,6 @@ import {
   createAutoformatPlugin,
   createBlockquotePlugin,
   createBoldPlugin,
-  // createCodeBlockPlugin,
   createCodePlugin,
   createExitBreakPlugin,
   createHeadingPlugin,
@@ -49,9 +48,6 @@ import {
   createJuicePlugin,
   serializeHtml,
   createPlateEditor,
-  usePlateEditorState,
-  setPlateState,
-  pluginDeserializeHtml
 } from '@udecode/plate'
 import {
   createExcalidrawPlugin,
@@ -79,7 +75,8 @@ components = withStyledDraggables(components)
 
 const TextEditor = ( { value, onChange } ) => {
 
-  const [editorValue, setEditorValue] = useState(value)
+  const [editorValue, setEditorValue] = useState([{ children: [{ text: '' }] }])
+  const [htmlState, setHtmlState] = useState('')
 
   const updateValue = (update) => {
     setEditorValue(update);
@@ -137,14 +134,15 @@ const TextEditor = ( { value, onChange } ) => {
 
   // serialize input below
 
-  // const editor = createPlateEditor({
-  //   plugins: plugins,
-  //   id: id
-  // });
+  const editor = useMemo(
+    () => createPlateEditor({
+      id: id,
+    }), []);
 
-  // const html = serializeHtml(editor, {
-  //   nodes: JSON.parse(editorValue),
-  // });
+  const serializeState = () => {
+    editorValue &&
+        setHtmlState(serializeHtml(editor, { nodes: editorValue }))
+  }
 
 
   return (
@@ -152,10 +150,10 @@ const TextEditor = ( { value, onChange } ) => {
       <Plate
         id={id}
         editableProps={CONFIG.editableProps}
-        initialValue={VALUES.align}
-        onChange={
-          (newValue) => updateValue(JSON.stringify(newValue))}
+        initialValue={editorValue}
+        onChange={updateValue}
         plugins={plugins}
+        editor={editor}
       >
         <HeadingToolbar>
           <ToolbarButtons />
@@ -166,6 +164,16 @@ const TextEditor = ( { value, onChange } ) => {
         <MentionCombobox />
 
       </Plate>
+
+      <button onClick={serializeState}>SERIALIZE</button>
+
+      {htmlState && (
+        <div>
+          <strong>serialized HTML:</strong>
+          <div dangerouslySetInnerHTML={{ __html: htmlState }} />
+        </div>
+      )}    
+
     </DndProvider>
   )
 }
