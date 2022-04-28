@@ -390,6 +390,7 @@ const MemberPage = ({ member, loadError }) => {
               <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
                 <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-background outline-none focus:outline-none p-10">
                   <h2 className="self-center text-lg font-normal mb-3">{ __('members_slug_links_title') }</h2>
+                  { error && <p className="validation-error">{ __('members_slug_error') } { error }</p> }
                   <form className='flex flex-col space-y-7 w-full p-2' onSubmit={handleSubmit}>
                     <div>
                       <label>{ __('members_slug_links_name') }</label>
