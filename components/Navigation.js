@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { trackEvent } from './Analytics';
 import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
 import { useAuth } from '../contexts/auth.js';
+import BlockchainWallet from './BlockchainWallet.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
 import FeaturedEvent from './FeaturedEvent';
@@ -165,17 +166,20 @@ const Navigation = () => {
               <FaTelegram />
             </a> }
             { isAuthenticated &&
-              <Link
-                href="/members/[slug]"
-                as={ `/members/${ user.slug }` }
-              >
+              <>
+                <Link
+                  href="/members/[slug]"
+                  as={`/members/${user.slug}`}
+                >
 
-                <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
-                  <span className='h-8 border-l mr-3' />
-                  <ProfilePhoto user={ user } />
-                  <p className='ml-3'>{user.screenname}</p>
-                </a>
-              </Link>
+                  <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
+                    <span className='h-8 border-l mr-3' />
+                    <ProfilePhoto user={user} />
+                    <p className='ml-3'>{user.screenname}</p>
+                  </a>
+                </Link>
+                <BlockchainWallet />
+              </>
             }
             <a
               className="space-y-2 md:hidden"

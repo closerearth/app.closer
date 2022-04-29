@@ -18,12 +18,23 @@ module.exports = {
   CACHE_DURATION: 6000000, // 1h
   STRIPE_TEST_KEY: 'pk_test_51Gv17cGtt5D0VKR2Gt2RUVIDfrHRGJTfMSwRFpdbF5B4VfZ2zFOxM62ckAj4aQN5q6mDexpjZAqQKLpKdmwcnQfJ00sJwfbVWK',
   STRIPE_PUB_KEY: 'pk_live_YxOUUf7iOvQj104TG4JyWMAE003w80ISH6',
+  BLOCKCHAIN_NETWORK_ID: 44787,
+  BLOCKCHAIN_DAO_TOKEN: {
+    address: '0x14dd060db55c0e7cc072bd3ab4709d55583119c0',
+    name: 'TEST TDF',
+    symbol: 'TDF',
+  },
+  BLOCKCHAIN_STABLE_COIN: {
+    address: '0x14dd060db55c0e7cc072bd3ab4709d55583119c0',
+    name: 'TEST EURC',
+    symbol: 'EURC',
+  },
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,
   REGISTRATION_MODE: 'open', // curated, paid, open
   // LOGO_FOOTER: "",
-  FACEBOOK_URL: "https://instagram.com/closerearth",
-  INSTAGRAM_URL: "https://instagram.com/closerearth",
+  FACEBOOK_URL: 'https://instagram.com/closerearth',
+  INSTAGRAM_URL: 'https://instagram.com/closerearth',
   DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',
   TWITTER_URL: 'https://twitter.com/closerearth',
   TELEGRAM_URL: 'https://t.me/closerdao',
