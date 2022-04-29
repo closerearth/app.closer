@@ -47,7 +47,7 @@ const Listings = () => {
             <Link as="/listings/create" href="/listings/create"><a className="btn-primary">{ __('listings_create') }</a></Link>
           </div>
         </div>
-        <div className="listings-list">
+        <div className="grid grid-cols-3 gap-6">
           { listings && listings.count() > 0 ?
             listings.map(listing => <ListingListPreview key={ listing.get('_id') } listing={ listing } />):
             'No Listings'

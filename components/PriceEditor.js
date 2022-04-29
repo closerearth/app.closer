@@ -1,4 +1,4 @@
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 
 export const currencies = [
   {
@@ -26,6 +26,10 @@ const PriceEditor = ({ value, onChange, placeholder, required }) => {
     onChange && onChange(update);
   }
   const currency = currencies.find(cur => cur.value === price.cur);
+
+  useEffect(() => {
+    setPrice(value);
+  }, [value]);
 
   return (
     <div className="currency-group flex justify-start items-center">

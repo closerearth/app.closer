@@ -139,6 +139,8 @@ export const getSample = (field) => {
     };
   case 'tags':
     return [];
+  case 'photos':
+    return [];
   case 'date':
     return new Date();
   case 'switch':

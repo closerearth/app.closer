@@ -4,14 +4,18 @@ import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
-import Layout from '../../../components/Layout';
+
 import api, { formatSearch, cdn } from '../../../utils/api';
-import UploadPhoto from '../../../components/UploadPhoto';
-import PostList from '../../../components/PostList';
-import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 import { __ } from '../../../utils/helpers';
+
+import PageNotFound from '../../404';
+
+import Layout from '../../../components/Layout';
+import UploadPhoto from '../../../components/UploadPhoto';
+import PostList from '../../../components/PostList';
+import Slider from '../../../components/Slider';
 
 const Listing = ({ listing, error }) => {
   const [photo, setPhoto] = useState(listing.photos && listing.photos[0]);
@@ -32,23 +36,20 @@ const Listing = ({ listing, error }) => {
       </Head>
       <main className="main-content">
         <div>
-          <div className="relative bg-gray-200 md:h-80 mb-4">
+          { listing.photos && listing.photos.length > 0 && <Slider
+            slides={listing.photos.map(id => ({
+              image: `${cdn}${id}-max-lg.jpg`
+            }))}
+          /> }
+          {/* <div className="relative bg-gray-200 md:h-80 mb-4">
             <div className="justify-self-center absolute top-0 left-0 right-0 flex justify-center items-center h-full">
               { photo && <img
                 className="object-cover md:h-full md:w-full"
                 src={ `${cdn}${photo}-max-lg.jpg` }
-                alt={ event.name }
+                alt={ listing.name }
               /> }
-              { (isAuthenticated && user._id === listing.createdBy) &&
-                <UploadPhoto
-                  model="listing"
-                  id={listing._id}
-                  onSave={id => setPhoto(id)}
-                  label={ photo ? 'Change photo': 'Add photo' }
-                />
-              }
             </div>
-          </div>
+          </div> */}
           <div>
             <h1>{listing.name}</h1>
             { error && <div className="validation-error">{error}</div> }
