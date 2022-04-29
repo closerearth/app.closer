@@ -5,7 +5,8 @@ import Router, { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'
 import { AuthProvider } from '../contexts/auth';
-import { PlatformProvider } from '../contexts/platform'
+import { PlatformProvider } from '../contexts/platform';
+import { Web3Provider } from '@chainsafe/web3-context';
 import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATION } from '../config';
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
