@@ -178,7 +178,6 @@ const Navigation = () => {
                     <p className='ml-3'>{user.screenname}</p>
                   </a>
                 </Link>
-                <BlockchainWallet />
               </>
             }
             <a

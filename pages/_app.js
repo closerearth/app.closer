@@ -22,6 +22,10 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
     api.defaults.headers.Authorization = `Bearer ${token}`;
   }
 
+  const tokensToWatch = {
+    [BLOCKCHAIN_NETWORK_ID]: [BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_STABLE_COIN]
+  }
+
   return (
     <div className="dark">
       <Head>
@@ -38,7 +42,9 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
       </Head>
       <AuthProvider>
         <PlatformProvider>
-          <Web3Provider networkIds={[BLOCKCHAIN_NETWORK_ID]} tokensToWatch={{ BLOCKCHAIN_NETWORK_ID:[BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_STABLE_COIN] }}>
+          <Web3Provider networkIds={[BLOCKCHAIN_NETWORK_ID]} 
+            tokensToWatch={tokensToWatch}
+          >
             <Navigation query={ query } signedIn={ signedIn } />
             <div className="content-wrapper">
               <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
