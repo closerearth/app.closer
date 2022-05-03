@@ -31,12 +31,12 @@ const Applications = () => {
       ]);
     }
 
-    if (user && user.roles.includes('community-curator')){
+    if (user){
       loadData();
     }
   }, [user, platform]);
 
-  if (!user || (!user.roles.includes('community-curator') && !user.roles.includes('admin'))) {
+  if (!user) {
     return <PageNotAllowed />;
   }
 

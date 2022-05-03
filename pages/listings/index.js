@@ -21,12 +21,12 @@ const Listings = () => {
   }
 
   useEffect(() => {
-    if (user && user.roles.includes('admin')){
+    if (user){
       loadData();
     }
   }, [user]);
 
-  if (!user || !user.roles.includes('admin')) {
+  if (!user) {
     return null;
   }
 
