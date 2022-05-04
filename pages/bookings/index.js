@@ -24,6 +24,7 @@ const Bookings = () => {
     ]);
   }
 
+
   useEffect(() => {
     if (user && user._id){
       loadData();
