@@ -7,8 +7,8 @@ import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { trackEvent } from './Analytics';
 import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
+import { useWeb3 } from '@rastaracoon/web3-context';
 import { useAuth } from '../contexts/auth.js';
-import BlockchainWallet from './BlockchainWallet.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
 import FeaturedEvent from './FeaturedEvent';
@@ -16,7 +16,8 @@ import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES } from '../config';
+import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES, BLOCKCHAIN_DAO_TOKEN } from '../config';
+
 
 dayjs.extend(relativeTime);
 
@@ -57,6 +58,7 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
+  const { wallet, tokens } = useWeb3();
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
     (
@@ -165,6 +167,22 @@ const Navigation = () => {
             >
               <FaTelegram />
             </a> }
+            { isAuthenticated && wallet && tokens[BLOCKCHAIN_DAO_TOKEN.address] &&
+              <>
+                <Link
+                  href="/members/[slug]"
+                  as={`/members/${user.slug}`}
+                >
+                  
+                  <a className='mr-3'>
+                    <span className='h-8 border-l mr-3' />
+                    <button className='btn-primary'>
+                      {tokens[BLOCKCHAIN_DAO_TOKEN.address].balance} {BLOCKCHAIN_DAO_TOKEN.name}
+                    </button>
+                  </a>
+                </Link>
+              </>
+            }
             { isAuthenticated &&
               <>
                 <Link
