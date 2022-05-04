@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useWeb3 } from '@rastaracoon/web3-context';
 import { utils, BigNumber } from 'ethers';
@@ -6,44 +6,125 @@ import { utils, BigNumber } from 'ethers';
 
 import { BLOCKCHAIN_NATIVE_TOKEN } from '../config';
 
-
 const Wallet = () => {
-  const { address, ethBalance: celoBalance, network, wallet, onboard, tokens } = useWeb3();
+  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens } = useWeb3();
+
+  const [toAddress, setToAddress] = useState('')
+  const [amountToSend, setamountToSend] = useState(0)
+  const [pendingTransactions, setPendingTransactions] = useState([])
+
+  const sendTokenTransaction = async (token) => {
+    if (!toAddress) {
+      alert('A Celo address to send Tokens to is required.')
+      return
+    }
+
+    const { hash } = await token.transfer(
+      utils.getAddress(toAddress),
+      BigNumber.from(amountToSend)
+    )
+
+    await setPendingTransactions([...pendingTransactions, hash])
+    provider.once(hash, (transaction) => {
+      console.log(`${hash} mined`)
+      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      // Emitted when the transaction has been mined
+    })
+  }
+
+  const sendCeloTransaction = async () => {
+    if (!toAddress) {
+      alert('A Celo address to send Tokens to is required.')
+      return
+    }
+
+    const signer = provider.getUncheckedSigner()
+    
+    const { hash } = await signer.sendTransaction({
+      to: utils.getAddress(toAddress),
+      value: BigNumber.from(amountToSend)
+    })
+
+    await setPendingTransactions([...pendingTransactions, hash])
+    provider.once(hash, (transaction) => {
+      console.log(`${hash} mined`)
+      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      // Emitted when the transaction has been mined
+    })
+  }
+
   return (
     <div>
-      <div className='flex flex-row content-end'>
-        <h3 className="mt-9 mb-8 text-4xl font-light">Blockchain wallet ({BLOCKCHAIN_NATIVE_TOKEN})</h3>
-        {!wallet?.provider ? (
-          <button
-            className="btn-primary w-24"
-            onClick={() => {
-              onboard?.walletSelect();
-            }}
-          >
+      <div className='flex flex-row items-baseline'>
+        <h3 className="mt-9 mb-8 text-4xl font-light">Blockchain wallet</h3>
+        <span className='px-4'>({BLOCKCHAIN_NATIVE_TOKEN}) - ({address?.substring(0,4)+'...'+address?.substring(address?.length-4)})</span>
+        <div>
+          {!wallet?.provider ? (
+            <button
+              className="btn-primary w-36 px-4"
+              onClick={() => {
+                onboard?.walletSelect();
+              }}
+            >
               Select a Wallet
-          </button>) : (
-          <><button
-            className="bn-demo-button"
-            onClick={() => onboard?.walletSelect()}
-          >
+            </button>) : (
+            <><button
+              className="btn-primary w-36"
+              onClick={() => onboard?.walletSelect()}
+            >
               Switch Wallets
-          </button>
-          </>
-        )}
+            </button>
+            </>
+          )}
+        </div>
       </div>
 
 
-      {celoBalance != null && <span>{celoBalance.toFixed(4)} {BLOCKCHAIN_NATIVE_TOKEN}</span>} <br />
+      {celoBalance != null && <span>{celoBalance.toFixed(4)} {BLOCKCHAIN_NATIVE_TOKEN}</span>} 
+      <button
+        className="btn-primary w-48"
+        onClick={async () => {
+          sendCeloTransaction()
+        }}
+      >
+        Send CELO
+      </button>
+      
+      
+      <br />
 
       {Object.keys(tokens).map((ta) => {
         const t = tokens[ta];
-        console.log(t);
         return (
-          <div key={ta}>
+          <div className='flex flex-row content-between' key={ta}>
             {t.balance} {t.name}
+            <button
+              className="btn-primary w-48"
+              onClick={async () => {
+                sendTokenTransaction(tokens[ta])
+              }}
+            >
+              Send {t.name}
+            </button>
           </div>
         );
       })}
+
+      <div className="flex justify-between md:flex-row">
+        <label>Send params:</label>
+        <input
+          className="w-64"
+          type="text"
+          value={toAddress}
+          placeholder="Address"
+          onChange={e => setToAddress(e.target.value)} />
+        <input
+          className="w-32"
+          type="number"
+          value={amountToSend}
+          placeholder="Celo amount"
+          onChange={e => setamountToSend(e.target.value)} />
+      </div>
 
     </div>
   );
