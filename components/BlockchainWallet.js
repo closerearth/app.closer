@@ -34,12 +34,12 @@ const Wallet = () => {
 
   const sendCeloTransaction = async () => {
     if (!toAddress) {
-      alert('A Celo address to send Tokens to is required.')
+      alert('A Celo address to send CELO to is required.')
       return
     }
 
     const signer = provider.getUncheckedSigner()
-    
+
     const { hash } = await signer.sendTransaction({
       to: utils.getAddress(toAddress),
       value: BigNumber.from(amountToSend)

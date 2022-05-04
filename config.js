@@ -21,17 +21,17 @@ module.exports = {
   BLOCKCHAIN_NETWORK_ID: 44787,
   BLOCKCHAIN_NATIVE_TOKEN: 'TEST CELO',
   BLOCKCHAIN_DAO_TOKEN: {
-    address: '0x2703D2e8AE9CdC70a0EF309F8759910300E2BBf2',
-    name: 'TEST TDF',
+    address: '0x17Bf6E84C3EC4b964C22F44F00511852d69a1C87',
+    name: 'TesTDF',
     symbol: 'TDF',
   },
   BLOCKCHAIN_STABLE_COIN: {
-    address: '0x10c892A6EC43a53E45D0B916B4b7D383B1b78C0F',
-    name: 'TEST EURC',
-    symbol: 'EURC',
+    address: '0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f',
+    name: 'Test cEUR',
+    symbol: 'cEUR',
   },
   BLOCKCHAIN_CROWDSALE_CONTRACT: {
-    address: '0x707471e6Fa79463792BC588229AbfACa4bd105a3'
+    address: '0xA3145DBd2E9E4778934D61f7814AF2b6eF3F06E2'
   },
   BLOCKCHAIN_DAO_STAKING_CONTRACT: {
     address: ''
