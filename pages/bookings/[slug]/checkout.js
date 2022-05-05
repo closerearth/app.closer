@@ -7,6 +7,7 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import { useWeb3 } from '@rastaracoon/web3-context';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -18,7 +19,7 @@ import { priceFormat, __ } from '../../../utils/helpers';
 import api, { formatSearch, cdn } from '../../../utils/api';
 import config from '../../../config';
 
-
+import Switch from '../../../components/Switch';
 import Layout from '../../../components/Layout';
 import CheckoutForm from '../../../components/CheckoutForm';
 
@@ -30,6 +31,8 @@ const Booking = ({ booking, error }) => {
   const stripe = loadStripe(config.STRIPE_TEST_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
+  const { wallet } = useWeb3();
+  
 
   const saveBooking = async (update) => {
     try {
@@ -63,48 +66,62 @@ const Booking = ({ booking, error }) => {
         <h1 className="mb-4">
           { __('bookings_checkout_title') }
         </h1>
+        <section className='mt-3'>
+          <div className="mt-2">
+            <div className="flex flex-row items-baseline mb-3">
+              <h3>{ __('bookings_using_crypto') }</h3>
+              <p className='italic text-sm'>{__('bookings_using_crypto_interrogation')}</p>
+            </div>
+            {wallet ? 
+              <Switch checked={booking.usingToken} onChange={usingToken => setBooking({ ...editBooking, usingToken })} />
+              :
+              <p className='italic'>Please connect and fund your wallet in your account.</p>
+            }
+          </div>
+        </section>
+
+
         <section className="mt-3">
           <h3>{ __('bookings_summary') }</h3>
           <p>{ __('bookings_status') } <b>{editBooking.status}</b></p>
           <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
           <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
           <p>{ __('bookings_total') }
-            <b className={ booking.volunteer ? 'line-through': '' }>
+            <b className={ booking.volunteer || editBooking.usingToken ? 'line-through': '' }>
               {' '}{priceFormat(booking.price)}
             </b>
-            <b>{' '}{booking.volunteer && priceFormat(0, booking.price.cur)}</b>
+            <b>{' '}{booking.volunteer || editBooking.usingToken && priceFormat(0, booking.price.cur)}</b>
           </p>
         </section>
         { booking.status === 'open' &&
           <div className="mt-2">
-            { booking.volunteer ?
+            {booking.volunteer ?
               <div>
-                <p>{ __('booking_volunteering_details') }</p>
+                <p>{__('booking_volunteering_details')}</p>
                 <p className="mt-3">
-                  <a href="#" onClick={ e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
+                  <a href="#" onClick={e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
                 </p>
-              </div>:
-              <Elements stripe={ stripe }>
-                <CheckoutForm
-                  type="booking"
-                  total={ booking.price.val }
-                  currency={ booking.price.cur }
-                  _id={ booking._id }
-                  onSuccess={ payment => setBooking({ ...booking, status: 'confirmed' }) }
-                  email={ user.email }
-                  name={ user.screenname }
-                  message={ booking.message }
-                  backUrl={ `/bookings/${booking._id}/contribution` }
-                  buttonText={ user.roles.includes('member') ? 'Book' : 'Request to book' }
-                  buttonDisabled={ false }
-                />
-              </Elements>
-            }
+              </div> : editBooking.usingToken ? 
+                <div>You did it </div>
+                :
+                <Elements stripe={stripe}>
+                  <CheckoutForm
+                    type="booking"
+                    total={booking.price.val}
+                    currency={booking.price.cur}
+                    _id={booking._id}
+                    onSuccess={payment => setBooking({ ...booking, status: 'confirmed' })}
+                    email={user.email}
+                    name={user.screenname}
+                    message={booking.message}
+                    backUrl={`/bookings/${booking._id}/contribution`}
+                    buttonText={user.roles.includes('member') ? 'Book' : 'Request to book'}
+                    buttonDisabled={false} />
+                </Elements>}
 
-            { user.roles.includes('member') ?
-              <p className="mt-3 text-sm"><i>{ __('booking_cancelation_policy_member') }</i></p>:
-              <p className="mt-3 text-sm"><i>{ __('booking_cancelation_policy') }</i></p>
-            }
+            {user.roles.includes('member') ?
+              <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy_member')}</i></p> :
+              <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy')}</i></p>}
           </div>
         }
       </main>
