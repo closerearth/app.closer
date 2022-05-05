@@ -25,7 +25,6 @@ import {
   createResetNodePlugin,
   createSelectOnBackspacePlugin,
   createSoftBreakPlugin,
-  createDndPlugin,
   createStrikethroughPlugin,
   createSubscriptPlugin,
   createSuperscriptPlugin,
@@ -56,9 +55,6 @@ import {
 } from '@udecode/plate-ui-excalidraw'
 import { MarkBallonToolbar, ToolbarButtons } from './config/components/Toolbars'
 import { withStyledPlaceHolders } from './config/components/withStyledPlaceHolders'
-import { withStyledDraggables } from './config/components/withStyledDraggables'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import { CONFIG } from './config/config'
 import { VALUES } from './config/values/values'
 
@@ -71,18 +67,13 @@ let components = createPlateUI({
   // customize your components by plugin key
 })
 components = withStyledPlaceHolders(components)
-components = withStyledDraggables(components)
 
 const TextEditor = ( { value, onChange } ) => {
 
   const [editorValue, setEditorValue] = useState([{ children: [{ text: '' }] }])
   const [htmlState, setHtmlState] = useState('')
 
-  const updateValue = (update) => {
-    setEditorValue(update);
-    onChange && onChange(update);
-  }
-
+  
   const plugins = createPlugins(
     [
       createParagraphPlugin(),
@@ -111,7 +102,6 @@ const TextEditor = ( { value, onChange } ) => {
       createFontSizePlugin(),
       createKbdPlugin(),
       createNodeIdPlugin(),
-      createDndPlugin(),
       createIndentPlugin(CONFIG.indent),
       createAutoformatPlugin(CONFIG.autoformat),
       createResetNodePlugin(CONFIG.resetBlockType),
@@ -131,50 +121,41 @@ const TextEditor = ( { value, onChange } ) => {
       components,
     }
   )
-
-  // serialize input below
-
+  
   const editor = useMemo(
     () => createPlateEditor({
       id: id,
+      plugins: plugins
     }), []);
 
-  const serializeState = () => {
+  
+
+  const serializeState = (update) => {
+    setEditorValue(update);
     editorValue &&
-        setHtmlState(serializeHtml(editor, { nodes: editorValue }))
+    setHtmlState(serializeHtml(editor, { nodes: editorValue }))
+    onChange && onChange(htmlState);
   }
 
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Plate
-        id={id}
-        editableProps={CONFIG.editableProps}
-        initialValue={editorValue}
-        onChange={updateValue}
-        plugins={plugins}
-        editor={editor}
-      >
-        <HeadingToolbar>
-          <ToolbarButtons />
-        </HeadingToolbar>
+    <Plate
+      id={id}
+      editableProps={CONFIG.editableProps}
+      initialValue={editorValue}
+      onChange={((newValue) => serializeState(newValue))}
+      plugins={plugins}
+    >
+      <HeadingToolbar>
+        <ToolbarButtons />
+      </HeadingToolbar>
 
-        <MarkBallonToolbar />
+      <MarkBallonToolbar />
 
-        <MentionCombobox />
+      <MentionCombobox />
 
-      </Plate>
+    </Plate>
 
-      <button onClick={serializeState}>SERIALIZE</button>
-
-      {htmlState && (
-        <div>
-          <strong>serialized HTML:</strong>
-          <div dangerouslySetInnerHTML={{ __html: htmlState }} />
-        </div>
-      )}    
-
-    </DndProvider>
   )
 }
 
