@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useWeb3 } from '@rastaracoon/web3-context';
 import { utils, BigNumber, Contract } from 'ethers';
 
+import Spinner from './Spinner';
+
 import { BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_CROWDSALE_CONTRACT, BLOCKCHAIN_STABLE_COIN } from '../config';
 
 import { BLOCKCHAIN_CROWDSALE_CONTRACT_ABI } from '../utils/blockchain';
@@ -103,6 +105,7 @@ const Wallet = () => {
 
   return (
     <div>
+      {pendingTransactions?.length > 0 && <Spinner fixed />}
       <div className='flex flex-row items-baseline'>
         <h3 className="mt-9 mb-8 text-4xl font-light">Blockchain wallet</h3>
         <div>
@@ -205,7 +208,7 @@ const Wallet = () => {
           </div>
         </>
       )}
-      
+
     </div>
   );
 };

@@ -174,7 +174,7 @@ const Navigation = () => {
                   as={`/members/${user.slug}`}
                 >
                   
-                  <a className='mr-3'>
+                  <a className='hidden md:flex mr-3'>
                     <span className='h-8 border-l mr-3' />
                     <button className='btn-primary'>
                       {tokens[BLOCKCHAIN_DAO_TOKEN.address].balance} {BLOCKCHAIN_DAO_TOKEN.name}
