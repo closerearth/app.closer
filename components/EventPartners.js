@@ -10,7 +10,7 @@ const EventPartners = ({ event, user, isAuthenticated, addPartner, partnerToAdd,
 
   return (<section className="mb-6">
     <div className="flex flex-row flex-wrap justify-center items-center">
-      {event.partners && event.partners.map(partner => partner.photoUrl && <a href={partner.url || '#'} target="_blank" rel="noreferrer" key={partner.name} className="mr-3">
+      {event.partners && event.partners.map(partner => partner.photo && <a href={partner.url || '#'} target="_blank" rel="noreferrer" key={partner.name} className="mr-3">
         <Photo id={partner.photo} photoUrl={partner.photoUrl} className="w-32 h-16" title={partner.name} />
       </a>)}
     </div>
