@@ -32,6 +32,7 @@ const Event = ({ event, error }) => {
     name: '',
     photo: null
   });
+  const [partnerForm, togglePartnerForm] = useState(false)
   const [loadError, setErrors] = useState(null);
   const [password, setPassword] = useState('');
   const [featured, setFeatured] = useState(event && !!event.featured);
@@ -75,6 +76,7 @@ const Event = ({ event, error }) => {
       await platform.event.patch(event._id, {
         partners: (event.partners || []).concat(partner)
       });
+      togglePartnerForm(!partnerForm)
     } catch (err) {
       alert(`Could not add partner: ${err.message}`)
     }
@@ -242,7 +244,7 @@ const Event = ({ event, error }) => {
           </section>
           <main className="main-content max-w-prose event-page py-10">
             { ((event.partners && event.partners.length > 0) || (isAuthenticated && user._id === event.createdBy)) &&
-              <EventPartners event={event} user={user} isAuthenticated={isAuthenticated} partnerToAdd={partnerToAdd} addPartner={addPartner} setPartnerToAdd={setPartnerToAdd}/>
+              <EventPartners event={event} user={user} isAuthenticated={isAuthenticated} partnerToAdd={partnerToAdd} addPartner={addPartner} setPartnerToAdd={setPartnerToAdd} partnerForm={partnerForm} togglePartnerForm={togglePartnerForm}/>
             }
 
             { attendees && attendees.length > 0 &&

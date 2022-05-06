@@ -4,9 +4,8 @@ import UploadPhoto from './UploadPhoto';
 import { FaTimes } from '@react-icons/all-files/fa/FaTimes';
 import { __ } from '../utils/helpers';
 
-const EventPartners = ({ event, user, isAuthenticated, addPartner, partnerToAdd, setPartnerToAdd }) => {
+const EventPartners = ({ event, user, isAuthenticated, addPartner, partnerToAdd, setPartnerToAdd, partnerForm, togglePartnerForm }) => {
 
-  const [partnerForm, togglePartnerForm] = useState(false)
 
   return (<section className="mb-6">
     <div className="flex flex-row flex-wrap justify-center items-center">
