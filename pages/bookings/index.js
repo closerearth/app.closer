@@ -60,8 +60,8 @@ const Bookings = () => {
                     value: 'open',
                     content: (
                       <div className="bookings-list">
-                        { bookings && bookings.count() > 0 ?
-                          bookings.map(booking => <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                        { bookings && bookings.count() > 0  ?
+                          bookings.map(booking => booking.get('status') == 'open' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
                           'No Bookings'
                         }
                       </div>
@@ -72,8 +72,8 @@ const Bookings = () => {
                     value: 'completed',
                     content: (
                       <div className="bookings-list">
-                        { bookings && bookings.count() > 0  ?
-                          bookings.map(booking => <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                        { bookings && bookings.count() > 0 ?
+                          bookings.map(booking => booking.get('status') == 'completed' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
                           'No Bookings'
                         }
                       </div>
@@ -84,8 +84,8 @@ const Bookings = () => {
                     value: 'rejected',
                     content: (
                       <div className="bookings-list">
-                        { bookings && bookings.count() > 0  ?
-                          bookings.map(booking => <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                        { bookings && bookings.count() > 0 ?
+                          bookings.map(booking => booking.get('status') == 'rejected' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
                           'No Bookings'
                         }
                       </div>
