@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useWeb3 } from '@rastaracoon/web3-context';
+import ReactTooltip from 'react-tooltip';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -57,29 +58,17 @@ const Booking = ({ booking, error }) => {
 
   return (
     <Layout>
+      <ReactTooltip />
       <Head>
         <title>{ booking.name }</title>
         <meta name="description" content={booking.description} />
         <meta property="og:type" content="booking" />
       </Head>
+      
       <main className="main-content max-w-prose booking">
         <h1 className="mb-4">
           { __('bookings_checkout_title') }
         </h1>
-        <section className='mt-3'>
-          <div className="mt-2">
-            <div className="flex flex-row items-baseline mb-3">
-              <h3>{ __('bookings_using_crypto') }</h3>
-              <p className='italic text-sm'>{__('bookings_using_crypto_interrogation')}</p>
-            </div>
-            {wallet ? 
-              <Switch checked={booking.usingToken} onChange={usingToken => setBooking({ ...editBooking, usingToken })} />
-              :
-              <p className='italic'>Please connect and fund your wallet in your account.</p>
-            }
-          </div>
-        </section>
-
 
         <section className="mt-3">
           <h3>{ __('bookings_summary') }</h3>
@@ -101,24 +90,53 @@ const Booking = ({ booking, error }) => {
                 <p className="mt-3">
                   <a href="#" onClick={e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
                 </p>
-              </div> : editBooking.usingToken ? 
-                <div>You did it </div>
-                :
-                <Elements stripe={stripe}>
-                  <CheckoutForm
-                    type="booking"
-                    total={booking.price.val}
-                    currency={booking.price.cur}
-                    _id={booking._id}
-                    onSuccess={payment => setBooking({ ...booking, status: 'confirmed' })}
-                    email={user.email}
-                    name={user.screenname}
-                    message={booking.message}
-                    backUrl={`/bookings/${booking._id}/contribution`}
-                    buttonText={user.roles.includes('member') ? 'Book' : 'Request to book'}
-                    buttonDisabled={false} />
-                </Elements>}
-
+              </div> : 
+              <>
+                <section className='mt-3'>
+                  <div className="mt-2">
+                    <div className="flex flex-row items-center space-x-2">
+                      <p className="mb-4">{ __('bookings_using_crypto') }</p>
+                      <wrap className="" data-tip={!wallet && __('bookings_using_crypto_connect_wallet')}>
+                        <Switch checked={editBooking.usingToken} onChange={usingToken => setBooking({ ...editBooking, usingToken })} disabled={!wallet && 'disabled'} />
+                      </wrap>
+                      <p className='italic text-sm mb-4 cursor-pointer' 
+                        data-tip={ __('bookings_using_crypto_interrogation_answer') }
+                      >
+                        {__('bookings_using_crypto_interrogation')}
+                      </p>
+                    </div>
+                  </div>
+                </section>
+                {editBooking.usingToken ? 
+                  <section className="flex flex-row">
+                    <p>You currently have {}tokens staked, and {}nights available to book</p>
+                    <button className="btn-primary w-36 px-4"
+                      onClick={() => {
+                      } }>
+                      Approve tokens
+                    </button>
+                    <button className="btn-primary w-36 px-4"
+                      onClick={() => {
+                      } }>
+                      Complete booking
+                    </button>
+                  </section>: 
+                  <Elements stripe={stripe}>
+                    <CheckoutForm
+                      type="booking"
+                      total={booking.price.val}
+                      currency={booking.price.cur}
+                      _id={booking._id}
+                      onSuccess={payment => setBooking({ ...booking, status: 'confirmed' })}
+                      email={user.email}
+                      name={user.screenname}
+                      message={booking.message}
+                      backUrl={`/bookings/${booking._id}/contribution`}
+                      buttonText={user.roles.includes('member') ? 'Book' : 'Request to book'}
+                      buttonDisabled={false} />
+                  </Elements>
+                }
+              </>}
             {user.roles.includes('member') ?
               <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy_member')}</i></p> :
               <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy')}</i></p>}
