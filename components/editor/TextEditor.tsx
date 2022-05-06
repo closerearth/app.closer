@@ -71,7 +71,6 @@ components = withStyledPlaceHolders(components)
 const TextEditor = ( { value, onChange } ) => {
 
   const [editorValue, setEditorValue] = useState([{ children: [{ text: '' }] }])
-  const [htmlState, setHtmlState] = useState('')
 
   
   const plugins = createPlugins(
@@ -132,9 +131,8 @@ const TextEditor = ( { value, onChange } ) => {
 
   const serializeState = (update) => {
     setEditorValue(update);
-    editorValue &&
-    setHtmlState(serializeHtml(editor, { nodes: editorValue }))
-    onChange && onChange(htmlState);
+    const html = serializeHtml(editor, { nodes: editorValue })
+    onChange && onChange(html);
   }
 
 
@@ -143,7 +141,7 @@ const TextEditor = ( { value, onChange } ) => {
       id={id}
       editableProps={CONFIG.editableProps}
       initialValue={editorValue}
-      onChange={((newValue) => serializeState(newValue))}
+      onChange={((update) => serializeState(update))}
       plugins={plugins}
     >
       <HeadingToolbar>
