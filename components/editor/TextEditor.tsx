@@ -1,6 +1,6 @@
 import 'tippy.js/dist/tippy.css'
 import ReactDOM from 'react-dom'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import {
   createPlateUI,
   HeadingToolbar,
@@ -46,31 +46,31 @@ import {
   createDeserializeDocxPlugin,
   createJuicePlugin,
   serializeHtml,
+  deserializeHtml,
   createPlateEditor,
+  deserializeHtmlNode,
 } from '@udecode/plate'
-import {
-  createExcalidrawPlugin,
-  ELEMENT_EXCALIDRAW,
-  ExcalidrawElement,
-} from '@udecode/plate-ui-excalidraw'
-import { MarkBallonToolbar, ToolbarButtons } from './config/components/Toolbars'
+import { ToolbarButtons } from './config/components/Toolbars'
 import { withStyledPlaceHolders } from './config/components/withStyledPlaceHolders'
 import { CONFIG } from './config/config'
-import { VALUES } from './config/values/values'
+
 
 
 
 const id = 'Examples/Playground'
 
-let components = createPlateUI({
-  [ELEMENT_EXCALIDRAW]: ExcalidrawElement,
-  // customize your components by plugin key
-})
+let components = createPlateUI({})
 components = withStyledPlaceHolders(components)
 
 const TextEditor = ( { value, onChange } ) => {
 
   const [editorValue, setEditorValue] = useState([{ children: [{ text: '' }] }])
+
+  useEffect(() => {
+
+    const deserialized = deserializeHtml(editor, { element : value })
+    setEditorValue(deserialized)
+  }, [editorValue]);
 
   
   const plugins = createPlugins(
@@ -85,8 +85,6 @@ const TextEditor = ( { value, onChange } ) => {
       createListPlugin(),
       createTablePlugin(),
       createMediaEmbedPlugin(),
-      createExcalidrawPlugin(),
-      // createCodeBlockPlugin(),
       createAlignPlugin(CONFIG.align),
       createBoldPlugin(),
       createCodePlugin(),
@@ -147,8 +145,6 @@ const TextEditor = ( { value, onChange } ) => {
       <HeadingToolbar>
         <ToolbarButtons />
       </HeadingToolbar>
-
-      <MarkBallonToolbar />
 
       <MentionCombobox />
 
