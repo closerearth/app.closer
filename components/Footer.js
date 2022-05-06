@@ -1,6 +1,6 @@
 import React from 'react';
 import Newsletter from './Newsletter';
-import { FaTelegramPlane } from '@react-icons/all-files/fa/FaTelegramPlane';
+import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
 import { SiDiscord } from '@react-icons/all-files/si/SiDiscord';
 import { SiTwitter } from '@react-icons/all-files/si/SiTwitter';
 import { SiInstagram } from '@react-icons/all-files/si/SiInstagram';
@@ -14,7 +14,7 @@ import { trackEvent } from './Analytics';
 import { PLATFORM_NAME, LOGO_FOOTER, LOGO_HEADER, TEAM_EMAIL, INSTAGRAM_URL, FACEBOOK_URL, TELEGRAM_URL, TWITTER_URL, NEWSLETTER, DISCORD_URL } from '../config';
 
 const footer = () => (
-  <div className="border border-top">
+  <div>
     <footer className="main-content flex flex-col items-center p-4">
       <div className="flex flex-col md:flex-row py-2 items-center w-full justify-between">
         <div className='flex flex-col items-center md:items-start'>
@@ -24,7 +24,7 @@ const footer = () => (
               target="_blank"
               rel="noreferrer nofollow"
               title="Follow us on Instagram"
-              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary bg-transparent duration-300 hover:scale-110"
+              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary dark:text-background bg-transparent duration-300 hover:scale-110"
             >
               <SiInstagram />
             </a> }
@@ -33,7 +33,7 @@ const footer = () => (
               target="_blank"
               rel="noreferrer nofollow"
               title="Follow us on Facebook"
-              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary bg-transparent duration-300 hover:scale-110"
+              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary dark:text-background bg-transparent duration-300 hover:scale-110"
             >
               <RiFacebookFill />
             </a> }
@@ -42,7 +42,7 @@ const footer = () => (
               target="_blank"
               rel="noreferrer nofollow"
               title="Follow us on Twitter"
-              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary bg-transparent duration-300 hover:scale-110"
+              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary dark:text-background bg-transparent duration-300 hover:scale-110"
             >
               <SiTwitter />
             </a> }
@@ -51,7 +51,7 @@ const footer = () => (
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Discord server"
-              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary bg-transparent duration-300 hover:scale-110"
+              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary dark:text-background bg-transparent duration-300 hover:scale-110"
             >
               <SiDiscord />
             </a> }
@@ -60,9 +60,9 @@ const footer = () => (
               target="_blank"
               rel="noreferrer nofollow"
               title="Join Telegram Group"
-              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary bg-transparent duration-300 hover:scale-110"
+              className="text-2xl mr-2 rounded-full hover:text-gray-100 hover:bg-primary p-2 text-primary dark:text-background bg-transparent duration-300 hover:scale-110"
             >
-              <FaTelegramPlane />
+              <FaTelegram />
             </a> }
           </div>
           <div className='flex flex-col items-start mt-8 text-gray-500'>

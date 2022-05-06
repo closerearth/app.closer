@@ -53,7 +53,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
   }, [platform, filter]);
 
   return (
-    <div className="application-list">
+    <div className="application-list grid gap-4">
       { applications && applications.count() > 0 ?
         applications.map(app => {
           const application = platform.application.findOne(app.get('_id'));
@@ -100,7 +100,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     }}
                     className="btn-primary mr-4"
                   >
-                    { __('appication_list_start_conversation') }
+                    { __('application_list_start_conversation') }
                   </button> :
                   application.get('status') === 'conversation'?
                     <button
@@ -114,16 +114,16 @@ const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
                     </button>:
                     <span />
                 }
-                <a
+                { application.get('status') === 'rejected' && <a
                   className="text-red-400"
                   href="#"
                   onClick={ (e) => {
                     e.preventDefault();
-                    updateApplication(application.get('_id'), 'rejected');
+                    updateApplication(application.get('_id'), 'open');
                   }}
                 >
-                  { __('application_list_reject') }
-                </a>
+                  { __('application_list_reopen') }
+                </a> }
               </div>
             </div>
           )

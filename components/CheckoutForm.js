@@ -6,10 +6,12 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 import api from '../utils/api';
+import { __ } from '../utils/helpers';
 import config from '../config';
 
 const CheckoutForm = ({
   type,
+  cancelUrl,
   ticketOption,
   _id,
   buttonText,
@@ -84,6 +86,7 @@ const CheckoutForm = ({
               fontSize: '20px',
               lineHeight: '1.6',
               color: 'black',
+              padding: '0.2rem',
               fontWeight: 'regular',
               fontFamily: 'Roobert, sans-serif',
               '::placeholder': {
@@ -95,11 +98,14 @@ const CheckoutForm = ({
             }
           }
         }}
-        className="payment-card shadow-lg p-3"
+        className="payment-card shadow-lg p-2 bg-white"
       />
       <button type="submit" className="btn-primary mt-4" disabled={!stripe || buttonDisabled || processing}>
-        { processing? 'Processing payment...' : buttonText || 'Pay' }
+        { processing? __('checkout_processing_payment') : buttonText || __('checkout_pay') }
       </button>
+      { cancelUrl && <a href={ cancelUrl } className="mt-4 ml-2">
+        {__('generic_cancel')}
+      </a> }
     </form>
   );
 };

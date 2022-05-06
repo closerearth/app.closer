@@ -1,6 +1,6 @@
 import api, { formatSearch } from '../utils/api'
-import Head from 'next/head'
-import App from 'next/app'
+import Head from 'next/head';
+import App from 'next/app';
 import Router, { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'

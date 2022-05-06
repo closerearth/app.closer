@@ -41,25 +41,17 @@ const Listings = () => {
         <div className="validation-error">{ listings.get('error') }</div>
       }
       <div className="main-content intro fullwidth">
-        <div className="flex flex-row">
-          <div className="w-3/4 mr-4">
-            <div className="page-header mb-3 flex justify-between">
-              <h1>{ __('listings_title') }</h1>
-              <div className="user-actions">
-                <Link as="/listings/create" href="/listings/create"><a className="btn-primary">{ __('listings_create') }</a></Link>
-              </div>
-            </div>
-            <div className="listings-list">
-              { listings && listings.count() > 0 ?
-                listings.map(listing => <ListingListPreview key={ listing.get('_id') } listing={ listing } />):
-                'No Listings'
-              }
-            </div>
+        <div className="page-header mb-3 flex justify-between">
+          <h1>{ __('listings_title') }</h1>
+          <div className="user-actions">
+            <Link as="/listings/create" href="/listings/create"><a className="btn-primary">{ __('listings_create') }</a></Link>
           </div>
-          <div className="w-1/4">
-            <h2>{ __('listings_book') }</h2>
-
-          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-6">
+          { listings && listings.count() > 0 ?
+            listings.map(listing => <ListingListPreview key={ listing.get('_id') } listing={ listing } />):
+            'No Listings'
+          }
         </div>
       </div>
     </Layout>

@@ -5,6 +5,7 @@ import Switch from './Switch';
 import Autocomplete from './Autocomplete';
 import DateTimePicker from './DateTimePicker';
 import PriceEditor from './PriceEditor';
+import PhotosEditor from './PhotosEditor';
 import TicketOptionsEditor from './TicketOptionsEditor';
 import DiscountsEditor from './DiscountsEditor';
 import FieldsEditor from './FieldsEditor';
@@ -28,12 +29,10 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
             onChange={e => update(name, e.target.value)}
             required={ required }
           /> }
-          { type === 'datetime' &&
-          <DateTimePicker
+          { type === 'datetime' && <DateTimePicker
             value={ data[name] }
             onChange={value => update(name, value)}
-          />
-          }
+          /> }
           { type === 'longtext' && <textarea
           // type={ type }
             value={ data[name] }
@@ -42,16 +41,18 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
             required={ required }
             className={ `${className} textarea` }
           /> }
-          { type === 'currency' &&
-          <PriceEditor
+          { type === 'currency' && <PriceEditor
             value={ data[name] }
-            onChange={price => update(name, price)}
+            onChange={value => update(name, value)}
             placeholder={ placeholder }
             required={ required }
-          />
-          }
-          { type === 'currencies' &&
-          <div className="currencies-group">
+          /> }
+          { type === 'photos' && <PhotosEditor
+            value={ data[name] }
+            onChange={value => update(name, value)}
+            required={ required }
+          /> }
+          { type === 'currencies' && <div className="currencies-group">
             { (data[name] || []).map((currencyGroup, index) => (
               <div className="currency-group" key={ `${name}.${index}.cur` }>
                 <select
@@ -83,8 +84,7 @@ const FormField = ({ data, update, className, label, placeholder, name, type, re
               e.preventDefault();
               update(name, (data[name] || []).concat({ cur: currencies[0].value, val: 0 }));
             } }>{ __('form_field_add_currency') }</a>
-          </div>
-          }
+          </div> }
           { type === 'select' &&
           <select
             value={ data[name] }
