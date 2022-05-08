@@ -17,7 +17,7 @@ const Wallet = () => {
   const [pendingTransactions, setPendingTransactions] = useState([])
 
   const sendTokenTransaction = async (token) => {
-    if (!toAddress) {
+    if (!toAddress || !provider) {
       alert('A Celo address to send Tokens to is required.')
       return
     }
@@ -37,7 +37,7 @@ const Wallet = () => {
   }
 
   const sendCeloTransaction = async () => {
-    if (!toAddress) {
+    if (!toAddress || !provider) {
       alert('A Celo address to send CELO to is required.')
       return
     }
@@ -169,7 +169,7 @@ const Wallet = () => {
             const t = tokens[ta];
             return (
               <div className='m-2' key={ta}>
-                {t.balance} {t.name}
+                {t.balance.toFixed(4)} {t.name}
                 <button
                   className="btn-primary w-48 m-2"
                   onClick={async () => {

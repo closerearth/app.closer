@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
@@ -9,6 +9,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useWeb3 } from '@rastaracoon/web3-context';
 import ReactTooltip from 'react-tooltip';
+import { utils, BigNumber, Contract } from 'ethers';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -17,12 +18,14 @@ import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
 import { priceFormat, __ } from '../../../utils/helpers';
+import { BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI } from '../../../utils/blockchain';
 import api, { formatSearch, cdn } from '../../../utils/api';
-import config from '../../../config';
+import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT } from '../../../config';
 
 import Switch from '../../../components/Switch';
 import Layout from '../../../components/Layout';
 import CheckoutForm from '../../../components/CheckoutForm';
+import Spinner from '../../../components/Spinner';
 
 dayjs.extend(LocalizedFormat);
 
@@ -32,8 +35,11 @@ const Booking = ({ booking, error }) => {
   const stripe = loadStripe(config.STRIPE_TEST_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { wallet } = useWeb3();
-  
+  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens } = useWeb3();
+  const [toAddress, setToAddress] = useState('')
+  const [amountToSend, setamountToSend] = useState(0)
+  const [pendingTransactions, setPendingTransactions] = useState([])
+  const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0 })
 
   const saveBooking = async (update) => {
     try {
@@ -52,6 +58,98 @@ const Booking = ({ booking, error }) => {
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
 
+  useEffect(() => {
+    async function getStakedTokenData() {
+
+      if(!provider || !address){
+        return
+      }
+
+      const StakingContract = new Contract(
+        BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+        BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
+        provider.getUncheckedSigner()
+      );
+  
+      const balance = await StakingContract.balanceOf(address);
+      const locked = await StakingContract.lockedAmount(address);
+      const unlocked = await StakingContract.unlockedAmount(address);
+      const lockindPeriod = await StakingContract.lockingPeriod();
+      
+      setStakedBalances({ ...stakedBalances, balance, locked, unlocked })
+    }
+    getStakedTokenData()
+  }, [tokens, pendingTransactions])
+
+  const approveDAOTokenForStakingContract = async () => {
+    if (!amountToSend) {
+      alert('Input an amount in Wei')
+      return
+    }
+
+    const DAOToken = tokens[BLOCKCHAIN_DAO_TOKEN.address]
+
+    const { hash } = await DAOToken.approve(
+      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+      BigNumber.from(amountToSend)
+    )
+
+    setPendingTransactions([...pendingTransactions, hash])
+
+    provider.once(hash, (transaction) => {
+      console.log(`${hash} mined`)
+      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      // Emitted when the transaction has been mined
+    })
+  }
+
+  const stakeTokens = async () => {
+    if (!amountToSend) {
+      alert('Input an amount in Wei')
+      return
+    }
+
+    const StakingContract = new Contract(
+      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+      BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
+      provider.getUncheckedSigner()
+    );
+
+    const { hash } = await StakingContract.deposit(BigNumber.from(amountToSend))
+
+    setPendingTransactions([...pendingTransactions, hash])
+
+    provider.once(hash, (transaction) => {
+      console.log(`${hash} mined`)
+      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      // Emitted when the transaction has been mined
+    })
+  }
+
+  const unstakeAllTokens = async () => {
+    if (!amountToSend) {
+      alert('Input an amount in Wei')
+      return
+    }
+
+    const StakingContract = new Contract(
+      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+      BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
+      provider.getUncheckedSigner()
+    );
+
+    const { hash } = await StakingContract.withdraw(BigNumber.from(amountToSend))
+
+    setPendingTransactions([...pendingTransactions, hash])
+
+    provider.once(hash, (transaction) => {
+      console.log(`${hash} mined`)
+      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      // Emitted when the transaction has been mined
+    })
+  }
+
+
   if (!isAuthenticated) {
     return <PageNotAllowed />
   }
@@ -59,6 +157,7 @@ const Booking = ({ booking, error }) => {
   return (
     <Layout>
       <ReactTooltip />
+      {pendingTransactions?.length > 0 && <Spinner fixed />}
       <Head>
         <title>{ booking.name }</title>
         <meta name="description" content={booking.description} />
@@ -108,18 +207,50 @@ const Booking = ({ booking, error }) => {
                   </div>
                 </section>
                 {editBooking.usingToken ? 
-                  <section className="flex flex-row">
-                    <p>You currently have {}tokens staked, and {}nights available to book</p>
-                    <button className="btn-primary w-36 px-4"
-                      onClick={() => {
-                      } }>
-                      Approve tokens
-                    </button>
-                    <button className="btn-primary w-36 px-4"
-                      onClick={() => {
-                      } }>
-                      Complete booking
-                    </button>
+                  <section className="flex flex-col">
+                    <p>You currently have <b>{(stakedBalances.balance/BLOCKCHAIN_DAO_TOKEN.decimals).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b> tokens staked{stakedBalances.balance>0 && 'consisting of:'}</p>
+                    <p className='flex flex-row'>
+                      {stakedBalances.locked>0 && <><b>{(stakedBalances.locked/BLOCKCHAIN_DAO_TOKEN.decimals).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b>&nbsp;locked<br/></>}
+                    </p>
+                    <p className='flex flex-row'>
+                      {stakedBalances.unlocked>0 && 
+                      <>
+                        <b>
+                          {(stakedBalances.unlocked/BLOCKCHAIN_DAO_TOKEN.decimals).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}
+                        </b>
+                        &nbsp;releasable
+                        <br/>
+                      </>}
+                    </p>
+                    <p>Locking period is {stakedBalances.lockingPeriod}</p>
+                    
+                    <div className='flex flex-row items-baseline mt-4'>
+                      <div className="w-60 mr-4">
+                        <input
+                          type="number"
+                          value={amountToSend}
+                          placeholder="cEUR amount (wei)"
+                          onChange={e => setamountToSend(e.target.value)} />
+                      </div>
+                      <button className="btn-primary w-36 px-4"
+                        onClick={async () => {
+                          unstakeAllTokens();
+                        } }>
+                      Withdraw
+                      </button>
+                      <button className="btn-primary w-36 px-4"
+                        onClick={async () => {
+                          approveDAOTokenForStakingContract();
+                        } }>
+                      Approve tokens for staking
+                      </button>
+                      <button className="btn-primary w-36 px-4"
+                        onClick={async () => {
+                          stakeTokens();
+                        } }>
+                      Stake tokens
+                      </button>
+                    </div>
                   </section>: 
                   <Elements stripe={stripe}>
                     <CheckoutForm
