@@ -71,9 +71,9 @@ const Booking = ({ booking, error }) => {
         provider.getUncheckedSigner()
       );
   
-      const balance = await StakingContract.balanceOf(address);
-      const locked = await StakingContract.lockedAmount(address);
-      const unlocked = await StakingContract.unlockedAmount(address);
+      const balance = await StakingContract.balanceOf(address)/BLOCKCHAIN_DAO_TOKEN.decimals;
+      const locked = await StakingContract.lockedAmount(address)/BLOCKCHAIN_DAO_TOKEN.decimals;
+      const unlocked = await StakingContract.unlockedAmount(address)/BLOCKCHAIN_DAO_TOKEN.decimals;
       const lockindPeriod = await StakingContract.lockingPeriod();
       
       setStakedBalances({ ...stakedBalances, balance, locked, unlocked })
@@ -98,7 +98,7 @@ const Booking = ({ booking, error }) => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
   }
@@ -121,7 +121,7 @@ const Booking = ({ booking, error }) => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
   }
@@ -208,15 +208,15 @@ const Booking = ({ booking, error }) => {
                 </section>
                 {editBooking.usingToken ? 
                   <section className="flex flex-col">
-                    <p>You currently have <b>{(stakedBalances.balance/BLOCKCHAIN_DAO_TOKEN.decimals).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b> tokens staked{stakedBalances.balance>0 && 'consisting of:'}</p>
+                    <p>You currently have <b>{(stakedBalances.balance).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b> tokens staked{stakedBalances.balance>0 && 'consisting of:'}</p>
                     <p className='flex flex-row'>
-                      {stakedBalances.locked>0 && <><b>{(stakedBalances.locked/BLOCKCHAIN_DAO_TOKEN.decimals).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b>&nbsp;locked<br/></>}
+                      {stakedBalances.locked>0 && <><b>{(stakedBalances.locked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b>&nbsp;locked<br/></>}
                     </p>
                     <p className='flex flex-row'>
                       {stakedBalances.unlocked>0 && 
                       <>
                         <b>
-                          {(stakedBalances.unlocked/BLOCKCHAIN_DAO_TOKEN.decimals).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}
+                          {(stakedBalances.unlocked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}
                         </b>
                         &nbsp;releasable
                         <br/>

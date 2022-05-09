@@ -31,7 +31,7 @@ const Wallet = () => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
   }
@@ -53,7 +53,7 @@ const Wallet = () => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
   }
@@ -75,7 +75,7 @@ const Wallet = () => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
   }
@@ -98,7 +98,7 @@ const Wallet = () => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
   }

@@ -5,9 +5,11 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
-import { trackEvent } from './Analytics';
 import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
 import { useWeb3 } from '@rastaracoon/web3-context';
+import { Contract } from 'ethers';
+
+import { trackEvent } from './Analytics';
 import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
@@ -16,7 +18,8 @@ import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES, BLOCKCHAIN_DAO_TOKEN } from '../config';
+import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_DAO_STAKING_CONTRACT } from '../config';
+import { BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI } from '../utils/blockchain';
 
 
 dayjs.extend(relativeTime);
@@ -58,7 +61,8 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-  const { wallet, tokens } = useWeb3();
+  const { wallet, tokens, onboard, provider, address } = useWeb3();
+  const [totalTokenBalance, settotalTokenBalance] = useState(0)
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
     (
@@ -76,6 +80,26 @@ const Navigation = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    async function getStakedTokenData() {
+
+      if(!provider || !address){
+        return
+      }
+
+      const StakingContract = new Contract(
+        BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+        BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
+        provider.getUncheckedSigner()
+      );
+  
+      const balance = await StakingContract.balanceOf(address);
+      
+      settotalTokenBalance(balance/BLOCKCHAIN_DAO_TOKEN.decimals+tokens[BLOCKCHAIN_DAO_TOKEN.address].balance)
+    }
+    getStakedTokenData()
+  }, [tokens])
 
   return (
     <div className="NavContainer pt-20 md:pt-0 relative">
@@ -167,24 +191,35 @@ const Navigation = () => {
             >
               <FaTelegram />
             </a> }
-            { isAuthenticated && wallet && tokens[BLOCKCHAIN_DAO_TOKEN.address] &&
-              <>
-                <Link
-                  href="/members/[slug]"
-                  as={`/members/${user.slug}`}
-                >
-                  
-                  <a className='hidden md:flex mr-3'>
-                    <span className='h-8 border-l mr-3' />
-                    <button className='btn-primary'>
-                      {tokens[BLOCKCHAIN_DAO_TOKEN.address].balance} {BLOCKCHAIN_DAO_TOKEN.name}
-                    </button>
-                  </a>
-                </Link>
-              </>
-            }
             { isAuthenticated &&
               <>
+                { wallet ? (
+                  <Link
+                    href="/members/[slug]"
+                    as={`/members/${user.slug}`}
+                  >
+                  
+                    <a className='hidden md:flex mr-3'>
+                      <span className='h-12 border-l mr-3' />
+                      <button className='btn-primary'>
+                        {totalTokenBalance.toFixed(0)
+                        +' '+
+                        BLOCKCHAIN_DAO_TOKEN.name}
+                      </button>
+                    </a>
+                  </Link>
+                ) : (
+                  <a className='hidden md:flex mr-3'>
+                    <span className='h-12 border-l mr-3' />
+                    <button className='btn-primary'
+                      onClick={() => {
+                        onboard?.walletSelect();
+                      } }>
+                      Connect wallet
+                    </button>
+                  </a>
+                )
+                }
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}
