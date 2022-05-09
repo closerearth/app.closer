@@ -62,7 +62,7 @@ const Navigation = () => {
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
   const { wallet, tokens, onboard, provider, address } = useWeb3();
-  const [totalTokenBalance, settotalTokenBalance] = useState(0)
+  const [totalTokenBalance, setTotalTokenBalance] = useState(0)
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
     (
@@ -96,7 +96,7 @@ const Navigation = () => {
   
       const balance = await StakingContract.balanceOf(address);
       
-      settotalTokenBalance(balance/BLOCKCHAIN_DAO_TOKEN.decimals+tokens[BLOCKCHAIN_DAO_TOKEN.address].balance)
+      setTotalTokenBalance(balance/BLOCKCHAIN_DAO_TOKEN.decimals+tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
     }
     getStakedTokenData()
   }, [tokens])
@@ -195,8 +195,7 @@ const Navigation = () => {
               <>
                 { wallet ? (
                   <Link
-                    href="/members/[slug]"
-                    as={`/members/${user.slug}`}
+                    href="/settings/blockchainwallet"
                   >
                   
                     <a className='hidden md:flex mr-3'>
@@ -215,7 +214,7 @@ const Navigation = () => {
                       onClick={() => {
                         onboard?.walletSelect();
                       } }>
-                      Connect wallet
+                      {__('blockchain_connect_wallet')}
                     </button>
                   </a>
                 )
