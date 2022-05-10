@@ -66,12 +66,6 @@ const TextEditor = ( { value, onChange } ) => {
 
   const [editorValue, setEditorValue] = useState([{ children: [{ text: '' }] }])
 
-  useEffect(() => {
-
-    const deserialized = deserializeHtml(editor, { element : value })
-    setEditorValue(deserialized)
-  }, [editorValue]);
-
   
   const plugins = createPlugins(
     [
@@ -141,6 +135,7 @@ const TextEditor = ( { value, onChange } ) => {
       initialValue={editorValue}
       onChange={((update) => serializeState(update))}
       plugins={plugins}
+      editor={editor}
     >
       <HeadingToolbar>
         <ToolbarButtons />
