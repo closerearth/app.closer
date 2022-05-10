@@ -368,13 +368,15 @@ const MemberPage = ({ member, loadError }) => {
                   </div>
                   <ul className='flex flex-col w-full space-y-1 mt-4'>
                     {links ? links.map((link) => (
-                      <li key={link._id} className="flex flex-row items-center justify-start space-x-5 mb-1">
+                      <li key={link._id} className="group flex flex-row items-center justify-start space-x-5 mb-1">
                         <a href={link.url}>
                           {link.name}
                         </a>
+                        { isAuthenticated && member._id === currentUser._id &&
                         <a href='#' onClick={(e) => {e.preventDefault(); deleteLink(link)}} >
-                          <TiDelete className='text-gray-500 text-lg hover:text-black' />
+                          <TiDelete className='text-gray-500 text-lg hover:text-black hidden group-hover:block' />
                         </a>
+                        }
                       </li>
                     )):
                       'No links yet'
