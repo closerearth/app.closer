@@ -73,7 +73,7 @@ const Bookings = () => {
                     content: (
                       <div className="bookings-list">
                         { bookings && bookings.count() > 0 ?
-                          bookings.map(booking => booking.get('status') == 'completed' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                          bookings.map(booking => booking.get('status') == 'confirmed' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
                           'No Bookings'
                         }
                       </div>

@@ -44,7 +44,7 @@ const BookingListPreview = ({ booking }) => {
         <button
           onClick={ (e) => {
             e.preventDefault();
-            updateBooking(booking.get('_id'), 'completed');
+            updateBooking(booking.get('_id'), 'confirmed');
           }}
           className="btn-primary mr-4"
         >
@@ -60,8 +60,6 @@ const BookingListPreview = ({ booking }) => {
         Reject
         </button>
       </div>
-
-
       }
     </div>
   );
