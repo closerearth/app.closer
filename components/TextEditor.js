@@ -72,17 +72,19 @@ const TextEditor = ({ onChange, value }) => {
       <Editor
         editorState={editorState}
         toolbarClassName="toolbarClassName"
-        // wrapperClassName="wrapperClassName"
+        wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
+        toolbarStyle={{ background: '#F8FAFC' }}
         onEditorStateChange={onEditorStateChange}
-        toolbar={{
-          inline: { inDropdown: true },
-          list: { inDropdown: true },
-          textAlign: { inDropdown: true },
-          link: { inDropdown: true },
-          history: { inDropdown: true },
-          image: { uploadCallback: uploadImageCallBack, alt: { present: true, mandatory: true } },
-        }}
+        toolbar={
+          {
+            inline: { inDropdown: true },
+            list: { inDropdown: true },
+            textAlign: { inDropdown: true },
+            link: { inDropdown: true },
+            history: { inDropdown: true },
+            image: { uploadCallback: uploadImageCallBack, alt: { present: true, mandatory: true } },
+          }}
       />
     </>
   );
