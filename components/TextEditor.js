@@ -10,7 +10,6 @@ const Editor = dynamic(
 );
 
 
-
 const TextEditor = ({ onChange, value }) => {
 
 
@@ -40,32 +39,38 @@ const TextEditor = ({ onChange, value }) => {
   }
 
 
+  // const dynamicImportFunc = async () => {
+  //   if (typeof window !== 'undefined') {
+  //     const { default: htmlToDraft } = await import('html-to-draftjs');
+  //     const contentBlock = htmlToDraft(value);
+  //     if (contentBlock) {
+  //       const contentState = ContentState.createFromBlockArray(
+  //         contentBlock.contentBlocks
+  //       );
+  //       const editorState = EditorState.createWithContent(contentState);
+  //       setEditorState(editorState);
+  //     }
+  //   }
+  // };
+
   const dynamicImportFunc = async () => {
-    if (typeof window !== 'undefined') {
-      const { default: htmlToDraft } = await import('html-to-draftjs');
-      const contentBlock = htmlToDraft(value);
-      if (contentBlock) {
-        const contentState = ContentState.createFromBlockArray(
-          contentBlock.contentBlocks
-        );
-        const editorState = EditorState.createWithContent(contentState);
-        setEditorState(editorState);
-      }
-    }
-  };
-    
-
-
+    const { default: htmlToDraft } = await import('html-to-draftjs');
+    const blocksFromHtml = htmlToDraft(value);
+    const { contentBlocks, entityMap } = blocksFromHtml;
+    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
+    const editorState = EditorState.createWithContent(contentState);
+    setEditorState(editorState);
+  }
+  
+  useEffect(() => {
+    dynamicImportFunc();
+  }, []);
+  
   const onEditorStateChange = (update) => {
     setEditorState(update);
     const html = draftToHtml(convertToRaw(editorState.getCurrentContent()))
     onEditorStateChange && onChange(html);
   };
-  
-  useEffect(() => {
-    dynamicImportFunc();
-  }, []);
-
 
   return (
     <>

@@ -38,6 +38,7 @@ const EventCheckout = ({ event, error }) => {
   const isVolunteer = !!router.query.volunteer && volunteerTicketsSold < maxVolunteers;
   const volunteerCapacityReached = !!router.query.volunteer && volunteerTicketsSold >= maxVolunteers;
   const stripe = loadStripe(event.stripePub || config.STRIPE_PUB_KEY);
+  console.log(discount)
 
   let total = 0;
   let currency = 'usd';
