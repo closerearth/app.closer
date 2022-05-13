@@ -7,11 +7,14 @@ import { useAuth } from '../contexts/auth';
 import { __, priceFormat } from '../utils/helpers';
 
 const BookingListPreview = ({ booking }) => {
+  
+  const { user } = useAuth();
+  const { platform } = usePlatform();
+
 
   if (!booking) {
     return null;
   }
-
 
   const updateBooking = async (id, status) => {
     try {
@@ -36,6 +39,15 @@ const BookingListPreview = ({ booking }) => {
         <b>{' '}{booking.get('volunteer') && priceFormat(0, booking.getIn(['price', 'cur']))}</b>
       </p>
       <p>{ __('bookings_id') } <b>{booking.get('_id')}</b></p>
+      { booking.get('duration') &&
+        <p>Nights: <b>{ booking.get('duration') }</b></p>
+      }
+      { booking.get('about') &&
+        <p>About: <b>{ booking.get('about').slice(0, 120) }{ booking.get('about').length > 120 && '...' }</b></p>
+      }
+      { booking.get('message') &&
+        <p>Message: <b>{ booking.get('message').slice(0, 120) }{ booking.get('message').length > 120 && '...' }</b></p>
+      }
       { booking.get('description') &&
         <p>{ booking.get('description').slice(0, 120) }{ booking.get('description').length > 120 && '...' }</p>
       }
