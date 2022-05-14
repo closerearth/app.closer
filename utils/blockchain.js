@@ -326,39 +326,6 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
   {
     'inputs': [
       {
-        'internalType': 'uint256',
-        'name': 'amount',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'deposit',
-    'outputs': [],
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'inputs': [
-      {
-        'internalType': 'uint256',
-        'name': 'requestedAmount',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'restake',
-    'outputs': [],
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'inputs': [],
-    'name': 'restakeMax',
-    'outputs': [],
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'inputs': [
-      {
         'internalType': 'contract IERC20',
         'name': '_token',
         'type': 'address'
@@ -390,38 +357,6 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
     ],
     'name': 'DepositedTokens',
     'type': 'event'
-  },
-  {
-    'inputs': [
-      {
-        'internalType': 'uint256',
-        'name': 'requested',
-        'type': 'uint256'
-      }
-    ],
-    'name': 'withdraw',
-    'outputs': [
-      {
-        'internalType': 'uint256',
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'stateMutability': 'nonpayable',
-    'type': 'function'
-  },
-  {
-    'inputs': [],
-    'name': 'withdrawMax',
-    'outputs': [
-      {
-        'internalType': 'uint256',
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'stateMutability': 'nonpayable',
-    'type': 'function'
   },
   {
     'anonymous': false,
@@ -464,6 +399,50 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
   {
     'inputs': [
       {
+        'internalType': 'uint256',
+        'name': 'amount',
+        'type': 'uint256'
+      }
+    ],
+    'name': 'deposit',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      }
+    ],
+    'name': 'depositsFor',
+    'outputs': [
+      {
+        'components': [
+          {
+            'internalType': 'uint256',
+            'name': 'timestamp',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'amount',
+            'type': 'uint256'
+          }
+        ],
+        'internalType': 'struct TokenLock.Deposit[]',
+        'name': '',
+        'type': 'tuple[]'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
         'internalType': 'address',
         'name': 'account',
         'type': 'address'
@@ -494,6 +473,49 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
     'type': 'function'
   },
   {
+    'inputs': [
+      {
+        'internalType': 'uint256',
+        'name': 'requestedAmount',
+        'type': 'uint256'
+      }
+    ],
+    'name': 'restake',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'restakeMax',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'amount',
+        'type': 'uint256'
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'initLockingTm',
+        'type': 'uint256'
+      }
+    ],
+    'name': 'restakeOrDepositAtFor',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
     'inputs': [],
     'name': 'token',
     'outputs': [
@@ -520,6 +542,200 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
         'internalType': 'uint256',
         'name': '',
         'type': 'uint256'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'uint256',
+        'name': 'requested',
+        'type': 'uint256'
+      }
+    ],
+    'name': 'withdraw',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      }
+    ],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'withdrawMax',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      }
+    ],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  }
+]
+
+export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT = [
+  {
+    'inputs': [
+      {
+        'internalType': 'uint256[]',
+        'name': '_dates',
+        'type': 'uint256[]'
+      }
+    ],
+    'name': 'book',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'uint256[]',
+        'name': '_cancelDates',
+        'type': 'uint256[]'
+      }
+    ],
+    'name': 'cancel',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': '_token',
+        'type': 'address'
+      },
+      {
+        'internalType': 'address',
+        'name': '_wallet',
+        'type': 'address'
+      }
+    ],
+    'stateMutability': 'nonpayable',
+    'type': 'constructor'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      }
+    ],
+    'name': 'balanceOf',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': '',
+        'type': 'address'
+      },
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      }
+    ],
+    'name': 'dates',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      },
+      {
+        'internalType': 'uint256',
+        'name': '_date',
+        'type': 'uint256'
+      }
+    ],
+    'name': 'getBooking',
+    'outputs': [
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      },
+      {
+        'internalType': 'uint256',
+        'name': '',
+        'type': 'uint256'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      }
+    ],
+    'name': 'getDates',
+    'outputs': [
+      {
+        'internalType': 'uint256[]',
+        'name': '',
+        'type': 'uint256[]'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'token',
+    'outputs': [
+      {
+        'internalType': 'contract IERC20',
+        'name': '',
+        'type': 'address'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'wallet',
+    'outputs': [
+      {
+        'internalType': 'contract ITokenLock',
+        'name': '',
+        'type': 'address'
       }
     ],
     'stateMutability': 'view',

@@ -24,7 +24,7 @@ module.exports = {
     address: '0x17Bf6E84C3EC4b964C22F44F00511852d69a1C87',
     name: 'TesTDF',
     symbol: 'TDF',
-    decimals: 10**18,
+    decimals: 18,
   },
   BLOCKCHAIN_STABLE_COIN: {
     address: '0x10c892a6ec43a53e45d0b916b4b7d383b1b78c0f',
@@ -35,7 +35,10 @@ module.exports = {
     address: '0xA3145DBd2E9E4778934D61f7814AF2b6eF3F06E2'
   },
   BLOCKCHAIN_DAO_STAKING_CONTRACT: {
-    address: '0x01a499398f3253E42E5371b1784c7544748E08c3'
+    address: '0x5573373eca49a668cb89488C77F308cFd3732Ebe'
+  },
+  BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT: {
+    address: '0x9844449AEbd92a8170feF41A05ECC95E5B2bD21B'
   },
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,

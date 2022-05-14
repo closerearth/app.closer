@@ -96,7 +96,7 @@ const Navigation = () => {
   
       const balance = await StakingContract.balanceOf(address);
       
-      setTotalTokenBalance(balance/BLOCKCHAIN_DAO_TOKEN.decimals+tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
+      setTotalTokenBalance(balance/(10**BLOCKCHAIN_DAO_TOKEN.decimals)+tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
     }
     getStakedTokenData()
   }, [tokens])

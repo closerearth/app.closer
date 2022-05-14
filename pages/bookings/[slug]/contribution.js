@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { Elements } from '@stripe/react-stripe-js';
+import { useWeb3 } from '@rastaracoon/web3-context';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -27,11 +28,13 @@ const Booking = ({ booking, error }) => {
   const [editBooking, setBooking] = useState(booking);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
+  const { wallet } = useWeb3();
+
 
   const saveBooking = async (update) => {
     try {
       await platform.booking.patch(booking._id, update);
-      router.push(`/bookings/${booking._id}/checkout`);
+      wallet ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
     } catch (err) {
       alert('An error occured.')
       console.log(err);
@@ -102,6 +105,7 @@ const Booking = ({ booking, error }) => {
 Booking.getInitialProps = async ({ req, query }) => {
   try {
     const { data: { results: booking } } = await api.get(`/booking/${query.slug}`);
+    console.log(`contrib ${query.slug}`);
     return { booking };
   } catch (err) {
     console.log('Error', err.message);

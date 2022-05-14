@@ -40,6 +40,8 @@ const Booking = ({ booking, error }) => {
   const [amountToSend, setamountToSend] = useState(0)
   const [pendingTransactions, setPendingTransactions] = useState([])
   const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0 })
+  const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
+  const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
 
   const saveBooking = async (update) => {
     try {
@@ -60,7 +62,6 @@ const Booking = ({ booking, error }) => {
 
   useEffect(() => {
     async function getStakedTokenData() {
-
       if(!provider || !address){
         return
       }
@@ -71,15 +72,16 @@ const Booking = ({ booking, error }) => {
         provider.getUncheckedSigner()
       );
   
-      const balance = await StakingContract.balanceOf(address)/BLOCKCHAIN_DAO_TOKEN.decimals;
-      const locked = await StakingContract.lockedAmount(address)/BLOCKCHAIN_DAO_TOKEN.decimals;
-      const unlocked = await StakingContract.unlockedAmount(address)/BLOCKCHAIN_DAO_TOKEN.decimals;
+      const balance = await StakingContract.balanceOf(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
+      const locked = await StakingContract.lockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
+      const unlocked = await StakingContract.unlockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
       const lockindPeriod = await StakingContract.lockingPeriod();
       
       setStakedBalances({ ...stakedBalances, balance, locked, unlocked })
+      setCanUseTokens(tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance + unlocked - locked >= booking.duration)
     }
     getStakedTokenData()
-  }, [tokens, pendingTransactions])
+  }, [tokens, pendingTransactions, pendingProcess])
 
   const approveDAOTokenForStakingContract = async () => {
     if (!amountToSend) {
@@ -144,9 +146,54 @@ const Booking = ({ booking, error }) => {
 
     provider.once(hash, (transaction) => {
       console.log(`${hash} mined`)
-      setPendingTransactions(pendingTransactions.filter((h) => h !== hash));
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
       // Emitted when the transaction has been mined
     })
+  }
+
+  const verifyDetermineApproveStakeNecessaryTokensAndBook = async () => {
+    if(booking.duration - stakedBalances.unlocked < 0) {
+      throw new Error('Something weird happened in the token calculation')
+    }
+
+    const DAOToken = tokens[BLOCKCHAIN_DAO_TOKEN.address]
+    const StakingContract = new Contract(
+      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+      BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
+      provider.getUncheckedSigner()
+    );
+
+    setPendingProcess(true)
+
+    const neededToStake = utils.parseUnits(booking.duration.toString(), BLOCKCHAIN_DAO_TOKEN.decimals).sub(utils.parseUnits(stakedBalances.unlocked.toString(),  BLOCKCHAIN_DAO_TOKEN.decimals))  ;
+    try {
+      const tx1 = await DAOToken.approve(
+        BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+        BigNumber.from(neededToStake)
+      )
+      setPendingTransactions([...pendingTransactions, tx1.hash])
+      await tx1.wait();
+      console.log(`${tx1.hash} mined`)
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx1.hash));
+    } catch (error) {
+      //User rejected transaction
+      setPendingProcess(false)
+      return
+    }
+    
+    try {
+      const tx2 = await StakingContract.deposit(BigNumber.from(neededToStake))
+      setPendingTransactions([...pendingTransactions, tx2.hash])
+      await tx2.wait();
+      console.log(`${tx2.hash} mined`)
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx2.hash));
+      saveBooking({ status: 'confirmed', transactionId: tx2.hash });
+      setPendingProcess(false)
+    } catch (error) {
+      //User rejected transaction
+      setPendingProcess(false)
+      return
+    }
   }
 
 
@@ -157,7 +204,6 @@ const Booking = ({ booking, error }) => {
   return (
     <Layout>
       <ReactTooltip />
-      {pendingTransactions?.length > 0 && <Spinner fixed />}
       <Head>
         <title>{ booking.name }</title>
         <meta name="description" content={booking.description} />
@@ -175,45 +221,63 @@ const Booking = ({ booking, error }) => {
           <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
           <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
           <p>{ __('bookings_total') }
-            <b className={ booking.volunteer || editBooking.usingToken ? 'line-through': '' }>
+            <b className={ booking.volunteer || canUseTokens ? 'line-through': '' }>
               {' '}{priceFormat(booking.price)}
             </b>
-            <b>{' '}{booking.volunteer || editBooking.usingToken && priceFormat(0, booking.price.cur)}</b>
+            <b>{' '}{booking.volunteer || canUseTokens && priceFormat(0, booking.price.cur)}</b>
           </p>
         </section>
         { booking.status === 'open' &&
           <div className="mt-2">
-            {booking.volunteer ?
-              <div>
-                <p>{__('booking_volunteering_details')}</p>
-                <p className="mt-3">
-                  <a href="#" onClick={e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
-                </p>
-              </div> : 
+            {wallet ? (
+              <section>
+                {!canUseTokens ? (
+                  <h4>
+                    You do not have enough tokens to book {booking.duration} nights, please acquire some more tokens.
+                  </h4>
+                ) : (
+                  <section>
+                    { stakedBalances.unlocked >= booking.duration ?
+                      <h4>You have enough releasable tokens to use right away</h4>
+                      : 
+                      <h4>You need to add tokens to your staking to continue</h4> 
+                    } 
+                    <button 
+                      className="btn-primary px-4"
+                      disabled={pendingProcess}
+                      onClick={async () => {
+                        verifyDetermineApproveStakeNecessaryTokensAndBook();
+                      } }>
+                      {pendingProcess ? <div className='flex flex-row items-center'><Spinner /><p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p></div> : 'Book using tokens'}
+                    </button>
+                  </section>
+                )}
+              </section>
+            ) : (
               <>
-                <section className='mt-3'>
-                  <div className="mt-2">
-                    <div className="flex flex-row items-center space-x-2">
-                      <p className="mb-4">{ __('bookings_using_crypto') }</p>
-                      <wrap className="" data-tip={!wallet && __('bookings_using_crypto_connect_wallet')}>
-                        <Switch checked={editBooking.usingToken} onChange={usingToken => setBooking({ ...editBooking, usingToken })} disabled={!wallet && 'disabled'} />
-                      </wrap>
-                      <p className='italic text-sm mb-4 cursor-pointer' 
-                        data-tip={ __('bookings_using_crypto_interrogation_answer') }
-                      >
-                        {__('bookings_using_crypto_interrogation')}
-                      </p>
-                    </div>
-                  </div>
-                </section>
-                {editBooking.usingToken ? 
-                  <section className="flex flex-col">
-                    <p>You currently have <b>{(stakedBalances.balance).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b> tokens staked{stakedBalances.balance>0 && 'consisting of:'}</p>
-                    <p className='flex flex-row'>
-                      {stakedBalances.locked>0 && <><b>{(stakedBalances.locked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b>&nbsp;locked<br/></>}
+                {booking.volunteer ?
+                  <div>
+                    <p>{__('booking_volunteering_details')}</p>
+                    <p className="mt-3">
+                      <a href="#" onClick={e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
                     </p>
-                    <p className='flex flex-row'>
-                      {stakedBalances.unlocked>0 && 
+                  </div> : 
+                  <>
+                    <section className='mt-3'>
+                      <div className="mt-2">
+                        <div className="flex flex-row items-center space-x-2">
+                          <p className="mb-4">{ __('bookings_using_crypto') }</p>
+                        </div>
+                      </div>
+                    </section>
+                    {canUseTokens ? 
+                      <section className="flex flex-col">
+                        <p>You currently have <b>{(stakedBalances.balance).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b> tokens staked{stakedBalances.balance>0 && 'consisting of:'}</p>
+                        <p className='flex flex-row'>
+                          {stakedBalances.locked>0 && <><b>{(stakedBalances.locked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b>&nbsp;locked<br/></>}
+                        </p>
+                        <p className='flex flex-row'>
+                          {stakedBalances.unlocked>0 && 
                       <>
                         <b>
                           {(stakedBalances.unlocked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}
@@ -221,53 +285,55 @@ const Booking = ({ booking, error }) => {
                         &nbsp;releasable
                         <br/>
                       </>}
-                    </p>
-                    <p>Locking period is {stakedBalances.lockingPeriod}</p>
+                        </p>
+                        <p>Locking period is {stakedBalances.lockingPeriod}</p>
                     
-                    <div className='flex flex-row items-baseline mt-4'>
-                      <div className="w-60 mr-4">
-                        <input
-                          type="number"
-                          value={amountToSend}
-                          placeholder="cEUR amount (wei)"
-                          onChange={e => setamountToSend(e.target.value)} />
-                      </div>
-                      <button className="btn-primary w-36 px-4"
-                        onClick={async () => {
-                          unstakeAllTokens();
-                        } }>
+                        <div className='flex flex-row items-baseline mt-4'>
+                          <div className="w-60 mr-4">
+                            <input
+                              type="number"
+                              value={amountToSend}
+                              placeholder="cEUR amount (wei)"
+                              onChange={e => setamountToSend(e.target.value)} />
+                          </div>
+                          <button className="btn-primary w-36 px-4"
+                            onClick={async () => {
+                              unstakeAllTokens();
+                            } }>
                       Withdraw
-                      </button>
-                      <button className="btn-primary w-36 px-4"
-                        onClick={async () => {
-                          approveDAOTokenForStakingContract();
-                        } }>
+                          </button>
+                          <button className="btn-primary w-36 px-4"
+                            onClick={async () => {
+                              approveDAOTokenForStakingContract();
+                            } }>
                       Approve tokens for staking
-                      </button>
-                      <button className="btn-primary w-36 px-4"
-                        onClick={async () => {
-                          stakeTokens();
-                        } }>
+                          </button>
+                          <button className="btn-primary w-36 px-4"
+                            onClick={async () => {
+                              stakeTokens();
+                            } }>
                       Stake tokens
-                      </button>
-                    </div>
-                  </section>: 
-                  <Elements stripe={stripe}>
-                    <CheckoutForm
-                      type="booking"
-                      total={booking.price.val}
-                      currency={booking.price.cur}
-                      _id={booking._id}
-                      onSuccess={payment => setBooking({ ...booking, status: 'confirmed' })}
-                      email={user.email}
-                      name={user.screenname}
-                      message={booking.message}
-                      backUrl={`/bookings/${booking._id}/contribution`}
-                      buttonText={user.roles.includes('member') ? 'Book' : 'Request to book'}
-                      buttonDisabled={false} />
-                  </Elements>
-                }
-              </>}
+                          </button>
+                        </div>
+                      </section>: 
+                      <Elements stripe={stripe}>
+                        <CheckoutForm
+                          type="booking"
+                          total={booking.price.val}
+                          currency={booking.price.cur}
+                          _id={booking._id}
+                          onSuccess={payment => setBooking({ ...booking, status: 'confirmed' })}
+                          email={user.email}
+                          name={user.screenname}
+                          message={booking.message}
+                          backUrl={`/bookings/${booking._id}/contribution`}
+                          buttonText={user.roles.includes('member') ? 'Book' : 'Request to book'}
+                          buttonDisabled={false} />
+                      </Elements>
+                    }
+                  </>}
+              </>
+            )}
             {user.roles.includes('member') ?
               <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy_member')}</i></p> :
               <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy')}</i></p>}
@@ -277,6 +343,7 @@ const Booking = ({ booking, error }) => {
     </Layout>
   );
 }
+
 Booking.getInitialProps = async ({ req, query }) => {
   try {
     const { data: { results: booking } } = await api.get(`/booking/${query.slug}`);
