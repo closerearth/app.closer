@@ -11,7 +11,7 @@ import Pagination from './Pagination';
 import { __ } from '../utils/helpers';
 
 
-const ApplicationList = ({ children, channel, status, managedBy, limit, hideRejectButton }) => {
+const ApplicationList = ({ children, channel, status, managedBy, limit }) => {
 
   const { user } = useAuth();
   const { platform } = usePlatform();
@@ -114,15 +114,15 @@ const ApplicationList = ({ children, channel, status, managedBy, limit, hideReje
                     </button>:
                     <span />
                 }
-                { !hideRejectButton && <a
+                { application.get('status') === 'rejected' && <a
                   className="text-red-400"
                   href="#"
                   onClick={ (e) => {
                     e.preventDefault();
-                    updateApplication(application.get('_id'), 'rejected');
+                    updateApplication(application.get('_id'), 'open');
                   }}
                 >
-                  { __('application_list_reject') }
+                  { __('application_list_reopen') }
                 </a> }
               </div>
             </div>
@@ -146,8 +146,7 @@ const ApplicationList = ({ children, channel, status, managedBy, limit, hideReje
 };
 ApplicationList.defaultProps = {
   status: 'open',
-  limit: 10,
-  hideRejectButton: false
+  limit: 10
 };
 
 export default ApplicationList;

@@ -14,6 +14,7 @@ import { __ } from '../../utils/helpers';
 const openApplications = { where: { status: 'open' } };
 const approvedApplications = { where: { status: 'approved' } };
 const inConversationApplications = { where: { status: 'conversation' } };
+const rejectedApplications = { where: { status: 'rejected' } };
 
 const Applications = () => {
   const { user } = useAuth();
@@ -25,7 +26,8 @@ const Applications = () => {
       await Promise.all([
         platform.application.getCount(openApplications),
         platform.application.getCount(approvedApplications),
-        platform.application.getCount(inConversationApplications)
+        platform.application.getCount(inConversationApplications),
+        platform.application.getCount(rejectedApplications),
       ]);
     }
 
@@ -57,6 +59,7 @@ const Applications = () => {
                 <p>{ __('applications_open') } <b>{platform.application.findCount(openApplications)}</b></p>
                 <p>{ __('applications_in_conversation') } <b>{platform.application.findCount(inConversationApplications)}</b></p>
                 <p>{ __('applications_accepted') } <b>{platform.application.findCount(approvedApplications)}</b></p>
+                <p>{ __('applications_rejected') } <b>{platform.application.findCount(rejectedApplications)}</b></p>
               </div>
             </div>
           </div>

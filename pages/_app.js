@@ -27,7 +27,7 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
   }
 
   return (
-    <div className="dark">
+    <div className="App">
       <Head>
         <title>{ DEFAULT_TITLE }</title>
         <meta charSet="utf-8" />

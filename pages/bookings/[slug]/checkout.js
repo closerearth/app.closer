@@ -32,7 +32,7 @@ dayjs.extend(LocalizedFormat);
 const Booking = ({ booking, error }) => {
   const router = useRouter();
   const [editBooking, setBooking] = useState(booking);
-  const stripe = loadStripe(config.STRIPE_TEST_KEY);
+  const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
   const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens } = useWeb3();
@@ -43,9 +43,18 @@ const Booking = ({ booking, error }) => {
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
   const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
 
-  const saveBooking = async (update) => {
+  const processConfirmation = async (update) => {
     try {
-      await platform.booking.patch(booking._id, update);
+      const { data: { results: payment } } = await api.post('/payment', {
+        type: 'booking',
+        _id: booking._id,
+        total: booking.price && booking.price.val,
+        currency: booking.price && booking.price.cur,
+        email: user.email,
+        name: user.screenname,
+        message: booking.message,
+        volunteer: booking.volunteer
+      });
       router.push(`/bookings/${booking._id}`);
     } catch (err) {
       alert('An error occured.')
@@ -257,9 +266,11 @@ const Booking = ({ booking, error }) => {
               <>
                 {booking.volunteer ?
                   <div>
-                    <p>{__('booking_volunteering_details')}</p>
+                    <p>{ __('booking_volunteering_details') }</p>
                     <p className="mt-3">
-                      <a href="#" onClick={e => { e.preventDefault(); saveBooking({ status: 'confirmed' }); } } className="btn-primary">Confirm booking</a>
+                      <a href="#" onClick={ e => { e.preventDefault(); processConfirmation(); } } className="btn-primary">
+                    Confirm booking
+                      </a>
                     </p>
                   </div> : 
                   <>
@@ -316,19 +327,20 @@ const Booking = ({ booking, error }) => {
                           </button>
                         </div>
                       </section>: 
-                      <Elements stripe={stripe}>
+                      <Elements stripe={ stripe }>
                         <CheckoutForm
                           type="booking"
-                          total={booking.price.val}
-                          currency={booking.price.cur}
-                          _id={booking._id}
-                          onSuccess={payment => setBooking({ ...booking, status: 'confirmed' })}
-                          email={user.email}
-                          name={user.screenname}
-                          message={booking.message}
-                          backUrl={`/bookings/${booking._id}/contribution`}
-                          buttonText={user.roles.includes('member') ? 'Book' : 'Request to book'}
-                          buttonDisabled={false} />
+                          total={ booking.price.val }
+                          currency={ booking.price.cur }
+                          _id={ booking._id }
+                          onSuccess={ payment => { setBooking({ ...booking, status: 'confirmed' }); router.push(`/bookings/${booking._id}`); } }
+                          email={ user.email }
+                          name={ user.screenname }
+                          message={ booking.message }
+                          cancelUrl={ `/bookings/${booking._id}/contribution` }
+                          buttonText={ user.roles.includes('member') ? 'Book' : 'Request to book' }
+                          buttonDisabled={ false }
+                        />
                       </Elements>
                     }
                   </>}

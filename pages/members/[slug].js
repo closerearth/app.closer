@@ -307,7 +307,7 @@ const MemberPage = ({ member, loadError }) => {
               </div>
 
               { error && <p className="validation-error">Error: { error }</p> }
-              
+
 
               { isAuthenticated && member._id === currentUser._id &&
                 <button type="button" className="btn-primary w-24" onClick={handleClick}>

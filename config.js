@@ -51,8 +51,8 @@ module.exports = {
   TELEGRAM_URL: 'https://t.me/closerdao',
   FEATURES: {
     events: true,
-    booking: true,
-    bookingVolunteers: true
+    booking: false,
+    bookingVolunteers: false
   },
   SIGNUP_FIELDS: [
     {
