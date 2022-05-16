@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import { usePlatform } from '../../contexts/platform';
 import BookingListPreview from '../../components/BookingListPreview';
 import Tabs from '../../components/Tabs';
 import { __ } from '../../utils/helpers';
+import api from '../../utils/api';
 import PageNotFound from '../404';
 
 const Bookings = () => {
@@ -16,13 +17,13 @@ const Bookings = () => {
   const { user } = useAuth();
   const { platform } = usePlatform();
   const [status, setStatus] = useState('open');
-  const bookingFilter = user && { where: { status } };
 
   const loadData = async () => {
     await Promise.all([
-      platform.booking.get(bookingFilter)
+      platform.booking.get(),
     ]);
   }
+
 
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const Bookings = () => {
     return <PageNotFound error="User not logged in." />;
   }
 
-  const bookings = platform.booking.find(bookingFilter);
+  const bookings = platform.booking.find();
   console.log('bookings', bookings);
 
   return (
@@ -56,7 +57,7 @@ const Bookings = () => {
               <Tabs
                 tabs={[
                   {
-                    title: 'Open',
+                    title: 'Requests',
                     value: 'open',
                     content: (
                       <div className="bookings-list">
@@ -68,7 +69,7 @@ const Bookings = () => {
                     )
                   },
                   {
-                    title: 'Completed',
+                    title: 'Accepted',
                     value: 'completed',
                     content: (
                       <div className="bookings-list">

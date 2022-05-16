@@ -5,16 +5,12 @@ import { usePlatform } from '../contexts/platform';
 import { useAuth } from '../contexts/auth';
 
 import { __, priceFormat } from '../utils/helpers';
+import { update } from 'immutable';
 
 const BookingListPreview = ({ booking }) => {
   
-  const { user } = useAuth();
   const { platform } = usePlatform();
 
-
-  if (!booking) {
-    return null;
-  }
 
   const updateBooking = async (id, status) => {
     try {
@@ -23,9 +19,15 @@ const BookingListPreview = ({ booking }) => {
       console.error(err);
     }
   }
-
+  
   const start = dayjs(booking.get('start'));
   const end = dayjs(booking.get('end'));
+ 
+
+  
+  if (!booking) {
+    return null;
+  }
 
   return (
     <div className="booking-list-preview card">
@@ -42,6 +44,13 @@ const BookingListPreview = ({ booking }) => {
       { booking.get('duration') &&
         <p>Nights: <b>{ booking.get('duration') }</b></p>
       }
+      { booking.get('createdBy') &&
+
+        <p>Created By: <b>{ booking.get('createdBy') }</b></p>
+      }
+      { booking.get('listing') &&
+        <p>Listing: <b>{ booking.get('listing') }</b></p>
+      }
       { booking.get('about') &&
         <p>About: <b>{ booking.get('about').slice(0, 120) }{ booking.get('about').length > 120 && '...' }</b></p>
       }
@@ -52,7 +61,7 @@ const BookingListPreview = ({ booking }) => {
         <p>{ booking.get('description').slice(0, 120) }{ booking.get('description').length > 120 && '...' }</p>
       }
       { booking.get('status') == 'open' &&
-      <div>
+      <div className='py-5'>
         <button
           onClick={ (e) => {
             e.preventDefault();
