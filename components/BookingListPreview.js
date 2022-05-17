@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import Link from 'next/link';
 import dayjs from 'dayjs';
 import { usePlatform } from '../contexts/platform';
 import { useAuth } from '../contexts/auth';
 
 import { __, priceFormat } from '../utils/helpers';
-import { update } from 'immutable';
+
 
 const BookingListPreview = ({ booking }) => {
   
+  const { user } = useAuth();
   const { platform } = usePlatform();
 
 
@@ -19,10 +19,10 @@ const BookingListPreview = ({ booking }) => {
       console.error(err);
     }
   }
+
   
   const start = dayjs(booking.get('start'));
   const end = dayjs(booking.get('end'));
- 
 
   
   if (!booking) {

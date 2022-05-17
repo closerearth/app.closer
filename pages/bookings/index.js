@@ -16,14 +16,13 @@ const Bookings = () => {
 
   const { user } = useAuth();
   const { platform } = usePlatform();
-  const [status, setStatus] = useState('open');
-
+  const [status, setStatus] = useState('');
+  
   const loadData = async () => {
     await Promise.all([
       platform.booking.get(),
     ]);
   }
-
 
 
   useEffect(() => {
@@ -35,9 +34,9 @@ const Bookings = () => {
   if (!user) {
     return <PageNotFound error="User not logged in." />;
   }
-
   const bookings = platform.booking.find();
-  console.log('bookings', bookings);
+
+
 
   return (
     <Layout>
