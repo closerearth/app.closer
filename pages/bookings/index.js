@@ -11,16 +11,23 @@ import { __ } from '../../utils/helpers';
 import api from '../../utils/api';
 import PageNotFound from '../404';
 
-const Bookings = () => {
+const Bookings = ( ) => {
   const router = useRouter();
 
   const { user } = useAuth();
   const { platform } = usePlatform();
   const [status, setStatus] = useState('');
+  const params = useMemo(() => ({ sort_by: 'created' }), []);
+  const users = platform.user.find(params);
+  console.log(users)
+  const bookings = platform.booking.find();
+  const listings = platform.listing.find();
   
   const loadData = async () => {
     await Promise.all([
       platform.booking.get(),
+      platform.listing.get(),
+      platform.user.get(params)
     ]);
   }
 
@@ -34,8 +41,6 @@ const Bookings = () => {
   if (!user) {
     return <PageNotFound error="User not logged in." />;
   }
-  const bookings = platform.booking.find();
-
 
 
   return (
@@ -61,7 +66,7 @@ const Bookings = () => {
                     content: (
                       <div className="bookings-list">
                         { bookings && bookings.count() > 0  ?
-                          bookings.map(booking => booking.get('status') == 'open' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                          bookings.map(booking => booking.get('status') == 'open' && <BookingListPreview key={ booking.get('_id') } booking={ booking } listings={listings} users={users} />):
                           'No Bookings'
                         }
                       </div>
@@ -73,7 +78,7 @@ const Bookings = () => {
                     content: (
                       <div className="bookings-list">
                         { bookings && bookings.count() > 0 ?
-                          bookings.map(booking => booking.get('status') == 'confirmed' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                          bookings.map(booking => booking.get('status') == 'confirmed' && <BookingListPreview key={ booking.get('_id') } booking={ booking } listings={listings} users={users}/>):
                           'No Bookings'
                         }
                       </div>
@@ -85,7 +90,7 @@ const Bookings = () => {
                     content: (
                       <div className="bookings-list">
                         { bookings && bookings.count() > 0 ?
-                          bookings.map(booking => booking.get('status') == 'rejected' && <BookingListPreview key={ booking.get('_id') } booking={ booking } />):
+                          bookings.map(booking => booking.get('status') == 'rejected' && <BookingListPreview key={ booking.get('_id') } booking={ booking } listings={listings} users={users}/>):
                           'No Bookings'
                         }
                       </div>

@@ -1,37 +1,39 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { usePlatform } from '../contexts/platform';
-import { useAuth } from '../contexts/auth';
-
 import { __, priceFormat } from '../utils/helpers';
+import MemberList from './MemberList';
 
 
-const BookingListPreview = ({ booking }) => {
+const BookingListPreview = ({ booking, listings, users }) => {
+
   
-  const { user } = useAuth();
-  const { platform } = usePlatform();
-
-
+  
+  const [status, setStatus] = useState(booking && booking.get('status'))
+  
   const updateBooking = async (id, status) => {
     try {
-      await platform.booking.patch(id, { status: status });
+      const { data } = await platform.booking.patch(id, { status: status });
+      setStatus(data.status)
     } catch (err) {
       console.error(err);
     }
   }
 
+  useEffect(() => {
+    setStatus(booking.get('status'))
+  }, [booking])
+  
   
   const start = dayjs(booking.get('start'));
   const end = dayjs(booking.get('end'));
-
   
   if (!booking) {
     return null;
   }
 
   return (
-    <div className="booking-list-preview card">
-      <p>{ __('bookings_status') } <b>{booking.get('status')}</b></p>
+    <div className="booking-list-preview card" >
+      <p>{ __('bookings_status') } <b>{ status }</b></p>
       <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
       <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
       <p>{ __('bookings_total') }
@@ -44,12 +46,11 @@ const BookingListPreview = ({ booking }) => {
       { booking.get('duration') &&
         <p>Nights: <b>{ booking.get('duration') }</b></p>
       }
-      { booking.get('createdBy') &&
-
-        <p>Created By: <b>{ booking.get('createdBy') }</b></p>
+      { users && users.count() > 0 &&
+        users.map((user) => user.get('_id') == booking.get('createdBy') && <p key={user.get('_id')}>Created By: <b>{ user.get('screenname') }</b></p> )
       }
-      { booking.get('listing') &&
-        <p>Listing: <b>{ booking.get('listing') }</b></p>
+      { listings && listings.count() > 0 &&
+        listings.map((list) => list.get('_id') == booking.get('listing') && <p key={list.get('_id')}>Listing: <b>{ list.get('name') }</b></p> )
       }
       { booking.get('about') &&
         <p>About: <b>{ booking.get('about').slice(0, 120) }{ booking.get('about').length > 120 && '...' }</b></p>
@@ -85,5 +86,6 @@ const BookingListPreview = ({ booking }) => {
     </div>
   );
 }
+
 
 export default BookingListPreview;
