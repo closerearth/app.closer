@@ -19,7 +19,6 @@ const Bookings = ( ) => {
   const [status, setStatus] = useState('');
   const params = useMemo(() => ({ sort_by: 'created' }), []);
   const users = platform.user.find(params);
-  console.log(users)
   const bookings = platform.booking.find();
   const listings = platform.listing.find();
   

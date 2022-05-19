@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import { __, priceFormat } from '../utils/helpers';
-import MemberList from './MemberList';
+
 
 
 const BookingListPreview = ({ booking, listings, users }) => {
@@ -47,7 +47,13 @@ const BookingListPreview = ({ booking, listings, users }) => {
         <p>Nights: <b>{ booking.get('duration') }</b></p>
       }
       { users && users.count() > 0 &&
-        users.map((user) => user.get('_id') == booking.get('createdBy') && <p key={user.get('_id')}>Created By: <b>{ user.get('screenname') }</b></p> )
+        users.map((user) => user.get('_id') == booking.get('createdBy') && <p key={user.get('_id')}>User: <b>{ user.get('screenname') }</b></p> )
+      }
+      { users && users.count() > 0 &&
+        users.map((user) => user.get('_id') == booking.get('createdBy') && <p key={user.get('_id')}>Email: <b>{ user.get('email') }</b></p> )
+      }
+      { users && users.count() > 0 &&
+        users.map((user) => user.get('_id') == booking.get('createdBy') && <p key={user.get('_id')}>Phone: <b>{ user.get('phone') }</b></p> )
       }
       { listings && listings.count() > 0 &&
         listings.map((list) => list.get('_id') == booking.get('listing') && <p key={list.get('_id')}>Listing: <b>{ list.get('name') }</b></p> )
