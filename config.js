@@ -38,7 +38,7 @@ module.exports = {
     address: '0x5573373eca49a668cb89488C77F308cFd3732Ebe'
   },
   BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT: {
-    address: '0x9844449AEbd92a8170feF41A05ECC95E5B2bD21B'
+    address: '0xc23C8d37Dda47697DA8b1D26ceE0f9C29Ad8B1d1'
   },
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,
@@ -51,7 +51,7 @@ module.exports = {
   TELEGRAM_URL: 'https://t.me/closerdao',
   FEATURES: {
     events: true,
-    booking: false,
+    booking: true,
     bookingVolunteers: false
   },
   SIGNUP_FIELDS: [
