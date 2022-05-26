@@ -30,18 +30,16 @@ const CryptoWallet = () => {
       return
     }
 
-    const { hash } = await token.transfer(
+    const tx = await token.transfer(
       utils.getAddress(toAddress),
       BigNumber.from(amountToSend)
     )
 
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
+    setPendingTransactions([...pendingTransactions, tx.hash])
+    await tx.wait();
+    console.log(`${tx.hash} mined`)
+    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
+      
   }
 
   const sendCeloTransaction = async () => {
@@ -52,18 +50,15 @@ const CryptoWallet = () => {
 
     const signer = provider.getUncheckedSigner()
 
-    const { hash } = await signer.sendTransaction({
+    const tx = await signer.sendTransaction({
       to: utils.getAddress(toAddress),
       value: BigNumber.from(amountToSend)
     })
 
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
+    setPendingTransactions([...pendingTransactions, tx.hash])
+    await tx.wait();
+    console.log(`${tx.hash} mined`)
+    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
   }
 
   const approveStableForCrowdsaleContract = async () => {
@@ -74,18 +69,15 @@ const CryptoWallet = () => {
 
     const stableCoin = tokens[BLOCKCHAIN_STABLE_COIN.address]
 
-    const { hash } = await stableCoin.approve(
+    const tx = await stableCoin.approve(
       BLOCKCHAIN_CROWDSALE_CONTRACT.address,
       BigNumber.from(amountToSend)
     )
 
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
+    setPendingTransactions([...pendingTransactions, tx.hash])
+    await tx.wait();
+    console.log(`${tx.hash} mined`)
+    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));      
   }
 
   const participateInCrowdsale = async () => {
@@ -100,15 +92,12 @@ const CryptoWallet = () => {
       provider.getUncheckedSigner()
     )
 
-    const { hash } = await CrowsaleContract.buy(BigNumber.from(amountToSend))
+    const tx = await CrowsaleContract.buy(BigNumber.from(amountToSend))
 
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
+    setPendingTransactions([...pendingTransactions, tx.hash])
+    await tx.wait();
+    console.log(`${tx.hash} mined`)
+    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));      
   }
 
 

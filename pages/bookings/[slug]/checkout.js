@@ -18,9 +18,9 @@ import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
 import { priceFormat, __ } from '../../../utils/helpers';
-import { BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI } from '../../../utils/blockchain';
+import { BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI, BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI } from '../../../utils/blockchain';
 import api, { formatSearch, cdn } from '../../../utils/api';
-import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT } from '../../../config';
+import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT, BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT } from '../../../config';
 
 import Switch from '../../../components/Switch';
 import Layout from '../../../components/Layout';
@@ -35,13 +35,13 @@ const Booking = ({ booking, error }) => {
   const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens } = useWeb3();
-  const [toAddress, setToAddress] = useState('')
-  const [amountToSend, setamountToSend] = useState(0)
+  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens, isReady } = useWeb3();
   const [pendingTransactions, setPendingTransactions] = useState([])
-  const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0 })
+  const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0, depositsFor: [] })
+  const [bookedNights, setBookedNights] = useState([])
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
   const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
+  const [loading, setLoading] = useState(true) //General loading to prevent seeing fallback pre-renders in a glitch while waiting for the data
 
   const processConfirmation = async (update) => {
     try {
@@ -74,6 +74,7 @@ const Booking = ({ booking, error }) => {
       if(!provider || !address){
         return
       }
+      setLoading(true)
 
       const StakingContract = new Contract(
         BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
@@ -84,20 +85,37 @@ const Booking = ({ booking, error }) => {
       const balance = await StakingContract.balanceOf(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
       const locked = await StakingContract.lockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
       const unlocked = await StakingContract.unlockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
+      const depositsFor = await StakingContract.depositsFor(address);
       const lockindPeriod = await StakingContract.lockingPeriod();
       
-      setStakedBalances({ ...stakedBalances, balance, locked, unlocked })
-      setCanUseTokens(tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance + unlocked - locked >= booking.duration)
+      setStakedBalances({ ...stakedBalances, balance, locked, unlocked, lockindPeriod, depositsFor })
+      setCanUseTokens(tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance + unlocked >= booking.duration)
     }
     getStakedTokenData()
+    setLoading(false)
+  }, [tokens, pendingTransactions, pendingProcess])
+
+  useEffect(() => {
+    async function getBookedNights() {
+      if(!provider || !address){
+        return
+      }
+      setLoading(true)
+
+      const ProofOfPresenceContract = new Contract(
+        BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT.address,
+        BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
+        provider.getUncheckedSigner()
+      );
+      
+      const bookedNights = await ProofOfPresenceContract.getDates(address);
+      setBookedNights(bookedNights)
+    }
+    getBookedNights()
+    setLoading(false)
   }, [tokens, pendingTransactions, pendingProcess])
 
   const approveDAOTokenForStakingContract = async () => {
-    if (!amountToSend) {
-      alert('Input an amount in Wei')
-      return
-    }
-
     const DAOToken = tokens[BLOCKCHAIN_DAO_TOKEN.address]
 
     const { hash } = await DAOToken.approve(
@@ -115,11 +133,6 @@ const Booking = ({ booking, error }) => {
   }
 
   const stakeTokens = async () => {
-    if (!amountToSend) {
-      alert('Input an amount in Wei')
-      return
-    }
-
     const StakingContract = new Contract(
       BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
       BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
@@ -137,32 +150,12 @@ const Booking = ({ booking, error }) => {
     })
   }
 
-  const unstakeAllTokens = async () => {
-    if (!amountToSend) {
-      alert('Input an amount in Wei')
-      return
-    }
-
-    const StakingContract = new Contract(
-      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-      BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
-      provider.getUncheckedSigner()
-    );
-
-    const { hash } = await StakingContract.withdraw(BigNumber.from(amountToSend))
-
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
-  }
-
   const verifyDetermineApproveStakeNecessaryTokensAndBook = async () => {
-    if(booking.duration - stakedBalances.unlocked < 0) {
-      throw new Error('Something weird happened in the token calculation')
+    if(!canUseTokens) {
+      throw new Error('User does not have enough tokens to continue')
+    }
+    if(!provider || !address){
+      return
     }
 
     const DAOToken = tokens[BLOCKCHAIN_DAO_TOKEN.address]
@@ -171,35 +164,59 @@ const Booking = ({ booking, error }) => {
       BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
       provider.getUncheckedSigner()
     );
+    const ProofOfPresenceContract = new Contract(
+      BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT.address,
+      BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
+      provider.getUncheckedSigner()
+    ); 
 
     setPendingProcess(true)
 
+    //Calculate how many tokens we need to stake and stake them.
+
     const neededToStake = utils.parseUnits(booking.duration.toString(), BLOCKCHAIN_DAO_TOKEN.decimals).sub(utils.parseUnits(stakedBalances.unlocked.toString(),  BLOCKCHAIN_DAO_TOKEN.decimals))  ;
-    try {
-      const tx1 = await DAOToken.approve(
-        BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-        BigNumber.from(neededToStake)
-      )
-      setPendingTransactions([...pendingTransactions, tx1.hash])
-      await tx1.wait();
-      console.log(`${tx1.hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx1.hash));
-    } catch (error) {
-      //User rejected transaction
-      setPendingProcess(false)
-      return
-    }
     
+    if(neededToStake) {
+      try {
+        const tx1 = await DAOToken.approve(
+          BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
+          BigNumber.from(neededToStake)
+        )
+        setPendingTransactions([...pendingTransactions, tx1.hash])
+        await tx1.wait();
+        console.log(`${tx1.hash} mined`)
+        setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx1.hash));
+      } catch (error) {
+      //User rejected transaction
+        setPendingProcess(false)
+        return
+      }
+    
+      try {
+        const tx2 = await StakingContract.deposit(BigNumber.from(neededToStake))
+        setPendingTransactions([...pendingTransactions, tx2.hash])
+        await tx2.wait();
+        console.log(`${tx2.hash} mined`)
+        setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx2.hash));
+      } catch (error) {
+      //User rejected transaction
+        setPendingProcess(false)
+        return
+      }
+    }
+
+    //Now we can book the nights
+    const nights = []
     try {
-      const tx2 = await StakingContract.deposit(BigNumber.from(neededToStake))
-      setPendingTransactions([...pendingTransactions, tx2.hash])
-      await tx2.wait();
-      console.log(`${tx2.hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx2.hash));
-      saveBooking({ status: 'confirmed', transactionId: tx2.hash });
+      const tx3 = await ProofOfPresenceContract.book(nights)
+      setPendingTransactions([...pendingTransactions, tx3.hash])
+      await tx3.wait();
+      console.log(`${tx3.hash} mined`)
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx3.hash));
+      saveBooking({ status: 'confirmed', transactionId: tx3.hash });
       setPendingProcess(false)
     } catch (error) {
-      //User rejected transaction
+    //User rejected transaction
       setPendingProcess(false)
       return
     }
@@ -236,32 +253,67 @@ const Booking = ({ booking, error }) => {
             <b>{' '}{booking.volunteer || canUseTokens && priceFormat(0, booking.price.cur)}</b>
           </p>
         </section>
+        <button onClick={() => {console.log(booking)}}>
+          Test
+        </button>
         { booking.status === 'open' &&
           <div className="mt-2">
             {wallet ? (
-              <section>
-                {!canUseTokens ? (
-                  <h4>
-                    You do not have enough tokens to book {booking.duration} nights, please acquire some more tokens.
-                  </h4>
-                ) : (
+              <>
+                {loading ? 
                   <section>
-                    { stakedBalances.unlocked >= booking.duration ?
-                      <h4>You have enough releasable tokens to use right away</h4>
-                      : 
-                      <h4>You need to add tokens to your staking to continue</h4> 
-                    } 
-                    <button 
-                      className="btn-primary px-4"
-                      disabled={pendingProcess}
-                      onClick={async () => {
-                        verifyDetermineApproveStakeNecessaryTokensAndBook();
-                      } }>
-                      {pendingProcess ? <div className='flex flex-row items-center'><Spinner /><p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p></div> : 'Book using tokens'}
-                    </button>
+                    Loading ...
+                  </section> : 
+                  <section>
+                    <div className='flex flex-row justify-end mb-8'>
+                      <div className='flex flex-column'>
+                        <b>Token balances:</b>
+                        <ul>
+                          <li>
+                          Wallet: {tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance.toFixed(0)}
+                          </li>
+                          <li>
+                          Staked: {stakedBalances.locked}
+                           For: {stakedBalances.depositsFor.map((el) => <li className='ml-2' key={el.timestamp.toString()}>{el.timestamp.toString()}</li>
+                            )}
+                          </li>
+                          <li>
+                          Releasable: {stakedBalances.unlocked}
+                          </li>
+                        </ul>
+                      </div>
+                      <div className='flex flex-column'>
+                        <b>Booked nights:</b>
+                        <ul>
+                          {bookedNights.map((el) => <li className='ml-2' key={el.toString()}>{el.toString()}</li>)}
+                        </ul>
+                      </div>
+                    </div>
+                    {!canUseTokens ? (
+                      <h4>
+                    You do not have enough tokens to book {booking.duration} nights, please acquire some more tokens.
+                      </h4>
+                    ) : (
+                      <section>
+                        { stakedBalances.unlocked >= booking.duration ?
+                          <h4>You have enough releasable tokens in staking to re-use right away.</h4>
+                          : 
+                          <h4>You need to add tokens to your staking to continue</h4> 
+                        }
+                        <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking at anytime to release your tokens.</p> 
+                        <button 
+                          className="btn-primary px-4"
+                          disabled={pendingProcess}
+                          onClick={async () => {
+                            verifyDetermineApproveStakeNecessaryTokensAndBook();
+                          } }>
+                          {pendingProcess ? <div className='flex flex-row items-center'><Spinner /><p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p></div> : 'Book using tokens'}
+                        </button>
+                      </section>
+                    )}
                   </section>
-                )}
-              </section>
+                }
+              </>
             ) : (
               <>
                 {booking.volunteer ?
@@ -273,76 +325,23 @@ const Booking = ({ booking, error }) => {
                       </a>
                     </p>
                   </div> : 
-                  <>
-                    <section className='mt-3'>
-                      <div className="mt-2">
-                        <div className="flex flex-row items-center space-x-2">
-                          <p className="mb-4">{ __('bookings_using_crypto') }</p>
-                        </div>
-                      </div>
-                    </section>
-                    {canUseTokens ? 
-                      <section className="flex flex-col">
-                        <p>You currently have <b>{(stakedBalances.balance).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b> tokens staked{stakedBalances.balance>0 && 'consisting of:'}</p>
-                        <p className='flex flex-row'>
-                          {stakedBalances.locked>0 && <><b>{(stakedBalances.locked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}</b>&nbsp;locked<br/></>}
-                        </p>
-                        <p className='flex flex-row'>
-                          {stakedBalances.unlocked>0 && 
-                      <>
-                        <b>
-                          {(stakedBalances.unlocked).toFixed(4)} {BLOCKCHAIN_DAO_TOKEN.name}
-                        </b>
-                        &nbsp;releasable
-                        <br/>
-                      </>}
-                        </p>
-                        <p>Locking period is {stakedBalances.lockingPeriod}</p>
+                  <>  
+                    <Elements stripe={ stripe }>
+                      <CheckoutForm
+                        type="booking"
+                        total={ booking.price.val }
+                        currency={ booking.price.cur }
+                        _id={ booking._id }
+                        onSuccess={ payment => { setBooking({ ...booking, status: 'confirmed' }); router.push(`/bookings/${booking._id}`); } }
+                        email={ user.email }
+                        name={ user.screenname }
+                        message={ booking.message }
+                        cancelUrl={ `/bookings/${booking._id}/contribution` }
+                        buttonText={ user.roles.includes('member') ? 'Book' : 'Request to book' }
+                        buttonDisabled={ false }
+                      />
+                    </Elements>
                     
-                        <div className='flex flex-row items-baseline mt-4'>
-                          <div className="w-60 mr-4">
-                            <input
-                              type="number"
-                              value={amountToSend}
-                              placeholder="cEUR amount (wei)"
-                              onChange={e => setamountToSend(e.target.value)} />
-                          </div>
-                          <button className="btn-primary w-36 px-4"
-                            onClick={async () => {
-                              unstakeAllTokens();
-                            } }>
-                      Withdraw
-                          </button>
-                          <button className="btn-primary w-36 px-4"
-                            onClick={async () => {
-                              approveDAOTokenForStakingContract();
-                            } }>
-                      Approve tokens for staking
-                          </button>
-                          <button className="btn-primary w-36 px-4"
-                            onClick={async () => {
-                              stakeTokens();
-                            } }>
-                      Stake tokens
-                          </button>
-                        </div>
-                      </section>: 
-                      <Elements stripe={ stripe }>
-                        <CheckoutForm
-                          type="booking"
-                          total={ booking.price.val }
-                          currency={ booking.price.cur }
-                          _id={ booking._id }
-                          onSuccess={ payment => { setBooking({ ...booking, status: 'confirmed' }); router.push(`/bookings/${booking._id}`); } }
-                          email={ user.email }
-                          name={ user.screenname }
-                          message={ booking.message }
-                          cancelUrl={ `/bookings/${booking._id}/contribution` }
-                          buttonText={ user.roles.includes('member') ? 'Book' : 'Request to book' }
-                          buttonDisabled={ false }
-                        />
-                      </Elements>
-                    }
                   </>}
               </>
             )}

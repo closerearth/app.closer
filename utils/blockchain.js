@@ -332,7 +332,7 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
       },
       {
         'internalType': 'uint256',
-        'name': 'daysLocked',
+        'name': 'secondsLocked',
         'type': 'uint256'
       }
     ],
@@ -581,12 +581,12 @@ export const BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI = [
   }
 ]
 
-export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT = [
+export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
   {
     'inputs': [
       {
         'internalType': 'uint256[]',
-        'name': '_dates',
+        'name': 'bookingDates',
         'type': 'uint256[]'
       }
     ],
@@ -599,7 +599,7 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT = [
     'inputs': [
       {
         'internalType': 'uint256[]',
-        'name': '_cancelDates',
+        'name': 'cancellingDates',
         'type': 'uint256[]'
       }
     ],
@@ -612,11 +612,6 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT = [
     'inputs': [
       {
         'internalType': 'address',
-        'name': '_token',
-        'type': 'address'
-      },
-      {
-        'internalType': 'address',
         'name': '_wallet',
         'type': 'address'
       }
@@ -627,36 +622,17 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT = [
   {
     'inputs': [
       {
-        'internalType': 'address',
-        'name': 'account',
-        'type': 'address'
-      }
-    ],
-    'name': 'balanceOf',
-    'outputs': [
-      {
-        'internalType': 'uint256',
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'inputs': [
-      {
-        'internalType': 'address',
-        'name': '',
-        'type': 'address'
+        'internalType': 'uint16',
+        'name': 'yearNum',
+        'type': 'uint16'
       },
       {
-        'internalType': 'uint256',
-        'name': '',
-        'type': 'uint256'
+        'internalType': 'uint16',
+        'name': 'dayOfTheYear',
+        'type': 'uint16'
       }
     ],
-    'name': 'dates',
+    'name': 'buildTimestamp',
     'outputs': [
       {
         'internalType': 'uint256',
@@ -710,19 +686,6 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT = [
         'internalType': 'uint256[]',
         'name': '',
         'type': 'uint256[]'
-      }
-    ],
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'inputs': [],
-    'name': 'token',
-    'outputs': [
-      {
-        'internalType': 'contract IERC20',
-        'name': '',
-        'type': 'address'
       }
     ],
     'stateMutability': 'view',
