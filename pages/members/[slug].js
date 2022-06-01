@@ -6,7 +6,7 @@ import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
-import { FaRegEdit } from '@react-icons/all-files/fa/FaRegEdit';
+import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 
 
 import Layout from '../../components/Layout';
@@ -27,6 +27,7 @@ const MemberPage = ({ member, loadError }) => {
   const [sendError, setSendErrors] = useState(false);
   const [linkName, setLinkName] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
+  const [links, setLinks] = useState(member && member.links);
   const { user: currentUser, isAuthenticated } = useAuth();
   const [about, setAbout] = useState(member && member.about);
   const [tagline, setTagline] = useState(member && member.tagline);
@@ -34,17 +35,34 @@ const MemberPage = ({ member, loadError }) => {
   const [editProfile, toggleEditProfile] = useState(false);
   const image = (photo || member.photo);
   const { platform } = usePlatform();
-  const  links = platform.user.find(currentUser?._id)?.get('links') || member.links;
+
 
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      await platform.user.patch(currentUser._id,  { links: (currentUser.links || []).concat({ name: linkName, url: linkUrl }) })
+      const { data } = await platform.user.patch(currentUser?._id,  { links: (links || []).concat({ name: linkName, url: linkUrl }) })
+      setLinks(data.links)
+      setLinkName('')
+      setLinkUrl('')
+      toggleShowForm(!showForm)
+      setErrors(null);
     } catch (err) {
-      console.log(err)
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
     }
   }
+
+  const deleteLink = async (link) => {
+    try {
+      const { data } = await platform.user.patch(currentUser?._id,  { links: links.filter((item) => item.name !== link.name ) })
+      setLinks(data.links)
+      setErrors(null);  
+    } catch (err) {
+      const error = err?.response?.data?.error || err.message;
+      setErrors(error);
+    }
+  };
 
   const handleClick = (event) => {
     event.preventDefault()
@@ -89,7 +107,10 @@ const MemberPage = ({ member, loadError }) => {
   useEffect(() => {
     setAbout(member.about);
     setTagline(member.tagline)
+    setLinks(member.links)
   }, [member]);
+
+
 
   if (!member) {
     return <PageNotFound error={ error } />;
@@ -317,7 +338,7 @@ const MemberPage = ({ member, loadError }) => {
             </div>
 
             <div className="flex flex-col items-start md:w-6/12">
-              <div>
+              <div className='w-full'>
                 <div className="page-title flex justify-between">
                   <h3 className="mt-16 md:mt-3 mb-4">Meet {member.screenname} at:</h3>
                 </div>
@@ -333,22 +354,29 @@ const MemberPage = ({ member, loadError }) => {
                 />
               </div>
 
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full">
                 <div className="flex flex-col items-start mb-10">
-                  <div className='flex flex-row items-center justify-between mt-8'>
+                  <div className='flex flex-row items-center justify-between mt-8 w-full'>
                     <p className='font-semibold text-md mr-5'>{ __('members_slug_stay_social') }</p>
                     { isAuthenticated && member._id === currentUser._id &&
-                      <a href="#" onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
-                        <FaRegEdit />
+                    <div className='flex flex-row items-center justify-start space-x-3 w-20'>
+                      <a href="#" name='Add links' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
+                        <button className='btn-small'>Add</button>
                       </a>
+                    </div>
                     }
                   </div>
-                  <ul className='space-y-1 mt-4'>
+                  <ul className='flex flex-col w-full space-y-1 mt-4'>
                     {links ? links.map((link) => (
-                      <li key={link._id} className="mb-1">
+                      <li key={link._id} className="group flex flex-row items-center justify-start space-x-5 mb-1">
                         <a href={link.url}>
                           {link.name}
                         </a>
+                        { isAuthenticated && member._id === currentUser._id &&
+                        <a href='#' onClick={(e) => {e.preventDefault(); deleteLink(link)}} >
+                          <TiDelete className='text-gray-500 text-lg hover:text-black hidden group-hover:block' />
+                        </a>
+                        }
                       </li>
                     )):
                       'No links yet'
@@ -362,8 +390,10 @@ const MemberPage = ({ member, loadError }) => {
           <>
             <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
               <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-                  <form className='flex flex-col space-y-7 w-full' onSubmit={handleSubmit}>
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-background outline-none focus:outline-none p-10">
+                  <h2 className="self-center text-lg font-normal mb-3">{ __('members_slug_links_title') }</h2>
+                  { error && <p className="validation-error">{ __('members_slug_error') } { error }</p> }
+                  <form className='flex flex-col space-y-7 w-full p-2' onSubmit={handleSubmit}>
                     <div>
                       <label>{ __('members_slug_links_name') }</label>
                       <input id='name'  type='text' placeholder='Name...' value={linkName} onChange={(e) => setLinkName(e.target.value)} required />
@@ -381,7 +411,7 @@ const MemberPage = ({ member, loadError }) => {
                           toggleShowForm(!showForm);
                         }}
                       >
-                  Cancel
+                        { __('generic_cancel') }
                       </a>
                     </div>
                   </form>
@@ -391,10 +421,7 @@ const MemberPage = ({ member, loadError }) => {
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
                 }
-
               </div>
-
-
             </div>
           </div>
         </main>

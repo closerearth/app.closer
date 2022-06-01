@@ -7,6 +7,9 @@
   .btn-primary, .btn-primary[type="submit"] {
     @apply btn text-primary bg-transparent hover:text-white hover:bg-primary border-primary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
   }
+  .btn-small, .btn-small[type="submit"] {
+    @apply btn py-0 px-2 text-sm hover:bg-primary text-primary hover:text-white bg-transparent border-2 border-primary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
+  }
   .btn-secondary, .btn-secondary[type="submit"] {
     @apply btn hover:bg-secondary text-secondary hover:text-white bg-transparent border-2 border-secondary disabled:hover:bg-transparent disabled:border-gray-400 disabled:text-gray-400;
   }
