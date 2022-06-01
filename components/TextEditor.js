@@ -55,7 +55,7 @@ const TextEditor = ({ onChange, value }) => {
 
   const dynamicImportFunc = async () => {
     const { default: htmlToDraft } = await import('html-to-draftjs');
-    const blocksFromHtml = htmlToDraft(value);
+    const blocksFromHtml = htmlToDraft(value)
     const { contentBlocks, entityMap } = blocksFromHtml;
     const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
     const editorState = EditorState.createWithContent(contentState);
@@ -64,7 +64,7 @@ const TextEditor = ({ onChange, value }) => {
   
   useEffect(() => {
     dynamicImportFunc();
-  }, []);
+  }, [value]);
   
   const onEditorStateChange = (update) => {
     setEditorState(update);
