@@ -38,7 +38,7 @@ module.exports = {
     address: '0x5573373eca49a668cb89488C77F308cFd3732Ebe'
   },
   BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT: {
-    address: '0xc23C8d37Dda47697DA8b1D26ceE0f9C29Ad8B1d1'
+    address: '0xBb47F3e2ad0Fe056f10d56655ee2acf862E1Fe78'
   },
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,

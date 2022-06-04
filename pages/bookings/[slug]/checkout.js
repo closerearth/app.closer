@@ -3,13 +3,14 @@ import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
 import dayjs from 'dayjs';
+import dayOfYear from 'dayjs/plugin/dayOfYear'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useWeb3 } from '@rastaracoon/web3-context';
 import ReactTooltip from 'react-tooltip';
-import { utils, BigNumber, Contract } from 'ethers';
+import { BigNumber, Contract } from 'ethers';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -22,12 +23,12 @@ import { BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI, BLOCKCHAIN_DAO_STAKING_CONTRACT_A
 import api, { formatSearch, cdn } from '../../../utils/api';
 import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT, BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT } from '../../../config';
 
-import Switch from '../../../components/Switch';
 import Layout from '../../../components/Layout';
 import CheckoutForm from '../../../components/CheckoutForm';
 import Spinner from '../../../components/Spinner';
 
 dayjs.extend(LocalizedFormat);
+dayjs.extend(dayOfYear)
 
 const Booking = ({ booking, error }) => {
   const router = useRouter();
@@ -40,6 +41,7 @@ const Booking = ({ booking, error }) => {
   const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0, depositsFor: [] })
   const [bookedNights, setBookedNights] = useState([])
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
+  const [neededToStake, setNeededToStake] = useState()
   const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
   const [loading, setLoading] = useState(true) //General loading to prevent seeing fallback pre-renders in a glitch while waiting for the data
 
@@ -68,14 +70,21 @@ const Booking = ({ booking, error }) => {
 
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
+  const bookingYear = start.year();
+  let nights = [[bookingYear, dayjs(booking.start).dayOfYear()]]
+  for(var i = 1; i < booking.duration; i++) {
+    nights = [...nights, [bookingYear,dayjs(booking.start).add(i, 'day').dayOfYear()]]
+  }
+  
+  if(start.year() != end.year()){
+    return <div>You cannot yet book accross different years</div>
+  }
 
   useEffect(() => {
+    if(!provider || !address){
+      return
+    }
     async function getStakedTokenData() {
-      if(!provider || !address){
-        return
-      }
-      setLoading(true)
-
       const StakingContract = new Contract(
         BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
         BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
@@ -89,66 +98,35 @@ const Booking = ({ booking, error }) => {
       const lockindPeriod = await StakingContract.lockingPeriod();
       
       setStakedBalances({ ...stakedBalances, balance, locked, unlocked, lockindPeriod, depositsFor })
-      setCanUseTokens(tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance + unlocked >= booking.duration)
     }
-    getStakedTokenData()
-    setLoading(false)
-  }, [tokens, pendingTransactions, pendingProcess])
 
-  useEffect(() => {
     async function getBookedNights() {
-      if(!provider || !address){
-        return
-      }
-      setLoading(true)
-
+      await getStakedTokenData()
       const ProofOfPresenceContract = new Contract(
         BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT.address,
         BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
         provider.getUncheckedSigner()
       );
       
-      const bookedNights = await ProofOfPresenceContract.getDates(address);
+      const bookedNights = await ProofOfPresenceContract.getBookings(address, bookingYear);
+      if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
+        throw new Error('You have already a booking for those dates')
+      }
+      //array1.filter(value => array2.includes(value))
       setBookedNights(bookedNights)
+      setLoading(false)
     }
+    
     getBookedNights()
-    setLoading(false)
+
+    //(current year ProofofPresenceBalance + reservations about to book  - current TokenLock balance )
   }, [tokens, pendingTransactions, pendingProcess])
 
-  const approveDAOTokenForStakingContract = async () => {
-    const DAOToken = tokens[BLOCKCHAIN_DAO_TOKEN.address]
-
-    const { hash } = await DAOToken.approve(
-      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-      BigNumber.from(amountToSend)
-    )
-
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
-  }
-
-  const stakeTokens = async () => {
-    const StakingContract = new Contract(
-      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-      BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
-      provider.getUncheckedSigner()
-    );
-
-    const { hash } = await StakingContract.deposit(BigNumber.from(amountToSend))
-
-    setPendingTransactions([...pendingTransactions, hash])
-
-    provider.once(hash, (transaction) => {
-      console.log(`${hash} mined`)
-      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== hash));
-      // Emitted when the transaction has been mined
-    })
-  }
+  useEffect(() => {
+    const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
+    setNeededToStake(tokensToStake);
+    setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
+  },[bookedNights,stakedBalances])
 
   const verifyDetermineApproveStakeNecessaryTokensAndBook = async () => {
     if(!canUseTokens) {
@@ -174,9 +152,8 @@ const Booking = ({ booking, error }) => {
 
     //Calculate how many tokens we need to stake and stake them.
 
-    const neededToStake = utils.parseUnits(booking.duration.toString(), BLOCKCHAIN_DAO_TOKEN.decimals).sub(utils.parseUnits(stakedBalances.unlocked.toString(),  BLOCKCHAIN_DAO_TOKEN.decimals))  ;
     
-    if(neededToStake) {
+    if(neededToStake > 0) {
       try {
         const tx1 = await DAOToken.approve(
           BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
@@ -191,29 +168,17 @@ const Booking = ({ booking, error }) => {
         setPendingProcess(false)
         return
       }
-    
-      try {
-        const tx2 = await StakingContract.deposit(BigNumber.from(neededToStake))
-        setPendingTransactions([...pendingTransactions, tx2.hash])
-        await tx2.wait();
-        console.log(`${tx2.hash} mined`)
-        setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx2.hash));
-      } catch (error) {
-      //User rejected transaction
-        setPendingProcess(false)
-        return
-      }
     }
 
-    //Now we can book the nights
-    const nights = []
+    //Now we can book the nights    
     try {
       const tx3 = await ProofOfPresenceContract.book(nights)
       setPendingTransactions([...pendingTransactions, tx3.hash])
       await tx3.wait();
       console.log(`${tx3.hash} mined`)
       setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx3.hash));
-      saveBooking({ status: 'confirmed', transactionId: tx3.hash });
+      setBooking({ ...booking, status: 'confirmed' , transactionId: tx3.hash });
+      router.push(`/bookings/${booking._id}`)
       setPendingProcess(false)
     } catch (error) {
     //User rejected transaction
@@ -253,9 +218,6 @@ const Booking = ({ booking, error }) => {
             <b>{' '}{booking.volunteer || canUseTokens && priceFormat(0, booking.price.cur)}</b>
           </p>
         </section>
-        <button onClick={() => {console.log(booking)}}>
-          Test
-        </button>
         { booking.status === 'open' &&
           <div className="mt-2">
             {wallet ? (
@@ -265,42 +227,15 @@ const Booking = ({ booking, error }) => {
                     Loading ...
                   </section> : 
                   <section>
-                    <div className='flex flex-row justify-end mb-8'>
-                      <div className='flex flex-column'>
-                        <b>Token balances:</b>
-                        <ul>
-                          <li>
-                          Wallet: {tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance.toFixed(0)}
-                          </li>
-                          <li>
-                          Staked: {stakedBalances.locked}
-                           For: {stakedBalances.depositsFor.map((el) => <li className='ml-2' key={el.timestamp.toString()}>{el.timestamp.toString()}</li>
-                            )}
-                          </li>
-                          <li>
-                          Releasable: {stakedBalances.unlocked}
-                          </li>
-                        </ul>
-                      </div>
-                      <div className='flex flex-column'>
-                        <b>Booked nights:</b>
-                        <ul>
-                          {bookedNights.map((el) => <li className='ml-2' key={el.toString()}>{el.toString()}</li>)}
-                        </ul>
-                      </div>
-                    </div>
                     {!canUseTokens ? (
                       <h4>
                     You do not have enough tokens to book {booking.duration} nights, please acquire some more tokens.
                       </h4>
                     ) : (
                       <section>
-                        { stakedBalances.unlocked >= booking.duration ?
-                          <h4>You have enough releasable tokens in staking to re-use right away.</h4>
-                          : 
-                          <h4>You need to add tokens to your staking to continue</h4> 
-                        }
-                        <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking at anytime to release your tokens.</p> 
+                        <h4>You have enough tokens available to book right away.</h4>
+                        {neededToStake > 0 && <p>You need to stake {neededToStake} tokens, this will be done for you in the following transactions.</p>}
+                        <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking to release your tokens.</p> 
                         <button 
                           className="btn-primary px-4"
                           disabled={pendingProcess}

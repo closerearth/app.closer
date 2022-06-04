@@ -585,9 +585,42 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
   {
     'inputs': [
       {
-        'internalType': 'uint256[]',
-        'name': 'bookingDates',
-        'type': 'uint256[]'
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      },
+      {
+        'internalType': 'bool',
+        'name': 'leapYear',
+        'type': 'bool'
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'start',
+        'type': 'uint256'
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'end',
+        'type': 'uint256'
+      },
+      {
+        'internalType': 'bool',
+        'name': 'enabled',
+        'type': 'bool'
+      }
+    ],
+    'name': 'addYear',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'uint16[2][]',
+        'name': 'dates',
+        'type': 'uint16[2][]'
       }
     ],
     'name': 'book',
@@ -598,9 +631,9 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
   {
     'inputs': [
       {
-        'internalType': 'uint256[]',
-        'name': 'cancellingDates',
-        'type': 'uint256[]'
+        'internalType': 'uint16[2][]',
+        'name': 'dates',
+        'type': 'uint16[2][]'
       }
     ],
     'name': 'cancel',
@@ -611,8 +644,46 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
   {
     'inputs': [
       {
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      },
+      {
+        'internalType': 'bool',
+        'name': 'enable',
+        'type': 'bool'
+      }
+    ],
+    'name': 'enableYear',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'pause',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      }
+    ],
+    'name': 'removeYear',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
         'internalType': 'address',
-        'name': '_wallet',
+        'name': '_tokenLock',
         'type': 'address'
       }
     ],
@@ -620,7 +691,242 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
     'type': 'constructor'
   },
   {
+    'anonymous': false,
     'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint16[2][]',
+        'name': 'bookings',
+        'type': 'uint16[2][]'
+      }
+    ],
+    'name': 'CanceledBookings',
+    'type': 'event'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint16[2][]',
+        'name': 'bookings',
+        'type': 'uint16[2][]'
+      }
+    ],
+    'name': 'NewBookings',
+    'type': 'event'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'previousOwner',
+        'type': 'address'
+      },
+      {
+        'indexed': true,
+        'internalType': 'address',
+        'name': 'newOwner',
+        'type': 'address'
+      }
+    ],
+    'name': 'OwnershipTransferred',
+    'type': 'event'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      }
+    ],
+    'name': 'Paused',
+    'type': 'event'
+  },
+  {
+    'inputs': [],
+    'name': 'renounceOwnership',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'newOwner',
+        'type': 'address'
+      }
+    ],
+    'name': 'transferOwnership',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'unpause',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      }
+    ],
+    'name': 'Unpaused',
+    'type': 'event'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      },
+      {
+        'internalType': 'bool',
+        'name': 'leapYear',
+        'type': 'bool'
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'start',
+        'type': 'uint256'
+      },
+      {
+        'internalType': 'uint256',
+        'name': 'end',
+        'type': 'uint256'
+      },
+      {
+        'internalType': 'bool',
+        'name': 'enabled',
+        'type': 'bool'
+      }
+    ],
+    'name': 'updateYear',
+    'outputs': [],
+    'stateMutability': 'nonpayable',
+    'type': 'function'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      },
+      {
+        'indexed': false,
+        'internalType': 'bool',
+        'name': 'leapYear',
+        'type': 'bool'
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'start',
+        'type': 'uint256'
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'end',
+        'type': 'uint256'
+      },
+      {
+        'indexed': false,
+        'internalType': 'bool',
+        'name': 'enabled',
+        'type': 'bool'
+      }
+    ],
+    'name': 'YearAdded',
+    'type': 'event'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      }
+    ],
+    'name': 'YearRemoved',
+    'type': 'event'
+  },
+  {
+    'anonymous': false,
+    'inputs': [
+      {
+        'indexed': false,
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      },
+      {
+        'indexed': false,
+        'internalType': 'bool',
+        'name': 'leapYear',
+        'type': 'bool'
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'start',
+        'type': 'uint256'
+      },
+      {
+        'indexed': false,
+        'internalType': 'uint256',
+        'name': 'end',
+        'type': 'uint256'
+      },
+      {
+        'indexed': false,
+        'internalType': 'bool',
+        'name': 'enabled',
+        'type': 'bool'
+      }
+    ],
+    'name': 'YearUpdated',
+    'type': 'event'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'address',
+        'name': 'account',
+        'type': 'address'
+      },
       {
         'internalType': 'uint16',
         'name': 'yearNum',
@@ -628,45 +934,43 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
       },
       {
         'internalType': 'uint16',
-        'name': 'dayOfTheYear',
+        'name': 'dayOfYear',
         'type': 'uint16'
-      }
-    ],
-    'name': 'buildTimestamp',
-    'outputs': [
-      {
-        'internalType': 'uint256',
-        'name': '',
-        'type': 'uint256'
-      }
-    ],
-    'stateMutability': 'view',
-    'type': 'function'
-  },
-  {
-    'inputs': [
-      {
-        'internalType': 'address',
-        'name': 'account',
-        'type': 'address'
-      },
-      {
-        'internalType': 'uint256',
-        'name': '_date',
-        'type': 'uint256'
       }
     ],
     'name': 'getBooking',
     'outputs': [
       {
-        'internalType': 'uint256',
+        'internalType': 'bool',
         'name': '',
-        'type': 'uint256'
+        'type': 'bool'
       },
       {
-        'internalType': 'uint256',
+        'components': [
+          {
+            'internalType': 'uint16',
+            'name': 'year',
+            'type': 'uint16'
+          },
+          {
+            'internalType': 'uint16',
+            'name': 'dayOfYear',
+            'type': 'uint16'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'price',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'timestamp',
+            'type': 'uint256'
+          }
+        ],
+        'internalType': 'struct BookingMapLib.Booking',
         'name': '',
-        'type': 'uint256'
+        'type': 'tuple'
       }
     ],
     'stateMutability': 'view',
@@ -678,14 +982,92 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
         'internalType': 'address',
         'name': 'account',
         'type': 'address'
+      },
+      {
+        'internalType': 'uint16',
+        'name': '_year',
+        'type': 'uint16'
       }
     ],
-    'name': 'getDates',
+    'name': 'getBookings',
     'outputs': [
       {
-        'internalType': 'uint256[]',
+        'components': [
+          {
+            'internalType': 'uint16',
+            'name': 'year',
+            'type': 'uint16'
+          },
+          {
+            'internalType': 'uint16',
+            'name': 'dayOfYear',
+            'type': 'uint16'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'price',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'timestamp',
+            'type': 'uint256'
+          }
+        ],
+        'internalType': 'struct BookingMapLib.Booking[]',
         'name': '',
-        'type': 'uint256[]'
+        'type': 'tuple[]'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [
+      {
+        'internalType': 'uint16',
+        'name': 'number',
+        'type': 'uint16'
+      }
+    ],
+    'name': 'getYear',
+    'outputs': [
+      {
+        'internalType': 'bool',
+        'name': '',
+        'type': 'bool'
+      },
+      {
+        'components': [
+          {
+            'internalType': 'uint16',
+            'name': 'number',
+            'type': 'uint16'
+          },
+          {
+            'internalType': 'bool',
+            'name': 'leapYear',
+            'type': 'bool'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'start',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'end',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'bool',
+            'name': 'enabled',
+            'type': 'bool'
+          }
+        ],
+        'internalType': 'struct BookingMapLib.Year',
+        'name': '',
+        'type': 'tuple'
       }
     ],
     'stateMutability': 'view',
@@ -693,7 +1075,73 @@ export const BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI = [
   },
   {
     'inputs': [],
-    'name': 'wallet',
+    'name': 'getYears',
+    'outputs': [
+      {
+        'components': [
+          {
+            'internalType': 'uint16',
+            'name': 'number',
+            'type': 'uint16'
+          },
+          {
+            'internalType': 'bool',
+            'name': 'leapYear',
+            'type': 'bool'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'start',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'uint256',
+            'name': 'end',
+            'type': 'uint256'
+          },
+          {
+            'internalType': 'bool',
+            'name': 'enabled',
+            'type': 'bool'
+          }
+        ],
+        'internalType': 'struct BookingMapLib.Year[]',
+        'name': '',
+        'type': 'tuple[]'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'owner',
+    'outputs': [
+      {
+        'internalType': 'address',
+        'name': '',
+        'type': 'address'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'paused',
+    'outputs': [
+      {
+        'internalType': 'bool',
+        'name': '',
+        'type': 'bool'
+      }
+    ],
+    'stateMutability': 'view',
+    'type': 'function'
+  },
+  {
+    'inputs': [],
+    'name': 'tokenLock',
     'outputs': [
       {
         'internalType': 'contract ITokenLock',
