@@ -304,7 +304,7 @@ const Event = ({ event, error }) => {
             </section> }
             
             {
-              <Calendar />
+              <Calendar event={event} />
             }
 
           </main>
