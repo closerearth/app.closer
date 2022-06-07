@@ -1,25 +1,13 @@
 import { Menu, Transition } from '@headlessui/react'
 import { DotsVerticalIcon } from '@heroicons/react/outline'
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import {
-  add,
-  eachDayOfInterval,
-  endOfMonth,
-  format,
-  getDay,
-  isEqual,
-  isSameDay,
-  isSameMonth,
-  isToday,
-  parse,
-  parseISO,
-  startOfToday,
-} from 'date-fns'
+import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { Fragment, useState, useEffect, useMemo } from 'react'
 import { useAuth } from '../contexts/auth'
 import { usePlatform } from '../contexts/platform'
 import { __ } from '../utils/helpers'
 
+dayjs.extend(advancedFormat)
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -28,19 +16,15 @@ function classNames(...classes) {
 export default function Calendar({ event }) {
   const { user: currentUser, isAuthenticated } = useAuth();
   const { platform } = usePlatform()
-  let today = startOfToday()
-  let [selectedDay, setSelectedDay] = useState(event.start)
-  let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
-  let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date())
   const [speakers, setSpeakers] = useState(event && event.speakers);
   const [showForm, toggleShowForm] = useState(false)
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [startTime, setStartTime] = useState()
+  const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
   const params = useMemo(() => ({ sort_by: 'created' }), []);
   const users = platform.user.find(params);
-  const totalUsers = platform.user.findCount(params);
+  const start = event && event.start && dayjs(event.start);
 
   const loadData = async () => {
     try {
@@ -64,7 +48,7 @@ export default function Calendar({ event }) {
       setEndTime('')
       toggleShowForm(!showForm)
     } catch (err) {
-      const error = err?.response?.data?.error || err.message;
+      console.error(err)
     }
   }
 
@@ -73,14 +57,15 @@ export default function Calendar({ event }) {
       const { data } = await platform.event.patch(event._id,  { speakers: speakers.filter((item) => item.name !== speaker.name ) })
       setSpeakers(data.speakers) 
     } catch (err) {
-      const error = err?.response?.data?.error || err.message;
+      console.error(err)
     }
   };
+  
 
   useEffect(() => {
     loadData();
     setSpeakers(event.speakers)
-  }, [event]);
+  }, [event.speakers]);
 
 
 
@@ -92,7 +77,7 @@ export default function Calendar({ event }) {
             <h2 className="font-semibold text-gray-900">
               Schedule for{' '}
               <time>
-                {selectedDay}
+                { start && start.format('MMMM Do') }
               </time>
             </h2>
             <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
@@ -101,7 +86,7 @@ export default function Calendar({ event }) {
                   <Speaker speaker={speaker} key={speaker.id} deleteSpeaker={deleteSpeaker} />
                 ))
               ) : (
-                <p>No speakers for today.</p>
+                <p>No speakers for this day.</p>
               )}
             </ol>
           </section>
@@ -213,7 +198,6 @@ function Speaker({ speaker, deleteSpeaker }) {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="#"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block px-4 py-2 text-sm'
@@ -226,7 +210,6 @@ function Speaker({ speaker, deleteSpeaker }) {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="#"
                     className={classNames(
                       active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                       'block px-4 py-2 text-sm'
