@@ -64,20 +64,12 @@ const Booking = ({ booking, error }) => {
     }
   };
 
-  if (!booking) {
-    return <PageNotFound />;
-  }
-
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
   const bookingYear = start.year();
   let nights = [[bookingYear, dayjs(booking.start).dayOfYear()]]
   for(var i = 1; i < booking.duration; i++) {
     nights = [...nights, [bookingYear,dayjs(booking.start).add(i, 'day').dayOfYear()]]
-  }
-  
-  if(start.year() != end.year()){
-    return <div>You cannot yet book accross different years</div>
   }
 
   useEffect(() => {
@@ -90,13 +82,13 @@ const Booking = ({ booking, error }) => {
         BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
         provider.getUncheckedSigner()
       );
-  
+
       const balance = await StakingContract.balanceOf(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
       const locked = await StakingContract.lockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
       const unlocked = await StakingContract.unlockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
       const depositsFor = await StakingContract.depositsFor(address);
       const lockindPeriod = await StakingContract.lockingPeriod();
-      
+
       setStakedBalances({ ...stakedBalances, balance, locked, unlocked, lockindPeriod, depositsFor })
     }
 
@@ -107,7 +99,7 @@ const Booking = ({ booking, error }) => {
         BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
         provider.getUncheckedSigner()
       );
-      
+
       const bookedNights = await ProofOfPresenceContract.getBookings(address, bookingYear);
       if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
         throw new Error('You have already a booking for those dates')
@@ -116,17 +108,21 @@ const Booking = ({ booking, error }) => {
       setBookedNights(bookedNights)
       setLoading(false)
     }
-    
+
     getBookedNights()
 
     //(current year ProofofPresenceBalance + reservations about to book  - current TokenLock balance )
-  }, [tokens, pendingTransactions, pendingProcess])
+  }, [tokens, pendingTransactions, pendingProcess]);
 
   useEffect(() => {
     const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
     setNeededToStake(tokensToStake);
     setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
-  },[bookedNights,stakedBalances])
+  },[bookedNights,stakedBalances]);
+
+  if(start.year() != end.year()){
+    return <div>You cannot yet book accross different years</div>
+  }
 
   const verifyDetermineApproveStakeNecessaryTokensAndBook = async () => {
     if(!canUseTokens) {
@@ -146,13 +142,13 @@ const Booking = ({ booking, error }) => {
       BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT.address,
       BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
       provider.getUncheckedSigner()
-    ); 
+    );
 
     setPendingProcess(true)
 
     //Calculate how many tokens we need to stake and stake them.
 
-    
+
     if(neededToStake > 0) {
       try {
         const tx1 = await DAOToken.approve(
@@ -170,7 +166,7 @@ const Booking = ({ booking, error }) => {
       }
     }
 
-    //Now we can book the nights    
+    //Now we can book the nights
     try {
       const tx3 = await ProofOfPresenceContract.book(nights)
       setPendingTransactions([...pendingTransactions, tx3.hash])
@@ -187,9 +183,11 @@ const Booking = ({ booking, error }) => {
     }
   }
 
-
   if (!isAuthenticated) {
     return <PageNotAllowed />
+  }
+  if (!booking) {
+    return <PageNotFound />;
   }
 
   return (
@@ -200,7 +198,7 @@ const Booking = ({ booking, error }) => {
         <meta name="description" content={booking.description} />
         <meta property="og:type" content="booking" />
       </Head>
-      
+
       <main className="main-content max-w-prose booking">
         <h1 className="mb-4">
           { __('bookings_checkout_title') }
@@ -222,10 +220,10 @@ const Booking = ({ booking, error }) => {
           <div className="mt-2">
             {wallet ? (
               <>
-                {loading ? 
+                {loading ?
                   <section>
                     Loading ...
-                  </section> : 
+                  </section> :
                   <section>
                     {!canUseTokens ? (
                       <h4>
@@ -235,8 +233,8 @@ const Booking = ({ booking, error }) => {
                       <section>
                         <h4>You have enough tokens available to book right away.</h4>
                         {neededToStake > 0 && <p>You need to stake {neededToStake} tokens, this will be done for you in the following transactions.</p>}
-                        <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking to release your tokens.</p> 
-                        <button 
+                        <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking to release your tokens.</p>
+                        <button
                           className="btn-primary px-4"
                           disabled={pendingProcess}
                           onClick={async () => {
@@ -259,8 +257,8 @@ const Booking = ({ booking, error }) => {
                     Confirm booking
                       </a>
                     </p>
-                  </div> : 
-                  <>  
+                  </div> :
+                  <>
                     <Elements stripe={ stripe }>
                       <CheckoutForm
                         type="booking"
@@ -276,13 +274,14 @@ const Booking = ({ booking, error }) => {
                         buttonDisabled={ false }
                       />
                     </Elements>
-                    
+
                   </>}
               </>
             )}
             {user.roles.includes('member') ?
               <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy_member')}</i></p> :
-              <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy')}</i></p>}
+              <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy')}</i></p>
+            }
           </div>
         }
       </main>

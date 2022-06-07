@@ -142,10 +142,8 @@ const MemberPage = ({ member, loadError }) => {
         </>
           }
 
-          <Link  href={'/members'}>
-            <p className="text-lg cursor-pointer my-4">
-              {'< All Profiles'}
-            </p>
+          <Link href={'/members'} className="text-lg cursor-pointer my-4">
+            <a>{'< All Profiles'}</a>
           </Link>
 
           <div className='flex flex-col md:flex-row items-start'>
@@ -400,7 +398,7 @@ const MemberPage = ({ member, loadError }) => {
 
 
           </div>
-    
+
 
         </main>
       </div>
