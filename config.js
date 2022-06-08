@@ -32,6 +32,15 @@ module.exports = {
     booking: false,
     bookingVolunteers: false
   },
+  // Set which roles are permitted to do certain actions
+  PERMISSIONS: {
+    event: {
+      create: 'event-creator'
+    },
+    booking: {
+      create: 'member'
+    }
+  },
   SIGNUP_FIELDS: [
     {
       name: 'community',
