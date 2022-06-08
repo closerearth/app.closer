@@ -6,6 +6,7 @@ import { Fragment, useState, useEffect, useMemo } from 'react'
 import { useAuth } from '../contexts/auth'
 import { usePlatform } from '../contexts/platform'
 import { __ } from '../utils/helpers'
+import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 
 dayjs.extend(advancedFormat)
 
@@ -16,7 +17,7 @@ function classNames(...classes) {
 export default function Calendar({ event }) {
   const { user: currentUser, isAuthenticated } = useAuth();
   const { platform } = usePlatform()
-  const [speakers, setSpeakers] = useState(event && event.speakers);
+  const [speakers, setSpeakers] = useState(event && (event.speakers || []));
   const [showForm, toggleShowForm] = useState(false)
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -40,7 +41,8 @@ export default function Calendar({ event }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const { data } = await platform.event.patch(event._id,  { speakers: (speakers || []).concat({ name: name, description: description, startTime: startTime, endTime: endTime }) })
+      const speakerObj = new Object({ name: name, description: description, startTime: startTime, endTime: endTime })
+      const { data } = await platform.event.patch(event?._id,  { speakers: (speakers || []).concat(speakerObj) })
       setSpeakers(data.speakers)
       setName('')
       setDescription('')
@@ -64,8 +66,11 @@ export default function Calendar({ event }) {
 
   useEffect(() => {
     loadData();
+  }, []);
+
+  useEffect(() => {
     setSpeakers(event.speakers)
-  }, [event.speakers]);
+  }, [event]);
 
 
 
@@ -82,8 +87,8 @@ export default function Calendar({ event }) {
             </h2>
             <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
               {speakers.length > 0 ? (
-                speakers.map((speaker) => (
-                  <Speaker speaker={speaker} key={speaker.id} deleteSpeaker={deleteSpeaker} />
+                speakers.map((speaker, index) => (
+                  <Speaker speaker={speaker} key={index} deleteSpeaker={deleteSpeaker} />
                 ))
               ) : (
                 <p>No speakers for this day.</p>
@@ -161,7 +166,7 @@ function Speaker({ speaker, deleteSpeaker }) {
         className="flex-none w-10 h-10 rounded-full"
       /> */}
       <div className="flex-auto">
-        <p className="text-gray-900">{speaker.name}</p>
+        <p className="text-gray-900 text-lg">{speaker.name}</p>
         <p className="text-gray-900">{speaker.description}</p>
         <p className="mt-0.5">
           <time>
@@ -173,57 +178,9 @@ function Speaker({ speaker, deleteSpeaker }) {
           </time>
         </p>
       </div>
-      <Menu
-        as="div"
-        className="relative opacity-0 focus-within:opacity-100 group-hover:opacity-100"
-      >
-        <div>
-          <Menu.Button className="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600">
-            <span className="sr-only">Open options</span>
-            <DotsVerticalIcon className="w-6 h-6" aria-hidden="true" />
-          </Menu.Button>
-        </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
-                    )}
-                  >
-                    Edit
-                  </a>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                      'block px-4 py-2 text-sm'
-                    )}
-                    onClick={active && deleteSpeaker(speaker)}
-                  >
-                    Cancel
-                  </a>
-                )}
-              </Menu.Item>
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+      <a href='#' onClick={(e) => {e.preventDefault(); deleteSpeaker(speaker)}} >
+        <TiDelete className='text-gray-500 text-lg hover:text-black hidden group-hover:block' />
+      </a>
     </li>
   )
 }
