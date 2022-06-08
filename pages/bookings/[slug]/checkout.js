@@ -44,6 +44,7 @@ const Booking = ({ booking, error }) => {
   const [neededToStake, setNeededToStake] = useState()
   const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
   const [loading, setLoading] = useState(true) //General loading to prevent seeing fallback pre-renders in a glitch while waiting for the data
+  const [alreadyBookedDates, setAlreadyBookedDates] = useState(false)
 
   const processConfirmation = async (update) => {
     try {
@@ -102,7 +103,7 @@ const Booking = ({ booking, error }) => {
 
       const bookedNights = await ProofOfPresenceContract.getBookings(address, bookingYear);
       if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
-        throw new Error('You have already a booking for those dates')
+        setAlreadyBookedDates(true)
       }
       //array1.filter(value => array2.includes(value))
       setBookedNights(bookedNights)
@@ -146,21 +147,20 @@ const Booking = ({ booking, error }) => {
 
     setPendingProcess(true)
 
-    //Calculate how many tokens we need to stake and stake them.
-
-
     if(neededToStake > 0) {
       try {
         const tx1 = await DAOToken.approve(
           BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-          BigNumber.from(neededToStake)
+          BigNumber.from(neededToStake).mul(BigNumber.from(10).pow(BLOCKCHAIN_DAO_TOKEN.decimals))
         )
+        console.log('sup')
         setPendingTransactions([...pendingTransactions, tx1.hash])
         await tx1.wait();
         console.log(`${tx1.hash} mined`)
         setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx1.hash));
       } catch (error) {
-      //User rejected transaction
+        console.log(error)
+        //User rejected transaction
         setPendingProcess(false)
         return
       }
@@ -198,25 +198,42 @@ const Booking = ({ booking, error }) => {
         <meta name="description" content={booking.description} />
         <meta property="og:type" content="booking" />
       </Head>
-
+     
       <main className="main-content max-w-prose booking">
-        <h1 className="mb-4">
-          { __('bookings_checkout_title') }
-        </h1>
-
-        <section className="mt-3">
-          <h3>{ __('bookings_summary') }</h3>
-          <p>{ __('bookings_status') } <b>{editBooking.status}</b></p>
-          <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
-          <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
-          <p>{ __('bookings_total') }
-            <b className={ booking.volunteer || canUseTokens ? 'line-through': '' }>
-              {' '}{priceFormat(booking.price)}
-            </b>
-            <b>{' '}{booking.volunteer || canUseTokens && priceFormat(0, booking.price.cur)}</b>
-          </p>
-        </section>
-        { booking.status === 'open' &&
+        { alreadyBookedDates ? 
+          <>
+          You already have a booking at these Dates.<br/>
+            <Link
+              href="/listings/book"
+            >
+              <button className="btn-primary px-4">Go back to booking</button>
+            </Link>
+          </> :
+          <><h1 className="mb-4">
+            {__('bookings_checkout_title')}
+          </h1><section className="mt-3">
+            <h3>{__('bookings_summary')}</h3>
+            <p>{__('bookings_status')} <b>{editBooking.status}</b></p>
+            <p>{__('bookings_checkin')} <b>{start.format('LLL')}</b></p>
+            <p>{__('bookings_checkout')} <b>{end.format('LLL')}</b></p>
+            <p>{__('bookings_total')}
+              <b className={booking.volunteer || canUseTokens ? 'line-through' : ''}>
+                {' '}{priceFormat(booking.price)}
+              </b>
+              <b>{' '}{booking.volunteer || canUseTokens && priceFormat(0, booking.price.cur)}</b>
+            </p>
+          </section>
+          <button
+            className="btn-primary px-4"
+            disabled={pendingProcess}
+            onClick={async () => {
+              console.log(neededToStake);
+              console.log(bookedNights);
+              console.log(stakedBalances);
+            } }>
+            Console 
+          </button>
+          { booking.status === 'open' &&
           <div className="mt-2">
             {wallet ? (
               <>
@@ -283,8 +300,11 @@ const Booking = ({ booking, error }) => {
               <p className="mt-3 text-sm"><i>{__('booking_cancelation_policy')}</i></p>
             }
           </div>
+          }
+          </>
         }
       </main>
+      
     </Layout>
   );
 }
