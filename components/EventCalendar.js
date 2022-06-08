@@ -1,5 +1,4 @@
-import { Menu, Transition } from '@headlessui/react'
-import { DotsVerticalIcon } from '@heroicons/react/outline'
+
 import dayjs from 'dayjs'
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import { Fragment, useState, useEffect, useMemo } from 'react'
@@ -10,17 +9,16 @@ import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 
 dayjs.extend(advancedFormat)
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export default function Calendar({ event }) {
   const { user: currentUser, isAuthenticated } = useAuth();
   const { platform } = usePlatform()
   const [speakers, setSpeakers] = useState(event && (event.speakers || []));
   const [showForm, toggleShowForm] = useState(false)
+  const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [location, setLocation] = useState('');
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
   const params = useMemo(() => ({ sort_by: 'created' }), []);
@@ -41,7 +39,7 @@ export default function Calendar({ event }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const speakerObj = new Object({ name: name, description: description, startTime: startTime, endTime: endTime })
+      const speakerObj = new Object({ title: title, name: name, description: description, location: location, startTime: startTime, endTime: endTime })
       const { data } = await platform.event.patch(event?._id,  { speakers: (speakers || []).concat(speakerObj) })
       setSpeakers(data.speakers)
       setName('')
@@ -110,18 +108,27 @@ export default function Calendar({ event }) {
                   <h2 className="self-center text-lg font-normal mb-3">Add Session</h2>
                   <form className='flex flex-col space-y-7 w-full p-2' onSubmit={handleSubmit} >
                     <div>
+                      <label>Session Title</label>
+                      <input id='title'  type='text' placeholder='Title...' value={title} onChange={(e) => setTitle(e.target.value)} />
+                    </div>
+                    <div>
                       <label>Speaker</label>
-                      <select id='speaker' name='speaker' value={name} onChange={(e) => setName(e.target.value)} >
+                      {/* <select id='speaker' name='speaker' value={name} onChange={(e) => setName(e.target.value)} >
                         {users.map(user => (
                           <option value={ user.get('screenname') } key={ user.get('_id') }>
                             { user.get('screenname') }
                           </option>
                         ))}
-                      </select >
+                      </select > */}
+                      <input id='speaker'  type='text' placeholder='Speaker...' value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div>
                       <label>Description</label>
                       <input id='description'  type='text' placeholder='Description...' value={description} onChange={(e) => setDescription(e.target.value)} />
+                    </div>
+                    <div>
+                      <label>Location</label>
+                      <input id='location'  type='text' placeholder='Location...' value={location} onChange={(e) => setLocation(e.target.value)} />
                     </div>
                     <div>
                       <label>Start Time</label>
@@ -166,8 +173,10 @@ function Speaker({ speaker, deleteSpeaker }) {
         className="flex-none w-10 h-10 rounded-full"
       /> */}
       <div className="flex-auto">
+        <h4 className="text-gray-900">{speaker.title}</h4>
         <p className="text-gray-900 text-lg">{speaker.name}</p>
         <p className="text-gray-900">{speaker.description}</p>
+        <p className="text-gray-900">{speaker.location}</p>
         <p className="mt-0.5">
           <time>
             {speaker.startTime}
