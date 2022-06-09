@@ -283,7 +283,7 @@ const Event = ({ event, error }) => {
 
             { event.description && <section className="mb-6">
               <h3 className="font-bold text-2xl">Event description</h3>
-              <p className="whitespace-pre-line">
+              {/* <p className="whitespace-pre-line">
                 <Linkify
                   componentDecorator={(decoratedHref, decoratedText, key) => (
                     <a
@@ -299,7 +299,8 @@ const Event = ({ event, error }) => {
                 >
                   {event.description}
                 </Linkify>
-              </p>
+              </p> */}
+              <div dangerouslySetInnerHTML={{ __html: event.description }} />
             </section> }
           </main>
         </div>
