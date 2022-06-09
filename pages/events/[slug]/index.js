@@ -18,7 +18,7 @@ import Photo from '../../../components/Photo';
 import TimeSince from '../../../components/TimeSince';
 import EventAttendees from '../../../components/EventAttendees';
 import EventPhoto from '../../../components/EventPhoto';
-import Calendar from '../../../components/EventCalendar';
+import EventSchedule from '../../../components/EventSchedule';
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
@@ -304,7 +304,7 @@ const Event = ({ event, error }) => {
             </section> }
             
             {
-              <Calendar event={event} />
+              <EventSchedule event={event} />
             }
 
           </main>

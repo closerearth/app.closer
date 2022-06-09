@@ -6,15 +6,17 @@ import { useAuth } from '../contexts/auth'
 import { usePlatform } from '../contexts/platform'
 import { __ } from '../utils/helpers'
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
+import { TiEdit } from '@react-icons/all-files/ti/TiEdit'
 
 dayjs.extend(advancedFormat)
 
 
-export default function Calendar({ event }) {
+export default function EventSchedule({ event }) {
   const { user: currentUser, isAuthenticated } = useAuth();
   const { platform } = usePlatform()
   const [speakers, setSpeakers] = useState(event && (event.speakers || []));
   const [showForm, toggleShowForm] = useState(false)
+  const [edit, toggleShowEdit] = useState(false)
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -39,11 +41,14 @@ export default function Calendar({ event }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      
       const speakerObj = new Object({ title: title, name: name, description: description, location: location, startTime: startTime, endTime: endTime })
-      const { data } = await platform.event.patch(event?._id,  { speakers: (speakers || []).concat(speakerObj) })
-      setSpeakers(data.speakers)
+      const { data } = await platform.event.patch(event._id,  { speakers: (speakers || []).concat(speakerObj) })
+      setSpeakers(data && data.speakers)
+      setTitle('')
       setName('')
       setDescription('')
+      setLocation('')
       setStartTime('')
       setEndTime('')
       toggleShowForm(!showForm)
@@ -60,6 +65,21 @@ export default function Calendar({ event }) {
       console.error(err)
     }
   };
+
+  const editSpeaker = async (speaker) => {
+    try {
+      setTitle(speaker.title)
+      setName(speaker.name)
+      setDescription(speaker.description)
+      setLocation(speaker.location)
+      setStartTime(speaker.startTime)
+      setEndTime(speaker.endTime)
+      toggleShowForm(!showForm)
+      toggleShowEdit(true)
+    } catch (err) {
+      console.error(err)
+    }
+  }
   
 
   useEffect(() => {
@@ -86,7 +106,7 @@ export default function Calendar({ event }) {
             <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
               {speakers.length > 0 ? (
                 speakers.map((speaker, index) => (
-                  <Speaker speaker={speaker} key={index} deleteSpeaker={deleteSpeaker} />
+                  <Speaker speaker={speaker} key={index} deleteSpeaker={deleteSpeaker} editSpeaker={editSpeaker} />
                 ))
               ) : (
                 <p>No speakers for this day.</p>
@@ -95,7 +115,7 @@ export default function Calendar({ event }) {
           </section>
           { isAuthenticated &&
                     <div className='mt-12 md:pl-14'>
-                      <a href="#" name='Add Speaker' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
+                      <a name='Add Speaker' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
                         <button className='btn-small'>Add Speaker</button>
                       </a>
                     </div>
@@ -128,7 +148,7 @@ export default function Calendar({ event }) {
                     </div>
                     <div>
                       <label>Location</label>
-                      <input id='location'  type='text' placeholder='Location...' value={location} onChange={(e) => setLocation(e.target.value)} />
+                      <input id='location'  type='text' placeholder='23 Maple St, 10100 San Francisco' value={location} onChange={(e) => setLocation(e.target.value)} />
                     </div>
                     <div>
                       <label>Start Time</label>
@@ -163,7 +183,7 @@ export default function Calendar({ event }) {
   )
 }
 
-function Speaker({ speaker, deleteSpeaker }) {
+function Speaker({ speaker, deleteSpeaker, editSpeaker }) {
 
   return (
     <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
@@ -187,8 +207,11 @@ function Speaker({ speaker, deleteSpeaker }) {
           </time>
         </p>
       </div>
-      <a href='#' onClick={(e) => {e.preventDefault(); deleteSpeaker(speaker)}} >
-        <TiDelete className='text-gray-500 text-lg hover:text-black hidden group-hover:block' />
+      <a onClick={(e) => {e.preventDefault(); editSpeaker(speaker)}} >
+        <TiEdit className='text-gray-500 text-lg hover:text-black hover:cursor-pointer hidden group-hover:block' />
+      </a>
+      <a onClick={(e) => {e.preventDefault(); deleteSpeaker(speaker)}} >
+        <TiDelete className='text-gray-500 text-lg hover:text-black hover:cursor-pointer hidden group-hover:block' />
       </a>
     </li>
   )
