@@ -72,7 +72,7 @@ const MemberList = ({
                   </div>
                   { user.get('about') && <p className="py-2 text-sm">{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p> }
                   <div className="pt-2">
-                    <button className="btn">{ __('member_list_see_profile') }</button>
+                    <button className="btn-primary">{ __('member_list_see_profile') }</button>
                   </div>
                 </div>
               </Link>

@@ -24,7 +24,7 @@ const Events = () => {
         <div className="page-title flex justify-between">
           <h1 className="mb-4">{ __('events_upcoming') }</h1>
           <div className="action">
-            { user && (!PERMISSIONS.event.create || user.roles.includes(PERMISSIONS.event.create)) &&
+            { user && (!PERMISSIONS || !PERMISSIONS.event.create || user.roles.includes(PERMISSIONS.event.create)) &&
               <Link href="/events/create">
                 <a className="btn-primary">{ __('events_link') }</a>
               </Link>
