@@ -16,7 +16,7 @@ export default function EventSchedule({ event }) {
   const { platform } = usePlatform()
   const [speakers, setSpeakers] = useState(event && (event.speakers || []));
   const [showForm, toggleShowForm] = useState(false)
-  const [edit, toggleShowEdit] = useState(false)
+  const [showEdit, toggleShowEdit] = useState(false)
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -40,8 +40,7 @@ export default function EventSchedule({ event }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    try {
-      
+    try {     
       const speakerObj = new Object({ title: title, name: name, description: description, location: location, startTime: startTime, endTime: endTime })
       const { data } = await platform.event.patch(event._id,  { speakers: (speakers || []).concat(speakerObj) })
       setSpeakers(data && data.speakers)
@@ -52,6 +51,7 @@ export default function EventSchedule({ event }) {
       setStartTime('')
       setEndTime('')
       toggleShowForm(!showForm)
+      toggleShowEdit(!showEdit)
     } catch (err) {
       console.error(err)
     }
@@ -75,7 +75,8 @@ export default function EventSchedule({ event }) {
       setStartTime(speaker.startTime)
       setEndTime(speaker.endTime)
       toggleShowForm(!showForm)
-      toggleShowEdit(true)
+      toggleShowEdit(!showEdit)
+      deleteSpeaker(speaker)
     } catch (err) {
       console.error(err)
     }
@@ -159,7 +160,7 @@ export default function EventSchedule({ event }) {
                       <input id='end-time'  type='time' value={endTime} onChange={(e) => setEndTime(e.target.value)} />
                     </div>
                     <div className='flex flex-row items-center justify-start'>
-                      <button type='submit' className='btn-primary w-24 mr-6'>{ __('members_slug_links_submit') }</button>
+                      <button type='submit' className='btn-primary w-24 mr-6'>{ showEdit ? 'Add' : 'Save' }</button>
                       <a
                         href="#"
                         onClick={ (e) => {
