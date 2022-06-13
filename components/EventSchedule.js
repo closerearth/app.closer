@@ -20,12 +20,13 @@ export default function EventSchedule({ event }) {
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [location, setLocation] = useState('');
-  const [startTime, setStartTime] = useState('')
-  const [endTime, setEndTime] = useState('')
+  const [url, setUrl] = useState('');
+  const [start, setStart] = useState('')
+  const [end, setEnd] = useState('')
   const params = useMemo(() => ({ sort_by: 'created' }), []);
   const users = platform.user.find(params);
-  const start = event && event.start && dayjs(event.start);
+  const startDate = event && event.start && dayjs(event.start);
+  const endDate = event && event.end && dayjs(event.end);
 
   const loadData = async () => {
     try {
@@ -41,15 +42,15 @@ export default function EventSchedule({ event }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {     
-      const speakerObj = new Object({ title: title, name: name, description: description, location: location, startTime: startTime, endTime: endTime })
+      const speakerObj = new Object({ title: title, name: name, description: description, location: location, start: start, end: end })
       const { data } = await platform.event.patch(event._id,  { speakers: (speakers || []).concat(speakerObj) })
       setSpeakers(data && data.speakers)
       setTitle('')
       setName('')
       setDescription('')
-      setLocation('')
-      setStartTime('')
-      setEndTime('')
+      setUrl('')
+      setStart('')
+      setEnd('')
       toggleShowForm(!showForm)
       toggleShowEdit(!showEdit)
     } catch (err) {
@@ -71,9 +72,9 @@ export default function EventSchedule({ event }) {
       setTitle(speaker.title)
       setName(speaker.name)
       setDescription(speaker.description)
-      setLocation(speaker.location)
-      setStartTime(speaker.startTime)
-      setEndTime(speaker.endTime)
+      setUrl(speaker.url)
+      setStart(speaker.start)
+      setEnd(speaker.end)
       toggleShowForm(!showForm)
       toggleShowEdit(!showEdit)
       deleteSpeaker(speaker)
@@ -101,7 +102,8 @@ export default function EventSchedule({ event }) {
             <h2 className="font-semibold text-gray-900">
               Schedule for{' '}
               <time>
-                { start && start.format('MMMM Do') }
+                { startDate && startDate.format('MMMM Do') }
+                { endDate && ` - ${ endDate.format('MMMM Do') }` }
               </time>
             </h2>
             <ol className="mt-4 space-y-1 text-sm leading-6 text-gray-500">
@@ -149,15 +151,15 @@ export default function EventSchedule({ event }) {
                     </div>
                     <div>
                       <label>Location</label>
-                      <input id='location'  type='text' placeholder='23 Maple St, 10100 San Francisco' value={location} onChange={(e) => setLocation(e.target.value)} />
+                      <input id='location'  type='text' placeholder='23 Maple St, 10100 San Francisco' value={url} onChange={(e) => setUrl(e.target.value)} />
                     </div>
                     <div>
                       <label>Start Time</label>
-                      <input id='start-time'  type='time'  value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+                      <input id='start-time'  type='datetime-local'  value={start} onChange={(e) => setStart(e.target.value)} />
                     </div>
                     <div>
                       <label>End Time</label>
-                      <input id='end-time'  type='time' value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+                      <input id='end-time'  type='datetime-local' value={end} onChange={(e) => setEnd(e.target.value)} />
                     </div>
                     <div className='flex flex-row items-center justify-start'>
                       <button type='submit' className='btn-primary w-24 mr-6'>{ showEdit ? 'Add' : 'Save' }</button>
@@ -186,25 +188,21 @@ export default function EventSchedule({ event }) {
 
 function Speaker({ speaker, deleteSpeaker, editSpeaker }) {
 
+
   return (
     <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
-      {/* <img
-        src={speaker.photo}
-        alt=""
-        className="flex-none w-10 h-10 rounded-full"
-      /> */}
       <div className="flex-auto">
         <h4 className="text-gray-900">{speaker.title}</h4>
         <p className="text-gray-900 text-lg">{speaker.name}</p>
         <p className="text-gray-900">{speaker.description}</p>
-        <p className="text-gray-900">{speaker.location}</p>
+        <p className="text-gray-900">{speaker.url}</p>
         <p className="mt-0.5">
           <time>
-            {speaker.startTime}
+            {speaker.start}
           </time>{' '}
           -{' '}
           <time>
-            {speaker.endTime}
+            {speaker.end}
           </time>
         </p>
       </div>
