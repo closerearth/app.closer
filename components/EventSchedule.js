@@ -133,7 +133,7 @@ export default function EventSchedule({ event }) {
                   <form className='flex flex-col space-y-7 w-full p-2' onSubmit={handleSubmit} >
                     <div>
                       <label>Session Title</label>
-                      <input id='title'  type='text' placeholder='Title...' value={title} onChange={(e) => setTitle(e.target.value)} />
+                      <input id='title'  type='text' placeholder='Tokenomics' value={title} onChange={(e) => setTitle(e.target.value)} />
                     </div>
                     <div>
                       <label>Speaker</label>
@@ -144,15 +144,15 @@ export default function EventSchedule({ event }) {
                           </option>
                         ))}
                       </select > */}
-                      <input id='speaker'  type='text' placeholder='Speaker...' value={name} onChange={(e) => setName(e.target.value)} />
+                      <input id='speaker'  type='text' placeholder='Samuel Deleshque' value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div>
                       <label>Description</label>
-                      <input id='description'  type='text' placeholder='Description...' value={description} onChange={(e) => setDescription(e.target.value)} />
+                      <input id='description'  type='text' placeholder='NFTs and token governance' value={description} onChange={(e) => setDescription(e.target.value)} />
                     </div>
                     <div>
                       <label>Location</label>
-                      <input id='location'  type='text' placeholder='23 Maple St, 10100 San Francisco' value={url} onChange={(e) => setUrl(e.target.value)} />
+                      <input id='location'  type='text' placeholder='zoom.com/tokens' value={url} onChange={(e) => setUrl(e.target.value)} />
                     </div>
                     <div>
                       <label>Start Time</label>
