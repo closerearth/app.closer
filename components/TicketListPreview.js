@@ -16,6 +16,9 @@ const TicketListPreview = ({ ticket }) => {
         { ticket.get('name') &&
           <p>{ __('ticket_list_holder') } <b>{ ticket.get('name') }</b></p>
         }
+        { ticket.get('email') &&
+          <p>{ __('ticket_list_email') } <b>{ ticket.get('email') }</b></p>
+        }
         { ticket.get('price') &&
           <p>{ __('ticket_list_total_cost') } <b>{ priceFormat(ticket.get('price')) }</b></p>
         }

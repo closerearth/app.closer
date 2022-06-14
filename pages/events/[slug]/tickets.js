@@ -11,19 +11,25 @@ import api from '../../../utils/api';
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
 import TicketListPreview from '../../../components/TicketListPreview';
+import Pagination from '../../../components/Pagination';
 import { __ } from '../../../utils/helpers';
+
+
 
 const EventTickets = ({ event }) => {
   const router = useRouter();
 
   const { user } = useAuth();
   const { platform } = usePlatform();
+  const [ page, setPage ] = useState(1)
   const ticketsFilter = { where: { event: event && event._id } };
   const tickets = platform.ticket.find(ticketsFilter);
+  const totalTickets = platform.ticket.findCount(ticketsFilter);
 
   const loadData = async () => {
     await Promise.all([
-      platform.ticket.get(ticketsFilter)
+      platform.ticket.get(ticketsFilter),
+      platform.ticket.getCount(ticketsFilter)
     ]);
   }
 
@@ -62,6 +68,16 @@ const EventTickets = ({ event }) => {
             <p className="p-3 text-2xl card text-center italic">{ __('events_slug_tickets_error') }</p>
           }
         </div>
+        <Pagination
+          loadPage={ (page) => {
+            setPage(page);
+            loadData();
+          }}
+          page={ page }
+          limit={ 50 }
+          total={ totalTickets }
+          items={ tickets }
+        />
       </div>
     </Layout>
   );
