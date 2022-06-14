@@ -119,7 +119,7 @@ export default function EventSchedule({ event }) {
           { isAuthenticated &&
                     <div className='mt-12 md:pl-14'>
                       <a name='Add Speaker' onClick={(e) => {e.preventDefault(); toggleShowForm(!showForm) }}>
-                        <button className='btn-small'>Add Speaker</button>
+                        <button className='btn-primary'>Add Speaker</button>
                       </a>
                     </div>
           }
