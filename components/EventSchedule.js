@@ -7,6 +7,7 @@ import { usePlatform } from '../contexts/platform'
 import { __ } from '../utils/helpers'
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
 import { TiEdit } from '@react-icons/all-files/ti/TiEdit'
+import { format, parseISO } from 'date-fns'
 
 dayjs.extend(advancedFormat)
 
@@ -188,6 +189,8 @@ export default function EventSchedule({ event }) {
 
 function Speaker({ speaker, deleteSpeaker, editSpeaker }) {
 
+  const startDate = parseISO(speaker.start)
+  const endDate = parseISO(speaker.end)
 
   return (
     <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
@@ -198,11 +201,11 @@ function Speaker({ speaker, deleteSpeaker, editSpeaker }) {
         <p className="text-gray-900">{speaker.url}</p>
         <p className="mt-0.5">
           <time>
-            {speaker.start}
+            {format(startDate, 'MMMM do h:mm a')}
           </time>{' '}
           -{' '}
           <time>
-            {speaker.end}
+            {format(endDate, 'h:mm a')}
           </time>
         </p>
       </div>
