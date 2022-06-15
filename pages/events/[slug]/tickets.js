@@ -15,7 +15,6 @@ import Pagination from '../../../components/Pagination';
 import { __ } from '../../../utils/helpers';
 
 
-
 const EventTickets = ({ event }) => {
   const router = useRouter();
 
