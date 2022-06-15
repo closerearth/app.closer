@@ -114,6 +114,18 @@ export default {
       ]
     },
     {
+      name: 'stripePub',
+      label: 'Custom Stripe Public Key',
+      type: 'text',
+      tab: 'tickets'
+    },
+    {
+      name: 'stripeKey',
+      label: 'Custom Stripe Private Key',
+      type: 'text',
+      tab: 'tickets'
+    },
+    {
       name: 'fields',
       label: 'Custom questions',
       type: 'fields',
@@ -126,20 +138,6 @@ export default {
       type: 'text',
       toggleFeature: true,
       placeholder: 'eventbrite.com/my-ticket',
-      tab: 'advanced'
-    },
-    {
-      name: 'stripePub',
-      label: 'Custom Stripe Public Key',
-      type: 'text',
-      toggleFeature: true,
-      tab: 'advanced'
-    },
-    {
-      name: 'stripeKey',
-      label: 'Custom Stripe Private Key',
-      type: 'text',
-      toggleFeature: true,
       tab: 'advanced'
     },
     {

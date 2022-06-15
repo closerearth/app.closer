@@ -160,7 +160,7 @@ const Event = ({ event, error }) => {
                           <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
                             <a className="btn-primary mr-2">See ticket</a>
                           </Link>:
-                          start && start.isAfter(dayjs()) &&
+                          start && start.isAfter(dayjs()) && (event.stripePub || config.STRIPE_PUB_KEY) &&
                           <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
                             <a className="btn-primary mr-2">Buy ticket</a>
                           </Link>
