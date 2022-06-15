@@ -151,7 +151,7 @@ export default function EventSchedule({ event }) {
                     </div>
                     <div>
                       <label>Start Time</label>
-                      <input id='start-time'  type='datetime-local'  value={start} onChange={(e) => setStart(e.target.value)} />
+                      <input className='bg-background border-gray-300 border-1' id='start-time'  type='datetime-local'  value={start} onChange={(e) => setStart(e.target.value)} />
                     </div>
                     <div>
                       <label>End Time</label>

@@ -39,7 +39,7 @@
   textarea, .textarea {
     @apply bg-transparent mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black resize-none;
   }
-  .input, input[type="email"], input[type="password"], input[type="text"], input[type="phone"], input[type="number"], input[type="date"], input[type="time"] {
+  .input, input[type="email"], input[type="password"], input[type="text"], input[type="phone"], input[type="number"], input[type="date"], input[type="time"], input[type='datetime-local'] {
     @apply bg-transparent text-foreground mt-0 block w-full border-0 border-b-2 border-gray-200 px-0.5 focus:ring-0 focus:border-black max-w-full;
   }
   select {
