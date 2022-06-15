@@ -45,7 +45,7 @@ export default function EventSchedule({ event }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {     
-      const speakerObj = new Object({ title: title, name: name, description: description, location: location, start: start, end: end })
+      const speakerObj = new Object({ title: title, name: name, description: description, url: url, start: start, end: end })
       const { data } = await platform.event.patch(event._id,  { speakers: (speakers || []).concat(speakerObj) })
       setSpeakers(data && data.speakers)
       setTitle('')
@@ -139,13 +139,6 @@ export default function EventSchedule({ event }) {
                     </div>
                     <div>
                       <label>Speaker</label>
-                      {/* <select id='speaker' name='speaker' value={name} onChange={(e) => setName(e.target.value)} >
-                        {users.map(user => (
-                          <option value={ user.get('screenname') } key={ user.get('_id') }>
-                            { user.get('screenname') }
-                          </option>
-                        ))}
-                      </select > */}
                       <input id='speaker'  type='text' placeholder='Samuel Deleshque' value={name} onChange={(e) => setName(e.target.value)} />
                     </div>
                     <div>
