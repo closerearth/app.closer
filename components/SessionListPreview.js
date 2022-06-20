@@ -18,7 +18,6 @@ const SessionListPreview = ({ session }) => {
   const end = parseISO( session.get('end') )  
   const [liked, setLiked] = useState(false);
   const [likedBy, setLikedBy] = useState(session && (session.get('likedBy') || []));
-  console.log(likedBy)
 
 
   const likePost = async () => {
@@ -38,7 +37,7 @@ const SessionListPreview = ({ session }) => {
   };
 
   useEffect(() => {
-    setLikedBy(session.get('likedBy'))
+    setLikedBy(likedBy)
   }, [session])
 
   if (!session) {
@@ -52,8 +51,8 @@ const SessionListPreview = ({ session }) => {
         <h4 className="text-gray-900">{session.get('name')}</h4>
         <p className="text-gray-900 text-lg">{session.get('speakers')}</p>
         <p className="text-gray-900">{session.get('description')}</p>
-        <p className="text-gray-900">{session.get('category')}</p>
-        <p className="mt-0.5">
+        <p className="text-gray-400 text-base">{session.get('category')}</p>
+        <p className="mt-0.5 text-gray-400 text-base">
           <time>
             {format(start, 'MMMM do h:mm a')}
           </time>{' '}
@@ -77,13 +76,13 @@ const SessionListPreview = ({ session }) => {
             <TiHeartOutline className="h-5 group-hover:text-gray-500 text-lg hover:cursor-pointer hidden group-hover:block" />
           )}
         </div>
-        { session.get('likedBy') && (
+        { likedBy && (
           <span
             className={`group-hover:text-pink-600 text-xs hidden group-hover:block ${
               liked && 'text-pink-600'
             }`}
           >
-            {likedBy && Object.values(likedBy).length}
+            {Object.keys(likedBy).length}
           </span>
         )}
       </div>
