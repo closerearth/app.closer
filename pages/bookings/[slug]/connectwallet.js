@@ -7,15 +7,16 @@ import { useWeb3 } from '@rastaracoon/web3-context';
 import { __ } from '../../../utils/helpers';
 
 import Layout from '../../../components/Layout';
+import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 
 
 const Booking = ({ booking, error }) => {
   const router = useRouter();
-  const { address, wallet, onboard } = useWeb3();
-  console.log(booking)
+  const { network, wallet, onboard, switchNetwork } = useWeb3();
+
   useEffect(() => {
-    wallet && router.push(`/bookings/${booking}/checkout`)
-  },[wallet])
+    wallet && network === BLOCKCHAIN_NETWORK_ID && router.push(`/bookings/${booking}/checkout`)
+  },[wallet, network])
 
   return (
     <Layout>
@@ -25,14 +26,26 @@ const Booking = ({ booking, error }) => {
       <main className="main-content max-w-prose booking min-h-[200px]">
         <h1>{ __('blockchain_interstitial_big_title') }</h1>
         <p>{__('blockchain_interstitial_subtitle')}</p>
-        <button
-          className="btn-primary w-48 px-4 mt-8"
-          onClick={() => {
-            onboard?.walletSelect();
-          } }
-        >
-          {__('blockchain_connect_wallet')}
-        </button>
+
+        {!wallet ? 
+          <button
+            className="btn-primary w-48 px-4 mt-8"
+            onClick={() => {
+              onboard?.walletSelect();
+            } }
+          >
+            {__('blockchain_connect_wallet')}
+          </button>
+          : network !== BLOCKCHAIN_NETWORK_ID && (
+            <button
+              className="btn-primary w-48 px-4 mt-8"
+              onClick={() => {
+                switchNetwork(BLOCKCHAIN_NETWORK_ID);
+              } }
+            >
+              {__('blockchain_switch_chain')}
+            </button>
+          )}
       </main>
     </Layout>
   )

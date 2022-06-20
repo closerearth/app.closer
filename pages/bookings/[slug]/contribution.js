@@ -17,6 +17,7 @@ import { usePlatform } from '../../../contexts/platform';
 import { priceFormat, __ } from '../../../utils/helpers';
 import api, { formatSearch, cdn } from '../../../utils/api';
 import config from '../../../config';
+import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 
 import Layout from '../../../components/Layout';
 import Switch from '../../../components/Switch';
@@ -28,13 +29,13 @@ const Booking = ({ booking, error }) => {
   const [editBooking, setBooking] = useState(booking);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { wallet } = useWeb3();
+  const { wallet, network } = useWeb3();
 
 
   const saveBooking = async (update) => {
     try {
       await platform.booking.patch(booking._id, update);
-      wallet ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
+      wallet && network === BLOCKCHAIN_NETWORK_ID ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
     } catch (err) {
       alert('An error occured.')
       console.log(err);

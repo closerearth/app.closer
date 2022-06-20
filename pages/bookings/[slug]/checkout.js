@@ -19,7 +19,7 @@ import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
 import { priceFormat, __ } from '../../../utils/helpers';
-import { BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI, BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI } from '../../../utils/blockchain';
+import { BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI, getStakedTokenData, getBookedNights } from '../../../utils/blockchain';
 import api, { formatSearch, cdn } from '../../../utils/api';
 import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT, BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT } from '../../../config';
 
@@ -77,49 +77,27 @@ const Booking = ({ booking, error }) => {
     if(!provider || !address){
       return
     }
-    async function getStakedTokenData() {
-      const StakingContract = new Contract(
-        BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-        BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
-        provider.getUncheckedSigner()
-      );
-
-      const balance = await StakingContract.balanceOf(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
-      const locked = await StakingContract.lockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
-      const unlocked = await StakingContract.unlockedAmount(address)/(10**BLOCKCHAIN_DAO_TOKEN.decimals);
-      const depositsFor = await StakingContract.depositsFor(address);
-      const lockindPeriod = await StakingContract.lockingPeriod();
-
-      setStakedBalances({ ...stakedBalances, balance, locked, unlocked, lockindPeriod, depositsFor })
-    }
-
-    async function getBookedNights() {
-      await getStakedTokenData()
-      const ProofOfPresenceContract = new Contract(
-        BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT.address,
-        BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
-        provider.getUncheckedSigner()
-      );
-
-      const bookedNights = await ProofOfPresenceContract.getBookings(address, bookingYear);
+    
+    async function getStakedAndBookedNights(provider, address) {
+      setLoading(true)
+      setStakedBalances({ ...stakedBalances, ...await getStakedTokenData(provider, address) })
+      
+      const bookedNights = await getBookedNights(provider, address, bookingYear)
+      
       if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
         setAlreadyBookedDates(true)
       }
-      //array1.filter(value => array2.includes(value))
+
       setBookedNights(bookedNights)
+      const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
+      setNeededToStake(tokensToStake);
+      setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
       setLoading(false)
     }
 
-    getBookedNights()
-
-    //(current year ProofofPresenceBalance + reservations about to book  - current TokenLock balance )
-  }, [tokens, pendingTransactions, pendingProcess]);
-
-  useEffect(() => {
-    const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
-    setNeededToStake(tokensToStake);
-    setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
-  },[bookedNights,stakedBalances]);
+    getStakedAndBookedNights()
+   
+  },[tokens, pendingTransactions, pendingProcess])
 
   if(start.year() != end.year()){
     return <div>You cannot yet book accross different years</div>
@@ -134,11 +112,7 @@ const Booking = ({ booking, error }) => {
     }
 
     const DAOToken = tokens[BLOCKCHAIN_DAO_TOKEN.address]
-    const StakingContract = new Contract(
-      BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
-      BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
-      provider.getUncheckedSigner()
-    );
+  
     const ProofOfPresenceContract = new Contract(
       BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT.address,
       BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
@@ -153,7 +127,6 @@ const Booking = ({ booking, error }) => {
           BLOCKCHAIN_DAO_STAKING_CONTRACT.address,
           BigNumber.from(neededToStake).mul(BigNumber.from(10).pow(BLOCKCHAIN_DAO_TOKEN.decimals))
         )
-        console.log('sup')
         setPendingTransactions([...pendingTransactions, tx1.hash])
         await tx1.wait();
         console.log(`${tx1.hash} mined`)

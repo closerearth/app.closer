@@ -7,7 +7,8 @@ import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'
 import { AuthProvider } from '../contexts/auth';
 import { PlatformProvider } from '../contexts/platform'
-import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATION, BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_STABLE_COIN } from '../config';
+import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATION } from '../config';
+import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_STABLE_COIN } from '../config_blockchain';
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
