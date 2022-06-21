@@ -82,7 +82,7 @@ const SessionListPreview = ({ session }) => {
               liked && 'text-pink-600'
             }`}
           >
-            {Object.keys(likedBy).length}
+            {Array.from(likedBy).length}
           </span>
         )}
       </div>

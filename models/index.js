@@ -23,7 +23,7 @@ export default {
   session: [
     { name: 'name', label: 'Session Name', type: 'text', placeholder: 'Tokenomics', required: true },
     { name: 'description', label: 'Description', type: 'longtext', placeholder: 'TDF tokens & Smart Contracts', required: true },
-    // { name: 'speakers', label: 'Speakers', type: 'text', placeholder: 'Bea Fonseca', required: true },
+    { name: 'speakers', label: 'Speakers', type: 'text', placeholder: 'Bea Fonseca', required: true },
     {
       name: 'category',
       label: 'Session URL',
