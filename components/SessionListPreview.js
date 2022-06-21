@@ -82,7 +82,7 @@ const SessionListPreview = ({ session }) => {
               liked && 'text-pink-600'
             }`}
           >
-            {Array.from(likedBy).length}
+            {Array.from(likedBy).length > 0 && Array.from(likedBy).length}
           </span>
         )}
       </div>

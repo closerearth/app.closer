@@ -23,13 +23,14 @@ export default {
   session: [
     { name: 'name', label: 'Session Name', type: 'text', placeholder: 'Tokenomics', required: true },
     { name: 'description', label: 'Description', type: 'longtext', placeholder: 'TDF tokens & Smart Contracts', required: true },
-    { name: 'speakers', label: 'Speakers', type: 'text', placeholder: 'Bea Fonseca', required: true },
+    // { name: 'speakers', label: 'Speakers', type: 'text', placeholder: 'Bea Fonseca', required: true },
     {
       name: 'category',
       label: 'Session URL',
       defaultValue: '',
       type: 'text',
       placeholder: 'https://zoom.com/tokens',
+      required: true
     },
     { name: 'start', label: 'When does the session start?', type: 'datetime', required: true },
     { name: 'end', label: 'When does the session end?', type: 'datetime', required: true }
