@@ -51,6 +51,7 @@ const SessionListPreview = ({ session }) => {
         <h4 className="text-gray-900">{session.get('name')}</h4>
         <p className="text-gray-900 text-lg">{session.get('speakers')}</p>
         <p className="text-gray-900">{session.get('description')}</p>
+        <p className="text-gray-900">{session.get('event')}</p>
         <p className="text-gray-400 text-base">{session.get('category')}</p>
         <p className="mt-0.5 text-gray-400 text-base">
           <time>
@@ -76,13 +77,13 @@ const SessionListPreview = ({ session }) => {
             <TiHeartOutline className="h-5 group-hover:text-gray-500 text-lg hover:cursor-pointer hidden group-hover:block" />
           )}
         </div>
-        { likedBy && (
+        { Array.from(likedBy).length > 0 && (
           <span
             className={`group-hover:text-pink-600 text-xs hidden group-hover:block ${
               liked && 'text-pink-600'
             }`}
           >
-            {Array.from(likedBy).length > 0 && Array.from(likedBy).length}
+            {Array.from(likedBy).length}
           </span>
         )}
       </div>
