@@ -16,6 +16,7 @@ export const models = [
   'listing',
   'booking',
   'ticket',
+  'session',
   'nest'
 ];
 const idList = entry => Array.from(new Set((

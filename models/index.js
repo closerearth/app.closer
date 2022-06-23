@@ -20,6 +20,46 @@ export default {
       type: 'switch'
     }
   ],
+  session: [
+    { name: 'name', label: 'Session Name', type: 'text', placeholder: 'Tokenomics', required: true },
+    { name: 'description', label: 'Description', type: 'longtext', placeholder: 'TDF tokens & Smart Contracts', required: true },
+    // { name: 'speakers', label: 'Speakers', type: 'text', placeholder: 'Bea Fonseca', required: true },
+    { name: 'event', label: 'Event', type: 'text', placeholder: 'A gathering around...', required: true },
+    {
+      name: 'virtual',
+      label: 'Is this a virtual session?',
+      type: 'switch',
+      defaultValue: false,
+    },
+    {
+      name: 'category',
+      label: 'Session URL',
+      defaultValue: '',
+      type: 'text',
+      placeholder: 'https://zoom.com/tokens',
+      showIf: [
+        {
+          field: 'virtual',
+          value: true
+        }
+      ]
+    },
+    {
+      name: 'category',
+      label: 'Session location',
+      defaultValue: '',
+      type: 'text',
+      placeholder: '23 Maple St, 10100 San Francisco',
+      showIf: [
+        {
+          field: 'virtual',
+          value: false
+        }
+      ]
+    },
+    { name: 'start', label: 'When does the session start?', type: 'datetime', required: true },
+    { name: 'end', label: 'When does the session end?', type: 'datetime', required: true }
+  ],
   event: [
     { name: 'name', className: 'text-4xl font-bold', label: 'Event title', type: 'text', placeholder: 'My event', required: true, tab: 'general' },
     { name: 'description', label: 'Description', type: 'longtext', placeholder: 'A gathering around...', tab: 'general' },
