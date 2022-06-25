@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { fromJS } from 'immutable'
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
-import { useWeb3 } from '@rastaracoon/web3-context';
-import { Contract } from 'ethers';
 
 import { trackEvent } from './Analytics';
 import { useAuth } from '../contexts/auth.js';
@@ -19,8 +18,7 @@ import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
 import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES } from '../config';
-import { BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_NETWORK_ID } from '../config_blockchain';
-import { getStakedTokenData } from '../utils/blockchain';
+
 
 
 dayjs.extend(relativeTime);
@@ -62,7 +60,6 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-  const { wallet, tokens, onboard, provider, address, network, switchNetwork } = useWeb3();
   const [totalTokenBalance, setTotalTokenBalance] = useState(-1)
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
@@ -81,28 +78,6 @@ const Navigation = () => {
   useEffect(() => {
     loadData();
   }, []);
-
-  useEffect(() => {
-    async function retrieveTokenBalance(){
-      console.log(address)
-      console.log(provider)
-      console.log(wallet)
-      if(onboard) {
-        await onboard.walletCheck();
-      }
-      
-      if(network !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(address && provier) {
-        const staked = await getStakedTokenData(provider, address)
-        setTotalTokenBalance(staked.balance/10**BLOCKCHAIN_DAO_TOKEN.decimals + tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
-      }
-      
-    }
-    retrieveTokenBalance()
-    
-  }, [tokens])
 
   return (
     <div className="NavContainer pt-20 md:pt-0 relative">
@@ -136,31 +111,33 @@ const Navigation = () => {
                 </Link>
               ))
             }
-            { isAuthenticated ? (
-              <Link href="/">
-                <a
-                  className="mr-3 text-sm hidden md:flex"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleNav(false);
-                    logout();
-                    window.location.href = '/';
-                  }}
-                  title={user.screenname}
-                >
-                  { __('navigation_sign_out') }
-                </a>
-              </Link>
-            ) : (
-              <Link href="/login">
-                <a
-                  className="mr-3 text-sm hidden md:flex"
-                  onClick={() => toggleNav(false)}
-                >
-                  { __('navigation_sign_in') }
-                </a>
-              </Link>
-            )}
+            { isAuthenticated ? 
+            
+              (
+                <Link href="/">
+                  <a
+                    className="mr-3 text-sm hidden md:flex"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleNav(false);
+                      logout();
+                      window.location.href = '/';
+                    }}
+                    title={user.screenname}
+                  >
+                    { __('navigation_sign_out') }
+                  </a>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <a
+                    className="mr-3 text-sm hidden md:flex"
+                    onClick={() => toggleNav(false)}
+                  >
+                    { __('navigation_sign_in') }
+                  </a>
+                </Link>
+              )}
             { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
               <a
                 className="btn-primary text-sm mr-3 hidden md:flex"
@@ -196,53 +173,7 @@ const Navigation = () => {
             </a> }
             { isAuthenticated &&
               <>
-                { wallet ? ( !address ? 
-                  <a className='hidden md:flex mr-3'>
-                    <span className='h-12 border-l mr-3' />
-                    <button className='btn-primary'
-                      onClick={() => {
-                        onboard.walletCheck();
-                      } }>
-                      {__('blockchain_link_wallet_again')}
-                    </button>
-                  </a>
-                  :
-                  ( network == BLOCKCHAIN_NETWORK_ID ? (
-                    <Link
-                      href="/settings/blockchainwallet"
-                    >
-                  
-                      <a className='hidden md:flex mr-3'>
-                        <span className='h-12 border-l mr-3' />
-                        <button className='btn-primary'>
-                          {totalTokenBalance == -1 ? 'Loading...' : totalTokenBalance.toFixed(0)
-                        +' '+
-                        BLOCKCHAIN_DAO_TOKEN.name}
-                        </button>
-                      </a>
-                    </Link>
-                  ) : 
-                    <a className='hidden md:flex mr-3'>
-                      <span className='h-12 border-l mr-3' />
-                      <button className='btn-primary'
-                        onClick={() => {
-                          switchNetwork(BLOCKCHAIN_NETWORK_ID);
-                        } }>
-                        {__('blockchain_switch_chain')}
-                      </button>
-                    </a>
-                  )) : (
-                  
-                  <a className='hidden md:flex mr-3'>
-                    <span className='h-12 border-l mr-3' />
-                    <button className='btn-primary'
-                      onClick={() => {
-                        onboard?.walletSelect();
-                      } }>
-                      {__('blockchain_connect_wallet')}
-                    </button>
-                  </a>
-                )}
+                
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}
