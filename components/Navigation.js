@@ -18,6 +18,7 @@ import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
 import { LOGO_HEADER, LOGO_WIDTH, PLATFORM_NAME, TELEGRAM_URL, REGISTRATION_MODE, FEATURES } from '../config';
+import BlockchainWalletPreview from './BlockchainWalletPreview';
 
 
 
@@ -60,7 +61,6 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-  const [totalTokenBalance, setTotalTokenBalance] = useState(-1)
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
     (
@@ -173,7 +173,7 @@ const Navigation = () => {
             </a> }
             { isAuthenticated &&
               <>
-                
+                <BlockchainWalletPreview />
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}

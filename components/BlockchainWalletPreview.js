@@ -1,39 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { init, useConnectWallet, useWallets, useSetChain } from '@web3-onboard/react';
+import injectedModule from '@web3-onboard/injected-wallets';
+import { providers } from 'ethers';
 
-import { useWeb3 } from '@rastaracoon/web3-context';
+import { __ } from '../utils/helpers';
 
-import { BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_NETWORK_ID } from '../config_blockchain';
-import { getStakedTokenData } from '../utils/blockchain';
+import { BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_NAME, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_RPC_URL } from '../config_blockchain';
+import { getDAOTokenBalance, getStakedTokenData } from '../utils/blockchain';
+import { DEFAULT_TITLE, LOGO_HEADER, PLATFORM_NAME } from '../config';
+
+const injected = injectedModule();
+
+init({
+  wallets: [injected],
+  chains: [
+    {
+      id: '0xAEF3',
+      token: 'CELO test',
+      label: 'Celo',
+      rpcUrl: 'https://ropsten.infura.io/v3/'
+    }
+  ],
+  accountCenter: {
+    desktop: {
+      position: 'bottomRight',
+      enabled: true,
+      minimal: true
+    },
+    mobile: {
+      position: 'bottomRight',
+      enabled: true,
+      minimal: true
+    }
+  },
+  appMetadata: {
+    name: PLATFORM_NAME,
+    icon: LOGO_HEADER, // svg string icon
+    description: DEFAULT_TITLE,
+    recommendedInjectedWallets: [
+      { name: 'MetaMask', url: 'https://metamask.io' },
+      { name: 'Coinbase', url: 'https://wallet.coinbase.com/' }
+    ]
+  },
+})
 
 const BlockchainWalletPreview = () => {
-  const { wallet, tokens, onboard, provider, address, network, switchNetwork } = useWeb3();
+  const [totalTokenBalance, setTotalTokenBalance] = useState(-1);
+  const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
+  const [{ chains, connectedChain, settingChain }, setChain ] = useSetChain()
+  let provider
+
+  console.log(wallet)
 
   useEffect(() => {
-    async function retrieveTokenBalance(){
-      console.log(address)
-      console.log(provider)
-      console.log(wallet)
-      if(onboard) {
-        await onboard.walletCheck();
+    async function retrieveTokenBalance(provider, address, connectedChain){
+      if(connectedChain !== BLOCKCHAIN_NETWORK_ID){
+        setChain(BLOCKCHAIN_NETWORK_ID)
       }
-      
-      if(network !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(address && provier) {
+      if(address && provider) {
         const staked = await getStakedTokenData(provider, address)
-        setTotalTokenBalance(staked.balance/10**BLOCKCHAIN_DAO_TOKEN.decimals + tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
+        const ercBalance = await getDAOTokenBalance(provider, address)
+        setTotalTokenBalance(staked.balance + ercBalance)
       }
-      
     }
-    retrieveTokenBalance()
-    
-  }, [tokens])
+
+    if (wallet) {
+      provider = new providers.Web3Provider(wallet.provider, 'any')
+      console.log(connectedChain)
+      retrieveTokenBalance(provider, wallet?.accounts[0]?.address, connectedChain)
+    }
+  },[wallet])
+  //const { wallet, tokens, onboard, provider, address, network, switchNetwork } = useWeb3();
 
   return (
     <>
-      { wallet ? ( !address ? 
+      <button
+        disabled={connecting}
+        onClick={() => (wallet ? disconnect() : connect())}
+      >
+        {connecting ? 'connecting' : wallet ? 'disconnect' : 'connect'}
+      </button>
+      {/* { wallet ? ( !address ? 
         <a className='hidden md:flex mr-3'>
           <span className='h-12 border-l mr-3' />
           <button className='btn-primary'
@@ -79,7 +127,7 @@ const BlockchainWalletPreview = () => {
             {__('blockchain_connect_wallet')}
           </button>
         </a>
-      )}
+      )} */}
     </>
   )
 }
