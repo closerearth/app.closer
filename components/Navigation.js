@@ -187,12 +187,6 @@ const Navigation = () => {
                 </Link>
               </>
             }
-            <button className='btn-primary'
-              onClick={() => {
-                onboard?.walletSelect();
-              } }>
-              {__('blockchain_connect_wallet')}
-            </button>
             <a
               className="space-y-2 md:hidden"
               onClick={ (e) => {

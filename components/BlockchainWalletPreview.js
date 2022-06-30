@@ -6,8 +6,6 @@ import { useWeb3 } from '@rastaracoon/web3-context';
 import { BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_NETWORK_ID } from '../config_blockchain';
 import { getStakedTokenData } from '../utils/blockchain';
 
-
-
 const BlockchainWalletPreview = () => {
   const { wallet, tokens, onboard, provider, address, network, switchNetwork } = useWeb3();
 
