@@ -2,13 +2,11 @@ import api, { formatSearch } from '../utils/api'
 import Head from 'next/head';
 import App from 'next/app';
 import Router, { useRouter } from 'next/router';
-import { Web3Provider } from '@rastaracoon/web3-context';
 import Footer from '../components/Footer';
 import Navigation from '../components/Navigation'
 import { AuthProvider } from '../contexts/auth';
 import { PlatformProvider } from '../contexts/platform'
 import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATION } from '../config';
-import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_STABLE_COIN } from '../config_blockchain';
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
@@ -21,10 +19,6 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
 
   if (typeof token !== 'undefined') {
     api.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-
-  const tokensToWatch = {
-    [BLOCKCHAIN_NETWORK_ID]: [BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_STABLE_COIN]
   }
 
   return (
@@ -43,14 +37,10 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
       </Head>
       <AuthProvider>
         <PlatformProvider>
-          <Web3Provider networkIds={[BLOCKCHAIN_NETWORK_ID]} 
-            tokensToWatch={tokensToWatch}
-          >
-            <Navigation query={ query } signedIn={ signedIn } />
-            <div className="content-wrapper">
-              <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
-            </div>
-          </Web3Provider>
+          <Navigation query={ query } signedIn={ signedIn } />
+          <div className="content-wrapper">
+            <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
+          </div>
         </PlatformProvider>
       </AuthProvider>
       <Footer tags={ tags } />
