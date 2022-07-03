@@ -1,6 +1,6 @@
 module.exports = {
   BLOCKCHAIN_NAME: 'Celo Alfajores',
-  BLOCKCHAIN_NETWORK_ID: '0xAEF3',
+  BLOCKCHAIN_NETWORK_ID: '0xaef3',
   BLOCKCHAIN_RPC_URL: 'https://alfajores-forno.celo-testnet.org',
   BLOCKCHAIN_NATIVE_TOKEN: 'TEST CELO',
   BLOCKCHAIN_DAO_TOKEN: {
