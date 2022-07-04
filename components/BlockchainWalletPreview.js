@@ -5,14 +5,12 @@ import { providers } from 'ethers';
 import { __ } from '../utils/helpers';
 
 import { BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_NETWORK_ID } from '../config_blockchain';
-import { getDAOTokenBalance, getStakedTokenData, initBlockchainWithParams, useConnectWallet, useSetChain } from '../utils/blockchain';
-
-initBlockchainWithParams()
+import { getDAOTokenBalance, getStakedTokenData, useConnectAndStoreWallet, useConnectWallet, useSetChain } from '../utils/blockchain';
 
 const BlockchainWalletPreview = () => {
   const [totalTokenBalance, setTotalTokenBalance] = useState(-1);
-  const [{ wallet, connecting }, connect, disconnect] = useConnectWallet()
-  const [{ chains, connectedChain, settingChain }, setChain ] = useSetChain()
+  const [{ wallet }, connect] = useConnectWallet()
+  const [{ connectedChain }, setChain ] = useSetChain()
   let provider
 
   useEffect(() => {
@@ -32,7 +30,6 @@ const BlockchainWalletPreview = () => {
       retrieveTokenBalance(provider, wallet?.accounts[0]?.address, connectedChain)
     }
   },[wallet])
-  //const { wallet, tokens, onboard, provider, address, network, switchNetwork } = useWeb3();
 
   return (
     <>
@@ -66,7 +63,7 @@ const BlockchainWalletPreview = () => {
             <span className='h-12 border-l mr-3' />
             <button className='btn-primary'
               onClick={() => {
-                connect();
+                connect()
               } }>
               {__('blockchain_connect_wallet')}
             </button>

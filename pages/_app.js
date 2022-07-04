@@ -9,6 +9,7 @@ import { PlatformProvider } from '../contexts/platform'
 import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATION } from '../config';
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
+import { initBlockchainWithParams } from '../utils/blockchain';
 
 const Application = ({ tags, query, signedIn, Component, pageProps, token, user }) => {
   const router = useRouter();
@@ -20,6 +21,8 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
   if (typeof token !== 'undefined') {
     api.defaults.headers.Authorization = `Bearer ${token}`;
   }
+
+  initBlockchainWithParams()
 
   return (
     <div className="App">

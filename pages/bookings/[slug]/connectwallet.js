@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useWeb3 } from '@rastaracoon/web3-context';
 
 import { __ } from '../../../utils/helpers';
+import { useConnectWallet, useSetChain } from '../../../utils/blockchain.js'
 
 import Layout from '../../../components/Layout';
 import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
@@ -12,11 +12,12 @@ import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 
 const Booking = ({ booking, error }) => {
   const router = useRouter();
-  const { network, wallet, onboard, switchNetwork } = useWeb3();
+  const [{ wallet }, connect] = useConnectWallet();
+  const [{ connectedChain }] = useSetChain();
 
   useEffect(() => {
-    wallet && network === BLOCKCHAIN_NETWORK_ID && router.push(`/bookings/${booking}/checkout`)
-  },[wallet, network])
+    wallet && connectedChain.id === BLOCKCHAIN_NETWORK_ID && router.push(`/bookings/${booking}/checkout`)
+  },[wallet, connectedChain ])
 
   return (
     <Layout>
@@ -31,16 +32,16 @@ const Booking = ({ booking, error }) => {
           <button
             className="btn-primary w-48 px-4 mt-8"
             onClick={() => {
-              onboard?.walletSelect();
+              connect();
             } }
           >
             {__('blockchain_connect_wallet')}
           </button>
-          : network !== BLOCKCHAIN_NETWORK_ID && (
+          : connectedChain.id !== BLOCKCHAIN_NETWORK_ID && (
             <button
               className="btn-primary w-48 px-4 mt-8"
               onClick={() => {
-                switchNetwork(BLOCKCHAIN_NETWORK_ID);
+                setChain({ chainId: BLOCKCHAIN_NETWORK_ID })
               } }
             >
               {__('blockchain_switch_chain')}

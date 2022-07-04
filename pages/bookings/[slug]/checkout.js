@@ -8,7 +8,6 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { useWeb3 } from '@rastaracoon/web3-context';
 import ReactTooltip from 'react-tooltip';
 import { BigNumber, Contract } from 'ethers';
 
@@ -19,7 +18,7 @@ import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
 import { priceFormat, __ } from '../../../utils/helpers';
-import { BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI, getStakedTokenData, getBookedNights } from '../../../utils/blockchain';
+import { BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI, getStakedTokenData, getBookedNights, initBlockchainWithParams, useConnectWallet, useSetChain } from '../../../utils/blockchain';
 import api, { formatSearch, cdn } from '../../../utils/api';
 import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT, BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT } from '../../../config';
 
@@ -30,13 +29,16 @@ import Spinner from '../../../components/Spinner';
 dayjs.extend(LocalizedFormat);
 dayjs.extend(dayOfYear)
 
+initBlockchainWithParams();
+
 const Booking = ({ booking, error }) => {
   const router = useRouter();
   const [editBooking, setBooking] = useState(booking);
   const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens, isReady } = useWeb3();
+  const [{ wallet }, connect] = useConnectWallet()
+  const [{ connectedChain }, setChain ] = useSetChain()
   const [pendingTransactions, setPendingTransactions] = useState([])
   const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0, depositsFor: [] })
   const [bookedNights, setBookedNights] = useState([])
@@ -65,6 +67,8 @@ const Booking = ({ booking, error }) => {
     }
   };
 
+
+  //helpers for dates calculations
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
   const bookingYear = start.year();
@@ -73,31 +77,37 @@ const Booking = ({ booking, error }) => {
     nights = [...nights, [bookingYear,dayjs(booking.start).add(i, 'day').dayOfYear()]]
   }
 
+  let provider
+
   useEffect(() => {
-    if(!provider || !address){
-      return
-    }
-    
     async function getStakedAndBookedNights(provider, address) {
-      setLoading(true)
-      setStakedBalances({ ...stakedBalances, ...await getStakedTokenData(provider, address) })
-      
-      const bookedNights = await getBookedNights(provider, address, bookingYear)
-      
-      if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
-        setAlreadyBookedDates(true)
+      if(connectedChain.id !== BLOCKCHAIN_NETWORK_ID){
+        setChain({ chainId: BLOCKCHAIN_NETWORK_ID  })
       }
+      if(address) {
+        setLoading(true)
+        setStakedBalances({ ...stakedBalances, ...await getStakedTokenData(provider, address) })
+        
+        const bookedNights = await getBookedNights(provider, address, bookingYear)
+        
+        if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
+          setAlreadyBookedDates(true)
+        }
 
-      setBookedNights(bookedNights)
-      const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
-      setNeededToStake(tokensToStake);
-      setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
-      setLoading(false)
+        setBookedNights(bookedNights)
+        const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
+        setNeededToStake(tokensToStake);
+        setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
+        setLoading(false)
+      }
     }
 
-    getStakedAndBookedNights()
+    if (wallet) {
+      provider = new providers.Web3Provider(wallet.provider, 'any')
+      getStakedAndBookedNights()
+    }
    
-  },[tokens, pendingTransactions, pendingProcess])
+  },[wallet, pendingTransactions, pendingProcess])
 
   if(start.year() != end.year()){
     return <div>You cannot yet book accross different years</div>

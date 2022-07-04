@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { Elements } from '@stripe/react-stripe-js';
-import { useWeb3 } from '@rastaracoon/web3-context';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -21,6 +20,7 @@ import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 
 import Layout from '../../../components/Layout';
 import Switch from '../../../components/Switch';
+import { useConnectWallet, useSetChain } from '../../../utils/blockchain.js'
 
 dayjs.extend(LocalizedFormat);
 
@@ -29,13 +29,13 @@ const Booking = ({ booking, error }) => {
   const [editBooking, setBooking] = useState(booking);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { wallet, network } = useWeb3();
-
+  const [{ wallet }] = useConnectWallet();
+  const [{ connectedChain }] = useSetChain();
 
   const saveBooking = async (update) => {
     try {
       await platform.booking.patch(booking._id, update);
-      wallet && network === BLOCKCHAIN_NETWORK_ID ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
+      wallet && connectedChain.id === BLOCKCHAIN_NETWORK_ID ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
     } catch (err) {
       alert('An error occured.')
       console.log(err);
