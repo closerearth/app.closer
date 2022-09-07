@@ -7,6 +7,9 @@ import UpcomingEvents from '../components/UpcomingEvents';
 import { useAuth } from '../contexts/auth';
 import { PLATFORM_NAME, DEFAULT_TITLE, REGISTRATION_MODE } from '../config';
 
+import { useWeb3React } from '@web3-react/core'
+
+
 const Index = () => {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
@@ -15,21 +18,15 @@ const Index = () => {
     router.push('/community')
   }
 
+  const { account } = useWeb3React()
+
   return (
     <Layout>
       <Head>
         <title>{ PLATFORM_NAME }</title>
       </Head>
       <main className="homepage">
-        <section className="text-center flex flex-column items-center justify-center pb-10">
-          <div className="main-content">
-            <h1 className="page-title">{ PLATFORM_NAME }</h1>
-            <p className="font-lg">{ DEFAULT_TITLE }</p>
-            { REGISTRATION_MODE !== 'closed' && <p className="mt-4">
-              <Link href="/signup"><a className="btn-primary">Create your account</a></Link>
-            </p> }
-          </div>
-        </section>
+        {account}
       </main>
     </Layout>
   );

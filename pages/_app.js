@@ -10,6 +10,12 @@ import { DEFAULT_TITLE, SEMANTIC_URL, DEFAULT_DESCRIPTION, FB_DOMAIN_VERIFICATIO
 import { theme } from '../tailwind.config';
 import '../public/styles.css';
 
+import { useWeb3React, Web3ReactHooks, Web3ReactProvider } from '@web3-react/core'
+import { MetaMask } from '@web3-react/metamask'
+import { initializeConnector } from '@web3-react/core'
+
+const [metaMask, hooks] = initializeConnector((actions) => new MetaMask({ actions }))
+
 const Application = ({ tags, query, signedIn, Component, pageProps, token, user }) => {
   const router = useRouter();
 
@@ -20,6 +26,12 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
   if (typeof token !== 'undefined') {
     api.defaults.headers.Authorization = `Bearer ${token}`;
   }
+
+  const [metaMask, metaMaskHooks] = initializeConnector((actions) => new MetaMask({ actions }))
+
+  const connectors = [
+    [metaMask, metaMaskHooks],
+  ]
 
   return (
     <div className="App">
@@ -38,9 +50,11 @@ const Application = ({ tags, query, signedIn, Component, pageProps, token, user 
       <AuthProvider>
         <PlatformProvider>
           <Navigation query={ query } signedIn={ signedIn } />
-          <div className="content-wrapper">
-            <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
-          </div>
+          <Web3ReactProvider connectors={connectors}>
+            <div className="content-wrapper">
+              <Component {...pageProps} query={ query } user={ user } signedIn={ signedIn } />
+            </div>
+          </Web3ReactProvider>
         </PlatformProvider>
       </AuthProvider>
       <Footer tags={ tags } />
