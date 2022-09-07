@@ -94,7 +94,7 @@ const Navigation = () => {
       if(network !== BLOCKCHAIN_NETWORK_ID){
         return
       }
-      if(address && provier) {
+      if(address && provider) {
         const staked = await getStakedTokenData(provider, address)
         setTotalTokenBalance(staked.balance/10**BLOCKCHAIN_DAO_TOKEN.decimals + tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
       }
