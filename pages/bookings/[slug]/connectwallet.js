@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useWeb3 } from '@rastaracoon/web3-context';
 
 import { __ } from '../../../utils/helpers';
 
@@ -12,7 +11,7 @@ import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 
 const Booking = ({ booking, error }) => {
   const router = useRouter();
-  const { network, wallet, onboard, switchNetwork } = useWeb3();
+  const { network, wallet, onboard, switchNetwork } = {};
 
   useEffect(() => {
     wallet && network === BLOCKCHAIN_NETWORK_ID && router.push(`/bookings/${booking}/checkout`)

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useWeb3 } from '@rastaracoon/web3-context';
 import { utils, BigNumber, Contract } from 'ethers';
 
 import Layout from '../../components/Layout';
@@ -18,7 +17,7 @@ import { BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_CROWDSALE_CONTRACT, BLOCKCHAIN_STAB
 
 const CryptoWallet = () => {
   const { isAuthenticated } = useAuth();
-  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens } = useWeb3();
+  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens } = {};
 
   const [toAddress, setToAddress] = useState('')
   const [amountToSend, setamountToSend] = useState(0)

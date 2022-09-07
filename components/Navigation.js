@@ -6,8 +6,6 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import slugify from 'slugify';
 import { useRouter } from 'next/router';
 import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
-import { useWeb3 } from '@rastaracoon/web3-context';
-import { Contract } from 'ethers';
 
 import { trackEvent } from './Analytics';
 import { useAuth } from '../contexts/auth.js';
@@ -62,7 +60,7 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-  const { wallet, tokens, onboard, provider, address, network, switchNetwork } = useWeb3();
+  const { wallet, tokens, onboard, provider, address, network, switchNetwork } = {};
   const [totalTokenBalance, setTotalTokenBalance] = useState(-1)
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||

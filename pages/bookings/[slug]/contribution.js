@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { Elements } from '@stripe/react-stripe-js';
-import { useWeb3 } from '@rastaracoon/web3-context';
 
 import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
@@ -29,7 +28,7 @@ const Booking = ({ booking, error }) => {
   const [editBooking, setBooking] = useState(booking);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { wallet, network } = useWeb3();
+  const { wallet, network } = {};
 
 
   const saveBooking = async (update) => {

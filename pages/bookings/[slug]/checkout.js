@@ -8,7 +8,6 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { useWeb3 } from '@rastaracoon/web3-context';
 import ReactTooltip from 'react-tooltip';
 import { BigNumber, Contract } from 'ethers';
 
@@ -36,7 +35,7 @@ const Booking = ({ booking, error }) => {
   const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens, isReady } = useWeb3();
+  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens, isReady } = {};
   const [pendingTransactions, setPendingTransactions] = useState([])
   const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0, depositsFor: [] })
   const [bookedNights, setBookedNights] = useState([])
@@ -73,31 +72,31 @@ const Booking = ({ booking, error }) => {
     nights = [...nights, [bookingYear,dayjs(booking.start).add(i, 'day').dayOfYear()]]
   }
 
-  useEffect(() => {
-    if(!provider || !address){
-      return
-    }
+  // useEffect(() => {
+  //   if(!provider || !address){
+  //     return
+  //   }
     
-    async function getStakedAndBookedNights(provider, address) {
-      setLoading(true)
-      setStakedBalances({ ...stakedBalances, ...await getStakedTokenData(provider, address) })
+  //   async function getStakedAndBookedNights(provider, address) {
+  //     setLoading(true)
+  //     setStakedBalances({ ...stakedBalances, ...await getStakedTokenData(provider, address) })
       
-      const bookedNights = await getBookedNights(provider, address, bookingYear)
+  //     const bookedNights = await getBookedNights(provider, address, bookingYear)
       
-      if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
-        setAlreadyBookedDates(true)
-      }
+  //     if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
+  //       setAlreadyBookedDates(true)
+  //     }
 
-      setBookedNights(bookedNights)
-      const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
-      setNeededToStake(tokensToStake);
-      setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
-      setLoading(false)
-    }
+  //     setBookedNights(bookedNights)
+  //     const tokensToStake = bookedNights.length + nights.length - stakedBalances.balance;
+  //     setNeededToStake(tokensToStake);
+  //     setCanUseTokens(tokensToStake <= tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance);
+  //     setLoading(false)
+  //   }
 
-    getStakedAndBookedNights()
+  //   getStakedAndBookedNights()
    
-  },[tokens, pendingTransactions, pendingProcess])
+  // },[tokens, pendingTransactions, pendingProcess])
 
   if(start.year() != end.year()){
     return <div>You cannot yet book accross different years</div>
