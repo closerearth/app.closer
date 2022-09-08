@@ -12,6 +12,7 @@ import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
 import FeaturedEvent from './FeaturedEvent';
+import ConnectMetamask from '../components/ConnectMetamask';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
@@ -104,6 +105,7 @@ const Navigation = () => {
 
   return (
     <div className="NavContainer pt-20 md:pt-0 relative">
+      <ConnectMetamask />
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
