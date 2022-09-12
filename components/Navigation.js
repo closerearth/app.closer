@@ -105,7 +105,6 @@ const Navigation = () => {
 
   return (
     <div className="NavContainer pt-20 md:pt-0 relative">
-      <ConnectMetamask />
       { featuredEvents && featuredEvents.first() &&
         <FeaturedEvent event={ featuredEvents.first() } />
       }
@@ -196,53 +195,7 @@ const Navigation = () => {
             </a> }
             { isAuthenticated &&
               <>
-                { wallet ? ( !address ? 
-                  <a className='hidden md:flex mr-3'>
-                    <span className='h-12 border-l mr-3' />
-                    <button className='btn-primary'
-                      onClick={() => {
-                        onboard.walletCheck();
-                      } }>
-                      {__('blockchain_link_wallet_again')}
-                    </button>
-                  </a>
-                  :
-                  ( network == BLOCKCHAIN_NETWORK_ID ? (
-                    <Link
-                      href="/settings/blockchainwallet"
-                    >
-                  
-                      <a className='hidden md:flex mr-3'>
-                        <span className='h-12 border-l mr-3' />
-                        <button className='btn-primary'>
-                          {totalTokenBalance == -1 ? 'Loading...' : totalTokenBalance.toFixed(0)
-                        +' '+
-                        BLOCKCHAIN_DAO_TOKEN.name}
-                        </button>
-                      </a>
-                    </Link>
-                  ) : 
-                    <a className='hidden md:flex mr-3'>
-                      <span className='h-12 border-l mr-3' />
-                      <button className='btn-primary'
-                        onClick={() => {
-                          switchNetwork(BLOCKCHAIN_NETWORK_ID);
-                        } }>
-                        {__('blockchain_switch_chain')}
-                      </button>
-                    </a>
-                  )) : (
-                  
-                  <a className='hidden md:flex mr-3'>
-                    <span className='h-12 border-l mr-3' />
-                    <button className='btn-primary'
-                      onClick={() => {
-                        onboard?.walletSelect();
-                      } }>
-                      {__('blockchain_connect_wallet')}
-                    </button>
-                  </a>
-                )}
+                <ConnectMetamask />
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}
@@ -256,12 +209,6 @@ const Navigation = () => {
                 </Link>
               </>
             }
-            <button className='btn-primary'
-              onClick={() => {
-                onboard?.walletSelect();
-              } }>
-              {__('blockchain_connect_wallet')}
-            </button>
             <a
               className="space-y-2 md:hidden"
               onClick={ (e) => {
