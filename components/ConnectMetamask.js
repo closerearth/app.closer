@@ -1,43 +1,31 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link';
 
-import { useWeb3React } from '@web3-react/core'
+import { useWeb3React } from '@web3-react/core';
+import { utils } from 'ethers';
 import { InjectedConnector, UserRejectedRequestError } from '@web3-react/injected-connector'
 
 import { __ } from '../utils/helpers';
-import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_STABLE_COIN } from '../config_blockchain';
+import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_NATIVE_TOKEN_SYMBOL, BLOCKCHAIN_NATIVE_TOKEN_DECIMALS, BLOCKCHAIN_EXPLORER_URL } from '../config_blockchain';
 
 const injected = new InjectedConnector({
   supportedChainIds: [
     BLOCKCHAIN_NETWORK_ID,
-    1
+    1,
+    3,
+    4,
+    5,
+    10,
+    42,
+    42220,
+    44787
   ]
 })
 
-const switchNetwork = async () => {
-  try {
-    await library.provider.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: toHex(network) }]
-    });
-  } catch (switchError) {
-    if (switchError.code === 4902) {
-      try {
-        await library.provider.request({
-          method: 'wallet_addEthereumChain',
-          params: [networkParams[toHex(network)]]
-        });
-      } catch (error) {
-        setError(error);
-      }
-    }
-  }
-};
-
 const ConnectMetamask = () => {
+  const { chainId, account, activate,deactivate, setError, active, library, connector } = useWeb3React()
 
-  const { chainId, account, activate,deactivate, setError, active,library ,connector } = useWeb3React()
-  const all = useWeb3React()
+  const [ count, setCount ] = useState(0)
 
   const onClickConnect = () => {
     activate(injected,(error) => {
@@ -45,18 +33,47 @@ const ConnectMetamask = () => {
         // ignore user rejected error
         console.log('user refused')
       } else {
+        console.log(error)
         setError(error)
       }
     }, false)
   }
 
+  const switchNetwork = async () => {
+    try {
+      await library.provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: utils.hexlify(BLOCKCHAIN_NETWORK_ID) }]
+      });
+      console.log('done')
+    } catch (switchError) {
+      console.log(switchError.code === 4902)
+      if (switchError.code === 4902) {
+        try {
+          await library.provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: utils.hexlify(BLOCKCHAIN_NETWORK_ID),
+              rpcUrls: [BLOCKCHAIN_RPC_URL],
+              chainName: BLOCKCHAIN_NAME,
+              nativeCurrency: {
+                name: BLOCKCHAIN_NATIVE_TOKEN,
+                symbol: BLOCKCHAIN_NATIVE_TOKEN_SYMBOL,
+                decimals: BLOCKCHAIN_NATIVE_TOKEN_DECIMALS
+              },
+              blockExplorerUrls: [BLOCKCHAIN_EXPLORER_URL]
+            }]
+          });
+        } catch (error) {
+          setError(error);
+        }
+      }
+    }
+  };
+
   const onClickDisconnect = () => {
     deactivate()
   }
-
-  useEffect(() => {
-    console.log(all)
-  })
 
   return (
     <div>
@@ -79,7 +96,7 @@ const ConnectMetamask = () => {
           <a className='hidden md:flex mr-3'>
             <span className='h-12 border-l mr-3' />
             <button className='btn-primary'
-              onClick={switchNetwork}>
+              onClick={async () => {await switchNetwork()}}>
               {__('blockchain_switch_chain')}
             </button>
           </a>
@@ -96,17 +113,6 @@ const ConnectMetamask = () => {
 
       )}
     </div>
-
-  // <a className='hidden md:flex mr-3'>
-  //   <span className='h-12 border-l mr-3' />
-  //   <button className='btn-primary'
-  //     onClick={() => {
-  //       onboard.walletCheck();
-  //     } }>
-  //     {__('blockchain_link_wallet_again')}
-  //   </button>
-  // </a>
- 
   )
 }
 

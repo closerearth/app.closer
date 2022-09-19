@@ -27,7 +27,7 @@
     "datejs": "^1.0.0-rc3",
     "dayjs": "^1.10.4",
     "eslint-config-airbnb-base": "^15.0.0",
-    "ethers": "^5.7.0",
+    "ethers": "^5.7.1",
     "fs-extra": "^10.0.0",
     "immutable": "^4.0.0-rc.12",
     "js-cookie": "^2.2.1",
