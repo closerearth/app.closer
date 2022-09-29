@@ -2,6 +2,24 @@ import { BigNumber, Contract } from 'ethers';
 
 import blockchainConfig from '../config_blockchain.js';
 
+export async function getDAOTokenBalance(provider, address) {
+
+  if(!provider || !address){
+    return
+  }
+  const decimals_dao_token = blockchainConfig.BLOCKCHAIN_DAO_TOKEN.decimals
+
+  const DAOTokenContract = new Contract(
+    blockchainConfig.BLOCKCHAIN_DAO_TOKEN.address,
+    blockchainConfig.BLOCKCHAIN_DAO_TOKEN_ABI,
+    provider.getUncheckedSigner()
+  );
+
+  const balance = await DAOTokenContract.balanceOf(address)/10**decimals_dao_token;
+
+  return balance
+}
+
 export async function getStakedTokenData(provider, address) {
 
   if(!provider || !address){
@@ -9,19 +27,18 @@ export async function getStakedTokenData(provider, address) {
   }
   const decimals_dao_token = blockchainConfig.BLOCKCHAIN_DAO_TOKEN.decimals
 
-  const StakingContract = new Contract(
-    blockchainConfig.BLOCKCHAIN_DAO_STAKING_CONTRACT_ADDRESS,
-    blockchainConfig.BLOCKCHAIN_DAO_STAKING_CONTRACT_ABI,
+  const Diamond = new Contract(
+    blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
+    blockchainConfig.BLOCKCHAIN_DIAMOND_ABI,
     provider.getUncheckedSigner()
   );
 
-  const balance = await StakingContract.balanceOf(address)/decimals_dao_token;
-  const locked = await StakingContract.lockedAmount(address)/decimals_dao_token;
-  const unlocked = await StakingContract.unlockedAmount(address)/decimals_dao_token;
-  const depositsFor = await StakingContract.depositsFor(address);
-  const lockindPeriod = await StakingContract.lockingPeriod();
+  const balance = await Diamond.stakedBalanceOf(address)/10**decimals_dao_token;
+  const locked = await Diamond.lockedStake(address)/10**decimals_dao_token;
+  const unlocked = await Diamond.unlockedStake(address)/10**decimals_dao_token;
+  const depositsFor = await Diamond.depositsStakedFor(address);
 
-  return { balance, locked, unlocked, lockindPeriod, depositsFor }
+  return { balance, locked, unlocked, depositsFor }
 }
 
 export async function getBookedNights(provider, address, bookingYear) {

@@ -61,8 +61,6 @@ const Navigation = () => {
   const router = useRouter();
   const { cache, getStaticCache } = useStatic();
   const { user, loading, error, isAuthenticated, logout, setError } = useAuth();
-  const { wallet, tokens, onboard, provider, address, network, switchNetwork } = {};
-  const [totalTokenBalance, setTotalTokenBalance] = useState(-1)
   const links = platformLinks.filter(link => (!link.enabled || link.enabled()) && (
     !link.roles ||
     (
@@ -80,28 +78,6 @@ const Navigation = () => {
   useEffect(() => {
     loadData();
   }, []);
-
-  useEffect(() => {
-    async function retrieveTokenBalance(){
-      console.log(address)
-      console.log(provider)
-      console.log(wallet)
-      if(onboard) {
-        await onboard.walletCheck();
-      }
-      
-      if(network !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(address && provider) {
-        const staked = await getStakedTokenData(provider, address)
-        setTotalTokenBalance(staked.balance/10**BLOCKCHAIN_DAO_TOKEN.decimals + tokens[BLOCKCHAIN_DAO_TOKEN.address]?.balance)
-      }
-      
-    }
-    retrieveTokenBalance()
-    
-  }, [tokens])
 
   return (
     <div className="NavContainer pt-20 md:pt-0 relative">
