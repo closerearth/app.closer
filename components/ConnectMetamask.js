@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link';
 
 import { useWeb3React } from '@web3-react/core';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { InjectedConnector, UserRejectedRequestError } from '@web3-react/injected-connector'
 
 import { __ } from '../utils/helpers';
-import { getDAOTokenBalance, getStakedTokenData } from '../utils/blockchain'
+import { formatBigNumberForDisplay, getDAOTokenBalance, getStakedTokenData } from '../utils/blockchain'
 import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_NATIVE_TOKEN_SYMBOL, BLOCKCHAIN_NATIVE_TOKEN_DECIMALS, BLOCKCHAIN_EXPLORER_URL, BLOCKCHAIN_DAO_TOKEN } from '../config_blockchain';
 
 const injected = new InjectedConnector({
@@ -26,9 +26,7 @@ const injected = new InjectedConnector({
 const ConnectMetamask = () => {
   const { chainId, account, activate,deactivate, setError, active, library } = useWeb3React()
 
-  const all = useWeb3React()
-
-  const [ totalTokenBalance, setTotalTokenBalance ] = useState(-1)
+  const [ totalTokenBalance, setTotalTokenBalance ] = useState()
 
   const onClickConnect = () => {
     activate(injected,(error) => {
@@ -48,9 +46,7 @@ const ConnectMetamask = () => {
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: utils.hexlify(BLOCKCHAIN_NETWORK_ID) }]
       });
-      console.log('done')
     } catch (switchError) {
-      console.log(switchError.code === 4902)
       if (switchError.code === 4902) {
         try {
           await library.provider.request({
@@ -79,7 +75,6 @@ const ConnectMetamask = () => {
   }
 
   useEffect(() => {
-    console.log(all)
     async function retrieveTokenBalance(){
       if(chainId !== BLOCKCHAIN_NETWORK_ID){
         return
@@ -87,9 +82,7 @@ const ConnectMetamask = () => {
       if(account && library) {
         const nativeBalance = await getDAOTokenBalance(library, account)
         const staked = await getStakedTokenData(library, account)
-        console.log(nativeBalance)
-        console.log(staked)
-        setTotalTokenBalance(staked.balance/10**BLOCKCHAIN_DAO_TOKEN.decimals + nativeBalance)
+        setTotalTokenBalance(staked.balance.add(nativeBalance))
       }
     }
 
@@ -107,9 +100,8 @@ const ConnectMetamask = () => {
             <a className='hidden md:flex mr-3'>
               <span className='h-12 border-l mr-3' />
               <button className='btn-primary'>
-                {totalTokenBalance == -1 ? 'Loading...' : totalTokenBalance.toFixed(0)
-              +' '+
-              BLOCKCHAIN_DAO_TOKEN.name}
+                {totalTokenBalance && formatBigNumberForDisplay(totalTokenBalance, BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name}
+                {!totalTokenBalance && 'Loading...'}
               </button>
             </a>
           </Link>

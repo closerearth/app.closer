@@ -2,30 +2,48 @@ import { BigNumber, Contract } from 'ethers';
 
 import blockchainConfig from '../config_blockchain.js';
 
+export function formatBigNumberForDisplay(bigNumber, decimals) {
+  if (BigNumber.isBigNumber(bigNumber)) {
+    const divisor = BigNumber.from(10).pow(decimals);
+    return bigNumber.div(divisor)
+  }
+  else return null
+}
+
+//Returns BigNumber
+export async function getNativeBalance(provider, address) {
+
+  if(!provider || !address){
+    return
+  }
+
+  const balance = await provider.getBalance(address)
+  return balance
+}
+
+//Returns BigNumber
 export async function getDAOTokenBalance(provider, address) {
 
   if(!provider || !address){
     return
   }
-  const decimals_dao_token = blockchainConfig.BLOCKCHAIN_DAO_TOKEN.decimals
 
   const DAOTokenContract = new Contract(
     blockchainConfig.BLOCKCHAIN_DAO_TOKEN.address,
     blockchainConfig.BLOCKCHAIN_DAO_TOKEN_ABI,
     provider.getUncheckedSigner()
   );
-
-  const balance = await DAOTokenContract.balanceOf(address)/10**decimals_dao_token;
-
+  
+  const balance = await DAOTokenContract.balanceOf(address) ;
   return balance
 }
 
+//Returns BigNumbers and array of dates
 export async function getStakedTokenData(provider, address) {
 
   if(!provider || !address){
     return
   }
-  const decimals_dao_token = blockchainConfig.BLOCKCHAIN_DAO_TOKEN.decimals
 
   const Diamond = new Contract(
     blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
@@ -33,9 +51,9 @@ export async function getStakedTokenData(provider, address) {
     provider.getUncheckedSigner()
   );
 
-  const balance = await Diamond.stakedBalanceOf(address)/10**decimals_dao_token;
-  const locked = await Diamond.lockedStake(address)/10**decimals_dao_token;
-  const unlocked = await Diamond.unlockedStake(address)/10**decimals_dao_token;
+  const balance = await Diamond.stakedBalanceOf(address);
+  const locked = await Diamond.lockedStake(address);
+  const unlocked = await Diamond.unlockedStake(address);
   const depositsFor = await Diamond.depositsStakedFor(address);
 
   return { balance, locked, unlocked, depositsFor }
