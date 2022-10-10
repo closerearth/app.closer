@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link';
 
-import { useWeb3React } from '@web3-react/core';
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { BigNumber, utils } from 'ethers';
-import { InjectedConnector, UserRejectedRequestError } from '@web3-react/injected-connector'
+import { InjectedConnector, NoEthereumProviderError, UserRejectedRequestError } from '@web3-react/injected-connector'
 
 import { __ } from '../utils/helpers';
 import { formatBigNumberForDisplay, getDAOTokenBalance, getStakedTokenData } from '../utils/blockchain'
 import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_NATIVE_TOKEN_SYMBOL, BLOCKCHAIN_NATIVE_TOKEN_DECIMALS, BLOCKCHAIN_EXPLORER_URL, BLOCKCHAIN_DAO_TOKEN } from '../config_blockchain';
+import { useEagerConnect } from '../hooks/blockchain_hooks';
 
 const injected = new InjectedConnector({
-  supportedChainIds: [
+  supportedChainIds: [...new Set([
     BLOCKCHAIN_NETWORK_ID,
     1,
     3,
@@ -18,38 +19,49 @@ const injected = new InjectedConnector({
     5,
     10,
     42,
+    137,
+    420,
     42220,
-    44787
-  ]
+    42161,
+    44787,
+    80001,
+    421611
+  ])]
 })
 
-const ConnectMetamask = () => {
+const ConnectInjected = () => {
   const { chainId, account, activate,deactivate, setError, active, library } = useWeb3React()
 
   const [ totalTokenBalance, setTotalTokenBalance ] = useState()
 
+  const tried = useEagerConnect(injected)
+
   const onClickConnect = () => {
-    activate(injected,(error) => {
+    activate(injected, async (error) => {
       if (error instanceof UserRejectedRequestError) {
         // ignore user rejected error
-        console.log('user refused')
+      } else if (error instanceof UnsupportedChainIdError && window.ethereum){
+        //Unrecognized chain, provider not loaded, attempting hard forced chain change if metamask is injected
+        switchNetwork(window.ethereum)
+      }
+      else if (error instanceof NoEthereumProviderError) {
+        alert('You need to install and activate an Ethereum compatible wallet')
       } else {
-        console.log(error)
         setError(error)
       }
     }, false)
   }
 
-  const switchNetwork = async () => {
+  const switchNetwork = async (provider = library.provider) => {
     try {
-      await library.provider.request({
+      await provider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: utils.hexlify(BLOCKCHAIN_NETWORK_ID) }]
       });
     } catch (switchError) {
       if (switchError.code === 4902) {
         try {
-          await library.provider.request({
+          await provider.request({
             method: 'wallet_addEthereumChain',
             params: [{
               chainId: utils.hexlify(BLOCKCHAIN_NETWORK_ID),
@@ -87,7 +99,7 @@ const ConnectMetamask = () => {
     }
 
     retrieveTokenBalance()
-  })
+  }, [account, library, chainId, active])
 
   return (
     <div>
@@ -124,9 +136,9 @@ const ConnectMetamask = () => {
           </button>
         </a>  
 
-      )}
+      )} 
     </div>
   )
 }
 
-export default ConnectMetamask
+export default ConnectInjected

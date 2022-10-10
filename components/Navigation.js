@@ -12,7 +12,7 @@ import { useAuth } from '../contexts/auth.js';
 import ProfilePhoto from './ProfilePhoto';
 import Prompts from './Prompts';
 import FeaturedEvent from './FeaturedEvent';
-import ConnectMetamask from '../components/ConnectMetamask';
+import ConnectInjected from './ConnectInjected';
 import { useStatic } from '../contexts/static';
 import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
@@ -171,7 +171,7 @@ const Navigation = () => {
             </a> }
             { isAuthenticated &&
               <>
-                <ConnectMetamask />
+                <ConnectInjected />
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}

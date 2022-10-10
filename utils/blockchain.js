@@ -23,7 +23,7 @@ export async function getNativeBalance(provider, address) {
 
 //Returns BigNumber
 export async function getDAOTokenBalance(provider, address) {
-
+  console.log(address)
   if(!provider || !address){
     return
   }
