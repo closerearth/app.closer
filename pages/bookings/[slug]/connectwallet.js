@@ -7,15 +7,18 @@ import { __ } from '../../../utils/helpers';
 
 import Layout from '../../../components/Layout';
 import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
+import { useWeb3React } from '@web3-react/core';
 
 
 const Booking = ({ booking, error }) => {
   const router = useRouter();
-  const { network, wallet, onboard, switchNetwork } = {};
+  const { onboard, switchNetwork } = {};
+  const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React();
+
 
   useEffect(() => {
-    wallet && network === BLOCKCHAIN_NETWORK_ID && router.push(`/bookings/${booking}/checkout`)
-  },[wallet, network])
+    account && chainId === BLOCKCHAIN_NETWORK_ID && router.push(`/bookings/${booking}/checkout`)
+  },[account, chainId])
 
   return (
     <Layout>
@@ -26,25 +29,14 @@ const Booking = ({ booking, error }) => {
         <h1>{ __('blockchain_interstitial_big_title') }</h1>
         <p>{__('blockchain_interstitial_subtitle')}</p>
 
-        {!wallet ? 
-          <button
-            className="btn-primary w-48 px-4 mt-8"
-            onClick={() => {
-              onboard?.walletSelect();
-            } }
-          >
-            {__('blockchain_connect_wallet')}
+        <a className='hidden md:flex mr-3'>
+          <span className='h-12 border-l mr-3' />
+          <button className='btn-primary'
+            onClick={() => router.push(`/bookings/${booking}/checkout`)}>
+            {__('blockchain_bypass_wallet')}
           </button>
-          : network !== BLOCKCHAIN_NETWORK_ID && (
-            <button
-              className="btn-primary w-48 px-4 mt-8"
-              onClick={() => {
-                switchNetwork(BLOCKCHAIN_NETWORK_ID);
-              } }
-            >
-              {__('blockchain_switch_chain')}
-            </button>
-          )}
+        </a>  
+        
       </main>
     </Layout>
   )

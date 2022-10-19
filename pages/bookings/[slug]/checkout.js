@@ -25,6 +25,7 @@ import config, { BLOCKCHAIN_DAO_TOKEN,BLOCKCHAIN_DAO_STAKING_CONTRACT, BLOCKCHAI
 import Layout from '../../../components/Layout';
 import CheckoutForm from '../../../components/CheckoutForm';
 import Spinner from '../../../components/Spinner';
+import { useWeb3React } from '@web3-react/core';
 
 dayjs.extend(LocalizedFormat);
 dayjs.extend(dayOfYear)
@@ -35,7 +36,8 @@ const Booking = ({ booking, error }) => {
   const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { address, ethBalance: celoBalance, provider, wallet, onboard, tokens, isReady } = {};
+  const { address, ethBalance: celoBalance, provider, onboard, tokens, isReady } = {};
+  const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React()
   const [pendingTransactions, setPendingTransactions] = useState([])
   const [stakedBalances, setStakedBalances] = useState({ balance:0, locked:0, unlocked:0, lockingPeriod:0, depositsFor: [] })
   const [bookedNights, setBookedNights] = useState([])
@@ -195,19 +197,9 @@ const Booking = ({ booking, error }) => {
               <b>{' '}{booking.volunteer || canUseTokens && priceFormat(0, booking.price.cur)}</b>
             </p>
           </section>
-          <button
-            className="btn-primary px-4"
-            disabled={pendingProcess}
-            onClick={async () => {
-              console.log(neededToStake);
-              console.log(bookedNights);
-              console.log(stakedBalances);
-            } }>
-            Console 
-          </button>
           { booking.status === 'open' &&
           <div className="mt-2">
-            {wallet ? (
+            {account ? (
               <>
                 {loading ?
                   <section>

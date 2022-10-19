@@ -20,6 +20,7 @@ import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 
 import Layout from '../../../components/Layout';
 import Switch from '../../../components/Switch';
+import { useWeb3React } from '@web3-react/core';
 
 dayjs.extend(LocalizedFormat);
 
@@ -28,13 +29,14 @@ const Booking = ({ booking, error }) => {
   const [editBooking, setBooking] = useState(booking);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  const { wallet, network } = {};
+
+  const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React()
 
 
   const saveBooking = async (update) => {
     try {
       await platform.booking.patch(booking._id, update);
-      wallet && network === BLOCKCHAIN_NETWORK_ID ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
+      active && typeof account === 'string' && chainId === BLOCKCHAIN_NETWORK_ID ? router.push(`/bookings/${booking._id}/checkout`) : router.push(`/bookings/${booking._id}/connectwallet`) 
     } catch (err) {
       alert('An error occured.')
       console.log(err);
