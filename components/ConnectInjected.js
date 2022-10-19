@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link';
 
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
-import { BigNumber, utils } from 'ethers';
+import { utils } from 'ethers';
 import { InjectedConnector, NoEthereumProviderError, UserRejectedRequestError } from '@web3-react/injected-connector'
 
 import { __ } from '../utils/helpers';
 import { formatBigNumberForDisplay, getDAOTokenBalance, getStakedTokenData } from '../utils/blockchain'
-import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_NATIVE_TOKEN_SYMBOL, BLOCKCHAIN_NATIVE_TOKEN_DECIMALS, BLOCKCHAIN_EXPLORER_URL, BLOCKCHAIN_DAO_TOKEN } from '../config_blockchain';
+import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_EXPLORER_URL, BLOCKCHAIN_DAO_TOKEN } from '../config_blockchain';
 import { useEagerConnect } from '../hooks/blockchain_hooks';
 
 const injected = new InjectedConnector({
@@ -30,10 +30,11 @@ const injected = new InjectedConnector({
 })
 
 const ConnectInjected = () => {
-  const { chainId, account, activate,deactivate, setError, active, library } = useWeb3React()
+  const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React()
 
   const [ totalTokenBalance, setTotalTokenBalance ] = useState()
 
+  //This hook tries to re-connect automatically a previously connected wallet
   const tried = useEagerConnect(injected)
 
   const onClickConnect = () => {
@@ -67,11 +68,7 @@ const ConnectInjected = () => {
               chainId: utils.hexlify(BLOCKCHAIN_NETWORK_ID),
               rpcUrls: [BLOCKCHAIN_RPC_URL],
               chainName: BLOCKCHAIN_NAME,
-              nativeCurrency: {
-                name: BLOCKCHAIN_NATIVE_TOKEN,
-                symbol: BLOCKCHAIN_NATIVE_TOKEN_SYMBOL,
-                decimals: BLOCKCHAIN_NATIVE_TOKEN_DECIMALS
-              },
+              nativeCurrency: BLOCKCHAIN_NATIVE_TOKEN,
               blockExplorerUrls: [BLOCKCHAIN_EXPLORER_URL]
             }]
           });

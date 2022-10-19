@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { utils, BigNumber, Contract } from 'ethers';
+import { utils, BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 
 
@@ -10,19 +10,19 @@ import Spinner from '../../components/Spinner';
 
 import { useAuth } from '../../contexts/auth'
 import { __ } from '../../utils/helpers';
-import { BLOCKCHAIN_CROWDSALE_CONTRACT_ABI, getDAOTokenBalance, getNativeBalance, getStakedTokenData } from '../../utils/blockchain';
 
 import PageNotAllowed from '../401';
 
-import { BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_CROWDSALE_CONTRACT, BLOCKCHAIN_STABLE_COIN } from '../../config';
-import { BLOCKCHAIN_NETWORK_ID } from '../../config_blockchain';
+import {  } from '../../config';
+import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_STABLE_COIN, BLOCKCHAIN_DAO_TOKEN } from '../../config_blockchain';
+import { formatBigNumberForDisplay, getDAOTokenBalance, getNativeBalance, getStakedTokenData, sendDAOToken } from '../../utils/blockchain';
 
 
 const CryptoWallet = () => {
   const { isAuthenticated } = useAuth();
   const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React()
 
-  const [ totalTokenBalance, setTotalTokenBalance ] = useState(null)
+  const [ tokenBalance, setTokenBalance ] = useState({})
   const [ nativeBalance, setNativeBalance ] = useState(null)
 
   const [toAddress, setToAddress] = useState('')
@@ -37,40 +37,39 @@ const CryptoWallet = () => {
       if(account && library) {
         const DAOTokenBalance = await getDAOTokenBalance(library, account)
         const staked = await getStakedTokenData(library, account)
-        setTotalTokenBalance(staked.balance.add(DAOTokenBalance))
+        setTokenBalance({ 'unencumbered': DAOTokenBalance, ...staked })
       }
     }
-    async function getBalance(){
+    async function retrieveNativeBalance(){
       if(chainId !== BLOCKCHAIN_NETWORK_ID){
         return
       }
       if(account && library) {
         const balance = await getNativeBalance(library, account)
-        setNativeBalance(balance.toString())
+        setNativeBalance(balance)
       }
       
     }
-
     retrieveTokenBalance()
-    getBalance()
-  })
+    retrieveNativeBalance()
+  },[chainId, account, active, library])
 
-  const sendTokenTransaction = async (token) => {
+  const sendTokenTransaction = async () => {
+    if(chainId !== BLOCKCHAIN_NETWORK_ID){
+      return
+    }
+
     if (!toAddress || !library) {
       alert('A Celo address to send Tokens to is required.')
       return
     }
 
-    const tx = await token.transfer(
-      utils.getAddress(toAddress),
-      BigNumber.from(amountToSend)
-    )
-
+    const tx = await sendDAOToken(library, toAddress, BigNumber.from(amountToSend));
+    
     setPendingTransactions([...pendingTransactions, tx.hash])
     await tx.wait();
     console.log(`${tx.hash} mined`)
     setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
-      
   }
 
   const sendCeloTransaction = async () => {
@@ -92,46 +91,6 @@ const CryptoWallet = () => {
     setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
   }
 
-  const approveStableForCrowdsaleContract = async () => {
-    if (!amountToSend) {
-      alert('Input an amount in Wei')
-      return
-    }
-
-    const stableCoin = tokens[BLOCKCHAIN_STABLE_COIN.address]
-
-    const tx = await stableCoin.approve(
-      BLOCKCHAIN_CROWDSALE_CONTRACT.address,
-      BigNumber.from(amountToSend)
-    )
-
-    setPendingTransactions([...pendingTransactions, tx.hash])
-    await tx.wait();
-    console.log(`${tx.hash} mined`)
-    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));      
-  }
-
-  const participateInCrowdsale = async () => {
-    if (!amountToSend) {
-      alert('Input an amount in Wei')
-      return
-    }
-
-    const CrowsaleContract = new Contract(
-      BLOCKCHAIN_CROWDSALE_CONTRACT.address,
-      BLOCKCHAIN_CROWDSALE_CONTRACT_ABI,
-      library.getUncheckedSigner()
-    )
-
-    const tx = await CrowsaleContract.buy(BigNumber.from(amountToSend))
-
-    setPendingTransactions([...pendingTransactions, tx.hash])
-    await tx.wait();
-    console.log(`${tx.hash} mined`)
-    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));      
-  }
-
-
   if (!isAuthenticated) {
     return <PageNotAllowed />;
   }
@@ -149,14 +108,8 @@ const CryptoWallet = () => {
             {account && library &&
               <>
                 <span className='px-4'>
-              ({BLOCKCHAIN_NATIVE_TOKEN}) - ({account?.substring(0, 4) + '...' + account?.substring(account?.length - 4)})
+              ({BLOCKCHAIN_NATIVE_TOKEN.name}) - ({account?.substring(0, 4) + '...' + account?.substring(account?.length - 4)})
                 </span>
-                <button
-                  className="btn-primary w-36"
-                  onClick={() => onboard?.walletSelect()}
-                >
-                  {__('blockchain_switch_wallet')}
-                </button>
               </>
             }
           </div>
@@ -189,7 +142,7 @@ const CryptoWallet = () => {
               </div>
 
               {nativeBalance && 
-            <div className='m-2'>{nativeBalance} {BLOCKCHAIN_NATIVE_TOKEN}
+            <div className='m-2'>{formatBigNumberForDisplay(nativeBalance, BLOCKCHAIN_NATIVE_TOKEN.decimals, 2)} {BLOCKCHAIN_NATIVE_TOKEN.symbol}
               <button
                 className="btn-primary w-48 m-2"
                 onClick={async () => {
@@ -200,34 +153,19 @@ const CryptoWallet = () => {
               </button>
             </div>
               }
-      
 
-              <h4 className='mt-16'>Crowdsale simulation</h4>
-
-              <div className='flex flex-row'>
-                <input
-                  className="w-12"
-                  type="number"
-                  value={amountToSend}
-                  placeholder="cEUR amount (wei)"
-                  onChange={e => setamountToSend(e.target.value)} />
-                <button
-                  className="btn-primary w-48 m-2"
-                  onClick={async () => {
-                    approveStableForCrowdsaleContract();
-                  } }
-                >
-                Approve amount
-                </button>
-                <button
-                  className="btn-primary w-48 m-2"
-                  onClick={async () => {
-                    participateInCrowdsale();
-                  } }
-                >
-                Participate in Crowsale
-                </button>
-              </div>
+              {tokenBalance && 
+            <div className='m-2'>{formatBigNumberForDisplay(tokenBalance['unencumbered'], BLOCKCHAIN_DAO_TOKEN['decimals'])} {BLOCKCHAIN_DAO_TOKEN.symbol}
+              <button
+                className="btn-primary w-48 m-2"
+                onClick={async () => {
+                  sendTokenTransaction()
+                } }
+              >
+                Send {BLOCKCHAIN_NATIVE_TOKEN.name}
+              </button>
+            </div>
+              }
             </>
           )}
 

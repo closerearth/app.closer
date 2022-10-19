@@ -1,11 +1,16 @@
-import { BigNumber, Contract } from 'ethers';
+import { utils, BigNumber, Contract } from 'ethers';
 
 import blockchainConfig from '../config_blockchain.js';
 
-export function formatBigNumberForDisplay(bigNumber, decimals) {
+export function formatBigNumberForDisplay(bigNumber, tokenDecimals, displayDecimals = 0) {
+  if(displayDecimals > 5 || displayDecimals > tokenDecimals) {
+    //Prevent overflow errors
+    throw new Error('Too many decimals')
+  }
   if (BigNumber.isBigNumber(bigNumber)) {
-    const divisor = BigNumber.from(10).pow(decimals);
-    return bigNumber.div(divisor)
+    const divisor = BigNumber.from(10).pow(tokenDecimals-displayDecimals);
+    return bigNumber.div(divisor).toString() / 10**displayDecimals
+    
   }
   else return null
 }
@@ -23,7 +28,6 @@ export async function getNativeBalance(provider, address) {
 
 //Returns BigNumber
 export async function getDAOTokenBalance(provider, address) {
-  console.log(address)
   if(!provider || !address){
     return
   }
@@ -36,6 +40,26 @@ export async function getDAOTokenBalance(provider, address) {
   
   const balance = await DAOTokenContract.balanceOf(address) ;
   return balance
+}
+
+//Expects BigNumber for amount
+export async function sendDAOToken(provider, toAddress, amount) {
+  if(!provider || !toAddress){
+    return
+  }
+
+  const DAOTokenContract = new Contract(
+    blockchainConfig.BLOCKCHAIN_DAO_TOKEN.address,
+    blockchainConfig.BLOCKCHAIN_DAO_TOKEN_ABI,
+    provider.getUncheckedSigner()
+  );
+  
+  const tx = await DAOTokenContract.transfer(
+    utils.getAddress(toAddress),
+    amount
+  )
+
+  return tx
 }
 
 //Returns BigNumbers and array of dates
@@ -71,29 +95,4 @@ export async function getBookedNights(provider, address, bookingYear) {
   );
 
   return await ProofOfPresenceContract.getBookings(address, bookingYear);
-}
-
-export async function reloadWalletOnNetworkChange() {
-  if (!network) return;
-
-  const providerNetwork = await getProviderNetwork();
-
-  // get current wallet info so can auto log back in
-  const userState = await onboard?.getState();
-  const wallet = userState && userState.wallet;
-  if (!wallet || !wallet.name) return;
-
-  // if provider network is different, then the user has changed networks
-  if (providerNetwork && providerNetwork.chainId !== network) {
-    // reset wallet to trigger a full re-initialization on wallet select
-    await onboard?.walletReset();
-
-    // re-select the wallet
-    // const walletSelected = await onboard?.walletSelect(wallet.name);
-    await onboard?.walletSelect(wallet.name);
-  }
-
-  if (providerNetwork && providerNetwork.chainId !== chainId) {
-    await onboard?.walletCheck();
-  }
 }
