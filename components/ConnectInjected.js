@@ -89,9 +89,9 @@ const ConnectInjected = () => {
         return
       }
       if(account && library) {
-        const nativeBalance = await getDAOTokenBalance(library, account)
+        const DAOTokenWalletBalance = await getDAOTokenBalance(library, account)
         const staked = await getStakedTokenData(library, account)
-        setTotalTokenBalance(staked.balance.add(nativeBalance))
+        setTotalTokenBalance(staked.balance.add(DAOTokenWalletBalance))
       }
     }
 

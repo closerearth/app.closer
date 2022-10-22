@@ -83,16 +83,30 @@ export async function getStakedTokenData(provider, address) {
   return { balance, locked, unlocked, depositsFor }
 }
 
+export async function isMember(provider, address) {
+  if(!provider || !address){
+    return
+  }
+  
+  const Diamond = new Contract(
+    blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
+    blockchainConfig.BLOCKCHAIN_DIAMOND_ABI,
+    provider.getUncheckedSigner()
+  );
+
+  return await Diamond.isMember(address);
+}
+
 export async function getBookedNights(provider, address, bookingYear) {
   if(!provider || !address){
     return
   }
   
-  const ProofOfPresenceContract = new Contract(
-    blockchainConfig.BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_CONTRACT_ADDRESS,
-    blockchainConfig.BLOCKCHAIN_DAO_PROOF_OF_PRESENCE_ABI,
+  const Diamond = new Contract(
+    blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
+    blockchainConfig.BLOCKCHAIN_DIAMOND_ABI,
     provider.getUncheckedSigner()
   );
 
-  return await ProofOfPresenceContract.getBookings(address, bookingYear);
+  return await Diamond.getAccommodationBookings(address, bookingYear);
 }
