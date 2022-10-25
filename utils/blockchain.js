@@ -3,11 +3,7 @@ import { isAddress } from 'ethers/lib/utils.js';
 
 import blockchainConfig, { BLOCKCHAIN_NETWORK_ID } from '../config_blockchain.js';
 
-export const fetcher = (library, abi, chainId) => (...args) => {
-  if(chainId !== BLOCKCHAIN_NETWORK_ID)
-  {
-    throw new Error('This is not the expected chain')
-  }
+export const fetcher = (library, abi) => (...args) => {
   const [arg1, arg2, ...params] = args
   //contract call
   if(isAddress(arg1)) {

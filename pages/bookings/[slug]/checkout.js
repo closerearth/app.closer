@@ -45,7 +45,6 @@ const Booking = ({ booking, error }) => {
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
   const [neededToStake, setNeededToStake] = useState()
   const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
-  const [loading, setLoading] = useState(true) //General loading to prevent seeing fallback pre-renders in a glitch while waiting for the data
   const [alreadyBookedDates, setAlreadyBookedDates] = useState(false)
 
   const processConfirmation = async (update) => {
@@ -95,7 +94,6 @@ const Booking = ({ booking, error }) => {
     if(!isDAOMember || !bookedNights || !balanceLocked || !balanceDAOToken){
       return
     }
-    setLoading(true)
 
     if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
       setAlreadyBookedDates(true)
@@ -106,7 +104,6 @@ const Booking = ({ booking, error }) => {
     setNeededToStake(tokensToStake);
     setCanUseTokens(tokensToStake.lte(balanceDAOToken));
         
-    setLoading(false)
   },[pendingTransactions, pendingProcess, account, bookedNights, balanceLocked, balanceDAOToken, isDAOMember])
 
   if(start.year() != end.year()){
@@ -217,32 +214,28 @@ const Booking = ({ booking, error }) => {
           <div className="mt-2">
             {account && isDAOMember ? (
               <>
-                {loading ?
-                  <section>
-                    Loading ...
-                  </section> :
-                  <section>
-                    {!canUseTokens ? (
-                      <h4>
+                <section>
+                  {!canUseTokens ? (
+                    <h4>
                     You do not have enough tokens to book {booking.duration} nights, please acquire some more tokens.
-                      </h4>
-                    ) : (
-                      <section>
-                        <h4>You have enough tokens available to book right away.</h4>
-                        {neededToStake.gt(0) && <p>You need to stake {formatBigNumberForDisplay(neededToStake, BLOCKCHAIN_DAO_TOKEN.decimals)} tokens, this will be done for you in the following transactions.</p>}
-                        <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking to release your tokens.</p>
-                        <button
-                          className="btn-primary px-4"
-                          disabled={pendingProcess}
-                          onClick={async () => {
-                            verifyDetermineApproveNecessaryTokensStakeAndBook();
-                          } }>
-                          {pendingProcess ? <div className='flex flex-row items-center'><Spinner /><p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p></div> : 'Book using tokens'}
-                        </button>
-                      </section>
-                    )}
-                  </section>
-                }
+                    </h4>
+                  ) : (
+                    <section>
+                      <h4>You have enough tokens available to book right away.</h4>
+                      {neededToStake.gt(0) && <p>You need to stake {formatBigNumberForDisplay(neededToStake, BLOCKCHAIN_DAO_TOKEN.decimals)} tokens, this will be done for you in the following transactions.</p>}
+                      <p>Staked tokens will be blocked until your booking last day + one year. You can cancel your booking to release your tokens.</p>
+                      <button
+                        className="btn-primary px-4"
+                        disabled={pendingProcess}
+                        onClick={async () => {
+                          verifyDetermineApproveNecessaryTokensStakeAndBook();
+                        } }>
+                        {pendingProcess ? <div className='flex flex-row items-center'><Spinner /><p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p></div> : 'Book using tokens'}
+                      </button>
+                    </section>
+                  )}
+                </section>
+                
               </>
             ) : (
               <>
