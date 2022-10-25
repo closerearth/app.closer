@@ -1,6 +1,22 @@
 import { utils, BigNumber, Contract } from 'ethers';
+import { isAddress } from 'ethers/lib/utils.js';
 
 import blockchainConfig from '../config_blockchain.js';
+
+export const fetcher = (library, abi) => (...args) => {
+  const [arg1, arg2, ...params] = args
+  //contract call
+  if(isAddress(arg1)) {
+    const address = arg1
+    const method = arg2
+    const contract = new Contract(address, abi, library.getSigner())
+    const res = contract[method](...params)
+    return res
+  }
+  //eth call
+  const method = arg1
+  return library[method](arg2, ...params)
+}
 
 export function formatBigNumberForDisplay(bigNumber, tokenDecimals, displayDecimals = 0) {
   if(displayDecimals > 5 || displayDecimals > tokenDecimals) {
@@ -15,43 +31,16 @@ export function formatBigNumberForDisplay(bigNumber, tokenDecimals, displayDecim
   else return null
 }
 
-//Returns BigNumber
-export async function getNativeBalance(provider, address) {
-
-  if(!provider || !address){
-    return
-  }
-
-  const balance = await provider.getBalance(address)
-  return balance
-}
-
-//Returns BigNumber
-export async function getDAOTokenBalance(provider, address) {
-  if(!provider || !address){
-    return
-  }
-
-  const DAOTokenContract = new Contract(
-    blockchainConfig.BLOCKCHAIN_DAO_TOKEN.address,
-    blockchainConfig.BLOCKCHAIN_DAO_TOKEN_ABI,
-    provider.getUncheckedSigner()
-  );
-  
-  const balance = await DAOTokenContract.balanceOf(address) ;
-  return balance
-}
-
 //Expects BigNumber for amount
-export async function sendDAOToken(provider, toAddress, amount) {
-  if(!provider || !toAddress){
+export async function sendDAOToken(library, toAddress, amount) {
+  if(!library || !toAddress){
     return
   }
 
   const DAOTokenContract = new Contract(
     blockchainConfig.BLOCKCHAIN_DAO_TOKEN.address,
     blockchainConfig.BLOCKCHAIN_DAO_TOKEN_ABI,
-    provider.getUncheckedSigner()
+    library.getSigner()
   );
   
   const tx = await DAOTokenContract.transfer(
@@ -60,53 +49,4 @@ export async function sendDAOToken(provider, toAddress, amount) {
   )
 
   return tx
-}
-
-//Returns BigNumbers and array of dates
-export async function getStakedTokenData(provider, address) {
-
-  if(!provider || !address){
-    return
-  }
-
-  const Diamond = new Contract(
-    blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
-    blockchainConfig.BLOCKCHAIN_DIAMOND_ABI,
-    provider.getUncheckedSigner()
-  );
-
-  const balance = await Diamond.stakedBalanceOf(address);
-  const locked = await Diamond.lockedStake(address);
-  const unlocked = await Diamond.unlockedStake(address);
-  const depositsFor = await Diamond.depositsStakedFor(address);
-
-  return { balance, locked, unlocked, depositsFor }
-}
-
-export async function isMember(provider, address) {
-  if(!provider || !address){
-    return
-  }
-  
-  const Diamond = new Contract(
-    blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
-    blockchainConfig.BLOCKCHAIN_DIAMOND_ABI,
-    provider.getUncheckedSigner()
-  );
-
-  return await Diamond.isMember(address);
-}
-
-export async function getBookedNights(provider, address, bookingYear) {
-  if(!provider || !address){
-    return
-  }
-  
-  const Diamond = new Contract(
-    blockchainConfig.BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
-    blockchainConfig.BLOCKCHAIN_DIAMOND_ABI,
-    provider.getUncheckedSigner()
-  );
-
-  return await Diamond.getAccommodationBookings(address, bookingYear);
 }

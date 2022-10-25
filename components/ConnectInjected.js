@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
 import Link from 'next/link';
+import useSWR from 'swr';
 
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
 import { InjectedConnector, NoEthereumProviderError, UserRejectedRequestError } from '@web3-react/injected-connector'
 
 import { __ } from '../utils/helpers';
-import { formatBigNumberForDisplay, getDAOTokenBalance, getStakedTokenData } from '../utils/blockchain'
-import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_EXPLORER_URL, BLOCKCHAIN_DAO_TOKEN } from '../config_blockchain';
+import { formatBigNumberForDisplay, fetcher } from '../utils/blockchain'
+import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NAME, BLOCKCHAIN_RPC_URL, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_EXPLORER_URL, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_DAO_TOKEN_ABI, BLOCKCHAIN_DAO_DIAMOND_ADDRESS, BLOCKCHAIN_DIAMOND_ABI } from '../config_blockchain';
 import { useEagerConnect } from '../hooks/blockchain_hooks';
 
 const injected = new InjectedConnector({
@@ -30,12 +30,10 @@ const injected = new InjectedConnector({
 })
 
 const ConnectInjected = () => {
-  const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React()
-
-  const [ totalTokenBalance, setTotalTokenBalance ] = useState()
+  const { chainId, account, activate, setError, active, library } = useWeb3React()
 
   //This hook tries to re-connect automatically a previously connected wallet
-  const tried = useEagerConnect(injected)
+  useEagerConnect(injected)
 
   const onClickConnect = () => {
     activate(injected, async (error) => {
@@ -79,24 +77,13 @@ const ConnectInjected = () => {
     }
   };
 
-  const onClickDisconnect = () => {
-    deactivate()
-  }
+  const { data: balanceDAOToken, mutate: mutateBD } = useSWR([BLOCKCHAIN_DAO_TOKEN.address, 'balanceOf', account], {
+    fetcher: fetcher(library, BLOCKCHAIN_DAO_TOKEN_ABI)
+  })
 
-  useEffect(() => {
-    async function retrieveTokenBalance(){
-      if(chainId !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(account && library) {
-        const DAOTokenWalletBalance = await getDAOTokenBalance(library, account)
-        const staked = await getStakedTokenData(library, account)
-        setTotalTokenBalance(staked.balance.add(DAOTokenWalletBalance))
-      }
-    }
-
-    retrieveTokenBalance()
-  }, [account, library, chainId, active])
+  const { data: balanceStaked, mutate: mutateSB } = useSWR([BLOCKCHAIN_DAO_DIAMOND_ADDRESS, 'stakedBalanceOf', account], {
+    fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI)
+  })
 
   return (
     <div>
@@ -109,8 +96,7 @@ const ConnectInjected = () => {
             <a className='hidden md:flex mr-3'>
               <span className='h-12 border-l mr-3' />
               <button className='btn-primary'>
-                {totalTokenBalance && formatBigNumberForDisplay(totalTokenBalance, BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name}
-                {!totalTokenBalance && 'Loading...'}
+                {balanceDAOToken & balanceStaked ? formatBigNumberForDisplay(balanceDAOToken.add(balanceStaked), BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name : 'Loading...'}
               </button>
             </a>
           </Link>

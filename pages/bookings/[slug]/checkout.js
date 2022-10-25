@@ -21,12 +21,13 @@ import { usePlatform } from '../../../contexts/platform';
 import { priceFormat, __ } from '../../../utils/helpers';
 import api, { formatSearch, cdn } from '../../../utils/api';
 import config, {  } from '../../../config';
-import { getStakedTokenData, getBookedNights, getDAOTokenBalance, isMember, formatBigNumberForDisplay } from '../../../utils/blockchain';
-import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_DAO_TOKEN_ABI, BLOCKCHAIN_DAO_DIAMOND_ADDRESS, BLOCKCHAIN_DIAMOND_ABI } from '../../../config_blockchain';
+import { formatBigNumberForDisplay, fetcher } from '../../../utils/blockchain';
+import { BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_DAO_TOKEN_ABI, BLOCKCHAIN_DAO_DIAMOND_ADDRESS, BLOCKCHAIN_DIAMOND_ABI } from '../../../config_blockchain';
 
 import Layout from '../../../components/Layout';
 import CheckoutForm from '../../../components/CheckoutForm';
 import Spinner from '../../../components/Spinner';
+import useSWR from 'swr';
 
 dayjs.extend(LocalizedFormat);
 dayjs.extend(dayOfYear)
@@ -39,7 +40,6 @@ const Booking = ({ booking, error }) => {
   const { platform } = usePlatform();
   
   const { chainId, account, library } = useWeb3React()
-  const [isDAOMember, setIsDAOMember] = useState(false)
   const [pendingTransactions, setPendingTransactions] = useState([])  //In general the following pendingTransactions state should be moved to the root of the app, and should be used as a dependency by all hooks that read blockchain state
   
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
@@ -75,47 +75,43 @@ const Booking = ({ booking, error }) => {
     nights = [...nights, [bookingYear,dayjs(booking.start).add(i, 'day').dayOfYear()]]
   }
 
+  const { data: balanceDAOToken, mutate: mutateBD } = useSWR([BLOCKCHAIN_DAO_TOKEN.address, 'balanceOf', account], {
+    fetcher: fetcher(library, BLOCKCHAIN_DAO_TOKEN_ABI)
+  })
+
+  const { data: balanceLocked, mutate: mutateSB } = useSWR([BLOCKCHAIN_DAO_DIAMOND_ADDRESS, 'lockedStake', account], {
+    fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI)
+  })
+
+  const { data: bookedNights, mutate: mutateBN } = useSWR([BLOCKCHAIN_DAO_DIAMOND_ADDRESS, 'getAccommodationBookings', account, bookingYear], {
+    fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI)
+  })
+
+  const { data: isDAOMember, mutate: mutateDAOM } = useSWR([BLOCKCHAIN_DAO_DIAMOND_ADDRESS, 'isMember', account], {
+    fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI)
+  })
+
   useEffect(() => {
-    if(!library || !account){
+    if(!library || !account || !isDAOMember){
       return
     }
-
-    async function retrieveTokenBalanceAndBookedNights(){
-      if(chainId !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(account && library) {
-        setLoading(true)
-        
-        const DAOTokenWalletBalance = await getDAOTokenBalance(library, account)
-        const staked = await getStakedTokenData(library, account)
-        const bookedNights = await getBookedNights(library, account, bookingYear)
-
-        if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
-          setAlreadyBookedDates(true)
-        }
-        //We should add here the type of booking, since they might require more than 1 token per night
-        const tokensToStake = BigNumber.from(bookedNights.length + nights.length).mul(BigNumber.from(10).pow(BLOCKCHAIN_DAO_TOKEN.decimals)).sub(staked.locked)
-
-        setNeededToStake(tokensToStake);
-        setCanUseTokens(tokensToStake.lte(DAOTokenWalletBalance));
-        
-        setLoading(false)
-      }
+    
+    if(!bookedNights || !balanceLocked || !balanceDAOToken){
+      return
     }
+    setLoading(true)
 
-    async function verifyMembershipAndProceed() {
-      if(chainId !== BLOCKCHAIN_NETWORK_ID){
-        return 
-      }
-      const isItAMember = await isMember(library, account)
-      setIsDAOMember(isItAMember)
-      isItAMember && retrieveTokenBalanceAndBookedNights()
+    if(nights.map(x => x[1]).filter(day => bookedNights.map(a => a.dayOfYear).includes(day)).length > 0){
+      setAlreadyBookedDates(true)
     }
+    //We should add here the type of booking, since they might require more than 1 token per night
+    const tokensToStake = BigNumber.from(bookedNights.length + nights.length).mul(BigNumber.from(10).pow(BLOCKCHAIN_DAO_TOKEN.decimals)).sub(balanceLocked)
 
-    verifyMembershipAndProceed()
-   
-  },[pendingTransactions, pendingProcess, account])
+    setNeededToStake(tokensToStake);
+    setCanUseTokens(tokensToStake.lte(balanceDAOToken));
+        
+    setLoading(false)
+  },[pendingTransactions, pendingProcess, account, bookedNights, balanceLocked, balanceDAOToken, isDAOMember])
 
   if(start.year() != end.year()){
     return <div>You cannot yet book accross different years</div>

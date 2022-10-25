@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
-import Link from 'next/link';
+import useSWR from 'swr';
 import { utils, BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 
@@ -14,45 +14,25 @@ import { __ } from '../../utils/helpers';
 import PageNotAllowed from '../401';
 
 import {  } from '../../config';
-import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_STABLE_COIN, BLOCKCHAIN_DAO_TOKEN } from '../../config_blockchain';
-import { formatBigNumberForDisplay, getDAOTokenBalance, getNativeBalance, getStakedTokenData, sendDAOToken } from '../../utils/blockchain';
+import { BLOCKCHAIN_NETWORK_ID, BLOCKCHAIN_NATIVE_TOKEN, BLOCKCHAIN_DAO_TOKEN, BLOCKCHAIN_DAO_TOKEN_ABI } from '../../config_blockchain';
+import { formatBigNumberForDisplay, fetcher, sendDAOToken } from '../../utils/blockchain';
 
 
 const CryptoWallet = () => {
   const { isAuthenticated } = useAuth();
   const { chainId, account, activate, deactivate, setError, active, library } = useWeb3React()
 
-  const [ tokenBalance, setTokenBalance ] = useState({})
-  const [ nativeBalance, setNativeBalance ] = useState(null)
-
   const [toAddress, setToAddress] = useState('')
   const [amountToSend, setamountToSend] = useState(0)
   const [pendingTransactions, setPendingTransactions] = useState([])
 
-  useEffect(() => {
-    async function retrieveTokenBalance(){
-      if(chainId !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(account && library) {
-        const DAOTokenBalance = await getDAOTokenBalance(library, account)
-        const staked = await getStakedTokenData(library, account)
-        setTokenBalance({ 'unencumbered': DAOTokenBalance, ...staked })
-      }
-    }
-    async function retrieveNativeBalance(){
-      if(chainId !== BLOCKCHAIN_NETWORK_ID){
-        return
-      }
-      if(account && library) {
-        const balance = await getNativeBalance(library, account)
-        setNativeBalance(balance)
-      }
-      
-    }
-    retrieveTokenBalance()
-    retrieveNativeBalance()
-  },[chainId, account, active, library])
+  const { data: nativeBalance, mutate: mutateNB } = useSWR(['getBalance', account, 'latest'], {
+    fetcher: fetcher(library)
+  })
+  
+  const { data: DAOTokenBalance, mutate: mutateDTD } = useSWR([BLOCKCHAIN_DAO_TOKEN.address, 'balanceOf', account], {
+    fetcher: fetcher(library, BLOCKCHAIN_DAO_TOKEN_ABI)
+  })
 
   const sendTokenTransaction = async () => {
     if(chainId !== BLOCKCHAIN_NETWORK_ID){
@@ -64,12 +44,17 @@ const CryptoWallet = () => {
       return
     }
 
-    const tx = await sendDAOToken(library, toAddress, BigNumber.from(amountToSend));
+    try {
+      const tx = await sendDAOToken(library, toAddress, BigNumber.from(amountToSend));
     
-    setPendingTransactions([...pendingTransactions, tx.hash])
-    await tx.wait();
-    console.log(`${tx.hash} mined`)
-    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
+      setPendingTransactions([...pendingTransactions, tx.hash])
+      await tx.wait();
+      mutateDTD(undefined, true)
+      console.log(`${tx.hash} mined`)
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
+    } catch (error) {
+      
+    }
   }
 
   const sendCeloTransaction = async () => {
@@ -78,17 +63,21 @@ const CryptoWallet = () => {
       return
     }
 
-    const signer = library.getUncheckedSigner()
+    const signer = library.getSigner()
+    try {
+      const tx = await signer.sendTransaction({
+        to: utils.getAddress(toAddress),
+        value: BigNumber.from(amountToSend)
+      })
 
-    const tx = await signer.sendTransaction({
-      to: utils.getAddress(toAddress),
-      value: BigNumber.from(amountToSend)
-    })
-
-    setPendingTransactions([...pendingTransactions, tx.hash])
-    await tx.wait();
-    console.log(`${tx.hash} mined`)
-    setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
+      setPendingTransactions([...pendingTransactions, tx.hash])
+      await tx.wait();
+      mutateNB(undefined, true)
+      console.log(`${tx.hash} mined`)
+      setPendingTransactions((pendingTransactions) => pendingTransactions.filter((h) => h !== tx.hash));
+    } catch (error) {
+  
+    } 
   }
 
   if (!isAuthenticated) {
@@ -154,15 +143,15 @@ const CryptoWallet = () => {
             </div>
               }
 
-              {tokenBalance && 
-            <div className='m-2'>{formatBigNumberForDisplay(tokenBalance['unencumbered'], BLOCKCHAIN_DAO_TOKEN['decimals'])} {BLOCKCHAIN_DAO_TOKEN.symbol}
+              {DAOTokenBalance && 
+            <div className='m-2'>{formatBigNumberForDisplay(DAOTokenBalance, BLOCKCHAIN_DAO_TOKEN['decimals'])} {BLOCKCHAIN_DAO_TOKEN.symbol}
               <button
                 className="btn-primary w-48 m-2"
                 onClick={async () => {
                   sendTokenTransaction()
                 } }
               >
-                Send {BLOCKCHAIN_NATIVE_TOKEN.name}
+                Send {BLOCKCHAIN_DAO_TOKEN.name}
               </button>
             </div>
               }
