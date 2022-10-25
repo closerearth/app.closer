@@ -2,7 +2,7 @@ import Link from 'next/link';
 import useSWR from 'swr';
 
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
-import { utils } from 'ethers';
+import { BigNumber, utils } from 'ethers';
 import { InjectedConnector, NoEthereumProviderError, UserRejectedRequestError } from '@web3-react/injected-connector'
 
 import { __ } from '../utils/helpers';
@@ -78,11 +78,13 @@ const ConnectInjected = () => {
   };
 
   const { data: balanceDAOToken, mutate: mutateBD } = useSWR([BLOCKCHAIN_DAO_TOKEN.address, 'balanceOf', account], {
-    fetcher: fetcher(library, BLOCKCHAIN_DAO_TOKEN_ABI)
+    fetcher: fetcher(library, BLOCKCHAIN_DAO_TOKEN_ABI),
+    fallbackData: BigNumber.from(0)
   })
 
   const { data: balanceStaked, mutate: mutateSB } = useSWR([BLOCKCHAIN_DAO_DIAMOND_ADDRESS, 'stakedBalanceOf', account], {
-    fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI)
+    fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI),
+    fallbackData: BigNumber.from(0)
   })
 
   return (
@@ -96,7 +98,7 @@ const ConnectInjected = () => {
             <a className='hidden md:flex mr-3'>
               <span className='h-12 border-l mr-3' />
               <button className='btn-primary'>
-                {balanceDAOToken & balanceStaked ? formatBigNumberForDisplay(balanceDAOToken.add(balanceStaked), BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name : 'Loading...'}
+                {formatBigNumberForDisplay(balanceDAOToken.add(balanceStaked), BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name}
               </button>
             </a>
           </Link>
