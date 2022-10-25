@@ -39,7 +39,7 @@ const Booking = ({ booking, error }) => {
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
   
-  const { chainId, account, library } = useWeb3React()
+  const { account, library } = useWeb3React()
   const [pendingTransactions, setPendingTransactions] = useState([])  //In general the following pendingTransactions state should be moved to the root of the app, and should be used as a dependency by all hooks that read blockchain state
   
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
@@ -92,11 +92,7 @@ const Booking = ({ booking, error }) => {
   })
 
   useEffect(() => {
-    if(!library || !account || !isDAOMember){
-      return
-    }
-    
-    if(!bookedNights || !balanceLocked || !balanceDAOToken){
+    if(!isDAOMember || !bookedNights || !balanceLocked || !balanceDAOToken){
       return
     }
     setLoading(true)
