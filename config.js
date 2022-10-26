@@ -10,8 +10,8 @@ module.exports = {
   TEAM_EMAIL: 'team@closer.earth',
   START_TIME: '2021-04-30T15:00:00.000Z',
   EXPOSE_STORE: true,
-  // API_URL: 'http://localhost:4002',
-  API_URL: 'https://api.oasa.co',
+  API_URL: 'http://localhost:4002',
+  // API_URL: 'https://api.oasa.co',
   CDN_URL: 'https://cdn.oasa.co/photo/',
   NEWSLETTER: false,
   LOG_REQUESTS: false,
@@ -21,15 +21,14 @@ module.exports = {
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,
   REGISTRATION_MODE: 'open', // curated, paid, open
-  // LOGO_FOOTER: "",
-  FACEBOOK_URL: "https://instagram.com/closerearth",
-  INSTAGRAM_URL: "https://instagram.com/closerearth",
+  // LOGO_FOOTER: '',
+  INSTAGRAM_URL: 'https://instagram.com/closerearth',
   DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',
   TWITTER_URL: 'https://twitter.com/closerearth',
-  TELEGRAM_URL: 'https://t.me/closerdao',
+  TELEGRAM_URL: 'https://t.me/closerearth',
   FEATURES: {
     events: true,
-    booking: false,
+    booking: true,
     bookingVolunteers: false
   },
   // Set which roles are permitted to do certain actions

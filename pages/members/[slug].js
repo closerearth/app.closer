@@ -57,7 +57,7 @@ const MemberPage = ({ member, loadError }) => {
     try {
       const { data } = await platform.user.patch(currentUser?._id,  { links: links.filter((item) => item.name !== link.name ) })
       setLinks(data.links)
-      setErrors(null);  
+      setErrors(null);
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
@@ -267,9 +267,12 @@ const MemberPage = ({ member, loadError }) => {
                           </Linkify>
                         </p>
                     } */}
-                    <div className="font-semibold text-sm mt-1">
-                      {member.timezone}
-                    </div>
+                    { member.roles && <div className="text-sm mt-1 tags">
+                      { member.roles.map(role => (
+                          <Link as={ `/members?role=${encodeURIComponent(role)}` } href="/members" key={ role }><a className="tag">{role}</a></Link>
+                        ))
+                      }
+                    </div>}
                     { editProfile?
                       <textarea
                         autoFocus
