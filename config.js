@@ -21,7 +21,8 @@ module.exports = {
   LOGO_HEADER: '/images/logo.png',
   LOGO_WIDTH: undefined,
   REGISTRATION_MODE: 'open', // curated, paid, open
-  // LOGO_FOOTER: '',
+  // LOGO_FOOTER: "",
+  FACEBOOK_URL: 'https://instagram.com/closerearth',
   INSTAGRAM_URL: 'https://instagram.com/closerearth',
   DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',
   TWITTER_URL: 'https://twitter.com/closerearth',

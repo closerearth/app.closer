@@ -13,6 +13,7 @@ import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
 import EventsList from '../../components/EventsList';
 
+
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
@@ -420,7 +421,11 @@ const MemberPage = ({ member, loadError }) => {
                 }
               </div>
             </div>
+
+
           </div>
+
+
         </main>
       </div>
     </Layout>
