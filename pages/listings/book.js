@@ -156,13 +156,13 @@ const Book = ({ token }) => {
                   />
                 </fieldset>
                 <fieldset>
-                  <button type="submit" className="btn-primary">Search</button>
+                  <button type="submit" className="btn-primary">{__('generic_search')}</button>
                 </fieldset>
               </div>
             </div>
 
             <div className="md:grid md:grid-cols-3 gap-6 mt-4">
-              { searchInProgress && <div className="loading">Loading...</div> }
+              { searchInProgress && <div className="loading">{__('generic_loading')}</div> }
               { checkedAvailability && (
                 isAvailable ?
                   listings && (
@@ -175,9 +175,9 @@ const Book = ({ token }) => {
                         book={ () => createBooking(listing, booking) }
                       />
                     )):
-                    <div className="no-match">No available listings found for those dates.</div>
+                    <div className="no-match">{__('booking_no_available_listings')}</div>
                   ):
-                  <div className="no-match">These dates are unavailable for booking. ({(datesAvailable && datesAvailable.filter(d => !d.available) || []).length} days from your date range were unavailable)</div>
+                  <div className="no-match">{__('booking_no_available_listings')} ({(datesAvailable && datesAvailable.filter(d => d.available) || []).length}/{datesAvailable && datesAvailable.length})</div>
                 )
               }
             </div>
