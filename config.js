@@ -29,7 +29,7 @@ module.exports = {
   FEATURES: {
     events: true,
     booking: true,
-    bookingVolunteers: false
+    bookingVolunteers: true
   },
   // Set which roles are permitted to do certain actions
   PERMISSIONS: {

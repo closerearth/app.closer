@@ -44,8 +44,11 @@ const Book = ({ token }) => {
   const router = useRouter();
   const { user } = useAuth();
   const { platform } = usePlatform();
-  const [listings, setListings] = useState(fromJS([]));
+  const [listings, setListings] = useState(false);
   const [searchInProgress, setLoading] = useState(false);
+  const [isAvailable, setAvailability] = useState(false);
+  const [datesAvailable, setAvailableDates] = useState([]);
+  const [checkedAvailability, setAvailabilityChecked] = useState(false);
   const [booking, setBooking] = useState({
     start: defaultStart,
     end: defaultEnd,
@@ -59,8 +62,6 @@ const Book = ({ token }) => {
     booking.rate = booking.duration >= 30 ? 'monthlyRate' : booking.duration >= 7 ? 'weeklyRate' : 'dailyRate';
     setBooking(booking);
   }
-  const [isAvailable, setAvailability] = useState(false);
-  const [checkedAvailability, setAvailabilityChecked] = useState(false);
 
   const getBookingDays = (firstDay, duration) => {
     const start = dayjs(firstDay).set('hours', 0).set('seconds', 0).set('minutes', 0);
@@ -99,9 +100,16 @@ const Book = ({ token }) => {
   const loadInventory = async (booking) => {
     setLoading(true);
     try {
-      const { data: { results: availableListings } } = await api.post('/booking/availability', booking);
+      const { data: { results: availableListings, available: available, availability: availability } } = await api.post('/booking/availability', booking);
+      setLoading(false);
       setListings(fromJS(availableListings));
+      setAvailability(fromJS(available));
+      setAvailableDates(fromJS(availability));
+      setAvailabilityChecked(true);
+
+      console.log('availability', availability)
     } catch (err) {
+      setLoading(false);
       alert(err);
     }
   }
@@ -154,15 +162,23 @@ const Book = ({ token }) => {
             </div>
 
             <div className="md:grid md:grid-cols-3 gap-6 mt-4">
-              { listings && listings.count() > 0 &&
-                listings.map(listing => (
-                  <ListingListPreview
-                    key={ listing.get('_id') }
-                    listing={ listing }
-                    rate={ booking.rate }
-                    book={ () => createBooking(listing, booking) }
-                  />
-                ))
+              { searchInProgress && <div className="loading">Loading...</div> }
+              { checkedAvailability && (
+                isAvailable ?
+                  listings && (
+                  listings.count() > 0 ?
+                    listings.map(listing => (
+                      <ListingListPreview
+                        key={ listing.get('_id') }
+                        listing={ listing }
+                        rate={ booking.rate }
+                        book={ () => createBooking(listing, booking) }
+                      />
+                    )):
+                    <div className="no-match">No available listings found for those dates.</div>
+                  ):
+                  <div className="no-match">These dates are unavailable for booking. ({(datesAvailable && datesAvailable.filter(d => !d.available) || []).length} days from your date range were unavailable)</div>
+                )
               }
             </div>
           </form>

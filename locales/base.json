@@ -35,6 +35,7 @@
   "discounts_nominal_discount": "Nominal Discount",
   "edit_model_auth_required": "User not authenticated.",
   "edit_model_permission_denied": "You may not edit this item.",
+  "edit_model_save": "Save",
   "events_slug_welcome_message": "Hi",
   "events_list_no_events": "No upcoming events.",
   "fields_editor_question": "Question",
