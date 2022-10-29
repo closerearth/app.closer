@@ -5,7 +5,7 @@ import Layout from '../../components/Layout';
 import api, { formatSearch } from '../../utils/api';
 import UpcomingEvents from '../../components/UpcomingEvents';
 import EventsList from '../../components/EventsList';
-import { PLATFORM_NAME } from '../../config';
+import { PLATFORM_NAME, PERMISSIONS } from '../../config';
 import { useAuth } from '../../contexts/auth.js';
 import { __ } from '../../utils/helpers';
 
@@ -24,7 +24,7 @@ const Events = () => {
         <div className="page-title flex justify-between">
           <h1 className="mb-4">{ __('events_upcoming') }</h1>
           <div className="action">
-            { user && user.roles.includes('event-creator') &&
+            { user && (!PERMISSIONS || !PERMISSIONS.event.create || user.roles.includes(PERMISSIONS.event.create)) &&
               <Link href="/events/create">
                 <a className="btn-primary">{ __('events_link') }</a>
               </Link>
@@ -36,8 +36,7 @@ const Events = () => {
           where={{
             end: {
               $gt: now
-            },
-            visibility: 'public'
+            }
           }}
         />
       </div>

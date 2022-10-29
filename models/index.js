@@ -33,6 +33,13 @@ export default {
       tab: 'general'
     },
     {
+      name: 'blocksBookingCalendar',
+      label: 'Should this event block the booking calendar?',
+      type: 'switch',
+      defaultValue: false,
+      tab: 'general'
+    },
+    {
       name: 'location',
       label: 'Event URL',
       defaultValue: '',
@@ -114,6 +121,18 @@ export default {
       ]
     },
     {
+      name: 'stripePub',
+      label: 'Custom Stripe Public Key',
+      type: 'text',
+      tab: 'tickets'
+    },
+    {
+      name: 'stripeKey',
+      label: 'Custom Stripe Private Key',
+      type: 'text',
+      tab: 'tickets'
+    },
+    {
       name: 'fields',
       label: 'Custom questions',
       type: 'fields',
@@ -126,20 +145,6 @@ export default {
       type: 'text',
       toggleFeature: true,
       placeholder: 'eventbrite.com/my-ticket',
-      tab: 'advanced'
-    },
-    {
-      name: 'stripePub',
-      label: 'Custom Stripe Public Key',
-      type: 'text',
-      toggleFeature: true,
-      tab: 'advanced'
-    },
-    {
-      name: 'stripeKey',
-      label: 'Custom Stripe Private Key',
-      type: 'text',
-      toggleFeature: true,
       tab: 'advanced'
     },
     {

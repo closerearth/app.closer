@@ -26,11 +26,20 @@ module.exports = {
   INSTAGRAM_URL: 'https://instagram.com/closerearth',
   DISCORD_URL: 'https://discord.gg/A5WFMwPRaK',
   TWITTER_URL: 'https://twitter.com/closerearth',
-  TELEGRAM_URL: 'https://t.me/closerdao',
+  TELEGRAM_URL: 'https://t.me/closerearth',
   FEATURES: {
     events: true,
     booking: true,
-    bookingVolunteers: false
+    bookingVolunteers: true
+  },
+  // Set which roles are permitted to do certain actions
+  PERMISSIONS: {
+    event: {
+      create: 'event-creator'
+    },
+    booking: {
+      create: 'member'
+    }
   },
   SIGNUP_FIELDS: [
     {

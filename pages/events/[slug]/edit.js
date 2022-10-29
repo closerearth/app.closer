@@ -8,6 +8,7 @@ import Layout from '../../../components/Layout';
 import EditModel from '../../../components/EditModel';
 import models from '../../../models';
 
+import config from '../../../config';
 import api from '../../../utils/api';
 import { __ } from '../../../utils/helpers';
 
@@ -30,7 +31,11 @@ const EditEvent = ({ event }) => {
       <div className="main-content">
         <h1 className="flex justify-start items-center">
           <Link as={`/events/${event.slug}`} href="/events/[slug]"><a className="mr-2"><FaArrowLeft /></a></Link>
-          { __('events_slug_edit_link') } <i>{ event.name }</i></h1>
+          { __('events_slug_edit_link') } <i>{ event.name }</i>
+        </h1>
+        { !config.STRIPE_PUB_KEY &&
+          <div className="p2 italic">{__('events_no_stripe_integration')}</div>
+        }
         <EditModel
           id={ event._id }
           endpoint="/event"
