@@ -166,19 +166,19 @@ const Book = ({ token }) => {
               { checkedAvailability && (
                 isAvailable ?
                   listings && (
-                  listings.count() > 0 ?
-                    listings.map(listing => (
-                      <ListingListPreview
-                        key={ listing.get('_id') }
-                        listing={ listing }
-                        rate={ booking.rate }
-                        book={ () => createBooking(listing, booking) }
-                      />
-                    )):
-                    <div className="no-match">{__('booking_no_available_listings')}</div>
+                    listings.count() > 0 ?
+                      listings.map(listing => (
+                        <ListingListPreview
+                          key={ listing.get('_id') }
+                          listing={ listing }
+                          rate={ booking.rate }
+                          book={ () => createBooking(listing, booking) }
+                        />
+                      )):
+                      <div className="no-match">{__('booking_no_available_listings')}</div>
                   ):
                   <div className="no-match">{__('booking_no_available_listings')} ({(datesAvailable && datesAvailable.filter(d => d.available) || []).length}/{datesAvailable && datesAvailable.length})</div>
-                )
+              )
               }
             </div>
           </form>
