@@ -11,6 +11,7 @@ import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
 import EventsList from '../../components/EventsList';
 
+
 import api, { formatSearch, cdn } from '../../utils/api';
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js'
@@ -122,49 +123,43 @@ const MemberPage = ({ member, loadError }) => {
       <div className='main-content'>
         <main className="flex flex-col justify-between">
           { openIntro &&
-        <>
-          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
-            <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
-                { sendError && <p className="validation-error">{ __('members_slug_error') } { sendError }</p> }
-                <form
-                  onSubmit={ (e) => {
-                    e.preventDefault();
-                    sendMessage(introMessage);
-                  }}
-                >
-                  <label>{ __('members_slug_contact') } {member.screenname}</label>
-                  <textarea
-                    placeholder="Type your message"
-                    onChange={ e => {
-                      setMessage(e.target.value);
-                    } }
-                    value={ introMessage }
-                    className='w-full h-32'
-                  />
-                  <button type="submit" className='btn-primary mt-8 mr-2'>{ __('members_slug_send') }</button>{' '}
-                  <a
-                    href="#"
-                    onClick={ (e) => {
-                      e.preventDefault();
-                      setOpenIntro(false);
-                    }}
-                  >
-                    { __('members_slug_cancel') }
-                  </a>
-                </form>
+            <>
+              <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline">
+                <div className="relative w-11/12 my-6 mx-auto max-w-3xl">
+                  <div className="border-0 rounded-lg shadow-lg relative flex flex-col space-x-5 w-full bg-background outline-none focus:outline-none p-10">
+                    { sendError && <p className="validation-error">{ __('members_slug_error') } { sendError }</p> }
+                    <form
+                      onSubmit={ (e) => {
+                        e.preventDefault();
+                        sendMessage(introMessage);
+                      }}
+                    >
+                      <label>{ __('members_slug_contact') } {member.screenname}</label>
+                      <textarea
+                        placeholder="Type your message"
+                        onChange={ e => {
+                          setMessage(e.target.value);
+                        } }
+                        value={ introMessage }
+                        className='w-full h-32'
+                      />
+                      <button type="submit" className='btn-primary mt-8 mr-2'>{ __('members_slug_send') }</button>{' '}
+                      <a
+                        href="#"
+                        onClick={ (e) => {
+                          e.preventDefault();
+                          setOpenIntro(false);
+                        }}
+                      >
+                        { __('members_slug_cancel') }
+                      </a>
+                    </form>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
+              <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+            </>
           }
-
-          <Link  href={'/members'}>
-            <p className="text-lg cursor-pointer my-4">
-              {'< All Profiles'}
-            </p>
-          </Link>
 
           <div className='flex flex-col md:flex-row items-start'>
 
@@ -265,9 +260,12 @@ const MemberPage = ({ member, loadError }) => {
                           </Linkify>
                         </p>
                     } */}
-                    <div className="font-semibold text-sm mt-1">
-                      {member.timezone}
-                    </div>
+                    { member.roles && <div className="text-sm mt-1 tags">
+                      { member.roles.map(role => (
+                        <Link as={ `/members?role=${encodeURIComponent(role)}` } href="/members" key={ role }><a className="tag">{role}</a></Link>
+                      ))
+                      }
+                    </div>}
                     { editProfile?
                       <textarea
                         autoFocus
@@ -421,7 +419,11 @@ const MemberPage = ({ member, loadError }) => {
                 }
               </div>
             </div>
+
+
           </div>
+
+
         </main>
       </div>
     </Layout>
