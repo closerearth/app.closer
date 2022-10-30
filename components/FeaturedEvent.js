@@ -12,7 +12,7 @@ const FeaturedEvent = ({ event }) => {
       <div className="main-content flex flex-row p-2 justify-between">
         <div className="preview flex flex-row">
           { event.get('photo') && <div className="mr-4">
-            <Link href={`/events/${event.get('slug')}`} legacyBehavior>
+            <Link href={`/events/${event.get('slug')}`}>
               <img
                 className="h-16 object-cover"
                 src={ `${cdn}${event.get('photo')}-post-md.jpg`}
@@ -22,7 +22,7 @@ const FeaturedEvent = ({ event }) => {
           </div> }
           <div className="event-description flex flex-col items-start justify-center">
             <h4 className="text-sm md:text-md font-bold">
-              <Link href={`/events/${event.get('slug')}`} legacyBehavior>
+              <Link href={`/events/${event.get('slug')}`}>
                 {event.get('name').slice(0, 50)}
                 {event.get('name').length > 50 && '...'}
               </Link>

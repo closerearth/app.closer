@@ -66,7 +66,7 @@ const MemberList = ({
                 passHref
                 as={`/members/${user.get('slug')}`}
                 href="/members/[slug]"
-                legacyBehavior>
+               >
                 <div className="flex flex-col justify-start card">
                   <div className='flex flex-row items-center justify-between w-full'>
                     <h4 className="font-light text-2xl md:text-2xl">

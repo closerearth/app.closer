@@ -32,7 +32,7 @@ const MemberHome = () => {
             </div>
             <div className="channel-sub-header">
               { user.roles.includes('admin') &&
-                <Link href="/channel/create" as="/channel/create" legacyBehavior>
+                <Link href="/channel/create" as="/channel/create">
                   { __('member_home_add_channel') }
                 </Link>
               }

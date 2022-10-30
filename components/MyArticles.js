@@ -45,7 +45,9 @@ const MyArticles = () => {
       <h1>Hi { user.screenname }</h1>
 
       <div className="user-actions">
-        <Link as="/compose/new" href="/compose/[slug]"><a className="button">{  __('my_articles_new_article') }</a></Link>
+        <Link as="/compose/new" href="/compose/[slug]" className="button">
+          {  __('my_articles_new_article') }
+        </Link>
       </div>
 
       { error && <div className="validation-error">{ error }</div> }
@@ -57,7 +59,7 @@ const MyArticles = () => {
             <div key={ article._id }>
               <h3>
                 <Link as={ `/${article.slug}` } href="/[slug]">
-                  <a>{article.title}</a>
+                  {article.title}
                 </Link> &nbsp;
               </h3>
               <p>{ article.summary }</p>
@@ -72,7 +74,7 @@ const MyArticles = () => {
         { others ?
           others.map(article => (
             <div key={ article._id }>
-              <h3><Link as={ `/${article.slug}` } href="/[slug]"><a>{article.title}</a></Link></h3>
+              <h3><Link as={ `/${article.slug}` } href="/[slug]">{article.title}</Link></h3>
               <p>{ article.summary }</p>
             </div>
           )):
