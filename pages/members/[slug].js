@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Head from 'next/head';
 import Link from 'next/link';
 import Linkify from 'react-linkify';
@@ -7,7 +6,6 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete'
-
 
 import Layout from '../../components/Layout';
 import UploadPhoto from '../../components/UploadPhoto';
@@ -57,7 +55,7 @@ const MemberPage = ({ member, loadError }) => {
     try {
       const { data } = await platform.user.patch(currentUser?._id,  { links: links.filter((item) => item.name !== link.name ) })
       setLinks(data.links)
-      setErrors(null);  
+      setErrors(null);
     } catch (err) {
       const error = err?.response?.data?.error || err.message;
       setErrors(error);
