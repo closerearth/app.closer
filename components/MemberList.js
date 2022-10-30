@@ -61,7 +61,12 @@ const MemberList = ({
         <div className={`grid gap-6 ${list ? 'md:grid-cols-1' : 'md:grid-cols-2'}  justify-start items-start mb-4`}>
           { users && users.count() > 0 ?
             users.map(user => (
-              <Link key={ user.get('_id') } passHref as={`/members/${user.get('slug')}`} href="/members/[slug]">
+              <Link
+                key={ user.get('_id') }
+                passHref
+                as={`/members/${user.get('slug')}`}
+                href="/members/[slug]"
+                legacyBehavior>
                 <div className="flex flex-col justify-start card">
                   <div className='flex flex-row items-center justify-between w-full'>
                     <h4 className="font-light text-2xl md:text-2xl">
@@ -94,7 +99,7 @@ const MemberList = ({
         />
       </div>
     </section>
-  )
+  );
 };
 MemberList.defaultProps = {
   limit: 50

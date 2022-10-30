@@ -24,7 +24,7 @@ const EventPreview = ({ event, list }) => {
         className={`${list?'flex flex-row':'card rounded bg-card overflow-hidden'}`}
       >
         <div className={`${list?'w-24 mt-3 mr-3 h-24':'-mx-4 -mt-4 h-44 md:h-80 '} bg-gray-50 overflow-hidden`}>
-          <Link href={`/events/${event.get('slug')}`}>
+          <Link href={`/events/${event.get('slug')}`} legacyBehavior>
             { event.get('photo')?
               <img
                 className="object-cover h-full w-full"
@@ -43,7 +43,7 @@ const EventPreview = ({ event, list }) => {
         <div className={`p-2 ${list?'w-2/3':'text-left'}`}>
           <div className="event-description">
             <h4 className={`${list?'text-sm':'font-bold text-xl'}`}>
-              <Link href={`/events/${event.get('slug')}`}>{event.get('name')}</Link>
+              <Link href={`/events/${event.get('slug')}`} legacyBehavior>{event.get('name')}</Link>
             </h4>
             <div className='flex flex-row items-center space-x-1 mt-2 text-gray-500'>
               <FaCalendarAlt />

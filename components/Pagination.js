@@ -21,17 +21,17 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
     <div className="pagination flex flex-row items-center justify-between">
       <div className="flex flex-row items-center justify-between">
         { page > 1 &&
-          <Link href={{ query: { [queryParam]: page - 1 } }}>
-            <a
-              className="p-1"
-              onClick={ (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                loadPage(page - 1);
-              } }
-            >
+          <Link
+            href={{ query: { [queryParam]: page - 1 } }}
+            className="p-1"
+            onClick={ (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              loadPage(page - 1);
+            } }>
+            
               prev
-            </a>
+            
           </Link>
         }
       </div>
@@ -43,35 +43,36 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
               return;
             }
             return (
-              <Link href={{ query: { [queryParam]: toPage  } }} key={ `page-${toPage}` }>
-                <a
-                  className={`p-1 mr-2 ${page === toPage?'bg-primary text-white':'bg-gray-100'}`}
-                  onClick={ (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    loadPage(toPage);
-                  } }
-                >
-                  { `${toPage}` }
-                </a>
-              </Link>
-            )
+              (<Link
+                href={{ query: { [queryParam]: toPage  } }}
+                key={ `page-${toPage}` }
+                className={`p-1 mr-2 ${page === toPage?'bg-primary text-white':'bg-gray-100'}`}
+                onClick={ (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  loadPage(toPage);
+                } }>
+
+                { `${toPage}` }
+
+              </Link>)
+            );
           })
         }
       </div>
       <div className="flex flex-row items-center justify-between">
         { page < totalPages &&
-          <Link href={{ query: { [queryParam]: page + 1 } }}>
-            <a
-              className="p-1"
-              onClick={ (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                loadPage(page + 1);
-              } }
-            >
+          <Link
+            href={{ query: { [queryParam]: page + 1 } }}
+            className="p-1"
+            onClick={ (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              loadPage(page + 1);
+            } }>
+            
               next
-            </a>
+            
           </Link>
         }
       </div>

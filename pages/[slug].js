@@ -45,7 +45,7 @@ const Article = ({ article, error }) => {
             <h1>
               {article.title}
               { isAuthenticated && user._id === article.createdBy &&
-                <Link href={`/compose/${article.slug}`}><a className="edit-article">(Edit)</a></Link>
+                <Link href={`/compose/${article.slug}`} className="edit-article">(Edit)</Link>
               }
             </h1>
           </div>
@@ -55,7 +55,7 @@ const Article = ({ article, error }) => {
           <h1>
             {article.title}
             { isAuthenticated && user._id === article.createdBy &&
-              <Link href={`/compose/${article.slug}`}><a className="edit-article">(Edit)</a></Link>
+              <Link href={`/compose/${article.slug}`} className="edit-article">(Edit)</Link>
             }
           </h1>
         </section>
@@ -71,7 +71,7 @@ const Article = ({ article, error }) => {
             <h3>Tags</h3>
             <p className="tags">
               { article.tags && article.tags.length > 0 &&
-                  article.tags.map(tag => <Link key={tag} as={`/search/${tag}`} href="/search/[keyword]"><a className="tag">{tag}</a></Link>)
+                  article.tags.map(tag => <Link key={tag} as={`/search/${tag}`} href="/search/[keyword]" className="tag">{tag}</Link>)
               }
             </p>
           </section>

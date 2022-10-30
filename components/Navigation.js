@@ -84,78 +84,75 @@ const Navigation = () => {
       <nav className="h-20 fixed z-50 top-0 left-0 right-0 shadow-sm md:relative">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
-            <Link href="/">
-              <a className="block">
-                { LOGO_HEADER ? <img
-                  src={ LOGO_HEADER }
-                  alt={ PLATFORM_NAME }
-                  width={ LOGO_WIDTH }
-                /> : PLATFORM_NAME }
-              </a>
+            <Link href="/" className="block">
+
+              { LOGO_HEADER ? <img
+                src={ LOGO_HEADER }
+                alt={ PLATFORM_NAME }
+                width={ LOGO_WIDTH }
+              /> : PLATFORM_NAME }
+
             </Link>
           </h3>
 
           <div className="menu-right no-print flex text-md flex-row justify-end items-center">
             {
               links.map(link => (
-                <Link
+                (<Link
                   key={ link.url }
                   href={ link.url }
-                >
-                  <a className="mr-3 text-sm hidden md:flex" onClick={() => toggleNav(false)}>
-                    { link.label }
-                  </a>
-                </Link>
+                  className="mr-3 text-sm hidden md:flex"
+                  onClick={() => toggleNav(false)}>
+
+                  { link.label }
+
+                </Link>)
               ))
             }
             { isAuthenticated ? (
-              <Link href="/">
-                <a
-                  className="mr-3 text-sm hidden md:flex"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleNav(false);
-                    logout();
-                    window.location.href = '/';
-                  }}
-                  title={user.screenname}
-                >
-                  { __('navigation_sign_out') }
-                </a>
-              </Link>
+              (<Link
+                href="/"
+                className="mr-3 text-sm hidden md:flex"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNav(false);
+                  logout();
+                  window.location.href = '/';
+                }}
+                title={user.screenname}>
+
+                { __('navigation_sign_out') }
+
+              </Link>)
             ) : (
-              <Link href="/login">
-                <a
-                  className="mr-3 text-sm hidden md:flex"
-                  onClick={() => toggleNav(false)}
-                >
-                  { __('navigation_sign_in') }
-                </a>
-              </Link>
+              (<Link
+                href="/login"
+                className="mr-3 text-sm hidden md:flex"
+                onClick={() => toggleNav(false)}>
+
+                { __('navigation_sign_in') }
+
+              </Link>)
             )}
-            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
-              <a
-                className="btn-primary text-sm mr-3 hidden md:flex"
-              >
-                {
-                  REGISTRATION_MODE === 'paid' ?
-                    'Get your membership' :
-                    REGISTRATION_MODE === 'curated' ?
-                      'Apply':
-                      'Signup'
-                }
-              </a>
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup" className="btn-primary text-sm mr-3 hidden md:flex">
+
+              {
+                REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                    'Apply':
+                    'Signup'
+              }
+
             </Link> }
-            { isAuthenticated && FEATURES.booking && <Link href="/listings/book">
-              <a
-                className="btn mr-3 hidden md:flex"
-              >
-                {
-                  user.roles.includes('member') ?
-                    __('navigation_book') :
-                    __('navigation_book_trial')
-                }
-              </a>
+            { isAuthenticated && FEATURES.booking && <Link href="/listings/book" className="btn mr-3 hidden md:flex">
+
+              {
+                user.roles.includes('member') ?
+                  __('navigation_book') :
+                  __('navigation_book_trial')
+              }
+
             </Link> }
             {TELEGRAM_URL && !isAuthenticated && <a
               href={TELEGRAM_URL}
@@ -172,13 +169,14 @@ const Navigation = () => {
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}
-                >
+                  title="View profile"
+                  className="hidden md:flex md:flex-row items-center"
+                  onClick={() => toggleNav(false)}>
 
-                  <a title="View profile" className="hidden md:flex md:flex-row items-center" onClick={() => toggleNav(false)}>
-                    <span className='h-8 border-l mr-3' />
-                    <ProfilePhoto user={user} />
-                    <p className='ml-3'>{user.screenname}</p>
-                  </a>
+                  <span className='h-8 border-l mr-3' />
+                  <ProfilePhoto user={user} />
+                  <p className='ml-3'>{user.screenname}</p>
+
                 </Link>
               </>
             }
@@ -203,74 +201,74 @@ const Navigation = () => {
               <Link
                 href="/members/[slug]"
                 as={ `/members/${ user.slug }` }
-              >
+                title="View profile"
+                className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row"
+                onClick={() => toggleNav(false)}>
 
-                <a title="View profile" className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row" onClick={() => toggleNav(false)}>
-                  <ProfilePhoto user={ user } />
-                  <p className='ml-3'>{user.screenname}</p>
-                </a>
+                <ProfilePhoto user={ user } />
+                <p className='ml-3'>{user.screenname}</p>
+
               </Link>
             }
             {
               links.map(link => (
-                <Link
+                (<Link
                   key={ link.url }
                   href={ link.url }
-                >
-                  <a className="p-4 block text-xl w-full border-b" onClick={() => toggleNav(false)}>
-                    { link.label }
-                  </a>
-                </Link>
+                  className="p-4 block text-xl w-full border-b"
+                  onClick={() => toggleNav(false)}>
+
+                  { link.label }
+
+                </Link>)
               ))
             }
-            { isAuthenticated && FEATURES.booking && <Link href="/listings/book">
-              <a
-                className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row"
-              >
-                {
-                  user.roles.includes('member') ?
-                    __('navigation_book') :
-                    __('navigation_book_trial')
-                }
-              </a>
+            { isAuthenticated && FEATURES.booking && <Link
+              href="/listings/book"
+              className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row">
+
+              {
+                user.roles.includes('member') ?
+                  __('navigation_book') :
+                  __('navigation_book_trial')
+              }
+
             </Link> }
             { isAuthenticated ? (
-              <Link href="/">
-                <a
-                  className="p-4 block text-xl w-full"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleNav(false);
-                    logout();
-                    window.location.href = '/';
-                  }}
-                  title={user.screenname}
-                >
-                  { __('navigation_sign_out') }
-                </a>
-              </Link>
+              (<Link
+                href="/"
+                className="p-4 block text-xl w-full"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleNav(false);
+                  logout();
+                  window.location.href = '/';
+                }}
+                title={user.screenname}>
+
+                { __('navigation_sign_out') }
+
+              </Link>)
             ) : (
-              <Link href="/login">
-                <a
-                  className="p-4 border-b block text-xl w-full"
-                  onClick={() => toggleNav(false)}
-                >
-                  { __('navigation_sign_in') }
-                </a>
-              </Link>
+              (<Link
+                href="/login"
+                className="p-4 border-b block text-xl w-full"
+                onClick={() => toggleNav(false)}>
+
+                { __('navigation_sign_in') }
+
+              </Link>)
             )}
-            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup">
-              <a
-                className="p-4 block text-xl"
-              >
-                {
-                  REGISTRATION_MODE === 'paid' ?
-                    'Get your membership' :
-                    REGISTRATION_MODE === 'curated' ?
-                      'Apply':
-                      'Signup'
-                }
-              </a>
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup" className="p-4 block text-xl">
+
+              {
+                REGISTRATION_MODE === 'paid' ?
+                  'Get your membership' :
+                  REGISTRATION_MODE === 'curated' ?
+                    'Apply':
+                    'Signup'
+              }
+
             </Link> }
           </div>
         </div>

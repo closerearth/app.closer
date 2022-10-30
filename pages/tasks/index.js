@@ -24,7 +24,7 @@ const Settings = ({ token }) => {
             { __('tasks_title') }
           </h1>
           <div className="user-actions">
-            <Link as="/tasks/create" href="/tasks/create"><a className="button">{ __('tasks_link_create') }</a></Link>
+            <Link as="/tasks/create" href="/tasks/create" className="button">{ __('tasks_link_create') }</Link>
           </div>
 
         </div>

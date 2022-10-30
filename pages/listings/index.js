@@ -45,7 +45,7 @@ const Listings = () => {
         <div className="page-header mb-3 flex justify-between">
           <h1>{ __('listings_title') }</h1>
           <div className="user-actions">
-            <Link as="/listings/create" href="/listings/create"><a className="btn-primary">{ __('listings_create') }</a></Link>
+            <Link as="/listings/create" href="/listings/create" className="btn-primary">{ __('listings_create') }</Link>
           </div>
         </div>
         <div className="grid grid-cols-3 gap-6">

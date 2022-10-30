@@ -37,7 +37,7 @@ const ChannelPage = ({ channel }) => {
                 <div className="page-actions">
                   {user && (user.roles.includes('admin') || channel.createdBy === user._id) &&
                     <Link as={`/edit-channel/${channel.slug}`} href="/edit-channel/[slug]">
-                      <a>edit</a>
+                      edit
                     </Link>
                   }
                 </div>

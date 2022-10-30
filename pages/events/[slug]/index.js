@@ -115,8 +115,11 @@ const Event = ({ event, error }) => {
             <input onChange={ e => setPassword(e.target.value) } placeholder="password" type="password" />
             {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin')) &&
               <div className="admin-actions mt-3 border-t pt-3">
-                <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
-                  <a className="btn-secondary text-xs mr-2">Edit event</a>
+                <Link
+                  as={`/events/${event.slug}/edit`}
+                  href="/events/[slug]/edit"
+                  className="btn-secondary text-xs mr-2">
+                  Edit event
                 </Link>
               </div>
             }
@@ -151,18 +154,28 @@ const Event = ({ event, error }) => {
 
                 <div className="mt-4 event-actions flex items-center">
                   { event.ticket && start && start.isAfter(dayjs())?
-                    <Link href={ prependHttp(event.ticket) }>
-                      <a className="btn-primary mr-2" target="_blank" rel="noreferrer nofollow">Buy ticket</a>
+                    <Link
+                      href={ prependHttp(event.ticket) }
+                      className="btn-primary mr-2"
+                      target="_blank"
+                      rel="noreferrer nofollow">
+                      Buy ticket
                     </Link>:
                     event.paid ?
                       <>
                         { myTickets && myTickets.count() > 0 ?
-                          <Link as={`/tickets/${myTickets.first().get('_id')}`} href="/tickets/[slug]">
-                            <a className="btn-primary mr-2">See ticket</a>
+                          <Link
+                            as={`/tickets/${myTickets.first().get('_id')}`}
+                            href="/tickets/[slug]"
+                            className="btn-primary mr-2">
+                            See ticket
                           </Link>:
                           start && start.isAfter(dayjs()) && (event.stripePub || config.STRIPE_PUB_KEY) &&
-                          <Link as={`/events/${event.slug}/checkout`} href="/events/[slug]/checkout">
-                            <a className="btn-primary mr-2">Buy ticket</a>
+                          <Link
+                            as={`/events/${event.slug}/checkout`}
+                            href="/events/[slug]/checkout"
+                            className="btn-primary mr-2">
+                            Buy ticket
                           </Link>
                         }
                       </>:
@@ -173,12 +186,18 @@ const Event = ({ event, error }) => {
                             start && start.isBefore(dayjs()) && end && end.isAfter(dayjs()) ?
                               <span className="p3 mr-2" href={ event.location }>ONGOING</span>:
                               !isAuthenticated && event.recording ?
-                                <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                                  <a className="btn-primary mr-2">Signup to watch recording</a>
+                                <Link
+                                  as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`}
+                                  href="/signup"
+                                  className="btn-primary mr-2">
+                                  Signup to watch recording
                                 </Link>:
                                 !isAuthenticated && start && start.isAfter(dayjs()) ?
-                                  <Link as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`} href="/signup">
-                                    <a className="btn-primary mr-2">Signup to RSVP</a>
+                                  <Link
+                                    as={`/signup?back=${encodeURIComponent(`/events/${event.slug}`)}`}
+                                    href="/signup"
+                                    className="btn-primary mr-2">
+                                    Signup to RSVP
                                   </Link>:
                                   end && end.isBefore(dayjs()) && user && attendees?.includes(user._id) ?
                                     <a
@@ -225,13 +244,19 @@ const Event = ({ event, error }) => {
                 {isAuthenticated && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
                   <div className="admin-actions mt-3 border-t pt-3">
                     { (user._id === event.createdBy || user.roles.includes('admin')) &&
-                      <Link as={`/events/${event.slug}/edit`} href="/events/[slug]/edit">
-                        <a className="btn-secondary text-xs mr-2">Edit event</a>
+                      <Link
+                        as={`/events/${event.slug}/edit`}
+                        href="/events/[slug]/edit"
+                        className="btn-secondary text-xs mr-2">
+                        Edit event
                       </Link>
                     }
                     { event.paid && (user._id === event.createdBy || user.roles.includes('admin') || user.roles.includes('space-host')) &&
-                      <Link as={`/events/${event.slug}/tickets`} href="/events/[slug]/tickets">
-                        <a className="btn-secondary text-xs mr-2">View tickets</a>
+                      <Link
+                        as={`/events/${event.slug}/tickets`}
+                        href="/events/[slug]/tickets"
+                        className="btn-secondary text-xs mr-2">
+                        View tickets
                       </Link>
                     }
                   </div>

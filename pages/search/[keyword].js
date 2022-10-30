@@ -24,15 +24,15 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
               { articles ?
                 articles.map(article => (
                   <div className="article-preview" key={ article._id }>
-                    <Link as={ `/${article.slug}` } href="/[slug]">
-                      <a role="button">
-                        <span className="title">
-                          {article.title}
-                        </span>
-                        { article.summary &&
-                        <span className="summary">{ article.summary }</span>
-                        }
-                      </a>
+                    <Link as={ `/${article.slug}` } href="/[slug]" role="button">
+
+                      <span className="title">
+                        {article.title}
+                      </span>
+                      { article.summary &&
+                      <span className="summary">{ article.summary }</span>
+                      }
+
                     </Link>
                   </div>
                 )):
@@ -46,12 +46,16 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
           <p className="tags">
             { tags ?
               tags.map(tag => (
-                <Link as={ `/search/${encodeURIComponent(tag)}` } href="/search/[keyword]" key={ tag }><a className="tag">{tag}</a></Link>
+                <Link
+                  as={ `/search/${encodeURIComponent(tag)}` }
+                  href="/search/[keyword]"
+                  key={ tag }
+                  className="tag">{tag}</Link>
               )):
               <span className="Loading">{ __('generic_loading') }</span>
             }
           </p>
-          <h3><Link href="/search"><a>{ __('search_keyword_articles') }</a></Link></h3>
+          <h3><Link href="/search">{ __('search_keyword_articles') }</Link></h3>
         </section>
       </div>
     </div>

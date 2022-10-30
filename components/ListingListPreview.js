@@ -18,7 +18,7 @@ const ListingListPreview = ({ listing, rate, book }) => {
   return (
     <div className="listing-list-preview card">
       <div className="card-header">
-        <Link href={`/listings/${listing.get('slug')}`}><b>{ listing.get('name') }</b></Link>
+        <Link href={`/listings/${listing.get('slug')}`} legacyBehavior><b>{ listing.get('name') }</b></Link>
       </div>
       <div className="card-body">
         { listing.get('photos') && listing.get('photos').count() > 0 && <Slider
@@ -40,7 +40,10 @@ const ListingListPreview = ({ listing, rate, book }) => {
       </div>
       <div className="card-footer">
         { (user.roles.includes('admin') || user.roles.includes('space-host')) &&
-          <Link href={`/listings/${listing.get('slug')}/edit`} className="btn mr-2">{ __('listing_preview_edit') }</Link>
+          <Link
+            href={`/listings/${listing.get('slug')}/edit`}
+            className="btn mr-2"
+            legacyBehavior>{ __('listing_preview_edit') }</Link>
         }
         { book && <a className="btn" href="#" onClick={ (e) => { e.preventDefault();book();} }>
           { __('listing_preview_book') }</a>

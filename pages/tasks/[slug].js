@@ -89,7 +89,7 @@ const Task = ({ task, error }) => {
                     <div className="action-row">
                       { user._id === task.createdBy ?
                         <div>
-                          <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]"><a>{ __('tasks_slug_edit_task') }</a></Link>
+                          <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]">{ __('tasks_slug_edit_task') }</Link>
                           <select
                             value={ status }
                             onChange={e => updateStatus(task._id, e.target.value)}
@@ -135,11 +135,15 @@ const Task = ({ task, error }) => {
                 { task.tags && task.tags.length > 0 &&
                     <div className="tags">
                       { task.tags.map(tag => (
-                        <Link key={ tag } as={`/search/${tag}`} href="/search/[keyword]">
-                          <a className="tag">
-                            <span className="ellipsis">{ tag }</span>
-                          </a>
-                        </Link>
+                        (<Link
+                          key={ tag }
+                          as={`/search/${tag}`}
+                          href="/search/[keyword]"
+                          className="tag">
+
+                          <span className="ellipsis">{ tag }</span>
+
+                        </Link>)
                       ))}
                     </div>
                 }
@@ -150,11 +154,15 @@ const Task = ({ task, error }) => {
                       { applicants.length > 0 ?
                         applicants.map(uid => (
                           usersById[uid] &&
-                            <Link key={ uid } as={`/members/${usersById[uid].slug}`} href="/members/[slug]">
-                              <a className="from user-preview">
-                                <ProfilePhoto size="sm" user={usersById[uid]} />
-                                <span className="name">{ usersById[uid].screenname }</span>
-                              </a>
+                            <Link
+                              key={ uid }
+                              as={`/members/${usersById[uid].slug}`}
+                              href="/members/[slug]"
+                              className="from user-preview">
+
+                              <ProfilePhoto size="sm" user={usersById[uid]} />
+                              <span className="name">{ usersById[uid].screenname }</span>
+
                             </Link>
                         )):
                         'No applicants yet'

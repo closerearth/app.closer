@@ -262,7 +262,11 @@ const MemberPage = ({ member, loadError }) => {
                     } */}
                     { member.roles && <div className="text-sm mt-1 tags">
                       { member.roles.map(role => (
-                        <Link as={ `/members?role=${encodeURIComponent(role)}` } href="/members" key={ role }><a className="tag">{role}</a></Link>
+                        <Link
+                          as={ `/members?role=${encodeURIComponent(role)}` }
+                          href="/members"
+                          key={ role }
+                          className="tag">{role}</Link>
                       ))
                       }
                     </div>}

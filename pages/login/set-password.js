@@ -37,8 +37,8 @@ const SetPasswordScreen = () => {
               <div className="card">
                 <p>{ __('login_set_password_success') }</p>
                 <div className="action-row">
-                  <Link href="/login">
-                    <a className="button">{ __('login_set_password_link') }</a>
+                  <Link href="/login" className="button">
+                    { __('login_set_password_link') }
                   </Link>
                 </div>
               </div>:

@@ -12,7 +12,7 @@ const FeaturedEvent = ({ event }) => {
       <div className="main-content flex flex-row p-2 justify-between">
         <div className="preview flex flex-row">
           { event.get('photo') && <div className="mr-4">
-            <Link href={`/events/${event.get('slug')}`}>
+            <Link href={`/events/${event.get('slug')}`} legacyBehavior>
               <img
                 className="h-16 object-cover"
                 src={ `${cdn}${event.get('photo')}-post-md.jpg`}
@@ -22,7 +22,7 @@ const FeaturedEvent = ({ event }) => {
           </div> }
           <div className="event-description flex flex-col items-start justify-center">
             <h4 className="text-sm md:text-md font-bold">
-              <Link href={`/events/${event.get('slug')}`}>
+              <Link href={`/events/${event.get('slug')}`} legacyBehavior>
                 {event.get('name').slice(0, 50)}
                 {event.get('name').length > 50 && '...'}
               </Link>
@@ -34,10 +34,10 @@ const FeaturedEvent = ({ event }) => {
           </div>
         </div>
         <div className="flex items-center justify-end grow w-48">
-          <Link href={`/events/${event.get('slug')}`}>
-            <a className="btn-primary text-sm">
-              {event.get('paid') ? 'Get your ticket' : 'See event' }
-            </a>
+          <Link href={`/events/${event.get('slug')}`} className="btn-primary text-sm">
+
+            {event.get('paid') ? 'Get your ticket' : 'See event' }
+
           </Link>
         </div>
       </div>

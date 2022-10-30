@@ -47,8 +47,8 @@ const MemberNav = ({ token, user, children, toggleNav }) => {
     </li>,
     <li className="left-nav-separator" key="sep-2" />,
     // user && user.roles.includes('member') && <li key="articles">
-    //   <ActiveLink href="/articles" as="/articles">
-    //     <a onClick={() => toggleNav(false)}>Articles</a>
+    //   <ActiveLink href="/articles" as="/articles" onClick={() => toggleNav(false)}>
+    //     Articles
     //   </ActiveLink>
     // </li>,
     user && user.roles.includes('member') && <li key="events">
@@ -72,18 +72,18 @@ const MemberNav = ({ token, user, children, toggleNav }) => {
       </ActiveLink>
     </li>,
     user && user.roles.includes('beta') && <li key="Nests">
-      <ActiveLink href="/nests" as="/nests">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_nests') }</a>
+      <ActiveLink href="/nests" as="/nests" onClick={() => toggleNav(false)}>
+        { __('member_nav_nests') }
       </ActiveLink>
     </li>,
     user && <li key="settings">
-      <ActiveLink href="/settings">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_settings') }</a>
+      <ActiveLink href="/settings" onClick={() => toggleNav(false)}>
+        { __('member_nav_settings') }
       </ActiveLink>
     </li>,
     user && <li key="profile">
-      <ActiveLink as={`/members/${user.slug}`} href="/members/[slug]">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_profile') }</a>
+      <ActiveLink as={`/members/${user.slug}`} href="/members/[slug]" onClick={() => toggleNav(false)}>
+        { __('member_nav_profile') }
       </ActiveLink>
     </li>
   ])

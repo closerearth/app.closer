@@ -138,11 +138,15 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
           <div className="form-row">
             <div className="tags">
               { newPost.tags && newPost.tags.length > 0 && newPost.tags.map(tag => (
-                <Link key={ tag } as={`/search/${tag}`} href="/search/[keyword]">
-                  <a className="tag">
-                    <span className="ellipsis">{ tag }</span>
-                  </a>
-                </Link>
+                (<Link
+                  key={ tag }
+                  as={`/search/${tag}`}
+                  href="/search/[keyword]"
+                  className="tag">
+
+                  <span className="ellipsis">{ tag }</span>
+
+                </Link>)
               ))}
               {/* <input
                 type="text"

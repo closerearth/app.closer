@@ -39,25 +39,29 @@ const TaskList = ({ channel, limit }) => {
         <div className="tasks-list">
           { tasks && tasks.length > 0?
             tasks.map(task => (
-              <Link key={ task._id } as={`/tasks/${task.slug}`} href="/tasks/[slug]">
-                <a className="task-preview card">
-                  <span className="name">{ task.title }</span>
-                  <br />
-                  { task.tags && task.tags.length > 0 &&
-                      <div className="tags">
-                        { task.tags.map(tag => <span className="tag" key={tag}>{tag}</span>)}
-                      </div>
-                  }
-                  <TimeSince time={ task.created } />
-                </a>
-              </Link>
+              (<Link
+                key={ task._id }
+                as={`/tasks/${task.slug}`}
+                href="/tasks/[slug]"
+                className="task-preview card">
+
+                <span className="name">{ task.title }</span>
+                <br />
+                { task.tags && task.tags.length > 0 &&
+                    <div className="tags">
+                      { task.tags.map(tag => <span className="tag" key={tag}>{tag}</span>)}
+                    </div>
+                }
+                <TimeSince time={ task.created } />
+
+              </Link>)
             )):
             <p>{ __('task_list_empty_message') }</p>
           }
         </div>
       </div>
     </section>
-  )
+  );
 };
 TaskList.defaultProps = {
   limit: 12

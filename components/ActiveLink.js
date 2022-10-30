@@ -10,7 +10,7 @@ const ActiveLink = ({ as, href, children }) => {
     className = `${className} active`;
   }
 
-  return <Link href={href} as={as}>{React.cloneElement(children, { className })}</Link>
+  return <Link href={href} as={as} legacyBehavior>{React.cloneElement(children, { className })}</Link>;
 }
 
 export default ActiveLink;

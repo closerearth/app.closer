@@ -91,17 +91,14 @@ const ConnectInjected = () => {
     <div>
       {active && typeof account === 'string' ? ( 
         (chainId == BLOCKCHAIN_NETWORK_ID) ? (
-          <Link
-            href="/settings/blockchainwallet"
-          >
-        
-            <a className='hidden md:flex mr-3'>
-              <span className='h-12 border-l mr-3' />
-              <button className='btn-primary'>
-                {formatBigNumberForDisplay(balanceDAOToken.add(balanceStaked), BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name}
-              </button>
-            </a>
-          </Link>
+          (<Link href="/settings/blockchainwallet" className='hidden md:flex mr-3'>
+
+            <span className='h-12 border-l mr-3' />
+            <button className='btn-primary'>
+              {formatBigNumberForDisplay(balanceDAOToken.add(balanceStaked), BLOCKCHAIN_DAO_TOKEN.decimals)+' '+BLOCKCHAIN_DAO_TOKEN.name}
+            </button>
+
+          </Link>)
         ) : (
           <a className='hidden md:flex mr-3'>
             <span className='h-12 border-l mr-3' />
@@ -123,7 +120,7 @@ const ConnectInjected = () => {
 
       )} 
     </div>
-  )
+  );
 }
 
 export default ConnectInjected

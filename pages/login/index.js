@@ -69,7 +69,7 @@ const Login = () => {
                 </button>
                 <hr className="my-4"/>
                 <p>
-                  <Link href="/login/forgot-password" as="/login/forgot-password"><a>{ __('login_link_forgot_password') }</a></Link>
+                  <Link href="/login/forgot-password" as="/login/forgot-password">{ __('login_link_forgot_password') }</Link>
                 </p>
               </div>
             </div>
