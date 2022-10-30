@@ -81,7 +81,7 @@ const Dashboard = ({ token }) => {
         { metricsToPlot.map(metric => {
           const data = platform[metric].findGraph(metricFilter);
           if (!data) {
-            return <h4>{ metric } not found.</h4>
+            return <h4 key={ metric }>{ metric } not found.</h4>
           }
           return (
             <div key={ metric }>

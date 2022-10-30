@@ -26,7 +26,7 @@ const Index = () => {
             <h1 className="page-title">{ PLATFORM_NAME }</h1>
             <p className="font-lg">{ DEFAULT_TITLE }</p>
             { REGISTRATION_MODE !== 'closed' && <p className="mt-4">
-              <Link href="/signup"><a className="btn-primary">Create your account</a></Link>
+              <Link href="/signup" className="btn-primary">Create your account</Link>
             </p> }
           </div>
         </section>

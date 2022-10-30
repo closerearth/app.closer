@@ -30,15 +30,15 @@ const MemberNav = ({ token, user, children, toggleNav }) => {
   return ([
     <li className="channel-link" key="community">
       <h3>
-        <ActiveLink as="/community" href="/community">
-          <a onClick={() => toggleNav(false)}>{ __('member_nav_community') }</a>
+        <ActiveLink as="/community" href="/community" onClick={() => toggleNav(false)}>
+          { __('member_nav_community') }
         </ActiveLink>
       </h3>
     </li>,
     channels && (channels.map(channel => (
       <li className="channel-link" key={ channel._id }>
-        <ActiveLink as={`/channel/${channel.slug}`} href="/channel/[channel]">
-          <a onClick={() => toggleNav(false)}>{channel.name}</a>
+        <ActiveLink as={`/channel/${channel.slug}`} href="/channel/[channel]" onClick={() => toggleNav(false)}>
+          {channel.name}
         </ActiveLink>
       </li>
     ))),
@@ -52,23 +52,23 @@ const MemberNav = ({ token, user, children, toggleNav }) => {
     //   </ActiveLink>
     // </li>,
     user && user.roles.includes('member') && <li key="events">
-      <ActiveLink href="/events" as="/events">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_events') }</a>
+      <ActiveLink href="/events" as="/events" onClick={() => toggleNav(false)}>
+        { __('member_nav_events') }
       </ActiveLink>
     </li>,
     user && user.roles.includes('member') && <li key="tasks">
-      <ActiveLink href="/tasks" as="/tasks">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_tasks') }</a>
+      <ActiveLink href="/tasks" as="/tasks" onClick={() => toggleNav(false)}>
+        { __('member_nav_tasks') }
       </ActiveLink>
     </li>,
     user && <li key="book">
-      <ActiveLink href="/book" as="/book">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_book') }</a>
+      <ActiveLink href="/book" as="/book" onClick={() => toggleNav(false)}>
+        { __('member_nav_book') }
       </ActiveLink>
     </li>,
     user && (user.roles.includes('community-curator') || user.roles.includes('admin')) && <li key="applications">
-      <ActiveLink href="/applications" as="/applications">
-        <a onClick={() => toggleNav(false)}>{ __('member_nav_applicatins') }</a>
+      <ActiveLink href="/applications" as="/applications" onClick={() => toggleNav(false)}>
+        { __('member_nav_applicatins') }
       </ActiveLink>
     </li>,
     user && user.roles.includes('beta') && <li key="Nests">
