@@ -29,7 +29,7 @@ const TicketListPreview = ({ ticket }) => {
         }
       </div>
       <div className="card-footer">
-        <Link href={`/tickets/${ticket.get('_id')}`} className="btn">{ __('ticket_list_view_ticket') }</Link>
+        <Link href={`/tickets/${ticket.get('_id')}`} className="btn" legacyBehavior>{ __('ticket_list_view_ticket') }</Link>
       </div>
     </div>
   );

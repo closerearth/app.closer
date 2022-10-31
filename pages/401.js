@@ -18,7 +18,10 @@ const PageNotAllowed = ({ error }) => {
       <main  className="main-content about intro page-not-found max-w-prose">
         <h1>{ __('401_title') }</h1>
         { error && <h2 className="font-light italic my-4">{ error }</h2> }
-        { !isAuthenticated && <p><Link href={`/login?back=${encodeURIComponent(router.asPath)}`} className="btn">{ __('401_signin') }</Link>.</p> }
+        { !isAuthenticated && <p><Link
+          href={`/login?back=${encodeURIComponent(router.asPath)}`}
+          className="btn"
+          legacyBehavior>{ __('401_signin') }</Link>.</p> }
       </main>
     </Layout>
   );

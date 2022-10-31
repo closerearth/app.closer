@@ -190,7 +190,7 @@ const Booking = ({ booking, error }) => {
         { alreadyBookedDates ? 
           <>
           You already have a booking at these Dates.<br/>
-            <Link href="/listings/book">
+            <Link href="/listings/book" legacyBehavior>
               <button className="btn-primary px-4">Go back to booking</button>
             </Link>
           </> :

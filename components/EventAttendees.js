@@ -20,10 +20,10 @@ const EventAttendees = ({ user, event, start, attendees, platform }) => {
               key={attendee.get('_id')}
               as={`/members/${attendee.get('slug')}`}
               href="/members/[slug]"
-              className="from user-preview z-10">
-
+              className="from user-preview z-10"
+              legacyBehavior
+            >
               <ProfilePhoto size="sm" user={attendee.toJS()} />
-
             </Link>
           );
         })}
@@ -40,7 +40,8 @@ const EventAttendees = ({ user, event, start, attendees, platform }) => {
               key={uid}
               as={`/members/${attendee.get('slug')}`}
               href="/members/[slug]"
-              className="from user-preview">
+              className="from user-preview"
+              legacyBehavior>
 
               <ProfilePhoto size="sm" user={attendee.toJS()} />
               <span className="name">{attendee.get('screenname')}</span>
@@ -52,5 +53,5 @@ const EventAttendees = ({ user, event, start, attendees, platform }) => {
     </section>
   );
 }
-  
+
 export default EventAttendees;

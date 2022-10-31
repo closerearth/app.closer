@@ -12,7 +12,7 @@ const PageNotFound = ({ error }) => (
     <main  className="main-content about intro page-not-found max-w-prose">
       <h1>{ __('404_title') }</h1>
       { error && <h2 className="font-light italic my-4"> { error }</h2> }
-      <p><Link href="/" className="btn">{ __('404_go_back') }</Link></p>
+      <p><Link href="/" className="btn" legacyBehavior>{ __('404_go_back') }</Link></p>
     </main>
   </Layout>
 );

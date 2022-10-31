@@ -91,7 +91,10 @@ const ConnectInjected = () => {
     <div>
       {active && typeof account === 'string' ? ( 
         (chainId == BLOCKCHAIN_NETWORK_ID) ? (
-          (<Link href="/settings/blockchainwallet" className='hidden md:flex mr-3'>
+          (<Link
+          href="/settings/blockchainwallet"
+          className='hidden md:flex mr-3'
+          legacyBehavior>
 
             <span className='h-12 border-l mr-3' />
             <button className='btn-primary'>

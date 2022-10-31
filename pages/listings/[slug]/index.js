@@ -75,7 +75,8 @@ const Listing = ({ listing, error }) => {
             <section className="my-4">
               <Link
                 href={`/listings/book?listing=${listing.slug}`}
-                className="text-lg btn-primary">
+                className="text-lg btn-primary"
+                legacyBehavior>
                 { __('listings_slug_link') }
               </Link>
             </section>

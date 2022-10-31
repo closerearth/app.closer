@@ -139,10 +139,11 @@ const CreatePost = ({ addPost, channel, parentType, parentId, isReply, visibilit
             <div className="tags">
               { newPost.tags && newPost.tags.length > 0 && newPost.tags.map(tag => (
                 (<Link
-                  key={ tag }
-                  as={`/search/${tag}`}
-                  href="/search/[keyword]"
-                  className="tag">
+                key={ tag }
+                as={`/search/${tag}`}
+                href="/search/[keyword]"
+                className="tag"
+                legacyBehavior>
 
                   <span className="ellipsis">{ tag }</span>
 

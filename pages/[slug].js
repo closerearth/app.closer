@@ -71,7 +71,12 @@ const Article = ({ article, error }) => {
             <h3>Tags</h3>
             <p className="tags">
               { article.tags && article.tags.length > 0 &&
-                  article.tags.map(tag => <Link key={tag} as={`/search/${tag}`} href="/search/[keyword]" className="tag">{tag}</Link>)
+                  article.tags.map(tag => <Link
+                    key={tag}
+                    as={`/search/${tag}`}
+                    href="/search/[keyword]"
+                    className="tag"
+                    legacyBehavior>{tag}</Link>)
               }
             </p>
           </section>

@@ -84,7 +84,7 @@ const Navigation = () => {
       <nav className="h-20 fixed z-50 top-0 left-0 right-0 shadow-sm md:relative">
         <div className="main-content flex flex-row-reverse md:flex-row justify-between items-center">
           <h3 className="logo">
-            <Link href="/" className="block">
+            <Link href="/" className="block" legacyBehavior>
 
               { LOGO_HEADER ? <img
                 src={ LOGO_HEADER }
@@ -99,10 +99,11 @@ const Navigation = () => {
             {
               links.map(link => (
                 (<Link
-                  key={ link.url }
-                  href={ link.url }
-                  className="mr-3 text-sm hidden md:flex"
-                  onClick={() => toggleNav(false)}>
+                key={ link.url }
+                href={ link.url }
+                className="mr-3 text-sm hidden md:flex"
+                onClick={() => toggleNav(false)}
+                legacyBehavior>
 
                   { link.label }
 
@@ -111,30 +112,35 @@ const Navigation = () => {
             }
             { isAuthenticated ? (
               (<Link
-                href="/"
-                className="mr-3 text-sm hidden md:flex"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleNav(false);
-                  logout();
-                  window.location.href = '/';
-                }}
-                title={user.screenname}>
+              href="/"
+              className="mr-3 text-sm hidden md:flex"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleNav(false);
+                logout();
+                window.location.href = '/';
+              }}
+              title={user.screenname}
+              legacyBehavior>
 
                 { __('navigation_sign_out') }
 
               </Link>)
             ) : (
               (<Link
-                href="/login"
-                className="mr-3 text-sm hidden md:flex"
-                onClick={() => toggleNav(false)}>
+              href="/login"
+              className="mr-3 text-sm hidden md:flex"
+              onClick={() => toggleNav(false)}
+              legacyBehavior>
 
                 { __('navigation_sign_in') }
 
               </Link>)
             )}
-            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup" className="btn-primary text-sm mr-3 hidden md:flex">
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link
+              href="/signup"
+              className="btn-primary text-sm mr-3 hidden md:flex"
+              legacyBehavior>
 
               {
                 REGISTRATION_MODE === 'paid' ?
@@ -145,7 +151,7 @@ const Navigation = () => {
               }
 
             </Link> }
-            { isAuthenticated && FEATURES.booking && <Link href="/listings/book" className="btn mr-3 hidden md:flex">
+            { isAuthenticated && FEATURES.booking && <Link href="/listings/book" className="btn mr-3 hidden md:flex" legacyBehavior>
 
               {
                 user.roles.includes('member') ?
@@ -166,18 +172,18 @@ const Navigation = () => {
             { isAuthenticated &&
               <>
                 <ConnectInjected />
+                <span className='h-8 border-l mr-3' />
                 <Link
                   href="/members/[slug]"
                   as={`/members/${user.slug}`}
                   title="View profile"
                   className="hidden md:flex md:flex-row items-center"
-                  onClick={() => toggleNav(false)}>
+                  onClick={() => toggleNav(false)}
+                >
 
-                  <span className='h-8 border-l mr-3' />
                   <ProfilePhoto user={user} />
-                  <p className='ml-3'>{user.screenname}</p>
-
                 </Link>
+                <p className='ml-3'>{user.screenname}</p>
               </>
             }
             <a
@@ -198,25 +204,29 @@ const Navigation = () => {
         <div className="subnav fixed top-20 left-0 right-0 bottom-0 z-10 bg-background no-print block md:hidden">
           <div className="flex flex-col justify-center items-start">
             { isAuthenticated &&
-              <Link
-                href="/members/[slug]"
-                as={ `/members/${ user.slug }` }
-                title="View profile"
-                className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row"
-                onClick={() => toggleNav(false)}>
-
-                <ProfilePhoto user={ user } />
-                <p className='ml-3'>{user.screenname}</p>
-
-              </Link>
+              <>
+                <Link
+                  href="/members/[slug]"
+                  as={ `/members/${ user.slug }` }
+                  title="View profile"
+                  className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row"
+                  onClick={() => toggleNav(false)}
+                  legacyBehavior>
+                  <span>
+                    <ProfilePhoto user={ user } />
+                    <span className='ml-3'>{user.screenname}</span>
+                  </span>
+                </Link>
+              </>
             }
             {
               links.map(link => (
                 (<Link
-                  key={ link.url }
-                  href={ link.url }
-                  className="p-4 block text-xl w-full border-b"
-                  onClick={() => toggleNav(false)}>
+                key={ link.url }
+                href={ link.url }
+                className="p-4 block text-xl w-full border-b"
+                onClick={() => toggleNav(false)}
+                legacyBehavior>
 
                   { link.label }
 
@@ -225,7 +235,8 @@ const Navigation = () => {
             }
             { isAuthenticated && FEATURES.booking && <Link
               href="/listings/book"
-              className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row">
+              className="p-4 border-b block text-xl text-center w-full flex justify-start flex-row"
+              legacyBehavior>
 
               {
                 user.roles.includes('member') ?
@@ -236,30 +247,32 @@ const Navigation = () => {
             </Link> }
             { isAuthenticated ? (
               (<Link
-                href="/"
-                className="p-4 block text-xl w-full"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleNav(false);
-                  logout();
-                  window.location.href = '/';
-                }}
-                title={user.screenname}>
+              href="/"
+              className="p-4 block text-xl w-full"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleNav(false);
+                logout();
+                window.location.href = '/';
+              }}
+              title={user.screenname}
+              legacyBehavior>
 
                 { __('navigation_sign_out') }
 
               </Link>)
             ) : (
               (<Link
-                href="/login"
-                className="p-4 border-b block text-xl w-full"
-                onClick={() => toggleNav(false)}>
+              href="/login"
+              className="p-4 border-b block text-xl w-full"
+              onClick={() => toggleNav(false)}
+              legacyBehavior>
 
                 { __('navigation_sign_in') }
 
               </Link>)
             )}
-            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup" className="p-4 block text-xl">
+            { !isAuthenticated && ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && <Link href="/signup" className="p-4 block text-xl" legacyBehavior>
 
               {
                 REGISTRATION_MODE === 'paid' ?

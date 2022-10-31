@@ -28,7 +28,8 @@ const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
                   onChange(tab);
                 }
               } }
-              className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }>
+              className={ `${styleMap.base} ${tab.disabled ? styleMap.disabled : index === currentTab ? styleMap.active : styleMap.normal}` }
+              legacyBehavior>
 
               { tab.title }
 

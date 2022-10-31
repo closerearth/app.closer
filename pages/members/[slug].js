@@ -266,7 +266,8 @@ const MemberPage = ({ member, loadError }) => {
                           as={ `/members?role=${encodeURIComponent(role)}` }
                           href="/members"
                           key={ role }
-                          className="tag">{role}</Link>
+                          className="tag"
+                          legacyBehavior>{role}</Link>
                       ))
                       }
                     </div>}

@@ -43,7 +43,7 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
               return;
             }
             return (
-              (<Link
+              <Link
                 href={{ query: { [queryParam]: toPage  } }}
                 key={ `page-${toPage}` }
                 className={`p-1 mr-2 ${page === toPage?'bg-primary text-white':'bg-gray-100'}`}
@@ -51,11 +51,12 @@ const Pagination = ({ loadPage, queryParam, total, items, page, limit, maxPages 
                   e.preventDefault();
                   e.stopPropagation();
                   loadPage(toPage);
-                } }>
+                } }
+                legacyBehavior>
 
-                { `${toPage}` }
+                  { `${toPage}` }
 
-              </Link>)
+                </Link>
             );
           })
         }

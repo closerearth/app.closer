@@ -61,26 +61,36 @@ const MemberList = ({
         <div className={`grid gap-6 ${list ? 'md:grid-cols-1' : 'md:grid-cols-2'}  justify-start items-start mb-4`}>
           { users && users.count() > 0 ?
             users.map(user => (
-              <Link
-                key={ user.get('_id') }
-                passHref
-                as={`/members/${user.get('slug')}`}
-                href="/members/[slug]"
-               >
+              <div key={ user.get('_id') }>
                 <div className="flex flex-col justify-start card">
                   <div className='flex flex-row items-center justify-between w-full'>
                     <h4 className="font-light text-2xl md:text-2xl">
                       { user.get('screenname') }
                       <span className="ml-3 text-xs text-gray-500">{user.get('timezone')}</span>
                     </h4>
-                    <ProfilePhoto user={user.toJS()} width="12" height="12" />
+                    <Link
+                      key={ user.get('_id') }
+                      passHref
+                      as={`/members/${user.get('slug')}`}
+                      href="/members/[slug]"
+                    >
+                      <ProfilePhoto user={user.toJS()} width="12" height="12" />
+                    </Link>
                   </div>
                   { user.get('about') && <p className="py-2 text-sm">{preview ? user.get('about').substring(0, 120).concat('...') : user.get('about') }</p> }
                   <div className="pt-2">
-                    <button className="btn-primary">{ __('member_list_see_profile') }</button>
+                    <Link
+                      key={ user.get('_id') }
+                      passHref
+                      as={`/members/${user.get('slug')}`}
+                      href="/members/[slug]"
+                      className="btn"
+                    >
+                      { __('member_list_see_profile') }
+                    </Link>
                   </div>
                 </div>
-              </Link>
+              </div>
             )):
             <p>{ __('member_list_error_message') }</p>
           }

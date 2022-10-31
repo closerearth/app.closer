@@ -40,10 +40,11 @@ const TaskList = ({ channel, limit }) => {
           { tasks && tasks.length > 0?
             tasks.map(task => (
               (<Link
-                key={ task._id }
-                as={`/tasks/${task.slug}`}
-                href="/tasks/[slug]"
-                className="task-preview card">
+              key={ task._id }
+              as={`/tasks/${task.slug}`}
+              href="/tasks/[slug]"
+              className="task-preview card"
+              legacyBehavior>
 
                 <span className="name">{ task.title }</span>
                 <br />

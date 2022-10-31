@@ -30,7 +30,11 @@ const EditEvent = ({ event }) => {
       </Head>
       <div className="main-content">
         <h1 className="flex justify-start items-center">
-          <Link as={`/events/${event.slug}`} href="/events/[slug]" className="mr-2"><FaArrowLeft /></Link>
+          <Link
+            as={`/events/${event.slug}`}
+            href="/events/[slug]"
+            className="mr-2"
+            legacyBehavior><FaArrowLeft /></Link>
           { __('events_slug_edit_link') } <i>{ event.name }</i>
         </h1>
         { !config.STRIPE_PUB_KEY &&

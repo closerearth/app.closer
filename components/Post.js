@@ -80,7 +80,10 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
     <div className="post card">
       { showChannel && channel && channelsById[channel] &&
         <div className="card-title">
-          <i>In #<Link as={`/channel/${channelsById[channel] ? channelsById[channel].slug : channel}`} href="/channel/[channel]">
+          <i>In #<Link
+            as={`/channel/${channelsById[channel] ? channelsById[channel].slug : channel}`}
+            href="/channel/[channel]"
+            legacyBehavior>
             { channelsById[channel] ? channelsById[channel].name : 'unknown channel' }
           </Link></i>
         </div>
@@ -91,11 +94,11 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
             key={ createdBy }
             as={`/members/${usersById[createdBy].slug}`}
             href="/members/[slug]"
-            className="from user-preview flex flex-row justify-start items-center">
-
-            <ProfilePhoto size="sm" user={usersById[createdBy]} />
-            <span className="name ml-4">{ usersById[createdBy].screenname }</span>
-
+          >
+            <span className="from user-preview flex flex-row justify-start items-center">
+              <ProfilePhoto size="sm" user={usersById[createdBy]} />
+              <b className="name ml-4">{ usersById[createdBy].screenname }</b>
+            </span>
           </Link>
         }
         <TimeSince time={ created } />
@@ -132,10 +135,11 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
             <div className="tags">
               { tags.map(tag => (
                 (<Link
-                  key={ tag }
-                  as={`/search/${tag}`}
-                  href="/search/[keyword]"
-                  className="tag">
+                key={ tag }
+                as={`/search/${tag}`}
+                href="/search/[keyword]"
+                className="tag"
+                legacyBehavior>
 
                   <span className="ellipsis">{ tag }</span>
 
@@ -215,7 +219,8 @@ const Post = ({ _id, attachment, channel, tags, createdBy, created, content, pho
                     <Link
                       as={`/members/${usersById[post.createdBy].slug}`}
                       href="/members/[slug]"
-                      className="from user-preview mr-2">
+                      className="from user-preview mr-2"
+                      legacyBehavior>
 
                       <ProfilePhoto size="sm" user={usersById[post.createdBy]} />
 

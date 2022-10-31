@@ -117,7 +117,7 @@ const EventCheckout = ({ event, error }) => {
       </Head>
       <div className="main-content max-w-prose booking">
         <h1 className="mb-4">
-          <Link as={ `/events/${event.slug}` } href="/events/[slug]">{ event.name }</Link>
+          <Link as={ `/events/${event.slug}` } href="/events/[slug]" legacyBehavior>{ event.name }</Link>
         </h1>
         { event.start &&
           <p className="text-gray-500 text-sm mb-24">
@@ -317,7 +317,7 @@ const EventCheckout = ({ event, error }) => {
           <div className="validation-error">
             { __('events_slug_checkout_free_event') }
             <div className="mt-4">
-              <Link href={ `/events/${event.slug}` } className="btn-primary">{ __('events_slug_checkout_go_back') }</Link>
+              <Link href={ `/events/${event.slug}` } className="btn-primary" legacyBehavior>{ __('events_slug_checkout_go_back') }</Link>
             </div>
           </div>
         }

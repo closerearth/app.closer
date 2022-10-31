@@ -25,7 +25,7 @@ const Events = () => {
           <h1 className="mb-4">{ __('events_upcoming') }</h1>
           <div className="action">
             { user && (!PERMISSIONS || !PERMISSIONS.event.create || user.roles.includes(PERMISSIONS.event.create)) &&
-              <Link href="/events/create" className="btn-primary">
+              <Link href="/events/create" className="btn-primary" legacyBehavior>
                 { __('events_link') }
               </Link>
             }

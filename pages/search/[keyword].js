@@ -24,7 +24,7 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
               { articles ?
                 articles.map(article => (
                   <div className="article-preview" key={ article._id }>
-                    <Link as={ `/${article.slug}` } href="/[slug]" role="button">
+                    <Link as={ `/${article.slug}` } href="/[slug]" role="button" legacyBehavior>
 
                       <span className="title">
                         {article.title}
@@ -50,12 +50,13 @@ const Search = ({ articles, error, keyword, tags }) => console.log(error, articl
                   as={ `/search/${encodeURIComponent(tag)}` }
                   href="/search/[keyword]"
                   key={ tag }
-                  className="tag">{tag}</Link>
+                  className="tag"
+                  legacyBehavior>{tag}</Link>
               )):
               <span className="Loading">{ __('generic_loading') }</span>
             }
           </p>
-          <h3><Link href="/search">{ __('search_keyword_articles') }</Link></h3>
+          <h3><Link href="/search" legacyBehavior>{ __('search_keyword_articles') }</Link></h3>
         </section>
       </div>
     </div>

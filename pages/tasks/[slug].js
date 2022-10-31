@@ -89,7 +89,7 @@ const Task = ({ task, error }) => {
                     <div className="action-row">
                       { user._id === task.createdBy ?
                         <div>
-                          <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]">{ __('tasks_slug_edit_task') }</Link>
+                          <Link as={`/tasks/edit/${task.slug}`} href="/tasks/edit/[slug]" legacyBehavior>{ __('tasks_slug_edit_task') }</Link>
                           <select
                             value={ status }
                             onChange={e => updateStatus(task._id, e.target.value)}
@@ -136,10 +136,11 @@ const Task = ({ task, error }) => {
                     <div className="tags">
                       { task.tags.map(tag => (
                         (<Link
-                          key={ tag }
-                          as={`/search/${tag}`}
-                          href="/search/[keyword]"
-                          className="tag">
+                        key={ tag }
+                        as={`/search/${tag}`}
+                        href="/search/[keyword]"
+                        className="tag"
+                        legacyBehavior>
 
                           <span className="ellipsis">{ tag }</span>
 
@@ -158,7 +159,8 @@ const Task = ({ task, error }) => {
                               key={ uid }
                               as={`/members/${usersById[uid].slug}`}
                               href="/members/[slug]"
-                              className="from user-preview">
+                              className="from user-preview"
+                              legacyBehavior>
 
                               <ProfilePhoto size="sm" user={usersById[uid]} />
                               <span className="name">{ usersById[uid].screenname }</span>

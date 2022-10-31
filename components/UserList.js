@@ -48,7 +48,7 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
     <section className="new-users card">
       <h3 className="card-title">
         { titleLink ?
-          <Link href={titleLink}>{title}</Link>:
+          <Link href={titleLink} legacyBehavior>{title}</Link>:
           title
         }
       </h3>
@@ -57,10 +57,11 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
           { users && users.length > 0?
             users.map(user => (
               (<Link
-                key={ user._id }
-                as={`/members/${user.slug}`}
-                href="/members/[slug]"
-                className="user-preview">
+              key={ user._id }
+              as={`/members/${user.slug}`}
+              href="/members/[slug]"
+              className="user-preview"
+              legacyBehavior>
 
                 <ProfilePhoto user={user} size="sm" />
                 <span className="ellipsis name">{ user.screenname }</span>
@@ -72,7 +73,7 @@ const UserList = ({ channel, limit, title, titleLink, canInviteUsers, seeAllLink
         </div>
         { seeAllLink &&
           <div className="see-all">
-            <Link href={seeAllLink}>{ __('user_list_all') }</Link>
+            <Link href={seeAllLink} legacyBehavior>{ __('user_list_all') }</Link>
           </div>
         }
       </div>
