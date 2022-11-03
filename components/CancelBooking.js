@@ -9,10 +9,14 @@ import dayjs from 'dayjs';
 const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPolicyLoading, policy }) => {
   const [error, setError] = useState(null)
   const [isSendingCancelRequest, setSendingCancelRequest] = useState(false)
-  const bookingPrice = booking?.price.val
+
+  if (!booking || !policy) {
+    return null
+  }
+
+  const refundTotal = calculateRefundTotal(booking, policy)
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
-  const refundTotal = calculateRefundTotal({ initialValue: bookingPrice, policy: policy?.results, startDate: booking.start })
 
   const cancelBooking = () => {
     try {
@@ -25,10 +29,6 @@ const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPol
     } finally {
       setSendingCancelRequest(false)
     }
-  }
-
-  if (!booking || !policy) {
-    return null
   }
 
   return (

@@ -199,10 +199,11 @@ export const getSample = (field) => {
   }
 }
 
-export const calculateRefundTotal = (args) => {
-  const { initialValue, policy, startDate } = args
-  const { default: defaultRefund, lastmonth, lastweek, lastday } = policy || {}
-  const bookingStartDate = dayjs(startDate)
+export const calculateRefundTotal = (booking, policy) => {
+  const { price: { val: initialValue }, start, volunteer } = booking
+  if (volunteer) return 0
+  const { default: defaultRefund, lastmonth, lastweek, lastday } = policy
+  const bookingStartDate = dayjs(start)
   const now = dayjs()
   const daysUntilBookingStart = bookingStartDate.diff(now, 'days')
 
