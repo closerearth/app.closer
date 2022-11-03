@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+import React, { useState, useEffect } from 'react'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
 
-import PageNotFound from '../../404';
-import PageNotAllowed from '../../401';
+import PageNotFound from '../../404'
+import PageNotAllowed from '../../401'
 
 import { useAuth } from '../../../contexts/auth';
  
-import { __, calculateRefundTotal } from '../../../utils/helpers';
+import { __ } from '../../../utils/helpers';
 import api from '../../../utils/api';
 
-import Layout from '../../../components/Layout';
-import CancelCompleted from '../../../components/CancelCompleted';
-import CancelBooking from '../../../components/CancelBooking';
+import Layout from '../../../components/Layout'
+import CancelCompleted from '../../../components/CancelCompleted'
+import CancelBooking from '../../../components/CancelBooking'
 
 const BookingCancelPage = ({ booking, error }) => {
-  const router = useRouter();
+  const router = useRouter()
   const bookingId = router.query.slug
   const { isAuthenticated, user } = useAuth()
   const isMember = user?.roles.includes('member')
@@ -35,13 +35,13 @@ const BookingCancelPage = ({ booking, error }) => {
         setPolicyLoading(false)
       }
     }
-    if(user) {
+    if (user) {
       fetchPolicy()
     }
   }, [user])
 
   if (!booking || error) {
-    return <PageNotFound />;
+    return <PageNotFound />
   }
 
   if (!isAuthenticated) {
@@ -67,19 +67,21 @@ const BookingCancelPage = ({ booking, error }) => {
         />
       }
     </Layout>
-  );
+  )
 }
 
 BookingCancelPage.getInitialProps = async ({ query }) => {
   try {
-    const { data: { results: booking } } = await api.get(`/booking/${query.slug}`);
-    return { booking };
+    const {
+      data: { results: booking }
+    } = await api.get(`/booking/${query.slug}`)
+    return { booking }
   } catch (err) {
-    console.error('Error', err.message);
+    console.error('Error', err.message)
     return {
       error: err.message
-    };
+    }
   }
 }
 
-export default BookingCancelPage;
+export default BookingCancelPage
