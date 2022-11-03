@@ -225,7 +225,13 @@ const Booking = ({ booking, error }) => {
                         onClick={async () => {
                           verifyDetermineApproveNecessaryTokensStakeAndBook();
                         } }>
-                        {pendingProcess ? <div className='flex flex-row items-center'><Spinner /><p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p></div> : 'Book using tokens'}
+                        {pendingProcess ?
+                          <div className='flex flex-row items-center'>
+                            <Spinner />
+                            <p className='font-x-small ml-4 text-neutral-300'>Approve all transactions and wait</p>
+                          </div>:
+                            'Book using tokens'
+                          }
                       </button>
                     </section>
                   )}
