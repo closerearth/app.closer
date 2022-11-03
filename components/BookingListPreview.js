@@ -5,11 +5,11 @@ import dayjs from 'dayjs';
 import { __, priceFormat } from '../utils/helpers';
 
 const BookingListPreview = ({ booking }) => {
-  const bookingId = booking.get('_id')
+  const bookingId = booking.get('_id');
   const now = dayjs();
   const start = dayjs(booking.get('start'));
   const end = dayjs(booking.get('end'));
-  const isBookingCancelable = now.isBefore(start);
+  const isBookingCancelable = now.isBefore(start) && (booking.get('status') === 'confirmed' || booking.get('status') === 'open');
 
   return (
     <div className="booking-list-preview card">

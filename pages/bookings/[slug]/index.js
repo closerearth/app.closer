@@ -21,13 +21,13 @@ dayjs.extend(LocalizedFormat);
 const Booking = ({ booking, error }) => {
   const router = useRouter();
   const [editBooking, setBooking] = useState(booking);
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { platform } = usePlatform();
   const bookingId = router.query.slug
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
   const now = dayjs();
-  const isBookingCancelable = now.isBefore(start);
+  const isBookingCancelable = now.isBefore(start) && (booking.status === 'confirmed' || booking.status === 'open');
 
   const saveBooking = async (update) => {
     try {
