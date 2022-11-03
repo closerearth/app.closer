@@ -207,19 +207,15 @@ export const calculateRefundTotal = (args) => {
   const daysUntilBookingStart = bookingStartDate.diff(now, 'days')
 
   if (daysUntilBookingStart > REFUND_PERIODS.MONTH) {
-    console.log('refund default')
     return initialValue * defaultRefund
   } 
   if (daysUntilBookingStart >= REFUND_PERIODS.WEEK) {
-    console.log('refund lastmonth')
     return initialValue * lastmonth
   }  
   if (daysUntilBookingStart > REFUND_PERIODS.DAY) {
-    console.log('refund lastweek')
     return initialValue * lastweek
   }
   if (daysUntilBookingStart > REFUND_PERIODS.LASTDAY) {
-    console.log('refund lastday')
     return initialValue * lastday
   }
   return 0
