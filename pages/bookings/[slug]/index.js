@@ -10,7 +10,7 @@ import PageNotAllowed from '../../401';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 
-import { priceFormat, __ } from '../../../utils/helpers';
+import { priceFormat, __, getIsBookingCancellable } from '../../../utils/helpers';
 import api from '../../../utils/api';
 
 
@@ -26,8 +26,7 @@ const Booking = ({ booking, error }) => {
   const bookingId = router.query.slug
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
-  const now = dayjs();
-  const isBookingCancelable = now.isBefore(start) && (booking.status === 'confirmed' || booking.status === 'open');
+  const isBookingCancelable = getIsBookingCancellable(booking.start, booking.status);
 
   const saveBooking = async (update) => {
     try {

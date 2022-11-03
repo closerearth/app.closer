@@ -1,9 +1,10 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 
 import React, { useEffect } from 'react';
 
 import BookingListPreview from '../../components/BookingListPreview';
+import React, { useEffect } from 'react';
+import Head from 'next/head';
 import Layout from '../../components/Layout';
 
 import PageNotFound from '../404';

@@ -7,7 +7,7 @@ import PageNotAllowed from '../../401'
 
 import { useAuth } from '../../../contexts/auth';
  
-import { __ } from '../../../utils/helpers';
+import { __, getIsBookingCancellable } from '../../../utils/helpers';
 import api from '../../../utils/api';
 
 import Layout from '../../../components/Layout'
@@ -22,6 +22,7 @@ const BookingCancelPage = ({ booking, error }) => {
   const [policy, setPolicy] = useState(null)
   const [isPolicyLoading, setPolicyLoading] = useState(false)
   const [isCancelCompleted, setCancelCompleted] = useState(false)
+  const isBookingCancelable = getIsBookingCancellable(booking.start, booking.status)
 
   useEffect(() => {
     const fetchPolicy = async () => {
@@ -46,6 +47,16 @@ const BookingCancelPage = ({ booking, error }) => {
 
   if (!isAuthenticated) {
     return <PageNotAllowed />
+  }
+
+  if (!isBookingCancelable) {
+    return (
+      <div className="main-content max-w-prose pb-16"> 
+        <h1 className="text-[32px] leading-[48px] font-normal border-b border-[#e1e1e1] border-solid pb-2">
+          <span className="text-red-500">X </span><span>{ __('booking_is_not_cancellable') }</span>
+        </h1>
+      </div>
+    )
   }
 
   return (

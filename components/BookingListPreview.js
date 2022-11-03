@@ -2,14 +2,13 @@
 import React from 'react';
 import Link from 'next/link'
 import dayjs from 'dayjs';
-import { __, priceFormat } from '../utils/helpers';
+import { __, priceFormat, getIsBookingCancellable } from '../utils/helpers';
 
 const BookingListPreview = ({ booking }) => {
   const bookingId = booking.get('_id');
-  const now = dayjs();
   const start = dayjs(booking.get('start'));
   const end = dayjs(booking.get('end'));
-  const isBookingCancelable = now.isBefore(start) && (booking.get('status') === 'confirmed' || booking.get('status') === 'open');
+  const isBookingCancelable = getIsBookingCancellable(booking.get('start'), booking.get('status'))
 
   return (
     <div className="booking-list-preview card">

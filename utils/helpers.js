@@ -224,3 +224,11 @@ export const calculateRefundTotal = (args) => {
   }
   return 0
 }
+
+export const getIsBookingCancellable = (bookingStart, bookingStatus) => {
+  const now = dayjs()
+  const start = dayjs(bookingStart)
+  const isBookingNotStarted = now.isBefore(start)
+  const allowedBookingStatuses = ['confirmed', 'open']
+  return isBookingNotStarted && allowedBookingStatuses.includes(bookingStatus)
+}
