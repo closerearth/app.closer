@@ -6,7 +6,7 @@ import PageNotFound from '../../404';
 import PageNotAllowed from '../../401';
 
 import { useAuth } from '../../../contexts/auth';
-
+ 
 import { __, calculateRefundTotal } from '../../../utils/helpers';
 import api from '../../../utils/api';
 
@@ -17,8 +17,6 @@ import CancelBooking from '../../../components/CancelBooking';
 const BookingCancelPage = ({ booking, error }) => {
   const router = useRouter();
   const bookingId = router.query.slug
-  const bookingPrice = booking?.price
-  const bookingStartDate = booking?.start
   const { isAuthenticated, user } = useAuth()
   const isMember = user?.roles.includes('member')
   const [policy, setPolicy] = useState(null)
@@ -60,9 +58,8 @@ const BookingCancelPage = ({ booking, error }) => {
       {isCancelCompleted 
         ? <CancelCompleted /> 
         : <CancelBooking 
+          booking={booking}
           bookingId={bookingId} 
-          initialBookingValue={bookingPrice.val}
-          bookingStartDate={bookingStartDate}
           policy={policy} 
           isMember={isMember}
           isPolicyLoading={isPolicyLoading}

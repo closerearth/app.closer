@@ -58,26 +58,15 @@ const Booking = ({ booking, error }) => {
       <main className="main-content max-w-prose booking">
         <h1 className="mb-4">{__(`bookings_title_${booking.status}`)}</h1>
         <section className="mt-3">
-          <h3>{__('bookings_summary')}</h3>
-          <p>
-            {__('bookings_status')} <b>{editBooking.status}</b>
-          </p>
-          <p>
-            {__('bookings_checkin')} <b>{start.format('LLL')}</b>
-          </p>
-          <p>
-            {__('bookings_checkout')} <b>{end.format('LLL')}</b>
-          </p>
-          <p>
-            {__('bookings_total')}
-            <b className={booking.volunteer ? 'line-through' : ''}>
-              {' '}
-              {priceFormat(booking.price)}
+          <h3>{ __('bookings_summary') }</h3>
+          <p>{ __('bookings_status') } <b>{editBooking.status}</b></p>
+          <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
+          <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
+          <p>{ __('bookings_total') } 
+            <b className={ booking.volunteer ? 'line-through': '' }>
+              {' '}{priceFormat(booking.price)}
             </b>
-            <b> {booking.volunteer && priceFormat(0, booking.price.cur)}</b>
-          </p>
-          <p>
-            {__('bookings_id')} <b>{booking._id}</b>
+            <b>{' '}{booking.volunteer && priceFormat(0, booking.price.cur)}</b>
           </p>
         </section>
         {booking.status === 'confirmed' && (

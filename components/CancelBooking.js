@@ -3,10 +3,15 @@ import { useState } from 'react'
 import api from '../utils/api';
 import Spinner from './Spinner';
 import CalculatorIcon from './icons/CalculatorIcon';
+import dayjs from 'dayjs';
 
-const CancelBooking = ({ setCancelCompleted, bookingId, initialBookingValue, bookingStartDate, isMember, isPolicyLoading, policy }) => {
+const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPolicyLoading, policy }) => {
   const [error, setError] = useState(null)
   const [isSendingCancelRequest, setSendingCancelRequest] = useState(false)
+  const bookingPrice = booking?.price.val
+  const start = dayjs(booking.start);
+  const end = dayjs(booking.end);
+  const refundTotal = calculateRefundTotal({ initialValue: bookingPrice, policy: policy?.results, startDate: booking.start })
 
   const cancelBooking = () => {
     try {
@@ -24,7 +29,11 @@ const CancelBooking = ({ setCancelCompleted, bookingId, initialBookingValue, boo
   const backToBookings = () => {
     router.push('/bookings')
   }
-  
+
+  if (!booking || !policy) {
+    return null
+  }
+
   return (
     <main className="main-content max-w-prose pb-16">
       <h1 className="text-[32px] leading-[48px] font-normal border-b border-[#e1e1e1] border-solid pb-2">
@@ -33,8 +42,14 @@ const CancelBooking = ({ setCancelCompleted, bookingId, initialBookingValue, boo
       <h2 className="text-2xl leading-10 font-normal my-16">
         { __('cancel_booking_details') }
       </h2>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      <p>{ __('bookings_status') } <b>{booking.status}</b></p>
+      <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
+      <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
+      <p>{ __('bookings_total') } 
+        <b className={ booking.volunteer ? 'line-through': '' }>
+          {' '}{priceFormat(booking.price)}
+        </b>
+        <b>{' '}{booking.volunteer && priceFormat(0, booking.price.cur)}</b>
       </p>
       <h2 className="text-2xl leading-10 font-normal my-16">
         { __('cancel_booking_refund_policy') }
@@ -50,7 +65,7 @@ const CancelBooking = ({ setCancelCompleted, bookingId, initialBookingValue, boo
       </h2>
       <div className="flex justify-between mb-16">
         <p>{ __('cancel_booking_fiat_description') }</p>
-        {(isPolicyLoading || !policy) ? <Spinner /> : <p className="font-black">{priceFormat(calculateRefundTotal({ initialValue: initialBookingValue, policy: policy.results, startDate: bookingStartDate }))}</p>}
+        {(isPolicyLoading) ? <Spinner /> : <p className="font-black">{priceFormat(refundTotal, booking.price.cur)}</p>}
       </div>
       { error && <p className="text-red-500 m-2 text-center">{error}</p> }
       <div className="flex flex-col space-y-8 md:flex-row md:space-y-0 md:space-x-4 md:justify-end">
