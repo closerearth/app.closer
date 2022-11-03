@@ -38,10 +38,10 @@ const Booking = ({ booking, error }) => {
   const stripe = loadStripe(config.STRIPE_PUB_KEY);
   const { isAuthenticated, user } = useAuth();
   const { platform } = usePlatform();
-  
+
   const { account, library } = useWeb3React()
   const [pendingTransactions, setPendingTransactions] = useState([])  //In general the following pendingTransactions state should be moved to the root of the app, and should be used as a dependency by all hooks that read blockchain state
-  
+
   const [canUseTokens, setCanUseTokens] = useState(false) //Used to determine if the user has enough available tokens to use in booking
   const [neededToStake, setNeededToStake] = useState()
   const [pendingProcess, setPendingProcess] = useState(false) //Used when need to make several blockchain transactions in a row
@@ -103,15 +103,10 @@ const Booking = ({ booking, error }) => {
 
     setNeededToStake(tokensToStake);
     setCanUseTokens(tokensToStake.lte(balanceDAOToken));
-        
   },[pendingTransactions, pendingProcess, account, bookedNights, balanceLocked, balanceDAOToken, isDAOMember])
 
-  if(start.year() != end.year()){
-    return <div>You cannot yet book accross different years</div>
-  }
 
-
-  //Should be moved to the blockchain functions util, but as a hook? 
+  //Should be moved to the blockchain functions util, but as a hook?
   //since we intensively update the local state inside this function
   const verifyDetermineApproveNecessaryTokensStakeAndBook = async () => {
     if(!canUseTokens) {
@@ -126,7 +121,7 @@ const Booking = ({ booking, error }) => {
       BLOCKCHAIN_DAO_TOKEN_ABI,
       library.getUncheckedSigner()
     );
-  
+
     const Diamond = new Contract(
       BLOCKCHAIN_DAO_DIAMOND_ADDRESS,
       BLOCKCHAIN_DIAMOND_ABI,
@@ -185,9 +180,9 @@ const Booking = ({ booking, error }) => {
         <meta name="description" content={booking.description} />
         <meta property="og:type" content="booking" />
       </Head>
-     
+
       <main className="main-content max-w-prose booking">
-        { alreadyBookedDates ? 
+        { alreadyBookedDates ?
           <>
           You already have a booking at these Dates.<br/>
             <Link
@@ -235,7 +230,7 @@ const Booking = ({ booking, error }) => {
                     </section>
                   )}
                 </section>
-                
+
               </>
             ) : (
               <>
@@ -277,7 +272,7 @@ const Booking = ({ booking, error }) => {
           </>
         }
       </main>
-      
+
     </Layout>
   );
 }
