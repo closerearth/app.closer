@@ -1,13 +1,12 @@
 import { priceFormat, __, calculateRefundTotal } from '../utils/helpers'
 import { useState } from 'react'
-import { useRouter } from 'next/router';
+import Link from 'next/link'
 import api from '../utils/api';
 import Spinner from './Spinner';
 import CalculatorIcon from './icons/CalculatorIcon';
 import dayjs from 'dayjs';
 
 const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPolicyLoading, policy }) => {
-  const router = useRouter();
   const [error, setError] = useState(null)
   const [isSendingCancelRequest, setSendingCancelRequest] = useState(false)
   const bookingPrice = booking?.price.val
@@ -26,10 +25,6 @@ const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPol
     } finally {
       setSendingCancelRequest(false)
     }
-  }
-
-  const backToBookings = () => {
-    router.push('/bookings')
   }
 
   if (!booking || !policy) {
@@ -79,9 +74,11 @@ const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPol
             __('confirm_cancel')
           )}
         </button>
-        <button className="btn" onClick={backToBookings}>
-          {__('back_to_my_bookings')}
-        </button>
+        <Link href="/bookings" passHref>
+          <a className="btn text-center"> 
+            {__('back_to_my_bookings')}
+          </a>
+        </Link>
       </div>
     </main>
   )

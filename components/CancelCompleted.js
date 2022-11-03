@@ -15,7 +15,7 @@ const CancelCompleted = () => {
       </p>
       <div className="flex flex-col">
         <Link href="/bookings" passHref>
-          <a className="btn">
+          <a className="btn w-fit">
             { __('generic_ok').toUpperCase() }
           </a>
         </Link>
