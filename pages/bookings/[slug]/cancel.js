@@ -18,18 +18,18 @@ const BookingCancelPage = ({ booking, error }) => {
   const router = useRouter();
   const bookingId = router.query.slug
   const bookingPrice = booking?.price
+  const bookingStartDate = booking?.start
   const { isAuthenticated, user } = useAuth()
   const isMember = user?.roles.includes('member')
   const [policy, setPolicy] = useState(null)
   const [isPolicyLoading, setPolicyLoading] = useState(false)
   const [isCancelCompleted, setCancelCompleted] = useState(false)
-  const refundTotal = calculateRefundTotal({ initialValue: bookingPrice.val, policy, startDate: booking.start })
 
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
         setPolicyLoading(true)
-        const { data } = await api.get('/policies/cancellation')
+        const { data } = await api.get('/bookings/cancelation-policy')
         setPolicy(data)
       } catch (error) {
         console.log(error)
@@ -61,9 +61,10 @@ const BookingCancelPage = ({ booking, error }) => {
         ? <CancelCompleted /> 
         : <CancelBooking 
           bookingId={bookingId} 
+          initialBookingValue={bookingPrice.val}
+          bookingStartDate={bookingStartDate}
           policy={policy} 
           isMember={isMember}
-          refundTotal={refundTotal}
           isPolicyLoading={isPolicyLoading}
           setCancelCompleted={setCancelCompleted}
         />
