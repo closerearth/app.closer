@@ -1,11 +1,13 @@
 import { priceFormat, __, calculateRefundTotal } from '../utils/helpers'
 import { useState } from 'react'
+import { useRouter } from 'next/router';
 import api from '../utils/api';
 import Spinner from './Spinner';
 import CalculatorIcon from './icons/CalculatorIcon';
 import dayjs from 'dayjs';
 
 const CancelBooking = ({ setCancelCompleted, bookingId, booking, isMember, isPolicyLoading, policy }) => {
+  const router = useRouter();
   const [error, setError] = useState(null)
   const [isSendingCancelRequest, setSendingCancelRequest] = useState(false)
   const bookingPrice = booking?.price.val
