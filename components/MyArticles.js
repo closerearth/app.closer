@@ -1,13 +1,10 @@
-import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../contexts/auth.js';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import ActiveLink from './ActiveLink';
 import Link from './ActiveLink';
-import { trackEvent } from './Analytics';
 
 const MyArticles = () => {
   const [error, setErrors] = useState(false);

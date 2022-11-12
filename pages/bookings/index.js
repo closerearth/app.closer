@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import BookingListPreview from '../../components/BookingListPreview';
 import Layout from '../../components/Layout';
@@ -53,11 +52,11 @@ const Bookings = () => {
             <div className="bookings-list">
               {bookings && bookings.count() > 0
                 ? bookings.map((booking) => (
-                    <BookingListPreview
-                      key={booking.get('_id')}
-                      booking={booking}
-                    />
-                  ))
+                  <BookingListPreview
+                    key={booking.get('_id')}
+                    booking={booking}
+                  />
+                ))
                 : 'No Bookings'}
             </div>
           </div>

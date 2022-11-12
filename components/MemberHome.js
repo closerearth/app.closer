@@ -1,15 +1,10 @@
-import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useAuth } from '../contexts/auth.js';
-import api, { cdn, formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import Layout from './Layout';
 import MemberList from './MemberList';
-import Post from './Post';
 import PostList from './PostList';
 import UpcomingEvents from './UpcomingEvents';
 

@@ -7,7 +7,6 @@ import { FaTelegram } from '@react-icons/all-files/fa/FaTelegram';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { fromJS } from 'immutable';
-import slugify from 'slugify';
 
 import {
   FEATURES,
@@ -19,10 +18,8 @@ import {
 } from '../config';
 import { useAuth } from '../contexts/auth.js';
 import { useStatic } from '../contexts/static';
-import { theme } from '../tailwind.config';
 import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import { trackEvent } from './Analytics';
 import ConnectInjected from './ConnectInjected';
 import FeaturedEvent from './FeaturedEvent';
 import ProfilePhoto from './ProfilePhoto';
@@ -148,16 +145,16 @@ const Navigation = () => {
             )}
             {!isAuthenticated &&
               ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && (
-                <Link href="/signup">
-                  <a className="btn-primary text-sm mr-3 hidden md:flex">
-                    {REGISTRATION_MODE === 'paid'
-                      ? 'Get your membership'
-                      : REGISTRATION_MODE === 'curated'
+              <Link href="/signup">
+                <a className="btn-primary text-sm mr-3 hidden md:flex">
+                  {REGISTRATION_MODE === 'paid'
+                    ? 'Get your membership'
+                    : REGISTRATION_MODE === 'curated'
                       ? 'Apply'
                       : 'Signup'}
-                  </a>
-                </Link>
-              )}
+                </a>
+              </Link>
+            )}
             {isAuthenticated && FEATURES.booking && (
               <Link href="/listings/book">
                 <a className="btn mr-3 hidden md:flex">
@@ -269,16 +266,16 @@ const Navigation = () => {
             )}
             {!isAuthenticated &&
               ['paid', 'curated', 'open'].includes(REGISTRATION_MODE) && (
-                <Link href="/signup">
-                  <a className="p-4 block text-xl">
-                    {REGISTRATION_MODE === 'paid'
-                      ? 'Get your membership'
-                      : REGISTRATION_MODE === 'curated'
+              <Link href="/signup">
+                <a className="p-4 block text-xl">
+                  {REGISTRATION_MODE === 'paid'
+                    ? 'Get your membership'
+                    : REGISTRATION_MODE === 'curated'
                       ? 'Apply'
                       : 'Signup'}
-                  </a>
-                </Link>
-              )}
+                </a>
+              </Link>
+            )}
           </div>
         </div>
       )}

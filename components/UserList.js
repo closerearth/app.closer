@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
 
-import dayjs from 'dayjs';
 
 import { useAuth } from '../contexts/auth';
 import api, { formatSearch } from '../utils/api';

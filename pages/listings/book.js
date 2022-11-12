@@ -1,13 +1,11 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import DateTimePicker from '../../components/DateTimePicker';
 import Layout from '../../components/Layout';
 import ListingListPreview from '../../components/ListingListPreview';
-import Slider from '../../components/Slider';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -15,8 +13,7 @@ import { fromJS } from 'immutable';
 
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
-import api, { cdn } from '../../utils/api';
-import { priceFormat } from '../../utils/helpers';
+import api from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 dayjs.extend(relativeTime);
@@ -75,8 +72,8 @@ const Book = ({ token }) => {
       booking.duration >= 30
         ? 'monthlyRate'
         : booking.duration >= 7
-        ? 'weeklyRate'
-        : 'dailyRate';
+          ? 'weeklyRate'
+          : 'dailyRate';
     setBooking(booking);
   };
 
@@ -184,11 +181,11 @@ const Book = ({ token }) => {
                         start,
                         end: dayjs(start).isAfter(booking.end)
                           ? dayjs(start)
-                              .set('hours', 11)
-                              .set('seconds', 0)
-                              .set('minutes', 0)
-                              .add(3, 'days')
-                              .toDate()
+                            .set('hours', 11)
+                            .set('seconds', 0)
+                            .set('minutes', 0)
+                            .add(3, 'days')
+                            .toDate()
                           : booking.end,
                       })
                     }

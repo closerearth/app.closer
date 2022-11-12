@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
 import PageNotFound from '../../404';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api from '../../../utils/api';
 import { priceFormat } from '../../../utils/helpers';
 import { __ } from '../../../utils/helpers';
 

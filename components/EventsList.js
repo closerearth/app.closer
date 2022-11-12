@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -8,9 +7,7 @@ import advancedFormat from 'dayjs/plugin/advancedFormat';
 
 import { useAuth } from '../contexts/auth';
 import { usePlatform } from '../contexts/platform';
-import api, { cdn, formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
-import { trackEvent } from './Analytics';
 import EventPreview from './EventPreview';
 import Pagination from './Pagination';
 

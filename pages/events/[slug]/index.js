@@ -1,20 +1,13 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Linkify from 'react-linkify';
 
-import CreatePost from '../../../components/CreatePost';
 import EventAttendees from '../../../components/EventAttendees';
 import EventPhoto from '../../../components/EventPhoto';
 import Layout from '../../../components/Layout';
 import Photo from '../../../components/Photo';
-import PostList from '../../../components/PostList';
-import ProfilePhoto from '../../../components/ProfilePhoto';
-import TimeSince from '../../../components/TimeSince';
-import UpcomingEvents from '../../../components/UpcomingEvents';
-import UploadPhoto from '../../../components/UploadPhoto';
 
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
@@ -23,7 +16,7 @@ import PageNotFound from '../../404';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api, { cdn } from '../../../utils/api';
 import { prependHttp } from '../../../utils/helpers';
 
 dayjs.extend(advancedFormat);
@@ -149,15 +142,15 @@ const Event = ({ event, error }) => {
             {isAuthenticated &&
               (user._id === event.createdBy ||
                 user.roles.includes('admin')) && (
-                <div className="admin-actions mt-3 border-t pt-3">
-                  <Link
-                    as={`/events/${event.slug}/edit`}
-                    href="/events/[slug]/edit"
-                  >
-                    <a className="btn-secondary text-xs mr-2">Edit event</a>
-                  </Link>
-                </div>
-              )}
+              <div className="admin-actions mt-3 border-t pt-3">
+                <Link
+                  as={`/events/${event.slug}/edit`}
+                  href="/events/[slug]/edit"
+                >
+                  <a className="btn-secondary text-xs mr-2">Edit event</a>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -231,73 +224,73 @@ const Event = ({ event, error }) => {
                       end &&
                       end.isAfter(dayjs()) &&
                       event.location ? (
-                        <a className="btn-primary mr-2" href={event.location}>
+                          <a className="btn-primary mr-2" href={event.location}>
                           Join call
-                        </a>
-                      ) : start &&
+                          </a>
+                        ) : start &&
                         start.isBefore(dayjs()) &&
                         end &&
                         end.isAfter(dayjs()) ? (
-                        <span className="p3 mr-2" href={event.location}>
+                            <span className="p3 mr-2" href={event.location}>
                           ONGOING
-                        </span>
-                      ) : !isAuthenticated && event.recording ? (
-                        <Link
-                          as={`/signup?back=${encodeURIComponent(
-                            `/events/${event.slug}`,
-                          )}`}
-                          href="/signup"
-                        >
-                          <a className="btn-primary mr-2">
+                            </span>
+                          ) : !isAuthenticated && event.recording ? (
+                            <Link
+                              as={`/signup?back=${encodeURIComponent(
+                                `/events/${event.slug}`,
+                              )}`}
+                              href="/signup"
+                            >
+                              <a className="btn-primary mr-2">
                             Signup to watch recording
-                          </a>
-                        </Link>
-                      ) : !isAuthenticated &&
+                              </a>
+                            </Link>
+                          ) : !isAuthenticated &&
                         start &&
                         start.isAfter(dayjs()) ? (
-                        <Link
-                          as={`/signup?back=${encodeURIComponent(
-                            `/events/${event.slug}`,
-                          )}`}
-                          href="/signup"
-                        >
-                          <a className="btn-primary mr-2">Signup to RSVP</a>
-                        </Link>
-                      ) : end &&
+                              <Link
+                                as={`/signup?back=${encodeURIComponent(
+                                  `/events/${event.slug}`,
+                                )}`}
+                                href="/signup"
+                              >
+                                <a className="btn-primary mr-2">Signup to RSVP</a>
+                              </Link>
+                            ) : end &&
                         end.isBefore(dayjs()) &&
                         user &&
                         attendees?.includes(user._id) ? (
-                        <a
-                          href="#"
-                          className="btn-primary mr-2"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            attendEvent(
-                              event._id,
-                              !attendees?.includes(user._id),
-                            );
-                          }}
-                        >
+                                <a
+                                  href="#"
+                                  className="btn-primary mr-2"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    attendEvent(
+                                      event._id,
+                                      !attendees?.includes(user._id),
+                                    );
+                                  }}
+                                >
                           Cancel RSVP
-                        </a>
-                      ) : (
-                        end &&
+                                </a>
+                              ) : (
+                                end &&
                         user &&
                         end.isBefore(dayjs()) && (
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              attendEvent(
-                                event._id,
-                                !attendees?.includes(user._id),
-                              );
-                            }}
-                            className="btn-primary mr-2"
-                          >
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      attendEvent(
+                                        event._id,
+                                        !attendees?.includes(user._id),
+                                      );
+                                    }}
+                                    className="btn-primary mr-2"
+                                  >
                             Attend
-                          </button>
-                        )
-                      )}
+                                  </button>
+                                )
+                              )}
                     </>
                   )}
                   {isAuthenticated && user.roles.includes('admin') && (
@@ -324,33 +317,33 @@ const Event = ({ event, error }) => {
                   (user._id === event.createdBy ||
                     user.roles.includes('admin') ||
                     user.roles.includes('space-host')) && (
-                    <div className="admin-actions mt-3 border-t pt-3">
-                      {(user._id === event.createdBy ||
+                  <div className="admin-actions mt-3 border-t pt-3">
+                    {(user._id === event.createdBy ||
                         user.roles.includes('admin')) && (
-                        <Link
-                          as={`/events/${event.slug}/edit`}
-                          href="/events/[slug]/edit"
-                        >
-                          <a className="btn-secondary text-xs mr-2">
+                      <Link
+                        as={`/events/${event.slug}/edit`}
+                        href="/events/[slug]/edit"
+                      >
+                        <a className="btn-secondary text-xs mr-2">
                             Edit event
-                          </a>
-                        </Link>
-                      )}
-                      {event.paid &&
+                        </a>
+                      </Link>
+                    )}
+                    {event.paid &&
                         (user._id === event.createdBy ||
                           user.roles.includes('admin') ||
                           user.roles.includes('space-host')) && (
-                          <Link
-                            as={`/events/${event.slug}/tickets`}
-                            href="/events/[slug]/tickets"
-                          >
-                            <a className="btn-secondary text-xs mr-2">
+                      <Link
+                        as={`/events/${event.slug}/tickets`}
+                        href="/events/[slug]/tickets"
+                      >
+                        <a className="btn-secondary text-xs mr-2">
                               View tickets
-                            </a>
-                          </Link>
-                        )}
-                    </div>
-                  )}
+                        </a>
+                      </Link>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </section>

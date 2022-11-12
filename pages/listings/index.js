@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import Layout from '../../components/Layout';
 import ListingListPreview from '../../components/ListingListPreview';
@@ -56,11 +56,11 @@ const Listings = () => {
         <div className="grid grid-cols-3 gap-6">
           {listings && listings.count() > 0
             ? listings.map((listing) => (
-                <ListingListPreview
-                  key={listing.get('_id')}
-                  listing={listing}
-                />
-              ))
+              <ListingListPreview
+                key={listing.get('_id')}
+                listing={listing}
+              />
+            ))
             : 'No Listings'}
         </div>
       </div>

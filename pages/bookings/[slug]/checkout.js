@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
-import Linkify from 'react-linkify';
 import ReactTooltip from 'react-tooltip';
 
 import { Elements } from '@stripe/react-stripe-js';
@@ -14,7 +13,7 @@ import Layout from '../../../components/Layout';
 import Spinner from '../../../components/Spinner';
 
 import { useWeb3React } from '@web3-react/core';
-import dayjs, { isDayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import dayOfYear from 'dayjs/plugin/dayOfYear';
 import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { BigNumber, Contract } from 'ethers';
@@ -31,7 +30,7 @@ import {
 } from '../../../config_blockchain';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api from '../../../utils/api';
 import { fetcher, formatBigNumberForDisplay } from '../../../utils/blockchain';
 import { __, priceFormat } from '../../../utils/helpers';
 
@@ -111,7 +110,7 @@ const Booking = ({ booking, error }) => {
     },
   );
 
-  const { data: isDAOMember, mutate: mutateDAOM } = useSWR(
+  const { data: isDAOMember } = useSWR(
     [BLOCKCHAIN_DAO_DIAMOND_ADDRESS, 'isMember', account],
     {
       fetcher: fetcher(library, BLOCKCHAIN_DIAMOND_ABI),

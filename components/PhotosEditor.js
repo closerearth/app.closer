@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete';
 

@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
 import Linkify from 'react-linkify';
@@ -11,12 +10,11 @@ import UploadPhoto from '../../components/UploadPhoto';
 
 import { FaUser } from '@react-icons/all-files/fa/FaUser';
 import { TiDelete } from '@react-icons/all-files/ti/TiDelete';
-import dayjs from 'dayjs';
 
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js';
 import { usePlatform } from '../../contexts/platform';
-import api, { cdn, formatSearch } from '../../utils/api';
+import api, { cdn } from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const MemberPage = ({ member, loadError }) => {
@@ -414,24 +412,24 @@ const MemberPage = ({ member, loadError }) => {
                   <ul className="flex flex-col w-full space-y-1 mt-4">
                     {links
                       ? links.map((link) => (
-                          <li
-                            key={link._id}
-                            className="group flex flex-row items-center justify-start space-x-5 mb-1"
-                          >
-                            <a href={link.url}>{link.name}</a>
-                            {isAuthenticated && member._id === currentUser._id && (
-                              <a
-                                href="#"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  deleteLink(link);
-                                }}
-                              >
-                                <TiDelete className="text-gray-500 text-lg hover:text-black hidden group-hover:block" />
-                              </a>
-                            )}
-                          </li>
-                        ))
+                        <li
+                          key={link._id}
+                          className="group flex flex-row items-center justify-start space-x-5 mb-1"
+                        >
+                          <a href={link.url}>{link.name}</a>
+                          {isAuthenticated && member._id === currentUser._id && (
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                deleteLink(link);
+                              }}
+                            >
+                              <TiDelete className="text-gray-500 text-lg hover:text-black hidden group-hover:block" />
+                            </a>
+                          )}
+                        </li>
+                      ))
                       : 'No links yet'}
                   </ul>
                 </div>

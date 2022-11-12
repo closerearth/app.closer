@@ -10,7 +10,7 @@ const EventAttendees = ({ user, event, start, attendees, platform }) => {
   return (
     <section className="attendees card-body mb-6">
       <h3 className="text-2xl font-bold">
-        {start && start.isAfter(dayjs()) ? "Who's coming?" : 'Who attended?'}
+        {start && start.isAfter(dayjs()) ? 'Who\'s coming?' : 'Who attended?'}
       </h3>
       {event.price || event.ticketOptions ? (
         <div className="-space-x-3 flex flex-row flex-wrap">

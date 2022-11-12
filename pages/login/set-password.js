@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import Layout from '../../components/Layout';
 
 import { useAuth } from '../../contexts/auth';
-import api from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const SetPasswordScreen = () => {

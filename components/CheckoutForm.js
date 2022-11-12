@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
 
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 
-import config from '../config';
 import api from '../utils/api';
 import { __ } from '../utils/helpers';
 

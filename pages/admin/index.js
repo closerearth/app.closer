@@ -1,7 +1,6 @@
 import Head from 'next/head';
-import Link from 'next/link';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import Layout from '../../components/Layout';
 import Loading from '../../components/Loading';
@@ -11,8 +10,7 @@ import Dashboard from '../../components/admin/Dashboard';
 
 import PageNotAllowed from '../401';
 import { useAuth } from '../../contexts/auth';
-import models from '../../models';
-import api, { formatSearch } from '../../utils/api';
+import api from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const Admin = ({ token }) => {

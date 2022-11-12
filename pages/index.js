@@ -2,10 +2,9 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import Layout from '../components/Layout';
-import UpcomingEvents from '../components/UpcomingEvents';
 
 import { DEFAULT_TITLE, PLATFORM_NAME, REGISTRATION_MODE } from '../config';
 import { useAuth } from '../contexts/auth';

@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Linkify from 'react-linkify';
 
 import Layout from '../../components/Layout';
@@ -40,13 +40,13 @@ const ChannelPage = ({ channel }) => {
                   {user &&
                     (user.roles.includes('admin') ||
                       channel.createdBy === user._id) && (
-                      <Link
-                        as={`/edit-channel/${channel.slug}`}
-                        href="/edit-channel/[slug]"
-                      >
-                        <a>edit</a>
-                      </Link>
-                    )}
+                    <Link
+                      as={`/edit-channel/${channel.slug}`}
+                      href="/edit-channel/[slug]"
+                    >
+                      <a>edit</a>
+                    </Link>
+                  )}
                 </div>
               </div>
               {channel.description && (

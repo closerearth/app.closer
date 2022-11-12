@@ -1,11 +1,8 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import React, { useState } from 'react';
-import Linkify from 'react-linkify';
 
-import { Elements } from '@stripe/react-stripe-js';
 
 import Layout from '../../../components/Layout';
 import Switch from '../../../components/Switch';
@@ -20,8 +17,8 @@ import config from '../../../config';
 import { BLOCKCHAIN_NETWORK_ID } from '../../../config_blockchain';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
-import { __, priceFormat } from '../../../utils/helpers';
+import api from '../../../utils/api';
+import { __ } from '../../../utils/helpers';
 
 dayjs.extend(LocalizedFormat);
 

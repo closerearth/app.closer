@@ -1,9 +1,8 @@
-import Link from 'next/link';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useAuth } from '../contexts/auth.js';
-import api, { cdn, formatSearch } from '../utils/api';
+import { cdn } from '../utils/api';
 import UploadPhoto from './UploadPhoto';
 
 const Prompts = () => {

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 
 import React from 'react';
 
@@ -12,18 +11,10 @@ import {
   DISCORD_URL,
   FACEBOOK_URL,
   INSTAGRAM_URL,
-  LOGO_FOOTER,
-  LOGO_HEADER,
-  NEWSLETTER,
-  PLATFORM_NAME,
-  TEAM_EMAIL,
   TELEGRAM_URL,
   TWITTER_URL,
 } from '../config';
-import { theme } from '../tailwind.config';
-import api from '../utils/api';
 import { __ } from '../utils/helpers';
-import { trackEvent } from './Analytics';
 import Newsletter from './Newsletter';
 
 const footer = () => (

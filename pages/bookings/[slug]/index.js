@@ -1,14 +1,10 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import React, { useState } from 'react';
-import Linkify from 'react-linkify';
 
-import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import CheckoutForm from '../../../components/CheckoutForm';
 import Layout from '../../../components/Layout';
 
 import dayjs from 'dayjs';
@@ -19,7 +15,7 @@ import PageNotFound from '../../404';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api from '../../../utils/api';
 import { __, priceFormat } from '../../../utils/helpers';
 
 dayjs.extend(LocalizedFormat);

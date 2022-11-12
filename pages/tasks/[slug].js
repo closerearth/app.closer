@@ -1,22 +1,16 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import Linkify from 'react-linkify';
 
-import CreatePost from '../../components/CreatePost';
 import Layout from '../../components/Layout';
-import MemberNav from '../../components/MemberNav';
-import PostList from '../../components/PostList';
 import ProfilePhoto from '../../components/ProfilePhoto';
-import UploadPhoto from '../../components/UploadPhoto';
 
-import dayjs from 'dayjs';
 
 import PageNotFound from '../404';
 import { useAuth } from '../../contexts/auth.js';
-import api, { cdn, formatSearch } from '../../utils/api';
+import api from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const Task = ({ task, error }) => {
@@ -166,34 +160,34 @@ const Task = ({ task, error }) => {
                 {user &&
                   (user._id === task.createdBy ||
                     (task.team && user._id === task.team[0])) && (
-                    <section className="applicants card-body">
-                      <h3>{__('tasks_slug_applicants')}</h3>
-                      <div className="user-list">
-                        {applicants.length > 0
-                          ? applicants.map(
-                              (uid) =>
-                                usersById[uid] && (
-                                  <Link
-                                    key={uid}
-                                    as={`/members/${usersById[uid].slug}`}
-                                    href="/members/[slug]"
-                                  >
-                                    <a className="from user-preview">
-                                      <ProfilePhoto
-                                        size="sm"
-                                        user={usersById[uid]}
-                                      />
-                                      <span className="name">
-                                        {usersById[uid].screenname}
-                                      </span>
-                                    </a>
-                                  </Link>
-                                ),
-                            )
-                          : 'No applicants yet'}
-                      </div>
-                    </section>
-                  )}
+                  <section className="applicants card-body">
+                    <h3>{__('tasks_slug_applicants')}</h3>
+                    <div className="user-list">
+                      {applicants.length > 0
+                        ? applicants.map(
+                          (uid) =>
+                            usersById[uid] && (
+                              <Link
+                                key={uid}
+                                as={`/members/${usersById[uid].slug}`}
+                                href="/members/[slug]"
+                              >
+                                <a className="from user-preview">
+                                  <ProfilePhoto
+                                    size="sm"
+                                    user={usersById[uid]}
+                                  />
+                                  <span className="name">
+                                    {usersById[uid].screenname}
+                                  </span>
+                                </a>
+                              </Link>
+                            ),
+                        )
+                        : 'No applicants yet'}
+                    </div>
+                  </section>
+                )}
                 {task.rewards && task.rewards.length > 0 && (
                   <section className="rewards card-body">
                     <h3>{__('tasks_slug_reward')}</h3>

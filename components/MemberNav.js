@@ -2,10 +2,9 @@ import { useRouter } from 'next/router';
 
 import React, { useEffect, useState } from 'react';
 
-import api, { formatSearch } from '../utils/api';
+import api from '../utils/api';
 import { __ } from '../utils/helpers';
 import ActiveLink from './ActiveLink';
-import { trackEvent } from './Analytics';
 
 const MemberNav = ({ token, user, children, toggleNav }) => {
   const router = useRouter();
@@ -82,14 +81,14 @@ const MemberNav = ({ token, user, children, toggleNav }) => {
     user &&
       (user.roles.includes('community-curator') ||
         user.roles.includes('admin')) && (
-        <li key="applications">
-          <ActiveLink href="/applications" as="/applications">
-            <a onClick={() => toggleNav(false)}>
-              {__('member_nav_applicatins')}
-            </a>
-          </ActiveLink>
-        </li>
-      ),
+      <li key="applications">
+        <ActiveLink href="/applications" as="/applications">
+          <a onClick={() => toggleNav(false)}>
+            {__('member_nav_applicatins')}
+          </a>
+        </ActiveLink>
+      </li>
+    ),
     user && user.roles.includes('beta') && (
       <li key="Nests">
         <ActiveLink href="/nests" as="/nests">

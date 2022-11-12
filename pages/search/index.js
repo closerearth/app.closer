@@ -1,13 +1,12 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import Layout from '../../components/Layout';
 
 import { PLATFORM_NAME } from '../../config';
-import api, { formatSearch } from '../../utils/api';
+import api from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const Search = ({ tags, error, keyword, articles }) => (
@@ -51,17 +50,17 @@ const Search = ({ tags, error, keyword, articles }) => (
           <p className="tags">
             {tags
               ? tags.map((tag) => (
-                  <Link
-                    as={`/search/${encodeURIComponent(tag)}`}
-                    href="/search/[keyword]"
-                    key={tag}
-                  >
-                    <a className="tag">{tag}</a>
-                  </Link>
-                ))
+                <Link
+                  as={`/search/${encodeURIComponent(tag)}`}
+                  href="/search/[keyword]"
+                  key={tag}
+                >
+                  <a className="tag">{tag}</a>
+                </Link>
+              ))
               : !error && (
-                  <span className="Loading">{__('generic_loading')}</span>
-                )}
+                <span className="Loading">{__('generic_loading')}</span>
+              )}
           </p>
         </section>
       </div>

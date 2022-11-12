@@ -1,18 +1,15 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import QRCode from 'react-qr-code';
 
 import Layout from '../../../components/Layout';
 
-import PageNotAllowed from '../../401';
 import PageNotFound from '../../404';
 import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api from '../../../utils/api';
 import { __ } from '../../../utils/helpers';
 
 const Ticket = ({ ticket, event, error }) => {

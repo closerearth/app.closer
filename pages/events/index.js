@@ -1,15 +1,13 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import EventsList from '../../components/EventsList';
 import Layout from '../../components/Layout';
-import UpcomingEvents from '../../components/UpcomingEvents';
 
 import { PERMISSIONS, PLATFORM_NAME } from '../../config';
 import { useAuth } from '../../contexts/auth.js';
-import api, { formatSearch } from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const now = new Date();
@@ -32,10 +30,10 @@ const Events = () => {
               (!PERMISSIONS ||
                 !PERMISSIONS.event.create ||
                 user.roles.includes(PERMISSIONS.event.create)) && (
-                <Link href="/events/create">
-                  <a className="btn-primary">{__('events_link')}</a>
-                </Link>
-              )}
+              <Link href="/events/create">
+                <a className="btn-primary">{__('events_link')}</a>
+              </Link>
+            )}
           </div>
         </div>
         <EventsList

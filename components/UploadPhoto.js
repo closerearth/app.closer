@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { useAuth } from '../contexts/auth.js';
-import api, { formatSearch } from '../utils/api';
+import api from '../utils/api';
 import { __ } from '../utils/helpers';
 
 const UploadPhoto = ({ model, id, onSave, label, minimal }) => {

@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import EditModel from '../../../components/EditModel';
 import Layout from '../../../components/Layout';

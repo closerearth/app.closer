@@ -1,7 +1,6 @@
-import react, { useState } from 'react';
+import { useState } from 'react';
 
 import { __ } from '../utils/helpers';
-import PriceEditor from './PriceEditor';
 
 const DiscountsEditor = ({ value, onChange, placeholder, required }) => {
   const [options, setOptions] = useState(value);

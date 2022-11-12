@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../contexts/auth.js';
-import api, { cdn, formatSearch } from '../utils/api';
+import api, { formatSearch } from '../utils/api';
 import CreatePost from './CreatePost';
 import Post from './Post';
 

@@ -1,8 +1,6 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import Layout from '../../../components/Layout';
 
@@ -12,7 +10,7 @@ import PageNotFound from '../../404';
 import { PLATFORM_LEGAL_ADDRESS, PLATFORM_NAME } from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api from '../../../utils/api';
 import { priceFormat } from '../../../utils/helpers';
 import { __ } from '../../../utils/helpers';
 

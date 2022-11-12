@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import React, { useState } from 'react';
 import Linkify from 'react-linkify';
@@ -8,14 +7,11 @@ import Linkify from 'react-linkify';
 import Layout from '../../../components/Layout';
 import PostList from '../../../components/PostList';
 import Slider from '../../../components/Slider';
-import UploadPhoto from '../../../components/UploadPhoto';
 
-import dayjs from 'dayjs';
 
 import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
-import { usePlatform } from '../../../contexts/platform';
-import api, { cdn, formatSearch } from '../../../utils/api';
+import api, { cdn } from '../../../utils/api';
 import { __ } from '../../../utils/helpers';
 
 const Listing = ({ listing, error }) => {

@@ -1,17 +1,13 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 import Layout from '../../components/Layout';
 import TaskList from '../../components/TaskList';
 
-import axios from 'axios';
 
-import PageNotAllowed from '../401';
 import { useAuth } from '../../contexts/auth.js';
-import models from '../../models';
-import api, { formatSearch } from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const Settings = ({ token }) => {

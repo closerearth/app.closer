@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { SIGNUP_FIELDS } from '../config';
 import { useAuth } from '../contexts/auth';
-import api from '../utils/api';
 import { __, useNextQueryParams } from '../utils/helpers';
 
 const SignupForm = () => {
@@ -30,7 +29,7 @@ const SignupForm = () => {
       return;
     }
     if (application.repeatpassword !== application.password) {
-      setError("Passwords don't match.");
+      setError('Passwords don\'t match.');
       return;
     }
     try {

@@ -6,8 +6,6 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {
   ContentState,
   EditorState,
-  convertFromHTML,
-  convertFromRaw,
   convertToRaw,
 } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';

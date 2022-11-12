@@ -1,6 +1,5 @@
-import App from 'next/app';
 import Head from 'next/head';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 import Footer from '../components/Footer';
 import Navigation from '../components/Navigation';
@@ -23,7 +22,7 @@ import { AuthProvider } from '../contexts/auth';
 import { PlatformProvider } from '../contexts/platform';
 import '../public/styles.css';
 import { theme } from '../tailwind.config';
-import api, { formatSearch } from '../utils/api';
+import api from '../utils/api';
 
 const Application = ({
   tags,

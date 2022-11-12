@@ -32,16 +32,16 @@ const EventPhoto = ({
     )}
     {isAuthenticated &&
       (user._id === event.createdBy || user.roles.includes('admin')) && (
-        <div className="mt-2">
-          <UploadPhoto
-            model="event"
-            minimal
-            id={event._id}
-            onSave={(id) => setPhoto(id)}
-            label={photo ? 'Change photo' : 'Add photo'}
-          />
-        </div>
-      )}
+      <div className="mt-2">
+        <UploadPhoto
+          model="event"
+          minimal
+          id={event._id}
+          onSave={(id) => setPhoto(id)}
+          label={photo ? 'Change photo' : 'Add photo'}
+        />
+      </div>
+    )}
   </div>
 );
 export default EventPhoto;

@@ -1,14 +1,11 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-import dayjs from 'dayjs';
 
 import { useAuth } from '../contexts/auth';
 import { usePlatform } from '../contexts/platform';
 import models from '../models';
-import api from '../utils/api';
 import { __ } from '../utils/helpers';
 import Pagination from './Pagination';
 import TimeSince from './TimeSince';

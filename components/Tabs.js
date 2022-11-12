@@ -37,8 +37,8 @@ const Tabs = ({ tabs, onChange, initialCurrentTab }) => {
                       tab.disabled
                         ? styleMap.disabled
                         : index === currentTab
-                        ? styleMap.active
-                        : styleMap.normal
+                          ? styleMap.active
+                          : styleMap.normal
                     }`}
                   >
                     {tab.title}

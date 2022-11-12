@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import ApplicationForm from '../../components/ApplicationForm';
 import Layout from '../../components/Layout';

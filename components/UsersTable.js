@@ -1,12 +1,9 @@
-import Link from 'next/link';
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-import dayjs from 'dayjs';
 
 import { useAuth } from '../contexts/auth.js';
 import { usePlatform } from '../contexts/platform';
-import api, { formatSearch } from '../utils/api';
 import { __ } from '../utils/helpers';
 import Loading from './Loading';
 import Pagination from './Pagination';

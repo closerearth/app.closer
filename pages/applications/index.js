@@ -1,7 +1,6 @@
 import Head from 'next/head';
-import Link from 'next/link';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ApplicationList from '../../components/ApplicationList';
 import Layout from '../../components/Layout';
@@ -10,8 +9,6 @@ import Tabs from '../../components/Tabs';
 import PageNotAllowed from '../401';
 import { useAuth } from '../../contexts/auth';
 import { usePlatform } from '../../contexts/platform';
-import models from '../../models';
-import api, { formatSearch } from '../../utils/api';
 import { __ } from '../../utils/helpers';
 
 const openApplications = { where: { status: 'open' } };

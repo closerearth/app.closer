@@ -27,8 +27,8 @@ const Photo = ({
   const url = photoUrl
     ? photoUrl
     : id
-    ? `${cdn}${id}-profile-${size}.jpg`
-    : placeholder;
+      ? `${cdn}${id}-profile-${size}.jpg`
+      : placeholder;
 
   return (
     <span

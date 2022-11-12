@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import objectPath from 'object-path';
 
 import { useAuth } from '../contexts/auth.js';
-import api, { formatSearch } from '../utils/api';
+import api from '../utils/api';
 import { getSample } from '../utils/helpers';
 import { __ } from '../utils/helpers';
 import { trackEvent } from './Analytics';
