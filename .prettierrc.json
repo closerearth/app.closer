@@ -1,0 +1,16 @@
+{
+    "printWidth": 80,
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "singleQuote": true,
+    "semi": true,
+    "importOrder": [
+        "^@core/(.*)$",
+        "<THIRD_PARTY_MODULES>",
+        "^@server/(.*)$",
+        "^@ui/(.*)$",
+        "^[./]"
+    ],
+    "importOrderSeparation": false,
+    "importOrderSortSpecifiers": true
+}
