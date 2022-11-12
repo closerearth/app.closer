@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
@@ -35,7 +34,7 @@ const metricsToPlot = ['user', 'ticket'];
 const last30days = dayjs().subtract(30, 'days').format();
 const metricFilter = { where: { created: { $gt: last30days } } };
 
-const Dashboard = ({ token }) => {
+const Dashboard = () => {
   const { platform } = usePlatform();
   const { user, isLoading } = useAuth();
   const [email, setInviteEmail] = useState('');
@@ -86,7 +85,7 @@ const Dashboard = ({ token }) => {
         {metricsToPlot.map((metric) => {
           const data = platform[metric].findGraph(metricFilter);
           if (!data) {
-            return <h4>{metric} not found.</h4>;
+            return <h4 key={metric}>{metric} not found.</h4>;
           }
           return (
             <div key={metric}>
