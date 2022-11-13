@@ -3,17 +3,18 @@ import { useEffect } from 'react';
 import { __ } from '../utils/helpers';
 import { useAuth } from '../contexts/auth';
 import { usePlatform } from '../contexts/platform';
+import dayjs from 'dayjs';
 
 const PastBookings = () => {
   const { user } = useAuth();
   const { platform } = usePlatform();
-  const pastBookingsFilter = user && { where: { createdBy: user._id, end: { $lt: new Date() }  } };
+  const now = dayjs().format('YYYY-MM-DDTHH:mm')
+  const pastBookingsFilter = user && { where: { createdBy: user._id, end: { $lt: now }  } };
 
   const loadData = async () => {
-    const [res] = await Promise.all([
+    await Promise.all([
       platform.booking.get(pastBookingsFilter) // QUESTION: if this is an empty List, then why on line 25 I got undefined
     ]);
-    console.log({ res })
   }
 
   useEffect(() => {
@@ -25,8 +26,6 @@ const PastBookings = () => {
   const pastBookings = platform.booking.find(pastBookingsFilter);
   const error = pastBookings && pastBookings.get('error')
   const noPastBookings = pastBookings && pastBookings.count() === 0;
-
-  console.log({ pastBookings }); // undefined
 
   if(error) {
     return <div className="validation-error">{ JSON.stringify(error) }</div>
