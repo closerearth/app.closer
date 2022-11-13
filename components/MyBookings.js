@@ -24,7 +24,7 @@ const MyBookings = () => {
 
   const myBookings = platform.booking.find(myBookingsFilter);
   const noBookings = myBookings && myBookings.count() === 0;
-  const error = myBookings && myBookings.get('error') // QUESTION: this Promise, how to get the error properly?
+  const error = myBookings && myBookings.get('error')
   const listings = platform.listing.find();
 
   if(error) {
@@ -36,7 +36,7 @@ const MyBookings = () => {
   }
   
   return (
-    <div className="columns">
+    <div className="columns mt-8">
       <div className="col lg two-third">
         <div className="page-header">
           <h1 className="font-normal border-b border-[#e1e1e1] border-solid pb-2 flex space-x-1 items-center">

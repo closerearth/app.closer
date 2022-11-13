@@ -13,7 +13,8 @@ const PastBookings = () => {
 
   const loadData = async () => {
     await Promise.all([
-      platform.booking.get(pastBookingsFilter) // QUESTION: if this is an empty List, then why on line 25 I got undefined
+      platform.booking.get(pastBookingsFilter),
+      platform.listing.get(),
     ]);
   }
 
@@ -24,28 +25,42 @@ const PastBookings = () => {
   }, [user]);
 
   const pastBookings = platform.booking.find(pastBookingsFilter);
-  const error = pastBookings && pastBookings.get('error')
-  const noPastBookings = pastBookings && pastBookings.count() === 0;
+  const listings = platform.listing.find();
 
   if(error) {
     return <div className="validation-error">{ JSON.stringify(error) }</div>
   }
-
+  
   if(!pastBookings) {
     return null;
   }
+  
+  const error = pastBookings && pastBookings.get('error')
+  const noPastBookings = pastBookings.count() === 0;
 
   return (
-    <div className="columns">
+    <div className="columns mt-8">
       <div className="col lg two-third">
         <div className="page-header">
-          <h1 className="text-[32px] leading-[48px] font-normal border-b border-[#e1e1e1] border-solid pb-2 flex space-x-1 items-center">
+          <h1 className="font-normal border-b border-[#e1e1e1] border-solid pb-2 flex space-x-1 items-center">
             { __('past_bookings_title') }
           </h1>
         </div>
-        <div className="bookings-list">
+        <div className="bookings-list mt-8">
           { noPastBookings && <p className='mt-4'>{ __('no_past_bookings') }</p> }
-          { pastBookings.map(booking => <BookingListPreview key={ booking.get('_id') } booking={ booking } />) }
+          { pastBookings.map(booking => {
+            const listingId = booking.get('listing');
+            const listing = listings.find(listing => listing.get('_id') === listingId);
+            const listingName = listing.get('name')
+
+            return (
+              <BookingListPreview 
+                key={ booking.get('_id') } 
+                booking={ booking } 
+                listingName={listingName} 
+              />
+            )
+          }) }
         </div>
       </div>
     </div>

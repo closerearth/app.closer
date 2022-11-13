@@ -14,7 +14,7 @@ const BookingListPreview = ({ booking, listingName }) => {
   const createdFormatted = dayjs(created).format('DD/MM/YYYY - hh:mmA')
 
   return (
-    <div className="bg-white rounded-lg p-4 shadow-xl">
+    <div className="bg-white rounded-lg p-4 shadow-xl mb-8">
       <p className='text-xs leading-5 opacity-50 mb-3'>{ __('bookings_id')}{`${id} - ${createdFormatted}`}</p>
       <div className="mb-3">
         <p className='text-xs leading-5 opacity-50'>{ __('bookings_status') }</p>
