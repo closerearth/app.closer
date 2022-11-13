@@ -3,11 +3,13 @@ import { useAuth } from '../contexts/auth';
 import { usePlatform } from '../contexts/platform';
 import BookingListPreview from './BookingListPreview';
 import { __ } from '../utils/helpers';
+import dayjs from 'dayjs';
 
 const MyBookings = () => {
   const { user } = useAuth();
   const { platform } = usePlatform();
-  const myBookingsFilter = user && { where: { createdBy: user._id, status: ['pending', 'confirmed', 'checkedIn'] } };
+  const now = dayjs().format('YYYY-MM-DDTHH:mm')
+  const myBookingsFilter = user && { where: { createdBy: user._id, status: ['pending', 'confirmed', 'checkedIn'], end: { $gt: now } } };
 
   const loadData = async () => {
     await Promise.all([
