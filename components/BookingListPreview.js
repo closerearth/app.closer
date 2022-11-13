@@ -1,34 +1,47 @@
 import React from 'react';
-import Link from 'next/link';
 import dayjs from 'dayjs';
-
 import { __, priceFormat } from '../utils/helpers';
 
-const ListingListPreview = ({ booking }) => {
-  if (!booking) {
+const BookingListPreview = ({ booking, listingName }) => {
+  if (!booking || !listingName) {
     return null;
   }
-
   const start = dayjs(booking.get('start'));
   const end = dayjs(booking.get('end'));
+  const id = booking.get('_id')
+  const created = booking.get('created')
+  const price = booking.get('price')
+  const createdFormatted = dayjs(created).format('DD/MM/YYYY - hh:mmA')
 
   return (
-    <div className="booking-list-preview card">
-      <p>{ __('bookings_status') } <b>{booking.get('status')}</b></p>
-      <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
-      <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
-      <p>{ __('bookings_total') }
-        <b className={ booking.get('volunteer') ? 'line-through': '' }>
-          {' '}{priceFormat(booking.get('price'))}
-        </b>
-        <b>{' '}{booking.get('volunteer') && priceFormat(0, booking.getIn(['price', 'cur']))}</b>
-      </p>
-      <p>{ __('bookings_id') } <b>{booking.get('_id')}</b></p>
-      { booking.get('description') &&
-        <p>{ booking.get('description').slice(0, 120) }{ booking.get('description').length > 120 && '...' }</p>
-      }
+    <div className="bg-white rounded-lg p-4 shadow-xl">
+      <p className='text-xs leading-5 opacity-50 mb-3'>{ __('bookings_id')}{`${id} - ${createdFormatted}`}</p>
+      <div className="mb-3">
+        <p className='text-xs leading-5 opacity-50'>{ __('bookings_status') }</p>
+        <p>{booking.get('status')}</p>
+      </div>
+      <div className="mb-3">
+        <p className='text-xs leading-5 opacity-50'>{ __('bookings_checkin') }</p>
+        <p>{start.format('DD/MM/YYYY')}</p>
+      </div>
+      <div className="mb-3">
+        <p className='text-xs leading-5 opacity-50'>{ __('bookings_checkout') }</p>
+        <p>{end.format('DD/MM/YYYY')}</p>
+      </div>
+      <div className="mb-3">
+        <p className='text-xs leading-5 opacity-50'>{ __('listings_book_accomodation_type') }</p>
+        <p>{listingName}</p>
+      </div>
+      <div className="mb-3">
+        <p className='text-xs leading-5 opacity-50'>{ __('bookings_payment_accomodation') }</p>
+        <p>{priceFormat(price)}</p>
+      </div>
+      <div className="mb-3">
+        <p className='text-xs leading-5 opacity-50'>{ __('bookings_payment_utility') }</p>
+        <p>NOT IMPLEMENTED</p>
+      </div>
     </div>
   );
 }
 
-export default ListingListPreview;
+export default BookingListPreview;
