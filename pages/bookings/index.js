@@ -3,8 +3,6 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 
 import BookingListPreview from '../../components/BookingListPreview';
-import React, { useEffect } from 'react';
-import Head from 'next/head';
 import Layout from '../../components/Layout';
 
 import PageNotFound from '../404';
@@ -32,7 +30,7 @@ const Bookings = () => {
   }
 
   const bookings = platform.booking.find(bookingFilter);
-  
+
   return (
     <Layout>
       <Head>
@@ -50,11 +48,11 @@ const Bookings = () => {
             <div className="bookings-list">
               {bookings && bookings.count() > 0
                 ? bookings.map((booking) => (
-                  <BookingListPreview
-                    key={booking.get('_id')}
-                    booking={booking}
-                  />
-                ))
+                    <BookingListPreview
+                      key={booking.get('_id')}
+                      booking={booking}
+                    />
+                  ))
                 : 'No Bookings'}
             </div>
           </div>
