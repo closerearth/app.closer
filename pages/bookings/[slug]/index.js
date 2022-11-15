@@ -1,20 +1,22 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import dayjs from 'dayjs';
-import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import { useRouter } from 'next/router';
 
-import PageNotFound from '../../404';
-import PageNotAllowed from '../../401';
+import Layout from '../../../components/Layout';
 
+import dayjs from 'dayjs';
+import LocalizedFormat from 'dayjs/plugin/localizedFormat';
+
+import PageNotAllowed from '../../401';
+import PageNotFound from '../../404';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
-
-import { priceFormat, __, getIsBookingCancellable } from '../../../utils/helpers';
 import api from '../../../utils/api';
-
-
-import Layout from '../../../components/Layout';
+import {
+  __,
+  getIsBookingCancellable,
+  priceFormat,
+} from '../../../utils/helpers';
 
 dayjs.extend(LocalizedFormat);
 
@@ -23,10 +25,13 @@ const Booking = ({ booking, error }) => {
   const [editBooking, setBooking] = useState(booking);
   const { isAuthenticated } = useAuth();
   const { platform } = usePlatform();
-  const bookingId = router.query.slug
+  const bookingId = router.query.slug;
   const start = dayjs(booking.start);
   const end = dayjs(booking.end);
-  const isBookingCancelable = getIsBookingCancellable(booking.start, booking.status);
+  const isBookingCancelable = getIsBookingCancellable(
+    booking.start,
+    booking.status,
+  );
 
   const saveBooking = async (update) => {
     try {
@@ -56,24 +61,35 @@ const Booking = ({ booking, error }) => {
       <main className="main-content max-w-prose booking">
         <h1 className="mb-4">{__(`bookings_title_${booking.status}`)}</h1>
         <section className="mt-3">
-          <h3>{ __('bookings_summary') }</h3>
-          <p>{ __('bookings_status') } <b>{editBooking.status}</b></p>
-          <p>{ __('bookings_checkin') } <b>{start.format('LLL')}</b></p>
-          <p>{ __('bookings_checkout') } <b>{end.format('LLL')}</b></p>
-          <p>{ __('bookings_total') } 
-            <b className={ booking.volunteer ? 'line-through': '' }>
-              {' '}{priceFormat(booking.price)}
+          <h3>{__('bookings_summary')}</h3>
+          <p>
+            {__('bookings_status')} <b>{editBooking.status}</b>
+          </p>
+          <p>
+            {__('bookings_checkin')} <b>{start.format('LLL')}</b>
+          </p>
+          <p>
+            {__('bookings_checkout')} <b>{end.format('LLL')}</b>
+          </p>
+          <p>
+            {__('bookings_total')}
+            <b className={booking.volunteer ? 'line-through' : ''}>
+              {' '}
+              {priceFormat(booking.price)}
             </b>
-            <b>{' '}{booking.volunteer && priceFormat(0, booking.price.cur)}</b>
+            <b> {booking.volunteer && priceFormat(0, booking.price.cur)}</b>
           </p>
         </section>
-        { booking.status === 'confirmed' &&
-          <section className="mt-3">{ __('bookings_confirmation') }</section>
-        }
+        {booking.status === 'confirmed' && (
+          <section className="mt-3">{__('bookings_confirmation')}</section>
+        )}
         <div className="mt-8">
           <Link passHref href={`/bookings/${bookingId}/cancel`}>
             <a>
-              <button disabled={!isBookingCancelable} className="btn-primary disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed">
+              <button
+                disabled={!isBookingCancelable}
+                className="btn-primary disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed"
+              >
                 {__('booking_cancel_button')}
               </button>
             </a>
@@ -82,7 +98,7 @@ const Booking = ({ booking, error }) => {
       </main>
     </Layout>
   );
-}
+};
 Booking.getInitialProps = async ({ query }) => {
   try {
     const {
