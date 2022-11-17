@@ -172,10 +172,17 @@ const MemberPage = ({ member, loadError }) => {
             </>
           )}
 
-          <div className="flex flex-col md:flex-row items-start">
-            <div className="flex flex-col items-start space-y-5 md:w-full md:mt-3">
-              <div className="flex flex-col md:flex-row w-full">
-                <div className="md:w-72 items-center justify-start relative top-0 right-0">
+          <Link passHref href={'/members'}>
+            <p className="text-lg cursor-pointer my-4">
+              {'< All Profiles'}
+            </p>
+          </Link>
+
+          <div className='flex flex-col md:flex-row items-start'>
+
+            <div className='flex flex-col items-start space-y-5 md:w-full md:mt-3'>
+              <div className='flex flex-col md:flex-row w-full'>
+                <div className='md:w-72 items-center justify-start relative top-0 right-0'>
                   <div className="flex mb-4 md:mr-8 md:justify-center items-center">
                     {member.photo ? (
                       <img

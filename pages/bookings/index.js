@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 
 import React, { useEffect } from 'react';
 
@@ -12,8 +11,6 @@ import { usePlatform } from '../../contexts/platform';
 import { __ } from '../../utils/helpers';
 
 const Bookings = () => {
-  const router = useRouter();
-
   const { user } = useAuth();
   const { platform } = usePlatform();
   const bookingFilter = user && { where: { createdBy: user._id } };
@@ -33,7 +30,6 @@ const Bookings = () => {
   }
 
   const bookings = platform.booking.find(bookingFilter);
-  console.log('bookings', bookings);
 
   return (
     <Layout>
@@ -52,11 +48,11 @@ const Bookings = () => {
             <div className="bookings-list">
               {bookings && bookings.count() > 0
                 ? bookings.map((booking) => (
-                  <BookingListPreview
-                    key={booking.get('_id')}
-                    booking={booking}
-                  />
-                ))
+                    <BookingListPreview
+                      key={booking.get('_id')}
+                      booking={booking}
+                    />
+                  ))
                 : 'No Bookings'}
             </div>
           </div>

@@ -10,6 +10,7 @@ import { isMap } from 'immutable';
 
 import base from '../locales/base';
 import en from '../locales/en';
+import { REFUND_PERIODS } from '../constants';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -196,4 +197,35 @@ export const getSample = (field) => {
     default:
       throw new Error(`Invalid model type:${field.type}`);
   }
-};
+}
+
+export const calculateRefundTotal = (booking, policy) => {
+  const { price: { val: initialValue }, start, volunteer } = booking
+  if (volunteer) return 0
+  const { default: defaultRefund, lastmonth, lastweek, lastday } = policy
+  const bookingStartDate = dayjs(start)
+  const now = dayjs()
+  const daysUntilBookingStart = bookingStartDate.diff(now, 'days')
+
+  if (daysUntilBookingStart > REFUND_PERIODS.MONTH) {
+    return initialValue * defaultRefund
+  } 
+  if (daysUntilBookingStart >= REFUND_PERIODS.WEEK) {
+    return initialValue * lastmonth
+  }  
+  if (daysUntilBookingStart > REFUND_PERIODS.DAY) {
+    return initialValue * lastweek
+  }
+  if (daysUntilBookingStart > REFUND_PERIODS.LASTDAY) {
+    return initialValue * lastday
+  }
+  return 0
+}
+
+export const getIsBookingCancellable = (bookingStart, bookingStatus) => {
+  const now = dayjs()
+  const start = dayjs(bookingStart)
+  const isBookingNotStarted = now.isBefore(start)
+  const allowedBookingStatuses = ['confirmed', 'open']
+  return isBookingNotStarted && allowedBookingStatuses.includes(bookingStatus)
+}

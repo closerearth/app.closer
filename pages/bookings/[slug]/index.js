@@ -1,9 +1,6 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-import React, { useState } from 'react';
-
-import { loadStripe } from '@stripe/stripe-js';
 
 import Layout from '../../../components/Layout';
 
@@ -12,20 +9,29 @@ import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 
 import PageNotAllowed from '../../401';
 import PageNotFound from '../../404';
-import config from '../../../config';
 import { useAuth } from '../../../contexts/auth';
 import { usePlatform } from '../../../contexts/platform';
 import api from '../../../utils/api';
-import { __, priceFormat } from '../../../utils/helpers';
+import {
+  __,
+  getIsBookingCancellable,
+  priceFormat,
+} from '../../../utils/helpers';
 
 dayjs.extend(LocalizedFormat);
 
 const Booking = ({ booking, error }) => {
   const router = useRouter();
   const [editBooking, setBooking] = useState(booking);
-  const stripe = loadStripe(config.STRIPE_TEST_KEY);
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { platform } = usePlatform();
+  const bookingId = router.query.slug;
+  const start = dayjs(booking.start);
+  const end = dayjs(booking.end);
+  const isBookingCancelable = getIsBookingCancellable(
+    booking.start,
+    booking.status,
+  );
 
   const saveBooking = async (update) => {
     try {
@@ -40,9 +46,6 @@ const Booking = ({ booking, error }) => {
   if (!booking) {
     return <PageNotFound />;
   }
-
-  const start = dayjs(booking.start);
-  const end = dayjs(booking.end);
 
   if (!isAuthenticated) {
     return <PageNotAllowed />;
@@ -76,18 +79,27 @@ const Booking = ({ booking, error }) => {
             </b>
             <b> {booking.volunteer && priceFormat(0, booking.price.cur)}</b>
           </p>
-          <p>
-            {__('bookings_id')} <b>{booking._id}</b>
-          </p>
         </section>
         {booking.status === 'confirmed' && (
           <section className="mt-3">{__('bookings_confirmation')}</section>
         )}
+        <div className="mt-8">
+          <Link passHref href={`/bookings/${bookingId}/cancel`}>
+            <a>
+              <button
+                disabled={!isBookingCancelable}
+                className="btn-primary disabled:text-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed"
+              >
+                {__('booking_cancel_button')}
+              </button>
+            </a>
+          </Link>
+        </div>
       </main>
     </Layout>
   );
 };
-Booking.getInitialProps = async ({ req, query }) => {
+Booking.getInitialProps = async ({ query }) => {
   try {
     const {
       data: { results: booking },
